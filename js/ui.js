@@ -29,6 +29,7 @@ let playerProfession = "Explorer";
 let playerXP = 420;
 
 let draggedSlotIndex = null;
+let draggedEquipmentSlot = null;
 
 const regionBackgrounds = {
   meadow: "img/meadow.png",
@@ -59,10 +60,17 @@ function updateEquipmentScreen() {
     slotElement.innerHTML = "";
 
     if (item === null) {
+      slotElement.draggable = false;
+      slotElement.ondragstart = null;
       slotElement.textContent = t(slotName);
       slotElement.classList.remove("is-equipped");
       return;
     }
+
+    slotElement.draggable = true;
+    slotElement.ondragstart = function () {
+      draggedEquipmentSlot = slotName;
+    };
 
     slotElement.classList.add("is-equipped");
 
@@ -76,7 +84,6 @@ function updateEquipmentScreen() {
     slotElement.append(img, name);
 
     const removeButton = document.createElement("button");
-
     removeButton.type = "button";
     removeButton.classList.add("equipment-remove");
     removeButton.innerHTML = "&times;";
@@ -294,12 +301,16 @@ function updateInventoryScreen() {
     });
 
     slot.addEventListener("drop", function () {
-      if (draggedSlotIndex === null) {
+      if (draggedEquipmentSlot !== null) {
+        unequipItem(draggedEquipmentSlot);
+        draggedEquipmentSlot = null;
         return;
       }
 
-      moveInventoryItem(draggedSlotIndex, i);
-      draggedSlotIndex = null;
+      if (draggedSlotIndex !== null) {
+        moveInventoryItem(draggedSlotIndex, i);
+        draggedSlotIndex = null;
+      }
     });
 
     inventoryGrid.appendChild(slot);
