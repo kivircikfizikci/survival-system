@@ -101,6 +101,7 @@ areaSelect.addEventListener("change", function () {
   playerRegion = areaSelect.value;
   updateRegionBackground(playerRegion);
   updateScreen();
+  saveGame();
 });
 let searchButtonRemainingSeconds = 0;
 let currentStatus = {

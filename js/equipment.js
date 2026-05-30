@@ -67,6 +67,7 @@ function wearInventoryItem(slotIndex) {
 
   updateInventoryScreen();
   updateEquipmentScreen();
+  saveGame();
 
   showMessage(t("equipped", { item: getItemName(item) }));
 }
@@ -106,6 +107,7 @@ function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
   updateInventoryCapacityFromEquipment();
   updateInventoryScreen();
   updateEquipmentScreen();
+  saveGame();
 
   showMessage(t("equipped", { item: getItemName(newItem) }));
 }
@@ -143,6 +145,7 @@ function unequipItem(equipSlot) {
 
   updateInventoryScreen();
   updateEquipmentScreen();
+  saveGame();
 
   showMessage(t("unequipped", { item: getItemName(item) }));
 }

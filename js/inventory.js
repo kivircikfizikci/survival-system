@@ -86,6 +86,7 @@ function addItem(item) {
   if (stackableSlot !== -1) {
     inventory.items[stackableSlot].quantity++;
     updateInventoryScreen();
+    saveGame();
     return true;
   }
 
@@ -102,6 +103,7 @@ function addItem(item) {
   };
 
   updateInventoryScreen();
+  saveGame();
   return true;
 }
 
@@ -119,11 +121,13 @@ function removeOneItem(slotIndex) {
   }
 
   updateInventoryScreen();
+  saveGame();
 }
 
 function removeItem(slotIndex) {
   inventory.items[slotIndex] = null;
   updateInventoryScreen();
+  saveGame();
 }
 
 function dropInventoryItem(slotIndex) {
@@ -154,6 +158,7 @@ function moveInventoryItem(fromSlot, toSlot) {
   inventory.items[toSlot] = fromItem;
 
   updateInventoryScreen();
+  saveGame();
 }
 
 function useInventoryItem(slotIndex) {

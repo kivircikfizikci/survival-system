@@ -70,6 +70,7 @@ document.getElementById("searchBtn").addEventListener("click", function () {
       area: getAreaName(selectedArea)
     }));
     startSearchCooldown();
+    saveGame();
   }
 });
 
@@ -95,6 +96,7 @@ document.getElementById("workBtn").addEventListener("click", function () {
   }
 
   updateScreen();
+  saveGame();
 });
 
 document.getElementById("sleepBtn").addEventListener("click", function () {
@@ -135,6 +137,7 @@ document.getElementById("sleepBtn").addEventListener("click", function () {
     setAwakeStatus();
 
     updateScreen();
+    saveGame();
   }, selectedHours * GAME_HOUR_MS);
 });
 
@@ -142,6 +145,7 @@ for (let languageButton of languageButtons) {
   languageButton.addEventListener("click", function () {
     setLanguage(languageButton.dataset.language);
     applyLanguage();
+    saveGame();
   });
 }
 
@@ -168,13 +172,20 @@ setInterval(function () {
   }
 
   updateScreen();
+  saveGame();
 }, GAME_HOUR_MS);
 
+// Kayıt varsa yükle, yoksa varsayılan kapasiteyi ayarla
+if (loadGame()) {
+  updateRegionBackground(playerRegion);
+} else {
+  setInventoryCapacity(inventory.baseSlots, inventory.baseMaxWeight);
+  updateRegionBackground(playerRegion);
+}
+
 updateScreen();
-setInventoryCapacity(inventory.baseSlots, inventory.baseMaxWeight);
 updateInventoryScreen();
 updateEquipmentScreen();
 updateSearchButton(0);
-updateRegionBackground(playerRegion);
 applyLanguage();
 setupEquipmentDropZones();
