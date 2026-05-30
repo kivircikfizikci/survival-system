@@ -101,7 +101,8 @@ const translations = {
     unequipped: "Unequipped {item}.",
     cannotRemoveSlotsWidthItems: "You cannot remove extra slots while you have items equipped that provide them.",
     cannotReduceInventory: "You cannot reduce inventory slots while you have more items than the new limit.",
-    cannotUnequipWithItems: "You cannot unequip this item because it would put you over your inventory limits."
+    cannotUnequipWithItems: "You cannot unequip this item because it would put you over your inventory limits.",
+    cannotUnequipSleeping: "You cannot unequip items while sleeping."
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -203,7 +204,8 @@ const translations = {
     unequipped: "{item} cikartildi.",
     cannotRemoveSlotsWidthItems: "Ekstra slot veren esyalar giyili iken ekstra slot kaldiramazsin.",
     cannotReduceInventory: "Yeni limite gore daha fazla esyan varken envanter slotlarini azaltamazsin.",
-    cannotUnequipWithItems: "Bu esyayi cikartamazsin cunku envanter limitlerini asmana neden olur."
+    cannotUnequipWithItems: "Bu esyayi cikartamazsin cunku envanter limitlerini asmana neden olur.",
+    cannotUnequipSleeping: "Uyurken esya cikartamazsin."
   }
 };
 

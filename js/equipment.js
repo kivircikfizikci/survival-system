@@ -117,6 +117,11 @@ function unequipItem(equipSlot) {
     return;
   }
 
+    if (isSleeping) {
+    showMessage(t("cannotUnequipSleeping"));
+    return;
+  }
+
   const targetSlotCount = inventory.items.length - (item.extraSlots || 0);
 
   if (!canReduceInventoryTo(targetSlotCount)) {
