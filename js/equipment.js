@@ -72,18 +72,42 @@ function wearInventoryItem(slotIndex) {
 }
 
 function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
-  const item = inventory.items[slotIndex];
+  const newItem = inventory.items[slotIndex];
 
-  if (item === null) {
+  if (newItem === null) {
     return;
   }
 
-  if (item.equipSlot !== targetEquipSlot) {
+  if (isSleeping) {
+    showMessage(t("cannotWearSleeping"));
+    return;
+  }
+
+  if (!isEquipableItem(newItem)) {
+    showMessage(t("cannotWearItem"));
+    return;
+  }
+
+  if (newItem.equipSlot !== targetEquipSlot) {
     showMessage(t("wrongEquipSlot"));
     return;
   }
 
-  wearInventoryItem(slotIndex);
+  const oldItem = equipment[targetEquipSlot];
+
+  if (oldItem !== null) {
+    inventory.items[slotIndex] = oldItem;
+  } else {
+    inventory.items[slotIndex] = null;
+  }
+
+  equipment[targetEquipSlot] = newItem;
+
+  updateInventoryCapacityFromEquipment();
+  updateInventoryScreen();
+  updateEquipmentScreen();
+
+  showMessage(t("equipped", { item: getItemName(newItem) }));
 }
 
 function unequipItem(equipSlot) {
