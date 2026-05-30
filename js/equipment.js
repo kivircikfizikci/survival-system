@@ -71,6 +71,21 @@ function wearInventoryItem(slotIndex) {
   showMessage(t("equipped", { item: getItemName(item) }));
 }
 
+function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
+  const item = inventory.items[slotIndex];
+
+  if (item === null) {
+    return;
+  }
+
+  if (item.equipSlot !== targetEquipSlot) {
+    showMessage(t("wrongEquipSlot"));
+    return;
+  }
+
+  wearInventoryItem(slotIndex);
+}
+
 function unequipItem(equipSlot) {
   const item = equipment[equipSlot];
 

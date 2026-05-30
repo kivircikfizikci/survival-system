@@ -183,7 +183,10 @@ function setupEquipmentDropZones() {
         return;
       }
 
-      wearInventoryItem(draggedSlotIndex);
+      const targetEquipSlot = equipmentSlot.dataset.equipSlot;
+
+      wearInventoryItemToSlot(draggedSlotIndex, targetEquipSlot);
+
       draggedSlotIndex = null;
     });
   });
@@ -235,11 +238,9 @@ function updateInventoryScreen() {
         slot.appendChild(quantityBadge);
       }
 
-
       slot.draggable = true;
       slot.addEventListener("dragstart", function () {
         draggedSlotIndex = i;
-        console.log("Sürüklenen slot:", draggedSlotIndex);
       });
 
       let slotActions = document.createElement("div");
