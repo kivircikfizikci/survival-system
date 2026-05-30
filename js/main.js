@@ -177,3 +177,4 @@ updateEquipmentScreen();
 updateSearchButton(0);
 updateRegionBackground(playerRegion);
 applyLanguage();
+setupEquipmentDropZones();

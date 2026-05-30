@@ -27,6 +27,9 @@ let playerNickname = "Survivor";
 let playerRegion = "meadow";
 let playerProfession = "Explorer";
 let playerXP = 420;
+
+let draggedSlotIndex = null;
+
 const regionBackgrounds = {
   meadow: "img/meadow.png",
   lake: "img/lake.png",
@@ -167,6 +170,25 @@ function setSleepingStatus(remainingHours) {
   updateStatusText();
 }
 
+function setupEquipmentDropZones() {
+  const equipmentSlots = document.querySelectorAll(".equipment-slot");
+
+  equipmentSlots.forEach(function (equipmentSlot) {
+    equipmentSlot.addEventListener("dragover", function (event) {
+      event.preventDefault();
+    });
+
+    equipmentSlot.addEventListener("drop", function () {
+      if (draggedSlotIndex === null) {
+        return;
+      }
+
+      wearInventoryItem(draggedSlotIndex);
+      draggedSlotIndex = null;
+    });
+  });
+}
+
 function updateInventoryScreen() {
   inventoryGrid.innerHTML = "";
   inventorySlotsText.textContent = t("slots", {
@@ -212,6 +234,13 @@ function updateInventoryScreen() {
         quantityBadge.textContent = "x" + item.quantity;
         slot.appendChild(quantityBadge);
       }
+
+
+      slot.draggable = true;
+      slot.addEventListener("dragstart", function () {
+        draggedSlotIndex = i;
+        console.log("Sürüklenen slot:", draggedSlotIndex);
+      });
 
       let slotActions = document.createElement("div");
       slotActions.classList.add("slot-actions");
