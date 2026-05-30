@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survival System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="language-switcher">
+    <button class="language-button is-active" type="button" data-language="en" aria-label="English">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30" width="1000" height="600" aria-hidden="true">
+        <clipPath id="t">
+          <path d="M25,15h25v15zv15h-25zh-25v-15zv-15h25z"/>
+        </clipPath>
+        <path d="M0,0v30h50v-30z" fill="#012169"/>
+        <path d="M0,0 50,30M50,0 0,30" stroke="#fff" stroke-width="6"/>
+        <path d="M0,0 50,30M50,0 0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+        <path d="M-1 11h22v-12h8v12h22v8h-22v12h-8v-12h-22z" fill="#C8102E" stroke="#FFF" stroke-width="2"/>
+      </svg>
+    </button>
+    <button class="language-button" type="button" data-language="tr" aria-label="Turkce">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 -30000 90000 60000" aria-hidden="true">
+        <path fill="#e30a17" d="m0-30000h90000v60000H0z"/>
+        <path fill="#fff" d="m41750 0 13568-4408-8386 11541V-7133l8386 11541zm925 8021a15000 15000 0 1 1 0-16042 12000 12000 0 1 0 0 16042z"/>
+      </svg>
+    </button>
+  </div>
+
+  <main class="game-shell">
+    <section class="hero">
+      <p class="eyebrow">Survival System</p>
+      <h1 data-i18n="characterStatus">Character Status</h1>
+      <p id="status" class="status-pill">Status: Awake</p>
+      <p id="alertMessage" class="alert-message" aria-live="polite" hidden></p>
+    </section>
+
+ <section class="profile-panel" aria-label="Character information">
+  <div class="profile-top eft-layout">
+
+    <section class="equipment-side">
+
+      <div class="equipment-column">
+        <div class="equipment-slot" data-equip-slot="head">Head</div>
+        <div class="equipment-slot" data-equip-slot="neck">Neck</div>
+        <div class="equipment-slot" data-equip-slot="torso">Torso</div>
+        <div class="equipment-slot" data-equip-slot="hands">Hands</div>
+      </div>
+    </section>
+
+    <section class="character-center">
+      <div class="avatar human-avatar" aria-hidden="true">
+        <span class="avatar-icon">S</span>
+      </div>
+
+      <div class="profile-details">
+        <p class="label" data-i18n="nicknameLabel">Nickname</p>
+        <p id="nickname" class="name">Survivor</p>
+
+        <div class="character-meta">
+          <div class="meta-row">
+            <span data-i18n="regionLabel">Region</span>
+            <strong id="region">Meadow</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="professionLabel">Profession</span>
+            <strong id="profession">Explorer</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="experienceLabel">Experience</span>
+            <strong id="experience">420 XP</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="equipment-side right-equipment">
+
+      <div class="equipment-column">
+        <div class="equipment-slot" data-equip-slot="legs">Legs</div>
+        <div class="equipment-slot" data-equip-slot="feet">Feet</div>
+        <div class="equipment-slot" data-equip-slot="bag">Bag</div>
+        <div class="equipment-slot" data-equip-slot="vest">Vest</div>
+      </div>
+    </section>
+
+  </div>
+
+      <div class="status-meters">
+        <article class="status-card health">
+          <div class="status-header">
+          <div class="status-icon health-icon" aria-hidden="true">
+            <img src="img/health.png" class="icon-base" alt="">
+            <img src="img/health.png" class="icon-fill" id="healthIconFill" alt="">
+          </div>
+            <span class="stat-label" data-i18n="health">Health</span>
+            <strong id="health">100</strong>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" id="healthFill"></div>
+          </div>
+          
+        </article>
+
+        <article class="status-card hunger">
+          <div class="status-header">
+          <div class="status-icon hunger-icon" aria-hidden="true">
+            <img src="img/hunger.png" class="icon-base" alt="">
+            <img src="img/hunger.png" class="icon-fill" id="hungerIconFill" alt="">
+          </div>
+            <span class="stat-label" data-i18n="hunger">Hunger</span>
+            <strong id="hunger">50</strong>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" id="hungerFill"></div>
+          </div>
+          
+        </article>
+
+        <article class="status-card energy">
+          <div class="status-header">
+          <div class="status-icon energy-icon" aria-hidden="true">
+            <img src="img/energy.png" class="icon-base" alt="">
+            <img src="img/energy.png" class="icon-fill" id="energyIconFill" alt="">
+          </div>
+            <span class="stat-label" data-i18n="energy">Energy</span>
+            <strong id="energy">50</strong>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" id="energyFill"></div>
+          </div>
+          
+        </article>
+      </div>
+    </section>
+
+    <section class="actions" aria-label="Actions">
+      <div class="sleep-controls">
+        <button id="sleepBtn" type="button" data-i18n="sleep">Sleep</button>
+        <select id="sleepHours" aria-label="Sleep duration">
+          <option value="1" data-i18n="oneHour">1 hour</option>
+          <option value="4" data-i18n="fourHours">4 hours</option>
+          <option value="8" data-i18n="eightHours">8 hours</option>
+        </select>
+      </div>
+      <button id="workBtn" type="button" data-i18n="work">Work</button>
+
+      <div class="search-controls">
+        <button id="searchBtn" type="button" data-i18n="search">Search</button>
+        <select id="areaSelect" aria-label="Search area">
+          <option value="meadow" data-area-option="meadow" data-i18n="meadow">Meadow</option>
+          <option value="lake" data-area-option="lake" data-i18n="lake">Lake</option>
+          <option value="trail" data-area-option="trail" data-i18n="trail">Trail</option>
+          <option value="mountain" data-area-option="mountain" data-i18n="mountain">Mountain</option>
+          <option value="abadonedVillage" data-area-option="abadonedVillage" data-i18n="abadonedVillage">Abandoned Village</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="inventory-panel" aria-label="Inventory">
+      <div class="inventory-header">
+        <h2 data-i18n="inventory">Inventory</h2>
+        <p class="inventory-summary">
+          <span id="inventorySlots">0 / 4 slots</span>
+          <span id="inventoryWeight">0 / 5 kg</span>
+        </p>
+      </div>
+      <div id="inventoryGrid" class="inventory-grid"></div>
+    </section>
+  </main>
+
+<script src="js/character.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/data.js"></script>
+<script src="js/equipment.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/inventory.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
