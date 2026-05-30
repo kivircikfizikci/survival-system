@@ -117,15 +117,17 @@ function unequipItem(equipSlot) {
     return;
   }
 
+  const targetSlotCount = inventory.items.length - (item.extraSlots || 0);
+
+  if (!canReduceInventoryTo(targetSlotCount)) {
+    showMessage(t("cannotUnequipWithItems"));
+    return;
+  }
+
   const emptySlot = findEmptySlot();
 
   if (emptySlot === -1) {
     showMessage(t("noEmptySlot"));
-    return;
-  }
-
-  if (getCurrentWeight() + item.weight > inventory.maxWeight) {
-    showMessage(t("tooHeavy"));
     return;
   }
 
@@ -138,4 +140,14 @@ function unequipItem(equipSlot) {
   updateEquipmentScreen();
 
   showMessage(t("unequipped", { item: getItemName(item) }));
+}
+
+function canReduceInventoryTo(targetSlotCount) {
+  for (let i = targetSlotCount; i < inventory.items.length; i++) {
+    if (inventory.items[i] !== null) {
+      return false;
+    }
+  }
+
+  return true;
 }
