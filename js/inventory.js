@@ -11,6 +11,17 @@ function setInventoryCapacity(totalSlots, totalWeight) {
   while (inventory.items.length < totalSlots) {
     inventory.items.push(null);
   }
+
+  while (inventory.items.length > totalSlots) {
+    const lastItem = inventory.items[inventory.items.length - 1];
+
+    if (lastItem !== null) {
+      showMessage(t("cannotReduceInventory"));
+      break;
+    }
+
+    inventory.items.pop();
+  }
 }
 
 function findEmptySlot() {

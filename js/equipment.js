@@ -132,6 +132,8 @@ function unequipItem(equipSlot) {
   inventory.items[emptySlot] = item;
   equipment[equipSlot] = null;
 
+  updateInventoryCapacityFromEquipment();
+
   updateInventoryScreen();
   updateEquipmentScreen();
 
