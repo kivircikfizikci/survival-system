@@ -289,6 +289,19 @@ function updateInventoryScreen() {
       slot.appendChild(emptyLabel);
     }
 
+    slot.addEventListener("dragover", function (event) {
+      event.preventDefault();
+    });
+
+    slot.addEventListener("drop", function () {
+      if (draggedSlotIndex === null) {
+        return;
+      }
+
+      moveInventoryItem(draggedSlotIndex, i);
+      draggedSlotIndex = null;
+    });
+
     inventoryGrid.appendChild(slot);
   }
 }

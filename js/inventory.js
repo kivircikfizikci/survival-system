@@ -131,6 +131,20 @@ function dropInventoryItem(slotIndex) {
   showMessage(t("dropped", { item: getItemName(item) }));
 }
 
+function moveInventoryItem(fromSlot, toSlot) {
+  if (fromSlot === toSlot) {
+    return;
+  }
+
+  const fromItem = inventory.items[fromSlot];
+  const toItem = inventory.items[toSlot];
+
+  inventory.items[fromSlot] = toItem;
+  inventory.items[toSlot] = fromItem;
+
+  updateInventoryScreen();
+}
+
 function useInventoryItem(slotIndex) {
   const item = inventory.items[slotIndex];
 
