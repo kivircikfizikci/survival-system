@@ -341,6 +341,18 @@ body {
   border-color: rgba(52, 211, 153, 0.45);
 }
 
+.craft-result-slot img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.craft-result-slot span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+}
+
 .craft-result-label {
   margin: 0;
   text-align: center;
@@ -1025,15 +1037,26 @@ h2 {
 
 .slot-actions {
   position: absolute;
-  inset: 0;
-  display: grid;
-  align-content: center;
-  gap: 8px;
-  padding: 14px;
-  background: rgba(2, 6, 23, 0.72);
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+  z-index: 12;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 160ms ease;
+  transition: opacity 140ms ease;
+}
+
+@media (hover: none) {
+  .slot-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .slot-action {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .actions {
@@ -1128,20 +1151,26 @@ h2 {
 }
 
 .slot-action {
-  min-height: 38px;
-  padding: 0 12px;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  border-radius: 12px;
-  font: inherit;
-  font-size: 0.86rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.88);
+  color: #f8fafc;
   cursor: pointer;
-  backdrop-filter: blur(6px);
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
+  font-size: 0;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+.slot-action:hover {
+  transform: translateY(-1px);
 }
 
 .use-action {
@@ -1150,26 +1179,40 @@ h2 {
   border-color: rgba(147, 197, 253, 0.5);
 }
 
-.use-action:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.08);
-  box-shadow:
-    0 12px 26px rgba(59, 130, 246, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+.use-action:hover,
+.wear-action:hover {
+  background: rgba(34, 197, 94, 0.88);
+  border-color: rgba(134, 239, 172, 0.75);
+}
+
+.use-action::before {
+  content: "✓";
+  font-size: 14px;
+}
+
+.wear-action::before {
+  content: "◆";
+  font-size: 12px;
+}
+
+.drop-action::before {
+  content: "×";
+  font-size: 17px;
+  line-height: 1;
+}
+
+.use-action,
+.wear-action {
+  border-color: rgba(52, 211, 153, 0.35);
 }
 
 .drop-action {
-  background: linear-gradient(180deg, rgba(251, 113, 133, 0.96), rgba(225, 29, 72, 0.9));
-  color: #fff1f2;
-  border-color: rgba(253, 164, 175, 0.5);
+  border-color: rgba(244, 63, 94, 0.35);
 }
 
 .drop-action:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.08);
-  box-shadow:
-    0 12px 26px rgba(244, 63, 94, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: rgba(225, 29, 72, 0.9);
+  border-color: rgba(251, 113, 133, 0.75);
 }
 
 .slot-action:active {

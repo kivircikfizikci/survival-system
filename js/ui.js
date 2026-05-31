@@ -30,6 +30,7 @@ let playerProfession = "Explorer";
 
 let draggedSlotIndex = null;
 let draggedEquipmentSlot = null;
+let dragMoveAmount = "all";
 
 const regionBackgrounds = {
   meadow: "img/meadow.png",
@@ -261,8 +262,25 @@ function updateInventoryScreen() {
       }
 
       slot.draggable = true;
-      slot.addEventListener("dragstart", function () {
+      slot.addEventListener("dragstart", function (event) {
         draggedSlotIndex = i;
+        dragMoveAmount = event.ctrlKey ? "one" : "all";
+      });
+
+      slot.addEventListener("click", function (event) {
+        if (event.target.closest(".slot-action")) {
+          return;
+        }
+
+        if (event.ctrlKey) {
+          quickMoveInventoryItemToCraft(i, "one");
+          return;
+        }
+
+        if (event.shiftKey) {
+          quickMoveInventoryItemToCraft(i, "all");
+          return;
+        }
       });
 
       let slotActions = document.createElement("div");
@@ -271,6 +289,7 @@ function updateInventoryScreen() {
       if (item.type === "food") {
         let useButton = document.createElement("button");
         useButton.type = "button";
+        useButton.title = t("use");
         useButton.classList.add("slot-action", "use-action");
         useButton.textContent = t("use");
         useButton.addEventListener("click", function () {
@@ -283,6 +302,7 @@ function updateInventoryScreen() {
       if (item.type === "clothing" || item.type === "bag") {
         let wearButton = document.createElement("button");
         wearButton.type = "button";
+        wearButton.title = t("wear");
         wearButton.classList.add("slot-action", "wear-action");
         wearButton.textContent = t("wear");
 
@@ -295,6 +315,7 @@ function updateInventoryScreen() {
 
       let dropButton = document.createElement("button");
       dropButton.type = "button";
+      dropButton.title = t("drop");
       dropButton.classList.add("slot-action", "drop-action");
       dropButton.textContent = t("drop");
       dropButton.addEventListener("click", function () {
@@ -322,11 +343,12 @@ function updateInventoryScreen() {
         return;
       }
 
-        if (draggedCraftSlotIndex !== null) {
-          moveCraftItemToInventorySlot(draggedCraftSlotIndex, i);
-          draggedCraftSlotIndex = null;
-          return;
-        }
+      if (draggedCraftSlotIndex !== null) {
+        moveCraftItemToInventorySlot(draggedCraftSlotIndex, i, dragMoveAmount);
+        draggedCraftSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
 
       if (draggedSlotIndex !== null) {
         moveInventoryItem(draggedSlotIndex, i);
@@ -350,14 +372,16 @@ function setupCraftDropZones() {
       const craftSlotIndex = Number(craftSlotElement.dataset.craftSlot);
 
       if (draggedCraftSlotIndex !== null) {
-        moveCraftItem(draggedCraftSlotIndex, craftSlotIndex);
+        moveCraftItem(draggedCraftSlotIndex, craftSlotIndex, dragMoveAmount);
         draggedCraftSlotIndex = null;
+        dragMoveAmount = "all";
         return;
       }
 
       if (draggedSlotIndex !== null) {
-        moveInventoryItemToCraftSlot(draggedSlotIndex, craftSlotIndex);
+        moveInventoryItemToCraftSlot(draggedSlotIndex, craftSlotIndex, dragMoveAmount);
         draggedSlotIndex = null;
+        dragMoveAmount = "all";
         return;
       }
     });
@@ -376,12 +400,27 @@ function updateCraftingScreen() {
     if (item === null) {
       slotElement.draggable = false;
       slotElement.ondragstart = null;
+      slotElement.onclick = null;
+      slotElement.innerHTML = "";
       return;
     }
 
     slotElement.draggable = true;
-    slotElement.ondragstart = function () {
+    slotElement.ondragstart = function (event) {
       draggedCraftSlotIndex = slotIndex;
+      dragMoveAmount = event.ctrlKey ? "one" : "all";
+    };
+
+    slotElement.onclick = function (event) {
+      if (event.ctrlKey) {
+        quickMoveCraftItemToInventory(slotIndex, "one");
+        return;
+      }
+
+      if (event.shiftKey) {
+        quickMoveCraftItemToInventory(slotIndex, "all");
+        return;
+      }
     };
 
     const img = document.createElement("img");
@@ -392,7 +431,43 @@ function updateCraftingScreen() {
     name.textContent = getItemName(item);
 
     slotElement.append(img, name);
+
+    if (item.quantity > 1) {
+      const quantityBadge = document.createElement("span");
+      quantityBadge.classList.add("quantity-badge");
+      quantityBadge.textContent = "x" + item.quantity;
+      slotElement.appendChild(quantityBadge);
+    }
+    
   });
+
+  updateCraftResultScreen();
+}
+
+const craftResultSlot = document.getElementById("craftResultSlot");
+
+function updateCraftResultScreen() {
+  craftResultSlot.innerHTML = "";
+
+  const recipe = getMatchingRecipe();
+
+  if (recipe === null) {
+    const emptyText = document.createElement("span");
+    emptyText.textContent = t("empty");
+    craftResultSlot.appendChild(emptyText);
+    return;
+  }
+
+  const resultItem = itemsDatabase[recipe.resultItemId];
+
+  const resultImage = document.createElement("img");
+  resultImage.src = resultItem.imageSrc;
+  resultImage.alt = getItemName(resultItem);
+
+  const resultName = document.createElement("span");
+  resultName.textContent = getItemName(resultItem);
+
+  craftResultSlot.append(resultImage, resultName);
 }
 
 function updateSearchButton(remainingSeconds) {
