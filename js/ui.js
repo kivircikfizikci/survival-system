@@ -4,7 +4,7 @@ const energyText = document.getElementById("energy");
 const nicknameText = document.getElementById("nickname");
 const regionText = document.getElementById("region");
 const professionText = document.getElementById("profession");
-const experienceText = document.getElementById("experience");
+// const experienceText = document.getElementById("experience");
 const healthFill = document.getElementById("healthFill");
 const hungerFill = document.getElementById("hungerFill");
 const energyFill = document.getElementById("energyFill");
@@ -26,7 +26,7 @@ let messageTimeoutId;
 let playerNickname = "Survivor";
 let playerRegion = "meadow";
 let playerProfession = "Explorer";
-let playerXP = 420;
+//let playerXP = 420;
 
 let draggedSlotIndex = null;
 let draggedEquipmentSlot = null;
@@ -122,7 +122,8 @@ function updateScreen() {
   nicknameText.textContent = playerNickname;
   regionText.textContent = t(playerRegion);
   professionText.textContent = playerProfession;
-  experienceText.textContent = playerXP + " XP";
+  // const experienceText = document.getElementById("experience");
+  // experienceText.textContent = playerXP + " XP";
 
 healthFill.style.width = `${clamp(Number(health), 0, 100)}%`;
 hungerFill.style.width = `${clamp(Number(hunger), 0, 100)}%`;
