@@ -1,3 +1,5 @@
+loadGame();
+
 const SEARCH_COOLDOWN_SECONDS = 5;
 let searchCooldownTimer = null;
 
@@ -138,6 +140,10 @@ document.getElementById("sleepBtn").addEventListener("click", function () {
   }, selectedHours * GAME_HOUR_MS);
 });
 
+document.getElementById("craftBtn").addEventListener("click", function () {
+  craftSelectedRecipe();
+});
+
 for (let languageButton of languageButtons) {
   languageButton.addEventListener("click", function () {
     setLanguage(languageButton.dataset.language);
@@ -170,10 +176,12 @@ setInterval(function () {
   updateScreen();
 }, GAME_HOUR_MS);
 
+updateLanguageButtons();
 updateScreen();
 setInventoryCapacity(inventory.baseSlots, inventory.baseMaxWeight);
 updateInventoryScreen();
 updateEquipmentScreen();
+updateCraftingScreen();
 setupCraftDropZones();
 updateSearchButton(0);
 updateRegionBackground(playerRegion);

@@ -489,6 +489,7 @@ function updateAreaOptions() {
   for (let option of areaOptions) {
     option.textContent = t(option.dataset.areaOption);
   }
+  autoSave();
 }
 
 function applyLanguage() {
@@ -504,10 +505,16 @@ function applyLanguage() {
   updateInventoryScreen();
   updateEquipmentScreen();
   updateLanguageButtons();
+  updateScreen();
+  updateCraftingScreen();
+  updateCraftResultScreen();
+  updateRecipesScreen();
+  autoSave();
 }
 
 function updateLanguageButtons() {
   for (let button of languageButtons) {
     button.classList.toggle("is-active", button.dataset.language === currentLanguage);
   }
+  
 }

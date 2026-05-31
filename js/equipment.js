@@ -69,6 +69,7 @@ function wearInventoryItem(slotIndex) {
   updateEquipmentScreen();
 
   showMessage(t("equipped", { item: getItemName(item) }));
+  autoSave();
 }
 
 function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
@@ -108,6 +109,7 @@ function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
   updateEquipmentScreen();
 
   showMessage(t("equipped", { item: getItemName(newItem) }));
+  autoSave();
 }
 
 function unequipItem(equipSlot) {
@@ -145,6 +147,7 @@ function unequipItem(equipSlot) {
   updateEquipmentScreen();
 
   showMessage(t("unequipped", { item: getItemName(item) }));
+  autoSave();
 }
 
 function canReduceInventoryTo(targetSlotCount) {

@@ -22,10 +22,7 @@ function moveInventoryItemToCraftSlot(inventorySlotIndex, craftSlotIndex, amount
 
   updateInventoryScreen();
   updateCraftingScreen();
-
-  if (typeof saveGame === "function") {
-    saveGame();
-  }
+  autoSave();
 }
 
 function findAvailableSlotForItem(container, item) {
@@ -96,10 +93,7 @@ function moveCraftItemToInventorySlot(craftSlotIndex, inventorySlotIndex, amount
 
   updateInventoryScreen();
   updateCraftingScreen();
-
-  if (typeof saveGame === "function") {
-    saveGame();
-  }
+  autoSave();
 }
 
 function moveCraftItem(craftFromSlot, craftToSlot, amount = "all") {
@@ -123,10 +117,7 @@ function moveCraftItem(craftFromSlot, craftToSlot, amount = "all") {
     craftSlots[craftToSlot] = fromItem;
 
     updateCraftingScreen();
-
-    if (typeof saveGame === "function") {
-      saveGame();
-    }
+    autoSave();
 
     return;
   }
@@ -264,4 +255,85 @@ function moveItemBetweenContainers(
   fromItem.quantity -= moveAmount;
 
   return true;
+}
+
+function craftSelectedRecipe() {
+  const recipe = getMatchingRecipe();
+
+  if (recipe === null) {
+    showMessage(t("noMatchingRecipe"));
+    return;
+  }
+
+  const resultItem = itemsDatabase[recipe.resultItemId];
+
+  if (!resultItem) {
+    showMessage(t("invalidRecipeResult"));
+    return;
+  }
+
+  const craftedItem = {
+    ...resultItem,
+    quantity: recipe.resultQuantity || 1
+  };
+
+  if (!canAddItemToInventory(craftedItem)) {
+    showMessage(t("notEnoughInventorySpace"));
+    return;
+  }
+
+  consumeCraftIngredients(recipe);
+  addItem(craftedItem);
+
+  updateCraftingScreen();
+  updateInventoryScreen();
+
+  showMessage(t("crafted", { item: getItemName(resultItem) }));
+
+  autoSave();
+}
+
+function canAddItemToInventory(item) {
+  if (getCurrentWeight() + item.weight * item.quantity > inventory.maxWeight) {
+    return false;
+  }
+
+  for (let inventoryItem of inventory.items) {
+    if (
+      inventoryItem !== null &&
+      inventoryItem.id === item.id &&
+      inventoryItem.quantity < inventoryItem.maxStack
+    ) {
+      return true;
+    }
+  }
+
+  return findEmptySlot() !== -1;
+}
+
+function consumeCraftIngredients(recipe) {
+  const neededIngredients = { ...recipe.ingredients };
+
+  for (let i = 0; i < craftSlots.length; i++) {
+    const item = craftSlots[i];
+
+    if (item === null) {
+      continue;
+    }
+
+    const neededAmount = neededIngredients[item.id];
+
+    if (!neededAmount) {
+      continue;
+    }
+
+    const consumeAmount = Math.min(item.quantity, neededAmount);
+
+    item.quantity -= consumeAmount;
+    neededIngredients[item.id] -= consumeAmount;
+
+    if (item.quantity <= 0) {
+      craftSlots[i] = null;
+    }
+  }
 }
