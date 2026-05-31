@@ -2,7 +2,8 @@ const itemsDatabase = {
   blackberry: {
     id: "blackberry",
     nameKey: "blackberry",
-    type: "food",
+    type: "usable",
+    category: "food",
     imageSrc: "img/blackberry.png",
     weight: 0.05,
     maxStack: 64,
@@ -12,6 +13,7 @@ const itemsDatabase = {
     id: "pebble",
     nameKey: "pebble",
     type: "material",
+    category: "natural",
     imageSrc: "img/pebble.png",
     weight: 0.2,
     maxStack: 4,
@@ -20,6 +22,7 @@ const itemsDatabase = {
     id: "dryWood",
     nameKey: "dryWood",
     type: "material",
+    category: "natural",
     imageSrc: "img/dryWood.png",
     weight: 0.7,
     maxStack: 1
@@ -28,6 +31,7 @@ const itemsDatabase = {
     id: "insect",
     nameKey: "insect",
     type: "material",
+    category: "natural",
     imageSrc: "img/insect.png",
     weight: 0.1,
     maxStack: 16 
@@ -36,6 +40,7 @@ const itemsDatabase = {
     id: "reed",
     nameKey: "reed",
     type: "material",
+    category: "natural",
     imageSrc: "img/reed.png",
     weight: 0.2,
     maxStack: 4
@@ -44,6 +49,7 @@ const itemsDatabase = {
     id: "sharpStone",
     nameKey: "sharpStone",
     type: "material",
+    category: "natural",
     imageSrc: "img/sharpStone.png",
     weight: 0.4,
     maxStack: 8
@@ -51,7 +57,8 @@ const itemsDatabase = {
   fish: {
     id: "fish",
     nameKey: "fish",
-    type: "food",
+    type: "usable",
+    category: "food",
     imageSrc: "img/fish.png",
     weight: 0.5,
     maxStack: 1,
@@ -60,7 +67,8 @@ const itemsDatabase = {
   freshWater: {
     id: "freshWater",
     nameKey: "freshWater",
-    type: "food",
+    type: "usable",
+    category: "food",
     imageSrc: "img/freshWater.png",
     weight: 0.5,
     maxStack: 1,
@@ -69,7 +77,8 @@ const itemsDatabase = {
   frog: {
     id: "frog",
     nameKey: "frog",
-    type: "food",
+    type: "usable",
+    category: "food",
     imageSrc: "img/frog.png",
     weight: 0.2,
     maxStack: 3,
@@ -79,6 +88,7 @@ const itemsDatabase = {
     id: "clay",
     nameKey: "clay",
     type: "material",
+    category: "natural",
     imageSrc: "img/clay.png",
     weight: 0.3,
     maxStack: 4
@@ -87,6 +97,7 @@ const itemsDatabase = {
     id: "branch",
     nameKey: "branch",
     type: "material",
+    category: "natural",
     imageSrc: "img/branch.png",
     weight: 1,
     maxStack: 2
@@ -94,7 +105,8 @@ const itemsDatabase = {
   mushroom: {
     id: "mushroom",
     nameKey: "mushroom",
-    type: "food",
+    type: "usable",
+    category: "food",
     imageSrc: "img/mushroom.png",
     weight: 0.1,
     maxStack: 16,
@@ -104,6 +116,7 @@ const itemsDatabase = {
     id: "rope",
     nameKey: "rope",
     type: "material",
+    category: "natural",
     imageSrc: "img/rope.png",
     weight: 1.5,
     maxStack: 1
@@ -112,6 +125,7 @@ const itemsDatabase = {
     id: "pebble",
     nameKey: "pebble",
     type: "material",
+    category: "natural",
     imageSrc: "img/pebble.png",
     weight: 0.2,
     maxStack: 4
@@ -120,6 +134,7 @@ const itemsDatabase = {
     id: "dryGrass",
     nameKey: "dryGrass",
     type: "material",
+    category: "natural",
     imageSrc: "img/dryGrass.png",
     weight: 0.1,
     maxStack: 32
@@ -128,6 +143,7 @@ const itemsDatabase = {
     id: "ironOre",
     nameKey: "ironOre",
     type: "material",
+    category: "resource",
     imageSrc: "img/ironOre.png",
     weight: 2,
     maxStack: 1
@@ -136,6 +152,7 @@ const itemsDatabase = {
     id: "coal",
     nameKey: "coal",
     type: "material",
+    category: "resource",
     imageSrc: "img/coal.png",
     weight: 1,
     maxStack: 2
@@ -144,6 +161,7 @@ const itemsDatabase = {
     id: "oldPants",
     nameKey: "oldPants",
     type: "clothing",
+    category: "clothing",
     equipSlot: "legs",
     imageSrc: "img/oldPants.png",
     weight: 0.8,
@@ -155,6 +173,7 @@ const itemsDatabase = {
     id: "cargoPants",
     nameKey: "cargoPants",
     type: "clothing",
+    category: "clothing",
     equipSlot: "legs",
     imageSrc: "img/cargoPants.png",
     weight: 1,
@@ -166,6 +185,7 @@ const itemsDatabase = {
     id: "shorts",
     nameKey: "shorts",
     type: "clothing",
+    category: "clothing",
     equipSlot: "legs",
     imageSrc: "img/shorts.png",
     weight: 0.5,
@@ -177,6 +197,7 @@ const itemsDatabase = {
     id: "sandals",
     nameKey: "sandals",
     type: "clothing",
+    category: "clothing",
     equipSlot: "feet",
     imageSrc: "img/sandals.png",
     weight: 0.3,
@@ -188,6 +209,7 @@ const itemsDatabase = {
     id: "sneakers",
     nameKey: "sneakers",
     type: "clothing",
+    category: "clothing",
     equipSlot: "feet",
     imageSrc: "img/sneakers.png",
     weight: 0.7,
@@ -199,6 +221,7 @@ const itemsDatabase = {
     id: "workBoots",
     nameKey: "workBoots",
     type: "clothing",
+    category: "clothing",
     equipSlot: "feet",
     imageSrc: "img/workBoots.png",
     weight: 1.5,
@@ -210,6 +233,7 @@ const itemsDatabase = {
     id: "oldJacket",
     nameKey: "oldJacket",
     type: "clothing",
+    category: "clothing",
     equipSlot: "vest",
     imageSrc: "img/oldJacket.png",
     weight: 1.2,
@@ -221,6 +245,7 @@ const itemsDatabase = {
     id: "leatherJacket",
     nameKey: "leatherJacket",
     type: "clothing",
+    category: "clothing",
     equipSlot: "vest",
     imageSrc: "img/leatherJacket.png",
     weight: 1.5,
@@ -232,6 +257,7 @@ const itemsDatabase = {
     id: "fingerlessGloves",
     nameKey: "fingerlessGloves",
     type: "clothing",
+    category: "clothing",
     equipSlot: "hands",
     imageSrc: "img/fingerlessGloves.png",
     weight: 0.3,
@@ -243,6 +269,7 @@ const itemsDatabase = {
     id: "winterGloves",
     nameKey: "winterGloves",
     type: "clothing",
+    category: "clothing",
     equipSlot: "hands",
     imageSrc: "img/winterGloves.png",
     weight: 0.5,
@@ -254,6 +281,7 @@ const itemsDatabase = {
     id: "oldHat",
     nameKey: "oldHat",
     type: "clothing",
+    category: "clothing",
     equipSlot: "head",
     imageSrc: "img/oldHat.png",
     weight: 0.2,
@@ -265,6 +293,7 @@ const itemsDatabase = {
     id: "tshirt",
     nameKey: "tshirt",
     type: "clothing",
+    category: "clothing",
     equipSlot: "torso",
     imageSrc: "img/tshirt.png",
     weight: 0.3,
@@ -276,6 +305,7 @@ const itemsDatabase = {
     id: "hoodie",
     nameKey: "hoodie",
     type: "clothing",
+    category: "clothing",
     equipSlot: "torso",
     imageSrc: "img/hoodie.png",
     weight: 0.7,
@@ -287,6 +317,7 @@ const itemsDatabase = {
     id: "wornShoes",
     nameKey: "wornShoes",
     type: "clothing",
+    category: "clothing",
     equipSlot: "feet",
     imageSrc: "img/wornShoes.png",
     weight: 0.5,
@@ -298,6 +329,7 @@ const itemsDatabase = {
     id: "schoolBag",
     nameKey: "schoolBag",
     type: "bag",
+    category: "bag",
     equipSlot: "bag",
     imageSrc: "img/schoolBag.png",
     weight: 0.8,
@@ -309,24 +341,140 @@ const itemsDatabase = {
     id: "hikingBag",
     nameKey: "hikingBag",
     type: "bag",
+    category: "bag",
     equipSlot: "bag",
     imageSrc: "img/hikingBag.png",
-    weight: 1.5,
+    weight: 2,
     maxStack: 1,
-    extraSlots: 10,
-    extraWeight: 8
+    extraSlots: 14,
+    extraWeight: 12
    },
    militaryBag: {
     id: "militaryBag",
     nameKey: "militaryBag",
     type: "bag",
+    category: "bag",
     equipSlot: "bag",
     imageSrc: "img/militaryBag.png",
-    weight: 2,
+    weight: 1.5,
     maxStack: 1,
-    extraSlots: 14,
-    extraWeight: 12
-   }
+    extraSlots: 10,
+    extraWeight: 8
+   },
+  bandage: {
+    id: "bandage",
+    nameKey: "bandage",
+    type: "usable",
+    category: "medical",
+    imageSrc: "img/bandage.png",
+    weight: 0.2,
+    maxStack: 8,
+    healAmount: 15
+  },
+  dirtyBandage: {
+    id: "dirtyBandage",
+    nameKey: "dirtyBandage",
+    type: "usable",
+    category: "medical",
+    imageSrc: "img/dirtyBandage.png",
+    weight: 0.15,
+    maxStack: 5,
+    healAmount: 8
+  },
+  sterileBandage: {
+    id: "sterileBandage",
+    nameKey: "sterileBandage",
+    type: "usable",
+    category: "medical",
+    imageSrc: "img/sterileBandage.png",
+    weight: 0.2,
+    maxStack: 6,
+    healAmount: 25
+  },
+  herbalPaste: {
+    id: "herbalPaste",
+    nameKey: "herbalPaste",
+    type: "usable",
+    category: "medical",
+    imageSrc: "img/herbalPaste.png",
+    weight: 0.25,
+    maxStack: 5,
+    healAmount: 12
+  },
+  stoneAxe: {
+    id: "stoneAxe",
+    nameKey: "stoneAxe",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/stoneAxe.png",
+    weight: 1,
+    maxStack: 1,
+    damage: 8,
+    durability: 40
+  },
+  stonePickaxe: {
+    id: "stonePickaxe",
+    nameKey: "stonePickaxe",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/stonePickaxe.png",
+    weight: 1.2,
+    maxStack: 1,
+    damage: 10,
+    durability: 35
+  },
+  stoneKnife: {
+    id: "stoneKnife",
+    nameKey: "stoneKnife",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/stoneKnife.png",
+    weight: 0.5,
+    maxStack: 1,
+    damage: 6,
+    durability: 30
+  },
+  stoneShovel: {
+    id: "stoneShovel",
+    nameKey: "stoneShovel",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/stoneShovel.png",
+    weight: 1.5,
+    maxStack: 1,
+    damage: 5,
+    durability: 45
+  },
+  woodenSpear: {
+    id: "woodenSpear",
+    nameKey: "woodenSpear",
+    type: "weapon",
+    category: "weapon",
+    imageSrc: "img/woodenSpear.png",
+    weight: 1.2,
+    maxStack: 1,
+    damage: 10,
+    durability: 25
+  },
+  clothScrap: {
+    id: "clothScrap",
+    nameKey: "clothScrap",
+    type: "material",
+    category: "material",
+    imageSrc: "img/clothScrap.png",
+    weight: 0.1,
+    maxStack: 16
+  },
+  stick: {
+    id: "stick",
+    nameKey: "stick",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/stick.png",
+    weight: 0.5,
+    maxStack: 8
+   },
+
 };
 
 const areasDatabase = {
@@ -335,28 +483,31 @@ const areasDatabase = {
     loot: [
       { itemId: "blackberry", chance: 25 },
       { itemId: "insect", chance: 20 },
-      { itemId: "dryWood", chance: 15 },
       { itemId: "dryGrass", chance: 20 },
-      { itemId: "reed", chance: 25 },
       { itemId: "pebble", chance: 10 }
     ]
   },
   lake: {
     nameKey: "lake",
     loot: [
-      { itemId: "fish", chance: 15 },
+      { itemId: "fish", chance: 5 },
       { itemId: "freshWater", chance: 30 },
       { itemId: "reed", chance: 25 },
       { itemId: "frog", chance: 10 },
-      { itemId: "clay", chance: 10 }
+      { itemId: "clay", chance: 10 },
+      { itemId: "pebble", chance: 10 }
+      
     ]
   },
   trail: {
     nameKey: "trail",
     loot: [
       { itemId: "branch", chance: 20 },
+      { itemId: "dryWood", chance: 15 },
+      { itemId: "stick", chance: 20 },
       { itemId: "mushroom", chance: 15 },
       { itemId: "sharpStone", chance: 15 },
+      { itemId: "pebble", chance: 10 },
       { itemId: "blackberry", chance: 15 },
       { itemId: "insect", chance: 15 }
     ]
@@ -364,11 +515,11 @@ const areasDatabase = {
   mountain: {
     nameKey: "mountain",
     loot: [
-      { itemId: "sharpStone", chance: 25 },
+      { itemId: "sharpStone", chance: 35 },
       { itemId: "pebble", chance: 30 },
       { itemId: "ironOre", chance: 10 },
       { itemId: "coal", chance: 10 },
-      { itemId: "rope", chance: 2 },
+      { itemId: "rope", chance: 2 }
     ]
   },
   abadonedVillage: {
@@ -389,17 +540,16 @@ const areasDatabase = {
       { itemId: "leatherJacket", chance: 5 },
       { itemId: "fingerlessGloves", chance: 5 },
       { itemId: "winterGloves", chance: 5 },
-      { itemId: "schoolBag", chance: 5 },
-      { itemId: "hikingBag", chance: 3 },
-      { itemId: "militaryBag", chance: 2 },
-      { itemId: "rope", chance: 10 },
-      { itemId: "insect", chance: 15 },
+      { itemId: "schoolBag", chance: 6 },
+      { itemId: "hikingBag", chance: 2 },
+      { itemId: "militaryBag", chance: 3 },
+      { itemId: "rope", chance: 10 }
     ]
   }
 };
 
 const recipesDatabase = {
- rope: {
+  rope: {
     id: "rope",
     nameKey: "rope",
     resultItemId: "rope",
@@ -409,6 +559,107 @@ const recipesDatabase = {
     ingredients: {
       reed: 3,
       dryGrass: 1
+    }
+  },
+   bandage: {
+    id: "bandage",
+    nameKey: "bandage",
+    resultItemId: "bandage",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "medical",
+    ingredients: {
+      clothScrap: 1,
+      freshWater: 1
+    }
+  },
+  sterileBandage: {
+    id: "sterileBandage",
+    nameKey: "sterileBandage",
+    resultItemId: "sterileBandage",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "medical",
+    ingredients: {
+      clothScrap: 1,
+      boiledWater: 1
+    }
+  },
+  boiledWater: {
+    id: "boiledWater",
+    nameKey: "boiledWater",
+    resultItemId: "boiledWater",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "natural",
+    ingredients: {
+      freshWater: 1,
+      dryWood: 1
+    }
+  },
+  stoneAxe: {
+    id: "stoneAxe",
+    nameKey: "stoneAxe",
+    resultItemId: "stoneAxe",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      sharpStone: 2,
+      rope: 2
+    }
+  },
+  stoneKnife: {
+    id: "stoneKnife",
+    nameKey: "stoneKnife",
+    resultItemId: "stoneKnife",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 1,
+      sharpStone: 2,
+      stick: 1
+    }
+  },
+  stonePickaxe: {
+    id: "stonePickaxe",
+    nameKey: "stonePickaxe",
+    resultItemId: "stonePickaxe",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      sharpStone: 3,
+      rope: 2
+    }
+  },
+  stoneShovel: {
+    id: "stoneShovel",
+    nameKey: "stoneShovel",
+    resultItemId: "stoneShovel",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 1,
+      sharpStone: 1,
+      rope: 1
+    }
+  },
+  woodenSpear: {
+    id: "woodenSpear",
+    nameKey: "woodenSpear",
+    resultItemId: "woodenSpear",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      sharpStone: 2,
+      rope: 1
     }
   }
 };

@@ -175,8 +175,13 @@ function useInventoryItem(slotIndex) {
     return;
   }
 
-  if (item.type === "food") {
-    hunger += item.hungerRestore;
+  if (item.type !== "usable") {
+    showMessage(t("cannotUseItem"));
+    return;
+  }
+
+  if (item.category === "food") {
+    hunger += item.hungerRestore || 0;
 
     if (hunger > 100) {
       hunger = 100;
@@ -184,7 +189,34 @@ function useInventoryItem(slotIndex) {
 
     removeOneItem(slotIndex);
     updateScreen();
-    showMessage(t("eaten", { item: getItemName(item) }));
+    updateInventoryScreen();
+
+    const message = t("used", { item: getItemName(item) });
+    showMessage(message, "success");
+    addLog(message, "success");
+
     autoSave();
+    return;
   }
+
+  if (item.category === "medical") {
+    health += item.healAmount || 0;
+
+    if (health > 100) {
+      health = 100;
+    }
+
+    removeOneItem(slotIndex);
+    updateScreen();
+    updateInventoryScreen();
+
+    const message = t("used", { item: getItemName(item) });
+    showMessage(message, "success");
+    addLog(message, "success");
+
+    autoSave();
+    return;
+  }
+
+  showMessage(t("cannotUseItem"));
 }

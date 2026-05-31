@@ -69,7 +69,7 @@ function updateRecipesScreen() {
   for (let recipeId in recipesDatabase) {
     const recipe = recipesDatabase[recipeId];
 
-    if (!recipe.isPublic) {
+    if (!isRecipeVisible(recipe)) {
       continue;
     }
 
@@ -386,7 +386,7 @@ function updateInventoryScreen() {
       let slotActions = document.createElement("div");
       slotActions.classList.add("slot-actions");
 
-      if (item.type === "food") {
+      if (item.type === "usable") {
         let useButton = document.createElement("button");
         useButton.type = "button";
         useButton.title = t("use");

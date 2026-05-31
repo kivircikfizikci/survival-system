@@ -80,6 +80,8 @@ function saveGame() {
     equipment: equipment,
     craftSlots: craftSlots,
 
+    discoveredRecipes: discoveredRecipes,
+
     currentLanguage: currentLanguage,
     selectedAreaId: areaSelect ? areaSelect.value : "meadow"
   };
@@ -111,6 +113,10 @@ function loadGame() {
   restoreInventory(saveData.inventory);
   restoreEquipment(saveData.equipment);
   restoreCraftSlots(saveData.craftSlots);
+
+  if (saveData.discoveredRecipes) {
+    discoveredRecipes = saveData.discoveredRecipes;
+  }
 
   if (saveData.currentLanguage) {
     currentLanguage = saveData.currentLanguage;

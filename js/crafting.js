@@ -6,6 +6,38 @@ let craftSlots = [
 
 let draggedCraftSlotIndex = null;
 
+function isRecipeVisible(recipe) {
+  if (recipe.isPublic) {
+    return true;
+  }
+
+  return discoveredRecipes.includes(recipe.id);
+}
+
+function discoverRecipe(recipeId) {
+  if (!recipesDatabase[recipeId]) {
+    return;
+  }
+
+  if (discoveredRecipes.includes(recipeId)) {
+    return;
+  }
+
+  discoveredRecipes.push(recipeId);
+
+  updateRecipesScreen();
+
+  showMessage(t("recipeDiscovered", {
+    recipe: t(recipesDatabase[recipeId].nameKey)
+  }), "success");
+
+  addLog(t("recipeDiscovered", {
+    recipe: t(recipesDatabase[recipeId].nameKey)
+  }), "success");
+
+  autoSave();
+}
+
 function moveInventoryItemToCraftSlot(inventorySlotIndex, craftSlotIndex, amount = "all") {
   const moved = moveItemBetweenContainers(
     inventory.items,
