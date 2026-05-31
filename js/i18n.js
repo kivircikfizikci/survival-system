@@ -102,7 +102,19 @@ const translations = {
     cannotRemoveSlotsWidthItems: "You cannot remove extra slots while you have items equipped that provide them.",
     cannotReduceInventory: "You cannot reduce inventory slots while you have more items than the new limit.",
     cannotUnequipWithItems: "You cannot unequip this item because it would put you over your inventory limits.",
-    cannotUnequipSleeping: "You cannot unequip items while sleeping."
+    cannotUnequipSleeping: "You cannot unequip items while sleeping.",
+    crafting: "Crafting",
+    craft: "Craft",
+    craftSlotFull: "That craft slot is already occupied.",
+    inventorySlotFull: "That inventory slot is already occupied.",
+    recipes: "Recipes",
+    results: "Results",
+    noRecipe: "You don't have any recipes yet.",
+    noCraftingResult: "You don't have any crafting results yet.",
+    publicRecipes: "Public Recipes",
+    log: "Log",
+    logEmpty: "Log is empty."
+
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -205,7 +217,18 @@ const translations = {
     cannotRemoveSlotsWidthItems: "Ekstra slot veren esyalar giyili iken ekstra slot kaldiramazsin.",
     cannotReduceInventory: "Yeni limite gore daha fazla esyan varken envanter slotlarini azaltamazsin.",
     cannotUnequipWithItems: "Bu esyayi cikartamazsin cunku envanter limitlerini asmana neden olur.",
-    cannotUnequipSleeping: "Uyurken esya cikartamazsin."
+    cannotUnequipSleeping: "Uyurken esya cikartamazsin.",
+    crafting: "Uretim",
+    craft: "Uret",
+    craftSlotFull: "O uretim slot'u zaten dolu.",
+    inventorySlotFull: "O envanter slot'u zaten dolu.",
+    recipes: "Tarifler",
+    results: "Sonuclar",
+    noRecipe: "Henüz hiç tarifin yok.",
+    noCraftingResult: "Henüz hiç uretim sonucunuz yok.",
+    publicRecipes: "Herkese Acik Tarifler",
+    log: "Günlük",
+    logEmpty: "Günlük boş.",
   }
 };
 

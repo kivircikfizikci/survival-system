@@ -39,6 +39,20 @@ const regionBackgrounds = {
   abadonedVillage: "img/abadonedVillage.png"
 };
 
+const recipesBtn = document.getElementById("recipesBtn");
+const recipesPanel = document.getElementById("recipesPanel");
+const closeRecipesBtn = document.getElementById("closeRecipesBtn");
+
+if (recipesBtn && recipesPanel && closeRecipesBtn) {
+  recipesBtn.addEventListener("click", function () {
+    recipesPanel.hidden = !recipesPanel.hidden;
+  });
+
+  closeRecipesBtn.addEventListener("click", function () {
+    recipesPanel.hidden = true;
+  });
+}
+
 const equipmentSlots = document.querySelectorAll(".equipment-slot");
 
 function updateRegionBackground(regionId) {
@@ -308,6 +322,12 @@ function updateInventoryScreen() {
         return;
       }
 
+        if (draggedCraftSlotIndex !== null) {
+          moveCraftItemToInventorySlot(draggedCraftSlotIndex, i);
+          draggedCraftSlotIndex = null;
+          return;
+        }
+
       if (draggedSlotIndex !== null) {
         moveInventoryItem(draggedSlotIndex, i);
         draggedSlotIndex = null;
@@ -316,6 +336,63 @@ function updateInventoryScreen() {
 
     inventoryGrid.appendChild(slot);
   }
+}
+
+function setupCraftDropZones() {
+  const craftSlotElements = document.querySelectorAll(".craft-slot");
+
+  craftSlotElements.forEach(function (craftSlotElement) {
+    craftSlotElement.addEventListener("dragover", function (event) {
+      event.preventDefault();
+    });
+
+    craftSlotElement.addEventListener("drop", function () {
+      const craftSlotIndex = Number(craftSlotElement.dataset.craftSlot);
+
+      if (draggedCraftSlotIndex !== null) {
+        moveCraftItem(draggedCraftSlotIndex, craftSlotIndex);
+        draggedCraftSlotIndex = null;
+        return;
+      }
+
+      if (draggedSlotIndex !== null) {
+        moveInventoryItemToCraftSlot(draggedSlotIndex, craftSlotIndex);
+        draggedSlotIndex = null;
+        return;
+      }
+    });
+  });
+}
+
+function updateCraftingScreen() {
+  const craftSlotElements = document.querySelectorAll(".craft-slot");
+
+  craftSlotElements.forEach(function (slotElement) {
+    const slotIndex = Number(slotElement.dataset.craftSlot);
+    const item = craftSlots[slotIndex];
+
+    slotElement.innerHTML = "";
+
+    if (item === null) {
+      slotElement.draggable = false;
+      slotElement.ondragstart = null;
+      return;
+    }
+
+    slotElement.draggable = true;
+    slotElement.ondragstart = function () {
+      draggedCraftSlotIndex = slotIndex;
+    };
+
+    const img = document.createElement("img");
+    img.src = item.imageSrc;
+    img.alt = getItemName(item);
+
+    const name = document.createElement("span");
+    name.textContent = getItemName(item);
+
+    slotElement.append(img, name);
+  });
 }
 
 function updateSearchButton(remainingSeconds) {

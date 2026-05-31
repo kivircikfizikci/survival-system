@@ -182,25 +182,117 @@
     </section>
     </div>
 
-  <aside class="side-panel" aria-label="Side panel with crafting and other features">
-    <section class="side-card">
-      <div class="side-card-header" aria-label="Crafting section header">
-        <h2 data-i18n="crafting">Crafting</h2>
+<aside class="craft-side-panel" aria-label="Crafting">
+  <section class="side-card crafting-card">
+    <div class="side-card-header">
+      <h2 data-i18n="crafting">Crafting</h2>
+    </div>
+
+    <div class="crafting-workbench">
+      <div class="craft-grid" id="craftGrid">
+        <div class="craft-slot" data-craft-slot="0"></div>
+        <div class="craft-slot" data-craft-slot="1"></div>
+        <div class="craft-slot" data-craft-slot="2"></div>
+
+        <div class="craft-slot" data-craft-slot="3"></div>
+        <div class="craft-slot" data-craft-slot="4"></div>
+        <div class="craft-slot" data-craft-slot="5"></div>
+
+        <div class="craft-slot" data-craft-slot="6"></div>
+        <div class="craft-slot" data-craft-slot="7"></div>
+        <div class="craft-slot" data-craft-slot="8"></div>
       </div>
 
-      <div class="side-placeholder">
-        <p data-i18n="craftingSoon">Crafting panel will be added here.</p>
+      <div class="craft-result-area">
+        <p class="craft-result-label" data-i18n="result">Result</p>
+
+        <div class="craft-result-slot" id="craftResultSlot">
+          <span data-i18n="empty">Empty</span>
+        </div>
       </div>
-    </section>
-  </aside>
+
+      <div class="craft-actions">
+        <button id="craftBtn" type="button" data-i18n="craft">Craft</button>
+        <button id="recipesBtn" type="button" data-i18n="recipes">Recipes</button>
+      </div>
+    </div>
+  </section>
+</aside>
+
+<aside class="info-side-panel" aria-label="Recipes and logs">
+  <section class="side-card recipes-card" id="recipesPanel" hidden>
+    <div class="recipes-header">
+      <h3 data-i18n="recipes">Recipes</h3>
+      <button id="closeRecipesBtn" type="button" class="recipes-close">&times;</button>
+    </div>
+
+    <div class="recipes-category">
+      <span data-i18n="publicRecipes">Public Recipes</span>
+    </div>
+
+    <div class="recipe-list">
+      <article class="recipe-row">
+        <div class="recipe-ingredients">
+          <span class="recipe-item">
+            <img src="img/reed.png" alt="">
+            <span data-i18n="reed">Reed</span>
+          </span>
+
+          <span class="recipe-plus">+</span>
+
+          <span class="recipe-item">
+            <img src="img/dryGrass.png" alt="">
+            <span data-i18n="dryGrass">Dry Grass</span>
+          </span>
+        </div>
+
+        <span class="recipe-equals">=</span>
+
+        <div class="recipe-result">
+          <img src="img/rope.png" alt="">
+          <span data-i18n="rope">Rope</span>
+        </div>
+      </article>
+
+      <article class="recipe-row">
+        <div class="recipe-ingredients">
+          <span class="recipe-item">
+            <img src="img/clothScrap.png" alt="">
+            <span data-i18n="clothScrap">Cloth Scrap</span>
+          </span>
+        </div>
+
+        <span class="recipe-equals">=</span>
+
+        <div class="recipe-result">
+          <img src="img/bandage.png" alt="">
+          <span data-i18n="bandage">Bandage</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="side-card log-card">
+    <div class="log-header">
+      <h3 data-i18n="log">Log</h3>
+    </div>
+
+    <div id="logList" class="log-list">
+      <p class="log-empty" data-i18n="logEmpty">No events yet.</p>
+    </div>
+  </section>
+</aside>
+
+
   </main>
 
-<script src="js/character.js"></script>
-<script src="js/i18n.js"></script>
 <script src="js/data.js"></script>
-<script src="js/equipment.js"></script>
-<script src="js/ui.js"></script>
+<script src="js/character.js"></script>
 <script src="js/inventory.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/equipment.js"></script>
+<script src="js/crafting.js"></script>
+<script src="js/ui.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

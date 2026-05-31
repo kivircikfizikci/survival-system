@@ -174,6 +174,7 @@ updateScreen();
 setInventoryCapacity(inventory.baseSlots, inventory.baseMaxWeight);
 updateInventoryScreen();
 updateEquipmentScreen();
+setupCraftDropZones();
 updateSearchButton(0);
 updateRegionBackground(playerRegion);
 applyLanguage();

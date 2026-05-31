@@ -132,6 +132,7 @@ function dropInventoryItem(slotIndex) {
   if (item === null) {
     return;
   }
+  
 
   if (isSleeping) {
     showMessage(t("cannotDropSleeping"));
