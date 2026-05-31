@@ -337,7 +337,7 @@ const areasDatabase = {
       { itemId: "insect", chance: 20 },
       { itemId: "dryWood", chance: 15 },
       { itemId: "dryGrass", chance: 20 },
-      { itemId: "reed", chance: 15 },
+      { itemId: "reed", chance: 25 },
       { itemId: "pebble", chance: 10 }
     ]
   },
@@ -395,5 +395,20 @@ const areasDatabase = {
       { itemId: "rope", chance: 10 },
       { itemId: "insect", chance: 15 },
     ]
+  }
+};
+
+const recipesDatabase = {
+ rope: {
+    id: "rope",
+    nameKey: "rope",
+    resultItemId: "rope",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "basic",
+    ingredients: {
+      reed: 3,
+      dryGrass: 1
+    }
   }
 };

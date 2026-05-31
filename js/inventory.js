@@ -99,11 +99,11 @@ function addItem(item) {
 
   inventory.items[emptySlot] = {
     ...item,
-    quantity: 1
+    quantity: item.quantity || 1
   };
 
   updateInventoryScreen();
-  saveGame();
+  autoSave();
   return true;
 }
 
@@ -127,7 +127,7 @@ function removeOneItem(slotIndex) {
 function removeItem(slotIndex) {
   inventory.items[slotIndex] = null;
   updateInventoryScreen();
-  saveGame();
+  autoSave();
 }
 
 function dropInventoryItem(slotIndex) {
@@ -136,6 +136,7 @@ function dropInventoryItem(slotIndex) {
   if (item === null) {
     return;
   }
+  
 
   if (isSleeping) {
     showMessage(t("cannotDropSleeping"));
@@ -144,6 +145,7 @@ function dropInventoryItem(slotIndex) {
 
   removeItem(slotIndex);
   showMessage(t("dropped", { item: getItemName(item) }));
+  autoSave();
 }
 
 function moveInventoryItem(fromSlot, toSlot) {
@@ -158,7 +160,7 @@ function moveInventoryItem(fromSlot, toSlot) {
   inventory.items[toSlot] = fromItem;
 
   updateInventoryScreen();
-  saveGame();
+  autoSave();
 }
 
 function useInventoryItem(slotIndex) {
@@ -183,5 +185,6 @@ function useInventoryItem(slotIndex) {
     removeOneItem(slotIndex);
     updateScreen();
     showMessage(t("eaten", { item: getItemName(item) }));
+    autoSave();
   }
 }

@@ -4,7 +4,7 @@ const energyText = document.getElementById("energy");
 const nicknameText = document.getElementById("nickname");
 const regionText = document.getElementById("region");
 const professionText = document.getElementById("profession");
-const experienceText = document.getElementById("experience");
+// const experienceText = document.getElementById("experience");
 const healthFill = document.getElementById("healthFill");
 const hungerFill = document.getElementById("hungerFill");
 const energyFill = document.getElementById("energyFill");
@@ -13,7 +13,6 @@ const hungerIconFill = document.getElementById("hungerIconFill");
 const energyIconFill = document.getElementById("energyIconFill");
 
 const statusText = document.getElementById("status");
-const messageText = document.getElementById("alertMessage");
 const inventoryGrid = document.getElementById("inventoryGrid");
 const inventorySlotsText = document.getElementById("inventorySlots");
 const inventoryWeightText = document.getElementById("inventoryWeight");
@@ -21,15 +20,20 @@ const sleepHoursSelect = document.getElementById("sleepHours");
 const areaSelect = document.getElementById("areaSelect");
 const searchButton = document.getElementById("searchBtn");
 const languageButtons = document.querySelectorAll("[data-language]");
-let messageTimeoutId;
+
+const logList = document.getElementById("logList");
+const toastContainer = document.getElementById("toastContainer");
+const MAX_LOG_ITEMS = 10;
+
 
 let playerNickname = "Survivor";
 let playerRegion = "meadow";
 let playerProfession = "Explorer";
-let playerXP = 420;
+//let playerXP = 420;
 
 let draggedSlotIndex = null;
 let draggedEquipmentSlot = null;
+let dragMoveAmount = "all";
 
 const regionBackgrounds = {
   meadow: "img/meadow.png",
@@ -38,6 +42,110 @@ const regionBackgrounds = {
   mountain: "img/mountain.png",
   abadonedVillage: "img/abadonedVillage.png"
 };
+
+const recipesBtn = document.getElementById("recipesBtn");
+const recipesPanel = document.getElementById("recipesPanel");
+const closeRecipesBtn = document.getElementById("closeRecipesBtn");
+
+const recipeList = document.getElementById("recipeList");
+
+if (recipesBtn && recipesPanel && closeRecipesBtn) {
+  recipesBtn.addEventListener("click", function () {
+    recipesPanel.hidden = !recipesPanel.hidden;
+  });
+
+  closeRecipesBtn.addEventListener("click", function () {
+    recipesPanel.hidden = true;
+  });
+}
+
+function updateRecipesScreen() {
+  if (!recipeList) {
+    return;
+  }
+
+  recipeList.innerHTML = "";
+
+  for (let recipeId in recipesDatabase) {
+    const recipe = recipesDatabase[recipeId];
+
+    if (!recipe.isPublic) {
+      continue;
+    }
+
+    const recipeRow = document.createElement("article");
+    recipeRow.classList.add("recipe-row");
+
+    const ingredientsWrapper = document.createElement("div");
+    ingredientsWrapper.classList.add("recipe-ingredients");
+
+    const ingredientIds = Object.keys(recipe.ingredients);
+
+    ingredientIds.forEach(function (itemId, index) {
+      const ingredientItem = itemsDatabase[itemId];
+      const ingredientAmount = recipe.ingredients[itemId];
+
+      if (!ingredientItem) {
+        return;
+      }
+
+      const ingredientElement = document.createElement("span");
+      ingredientElement.classList.add("recipe-item");
+
+      const ingredientImage = document.createElement("img");
+      ingredientImage.src = ingredientItem.imageSrc;
+      ingredientImage.alt = getItemName(ingredientItem);
+
+      const ingredientName = document.createElement("span");
+
+      if (ingredientAmount > 1) {
+        ingredientName.textContent =
+          getItemName(ingredientItem) + " x" + ingredientAmount;
+      } else {
+        ingredientName.textContent = getItemName(ingredientItem);
+      }
+
+      ingredientElement.append(ingredientImage, ingredientName);
+      ingredientsWrapper.appendChild(ingredientElement);
+
+      if (index < ingredientIds.length - 1) {
+        const plusElement = document.createElement("span");
+        plusElement.classList.add("recipe-plus");
+        plusElement.textContent = "+";
+        ingredientsWrapper.appendChild(plusElement);
+      }
+    });
+
+    const equalsElement = document.createElement("span");
+    equalsElement.classList.add("recipe-equals");
+    equalsElement.textContent = "=";
+
+    const resultItem = itemsDatabase[recipe.resultItemId];
+
+    const resultWrapper = document.createElement("div");
+    resultWrapper.classList.add("recipe-result");
+
+    if (resultItem) {
+      const resultImage = document.createElement("img");
+      resultImage.src = resultItem.imageSrc;
+      resultImage.alt = getItemName(resultItem);
+
+      const resultName = document.createElement("span");
+
+      if (recipe.resultQuantity > 1) {
+        resultName.textContent =
+          getItemName(resultItem) + " x" + recipe.resultQuantity;
+      } else {
+        resultName.textContent = getItemName(resultItem);
+      }
+
+      resultWrapper.append(resultImage, resultName);
+    }
+
+    recipeRow.append(ingredientsWrapper, equalsElement, resultWrapper);
+    recipeList.appendChild(recipeRow);
+  }
+}
 
 const equipmentSlots = document.querySelectorAll(".equipment-slot");
 
@@ -123,7 +231,8 @@ function updateScreen() {
   nicknameText.textContent = playerNickname;
   regionText.textContent = t(playerRegion);
   professionText.textContent = playerProfession;
-  experienceText.textContent = playerXP + " XP";
+  // const experienceText = document.getElementById("experience");
+  // experienceText.textContent = playerXP + " XP";
 
 healthFill.style.width = `${clamp(Number(health), 0, 100)}%`;
 hungerFill.style.width = `${clamp(Number(hunger), 0, 100)}%`;
@@ -134,17 +243,23 @@ hungerIconFill.style.setProperty("--empty", 100 - clamp(hunger, 0, 100) + "%");
 energyIconFill.style.setProperty("--empty", 100 - clamp(energy, 0, 100) + "%");
 }
 
-function showMessage(message) {
-  clearTimeout(messageTimeoutId);
+function showMessage(message, type = "warning") {
+  if (!toastContainer) {
+    return;
+  }
 
-  messageText.textContent = message;
-  messageText.hidden = false;
-  messageText.classList.add("is-visible");
+  const toast = document.createElement("div");
+  toast.classList.add("toast", "is-" + type);
+  toast.textContent = message;
 
-  messageTimeoutId = setTimeout(function () {
-    messageText.textContent = "";
-    messageText.hidden = true;
-    messageText.classList.remove("is-visible");
+  toastContainer.appendChild(toast);
+
+  setTimeout(function () {
+    toast.classList.add("is-hiding");
+
+    setTimeout(function () {
+      toast.remove();
+    }, 180);
   }, 3000);
 }
 
@@ -247,8 +362,25 @@ function updateInventoryScreen() {
       }
 
       slot.draggable = true;
-      slot.addEventListener("dragstart", function () {
+      slot.addEventListener("dragstart", function (event) {
         draggedSlotIndex = i;
+        dragMoveAmount = event.ctrlKey ? "one" : "all";
+      });
+
+      slot.addEventListener("click", function (event) {
+        if (event.target.closest(".slot-action")) {
+          return;
+        }
+
+        if (event.ctrlKey) {
+          quickMoveInventoryItemToCraft(i, "one");
+          return;
+        }
+
+        if (event.shiftKey) {
+          quickMoveInventoryItemToCraft(i, "all");
+          return;
+        }
       });
 
       let slotActions = document.createElement("div");
@@ -257,6 +389,7 @@ function updateInventoryScreen() {
       if (item.type === "food") {
         let useButton = document.createElement("button");
         useButton.type = "button";
+        useButton.title = t("use");
         useButton.classList.add("slot-action", "use-action");
         useButton.textContent = t("use");
         useButton.addEventListener("click", function () {
@@ -269,6 +402,7 @@ function updateInventoryScreen() {
       if (item.type === "clothing" || item.type === "bag") {
         let wearButton = document.createElement("button");
         wearButton.type = "button";
+        wearButton.title = t("wear");
         wearButton.classList.add("slot-action", "wear-action");
         wearButton.textContent = t("wear");
 
@@ -281,6 +415,7 @@ function updateInventoryScreen() {
 
       let dropButton = document.createElement("button");
       dropButton.type = "button";
+      dropButton.title = t("drop");
       dropButton.classList.add("slot-action", "drop-action");
       dropButton.textContent = t("drop");
       dropButton.addEventListener("click", function () {
@@ -308,6 +443,13 @@ function updateInventoryScreen() {
         return;
       }
 
+      if (draggedCraftSlotIndex !== null) {
+        moveCraftItemToInventorySlot(draggedCraftSlotIndex, i, dragMoveAmount);
+        draggedCraftSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
       if (draggedSlotIndex !== null) {
         moveInventoryItem(draggedSlotIndex, i);
         draggedSlotIndex = null;
@@ -316,6 +458,116 @@ function updateInventoryScreen() {
 
     inventoryGrid.appendChild(slot);
   }
+}
+
+function setupCraftDropZones() {
+  const craftSlotElements = document.querySelectorAll(".craft-slot");
+
+  craftSlotElements.forEach(function (craftSlotElement) {
+    craftSlotElement.addEventListener("dragover", function (event) {
+      event.preventDefault();
+    });
+
+    craftSlotElement.addEventListener("drop", function () {
+      const craftSlotIndex = Number(craftSlotElement.dataset.craftSlot);
+
+      if (draggedCraftSlotIndex !== null) {
+        moveCraftItem(draggedCraftSlotIndex, craftSlotIndex, dragMoveAmount);
+        draggedCraftSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
+      if (draggedSlotIndex !== null) {
+        moveInventoryItemToCraftSlot(draggedSlotIndex, craftSlotIndex, dragMoveAmount);
+        draggedSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+    });
+  });
+}
+
+function updateCraftingScreen() {
+  const craftSlotElements = document.querySelectorAll(".craft-slot");
+
+  craftSlotElements.forEach(function (slotElement) {
+    const slotIndex = Number(slotElement.dataset.craftSlot);
+    const item = craftSlots[slotIndex];
+
+    slotElement.innerHTML = "";
+
+    if (item === null) {
+      slotElement.draggable = false;
+      slotElement.ondragstart = null;
+      slotElement.onclick = null;
+      slotElement.innerHTML = "";
+      return;
+    }
+
+    slotElement.draggable = true;
+    slotElement.ondragstart = function (event) {
+      draggedCraftSlotIndex = slotIndex;
+      dragMoveAmount = event.ctrlKey ? "one" : "all";
+    };
+
+    slotElement.onclick = function (event) {
+      if (event.ctrlKey) {
+        quickMoveCraftItemToInventory(slotIndex, "one");
+        return;
+      }
+
+      if (event.shiftKey) {
+        quickMoveCraftItemToInventory(slotIndex, "all");
+        return;
+      }
+    };
+
+    const img = document.createElement("img");
+    img.src = item.imageSrc;
+    img.alt = getItemName(item);
+
+    const name = document.createElement("span");
+    name.textContent = getItemName(item);
+
+    slotElement.append(img, name);
+
+    if (item.quantity > 1) {
+      const quantityBadge = document.createElement("span");
+      quantityBadge.classList.add("quantity-badge");
+      quantityBadge.textContent = "x" + item.quantity;
+      slotElement.appendChild(quantityBadge);
+    }
+    
+  });
+
+  updateCraftResultScreen();
+}
+
+const craftResultSlot = document.getElementById("craftResultSlot");
+
+function updateCraftResultScreen() {
+  craftResultSlot.innerHTML = "";
+
+  const recipe = getMatchingRecipe();
+
+  if (recipe === null) {
+    const emptyText = document.createElement("span");
+    emptyText.textContent = t("empty");
+    craftResultSlot.appendChild(emptyText);
+    return;
+  }
+
+  const resultItem = itemsDatabase[recipe.resultItemId];
+
+  const resultImage = document.createElement("img");
+  resultImage.src = resultItem.imageSrc;
+  resultImage.alt = getItemName(resultItem);
+
+  const resultName = document.createElement("span");
+  resultName.textContent = getItemName(resultItem);
+
+  craftResultSlot.append(resultImage, resultName);
 }
 
 function updateSearchButton(remainingSeconds) {
@@ -337,6 +589,7 @@ function updateAreaOptions() {
   for (let option of areaOptions) {
     option.textContent = t(option.dataset.areaOption);
   }
+  autoSave();
 }
 
 function applyLanguage() {
@@ -352,10 +605,56 @@ function applyLanguage() {
   updateInventoryScreen();
   updateEquipmentScreen();
   updateLanguageButtons();
+  updateScreen();
+  updateCraftingScreen();
+  updateCraftResultScreen();
+  updateRecipesScreen();
 }
 
 function updateLanguageButtons() {
   for (let button of languageButtons) {
     button.classList.toggle("is-active", button.dataset.language === currentLanguage);
+  }
+  
+}
+
+function showToast(message, type = "warning") {
+  if (!toastContainer) {
+    return;
+  }
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", "is-" + type);
+  toast.textContent = message;
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(function () {
+    toast.remove();
+  }, 3000);
+}
+
+
+function addLog(message, type = "info") {
+  if (!logList) {
+    return;
+  }
+
+  const emptyLog = logList.querySelector(".log-empty");
+
+  if (emptyLog) {
+    emptyLog.remove();
+  }
+
+  const logItem = document.createElement("p");
+  logItem.classList.add("log-item", "log-" + type);
+  logItem.textContent = message;
+
+  logList.prepend(logItem);
+
+  const logItems = logList.querySelectorAll(".log-item");
+
+  if (logItems.length > MAX_LOG_ITEMS) {
+    logItems[logItems.length - 1].remove();
   }
 }

@@ -1,134 +1,135 @@
 const SAVE_KEY = "survivalSystemSave";
 
-// ── KAYDET ─────────────────────────────────────────────────────────────────
+function restoreItem(savedItem) {
+  if (savedItem === null) {
+    return null;
+  }
+
+  // Önce doğrudan key ile ara
+  let databaseItem = itemsDatabase[savedItem.id];
+
+  // Bulamazsa item id üzerinden ara
+  if (!databaseItem) {
+    databaseItem = Object.values(itemsDatabase).find(function (item) {
+      return item.id === savedItem.id;
+    });
+  }
+
+  // Database'de hâlâ yoksa eski kaydı koru
+  if (!databaseItem) {
+    return savedItem;
+  }
+
+  return {
+    ...databaseItem,
+    quantity: savedItem.quantity ?? 1
+  };
+}
+
+function restoreInventory(savedInventory) {
+  if (!savedInventory) {
+    return;
+  }
+
+  inventory = savedInventory;
+
+  inventory.baseSlots = inventory.baseSlots ?? 4;
+  inventory.baseMaxWeight = inventory.baseMaxWeight ?? 5;
+  inventory.maxWeight = inventory.maxWeight ?? inventory.baseMaxWeight;
+  inventory.items = inventory.items ?? [null, null, null, null];
+
+  inventory.items = inventory.items.map(function (item) {
+    return restoreItem(item);
+  });
+}
+
+function restoreEquipment(savedEquipment) {
+  if (!savedEquipment) {
+    return;
+  }
+
+  equipment = {
+    head: restoreItem(savedEquipment.head ?? null),
+    neck: restoreItem(savedEquipment.neck ?? null),
+    torso: restoreItem(savedEquipment.torso ?? null),
+    hands: restoreItem(savedEquipment.hands ?? null),
+    legs: restoreItem(savedEquipment.legs ?? null),
+    feet: restoreItem(savedEquipment.feet ?? null),
+    bag: restoreItem(savedEquipment.bag ?? null),
+    vest: restoreItem(savedEquipment.vest ?? null)
+  };
+}
+
+function restoreCraftSlots(savedCraftSlots) {
+  if (!savedCraftSlots) {
+    return;
+  }
+
+  craftSlots = savedCraftSlots.map(function (item) {
+    return restoreItem(item);
+  });
+}
 
 function saveGame() {
   const saveData = {
-    // Karakter istatistikleri
     health: health,
     hunger: hunger,
     energy: energy,
 
-    // Oyuncu bilgileri
-    playerNickname: playerNickname,
-    playerRegion: playerRegion,
-    playerProfession: playerProfession,
-    playerXP: playerXP,
+    inventory: inventory,
+    equipment: equipment,
+    craftSlots: craftSlots,
 
-    // Dil tercihi
     currentLanguage: currentLanguage,
-
-    // Envanter: null'ları koruyarak tüm slotları kaydet
-    inventory: {
-      baseSlots: inventory.baseSlots,
-      baseMaxWeight: inventory.baseMaxWeight,
-      items: inventory.items.map(function (item) {
-        if (item === null) return null;
-        // Sadece kaydedilmesi gereken alanları tut
-        return {
-          id: item.id,
-          quantity: item.quantity
-        };
-      })
-    },
-
-    // Ekipman: her slot için item id'sini kaydet
-    equipment: (function () {
-      const saved = {};
-      for (let slot in equipment) {
-        saved[slot] = equipment[slot] ? equipment[slot].id : null;
-      }
-      return saved;
-    })()
+    selectedAreaId: areaSelect ? areaSelect.value : "meadow"
   };
 
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
-  } catch (e) {
-    console.warn("Kayıt yapılamadı:", e);
-  }
-}
-
-// ── YÜKLEYİCİ YARDIMCISI ──────────────────────────────────────────────────
-
-// Item id'sinden tam item nesnesini bul ve quantity ekle
-function resolveItem(id, quantity) {
-  const base = itemsDatabase[id];
-  if (!base) return null;
-  return Object.assign({}, base, { quantity: quantity });
-}
-
-// ── YÜKLE ──────────────────────────────────────────────────────────────────
-
-function hasSaveData() {
-  return localStorage.getItem(SAVE_KEY) !== null;
+  localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
 }
 
 function loadGame() {
-  const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) return false;
+  const savedData = localStorage.getItem(SAVE_KEY);
+
+  if (savedData === null) {
+    return;
+  }
 
   let saveData;
+
   try {
-    saveData = JSON.parse(raw);
-  } catch (e) {
-    console.warn("Kayıt dosyası bozuk:", e);
-    return false;
+    saveData = JSON.parse(savedData);
+  } catch (error) {
+    console.error("Save data could not be loaded:", error);
+    localStorage.removeItem(SAVE_KEY);
+    return;
   }
 
-  // Karakter istatistikleri
-  if (typeof saveData.health === "number") health = saveData.health;
-  if (typeof saveData.hunger === "number") hunger = saveData.hunger;
-  if (typeof saveData.energy === "number") energy = saveData.energy;
+  health = saveData.health ?? health;
+  hunger = saveData.hunger ?? hunger;
+  energy = saveData.energy ?? energy;
 
-  // Oyuncu bilgileri
-  if (saveData.playerNickname) playerNickname = saveData.playerNickname;
-  if (saveData.playerRegion)   playerRegion   = saveData.playerRegion;
-  if (saveData.playerProfession) playerProfession = saveData.playerProfession;
-  if (typeof saveData.playerXP === "number") playerXP = saveData.playerXP;
+  restoreInventory(saveData.inventory);
+  restoreEquipment(saveData.equipment);
+  restoreCraftSlots(saveData.craftSlots);
 
-  // Dil tercihi
   if (saveData.currentLanguage) {
-    setLanguage(saveData.currentLanguage);
+    currentLanguage = saveData.currentLanguage;
   }
 
-  // Envanter
-  if (saveData.inventory) {
-    inventory.baseSlots     = saveData.inventory.baseSlots     || inventory.baseSlots;
-    inventory.baseMaxWeight = saveData.inventory.baseMaxWeight || inventory.baseMaxWeight;
-
-    const loadedItems = saveData.inventory.items || [];
-    inventory.items = loadedItems.map(function (entry) {
-      if (entry === null) return null;
-      return resolveItem(entry.id, entry.quantity);
-    });
+  if (saveData.selectedAreaId && areaSelect) {
+    areaSelect.value = saveData.selectedAreaId;
   }
 
-  // Ekipman
-  if (saveData.equipment) {
-    for (let slot in saveData.equipment) {
-      const itemId = saveData.equipment[slot];
-      if (itemId && itemsDatabase[itemId]) {
-        equipment[slot] = Object.assign({}, itemsDatabase[itemId], { quantity: 1 });
-      } else {
-        equipment[slot] = null;
-      }
-    }
-  }
-
-  // Envanter kapasitesini ekipmanlardan yeniden hesapla
   updateInventoryCapacityFromEquipment();
-
-  // Bölge seçicisini kayıtlı bölgeyle eşleştir
-  if (areaSelect && saveData.playerRegion) {
-    areaSelect.value = saveData.playerRegion;
-  }
-
-  return true;
 }
 
-// ── KAYDI SİL ──────────────────────────────────────────────────────────────
-
-function deleteSave() {
+function resetSave() {
   localStorage.removeItem(SAVE_KEY);
+  location.reload();
+}
+
+function autoSave() {
+  if (typeof saveGame === "function") {
+    saveGame();
+  }
 }

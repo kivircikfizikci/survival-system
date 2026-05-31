@@ -1,3 +1,9 @@
+loadGame();
+updateInventoryCapacityFromEquipment();
+applyLanguage();
+updateStatusText();
+updateScreen();
+
 const SEARCH_COOLDOWN_SECONDS = 5;
 let searchCooldownTimer = null;
 
@@ -61,16 +67,21 @@ document.getElementById("searchBtn").addEventListener("click", function () {
   if (foundItem === null) {
     showMessage(t("foundNothing"));
     startSearchCooldown();
+    autoSave();
     return;
   }
 
   if (addItem(foundItem)) {
-    showMessage(t("foundItem", {
+    const message = t("foundItem", {
       item: getItemName(foundItem),
       area: getAreaName(selectedArea)
-    }));
+    });
+
+    showMessage(message, "success");
+    addLog(message, "success");
+
     startSearchCooldown();
-    saveGame();
+    autoSave();
   }
 });
 
@@ -87,6 +98,7 @@ document.getElementById("workBtn").addEventListener("click", function () {
 
   energy -= 15;
   hunger -= 10;
+
   if (hunger < 0) {
     hunger = 0;
   }
@@ -96,7 +108,7 @@ document.getElementById("workBtn").addEventListener("click", function () {
   }
 
   updateScreen();
-  saveGame();
+  autoSave();
 });
 
 document.getElementById("sleepBtn").addEventListener("click", function () {
@@ -110,6 +122,7 @@ document.getElementById("sleepBtn").addEventListener("click", function () {
 
   isSleeping = true;
   setSleepingStatus(remainingHours);
+  autoSave();
 
   const sleepCounter = setInterval(function () {
     remainingHours--;
@@ -137,15 +150,25 @@ document.getElementById("sleepBtn").addEventListener("click", function () {
     setAwakeStatus();
 
     updateScreen();
-    saveGame();
+    autoSave();
   }, selectedHours * GAME_HOUR_MS);
+});
+
+document.getElementById("craftBtn").addEventListener("click", function () {
+  craftSelectedRecipe();
 });
 
 for (let languageButton of languageButtons) {
   languageButton.addEventListener("click", function () {
     setLanguage(languageButton.dataset.language);
     applyLanguage();
-    saveGame();
+    autoSave();
+  });
+}
+
+if (areaSelect) {
+  areaSelect.addEventListener("change", function () {
+    autoSave();
   });
 }
 
@@ -172,7 +195,7 @@ setInterval(function () {
   }
 
   updateScreen();
-  saveGame();
+  autoSave();
 }, GAME_HOUR_MS);
 
 // Kayıt varsa yükle, yoksa varsayılan kapasiteyi ayarla
@@ -183,9 +206,13 @@ if (loadGame()) {
   updateRegionBackground(playerRegion);
 }
 
-updateScreen();
+updateLanguageButtons();
+updateInventoryCapacityFromEquipment();
 updateInventoryScreen();
 updateEquipmentScreen();
-updateSearchButton(0);
-applyLanguage();
+updateCraftingScreen();
+updateRecipesScreen();
+setupCraftDropZones();
 setupEquipmentDropZones();
+updateSearchButton(0);
+updateRegionBackground(playerRegion);

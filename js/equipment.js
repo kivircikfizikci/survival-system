@@ -26,10 +26,10 @@ function updateInventoryCapacityFromEquipment() {
     }
   }
 
-  setInventoryCapacity(
-    inventory.baseSlots + extraSlots,
-    inventory.baseMaxWeight + extraWeight
-  );
+  const totalSlots = inventory.baseSlots + extraSlots;
+  const totalWeight = inventory.baseMaxWeight + extraWeight;
+
+  setInventoryCapacity(totalSlots, totalWeight);
 }
 
 function wearInventoryItem(slotIndex) {
@@ -69,7 +69,12 @@ function wearInventoryItem(slotIndex) {
   updateEquipmentScreen();
   saveGame();
 
-  showMessage(t("equipped", { item: getItemName(item) }));
+  const message = t("equipped", { item: getItemName(item) });
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  autoSave();
 }
 
 function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
@@ -110,6 +115,7 @@ function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
   saveGame();
 
   showMessage(t("equipped", { item: getItemName(newItem) }));
+  autoSave();
 }
 
 function unequipItem(equipSlot) {
@@ -147,7 +153,12 @@ function unequipItem(equipSlot) {
   updateEquipmentScreen();
   saveGame();
 
-  showMessage(t("unequipped", { item: getItemName(item) }));
+  const message = t("unequipped", { item: getItemName(item) });
+
+  showMessage(message, "success");
+  addLog(message, "info");
+
+  autoSave();
 }
 
 function canReduceInventoryTo(targetSlotCount) {

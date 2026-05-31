@@ -7,7 +7,20 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="language-switcher">
+
+  <header class="top-navbar">
+  <div class="brand-block">
+    <p class="eyebrow">Survival System</p>
+  </div>
+
+  <!-- Navbar is currently not implemented, so hiding this for now to avoid confusion. Will be added in future updates when more features are implemented.
+  <nav class="navbar-menu" aria-label="Game menu">
+    <button type="button" class="navbar-link" data-i18n="characterStatus">Character</button>
+    <button type="button" class="navbar-link" data-i18n="inventory">Inventory</button>
+    <button type="button" class="navbar-link" data-i18n="crafting">Crafting</button>
+  </nav>-->
+
+  <div class="language-switcher" aria-label="Language switcher">
     <button class="language-button is-active" type="button" data-language="en" aria-label="English">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30" width="1000" height="600" aria-hidden="true">
         <clipPath id="t">
@@ -19,26 +32,25 @@
         <path d="M-1 11h22v-12h8v12h22v8h-22v12h-8v-12h-22z" fill="#C8102E" stroke="#FFF" stroke-width="2"/>
       </svg>
     </button>
-    <button class="language-button" type="button" data-language="tr" aria-label="Turkce">
+
+        <button class="language-button" type="button" data-language="tr" aria-label="Turkce">
       <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 -30000 90000 60000" aria-hidden="true">
         <path fill="#e30a17" d="m0-30000h90000v60000H0z"/>
         <path fill="#fff" d="m41750 0 13568-4408-8386 11541V-7133l8386 11541zm925 8021a15000 15000 0 1 1 0-16042 12000 12000 0 1 0 0 16042z"/>
       </svg>
     </button>
   </div>
+</header>
 
-  <main class="game-shell">
-    <section class="hero">
-      <p class="eyebrow">Survival System</p>
-      <h1 data-i18n="characterStatus">Character Status</h1>
-      <p id="status" class="status-pill">Status: Awake</p>
-      <p id="alertMessage" class="alert-message" aria-live="polite" hidden></p>
-    </section>
+<p id="alertMessage" class="alert-message" aria-live="polite" hidden></p>
+
+  <main class="game-shell game-layout" aria-label="Survival game interface">
+    <div class="main-panel">
 
  <section class="profile-panel" aria-label="Character information">
-  <div class="profile-top eft-layout">
+  <div class="profile-top eft-layout" aria-label="Character profile and equipment">
 
-    <section class="equipment-side">
+    <section class="equipment-side" aria-label="Equipment slots">
 
       <div class="equipment-column">
         <div class="equipment-slot" data-equip-slot="head">Head</div>
@@ -48,16 +60,17 @@
       </div>
     </section>
 
-    <section class="character-center">
+    <section class="character-center" aria-label="Character center panel">
       <div class="avatar human-avatar" aria-hidden="true">
         <span class="avatar-icon">S</span>
       </div>
 
-      <div class="profile-details">
+      <div class="profile-details" aria-label="Character information">
         <p class="label" data-i18n="nicknameLabel">Nickname</p>
         <p id="nickname" class="name">Survivor</p>
+        <p id="status" class="status-pill profile-status">Status: Awake</p>
 
-        <div class="character-meta">
+        <div class="character-meta" aria-label="Character metadata">
           <div class="meta-row">
             <span data-i18n="regionLabel">Region</span>
             <strong id="region">Meadow</strong>
@@ -65,16 +78,16 @@
           <div class="meta-row">
             <span data-i18n="professionLabel">Profession</span>
             <strong id="profession">Explorer</strong>
-          </div>
-          <div class="meta-row">
+          </div><!-- experience is currently not implemented, so hiding this for now to avoid confusion
+         <div class="meta-row">
             <span data-i18n="experienceLabel">Experience</span>
             <strong id="experience">420 XP</strong>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>
 
-    <section class="equipment-side right-equipment">
+    <section class="equipment-side right-equipment" aria-label="Equipment slots">
 
       <div class="equipment-column">
         <div class="equipment-slot" data-equip-slot="legs">Legs</div>
@@ -86,7 +99,7 @@
 
   </div>
 
-      <div class="status-meters">
+      <div class="status-meters" aria-label="Status meters">
         <article class="status-card health">
           <div class="status-header">
           <div class="status-icon health-icon" aria-hidden="true">
@@ -167,14 +180,82 @@
       </div>
       <div id="inventoryGrid" class="inventory-grid"></div>
     </section>
+    </div>
+
+<aside class="craft-side-panel" aria-label="Crafting">
+  <section class="side-card crafting-card">
+    <div class="side-card-header">
+      <h2 data-i18n="crafting">Crafting</h2>
+    </div>
+
+    <div class="crafting-workbench">
+      <div class="craft-grid" id="craftGrid">
+        <div class="craft-slot" data-craft-slot="0"></div>
+        <div class="craft-slot" data-craft-slot="1"></div>
+        <div class="craft-slot" data-craft-slot="2"></div>
+
+        <div class="craft-slot" data-craft-slot="3"></div>
+        <div class="craft-slot" data-craft-slot="4"></div>
+        <div class="craft-slot" data-craft-slot="5"></div>
+
+        <div class="craft-slot" data-craft-slot="6"></div>
+        <div class="craft-slot" data-craft-slot="7"></div>
+        <div class="craft-slot" data-craft-slot="8"></div>
+      </div>
+
+      <div class="craft-result-area">
+        <p class="craft-result-label" data-i18n="result">Result</p>
+
+        <div class="craft-result-slot" id="craftResultSlot">
+          <span data-i18n="empty">Empty</span>
+        </div>
+      </div>
+
+      <div class="craft-actions">
+        <button id="craftBtn" type="button" data-i18n="craft">Craft</button>
+        <button id="recipesBtn" type="button" data-i18n="recipes">Recipes</button>
+      </div>
+    </div>
+  </section>
+</aside>
+
+<aside class="info-side-panel" aria-label="Recipes and logs">
+  <section class="side-card recipes-card" id="recipesPanel" hidden>
+    <div class="recipes-header">
+      <h3 data-i18n="recipes">Recipes</h3>
+      <button id="closeRecipesBtn" type="button" class="recipes-close">&times;</button>
+    </div>
+
+    <div class="recipes-category">
+      <span data-i18n="publicRecipes">Public Recipes</span>
+    </div>
+
+    <div class="recipe-list" id="recipeList"></div>
+  </section>
+
+  <section class="side-card log-card">
+    <div class="log-header">
+      <h3 data-i18n="log">Log</h3>
+    </div>
+
+    <div id="logList" class="log-list">
+      <p class="log-empty" data-i18n="logEmpty">No events yet.</p>
+    </div>
+  </section>
+</aside>
+
+
   </main>
 
-<script src="js/character.js"></script>
-<script src="js/i18n.js"></script>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
 <script src="js/data.js"></script>
-<script src="js/equipment.js"></script>
-<script src="js/ui.js"></script>
+<script src="js/character.js"></script>
 <script src="js/inventory.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/equipment.js"></script>
+<script src="js/crafting.js"></script>
+<script src="js/ui.js"></script>
 <script src="js/save.js"></script>
 <script src="js/main.js"></script>
 </body>
