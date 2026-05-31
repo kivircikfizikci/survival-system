@@ -226,6 +226,8 @@ body {
   .info-side-panel {
     grid-column: 2;
     position: static;
+    display: grid;
+    gap: 16px;
   }
 }
 
@@ -241,6 +243,7 @@ body {
   .info-side-panel {
     grid-column: 1;
     position: static;
+    align-self: stretch;
   }
   .craft-grid {
     grid-template-columns: repeat(3, 72px);
@@ -250,6 +253,9 @@ body {
   .recipes-card,
   .log-card {
     width: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 520px;
   }
 }
 
@@ -521,9 +527,28 @@ body {
 
 .log-list {
   display: grid;
+  align-content: start;
   gap: 8px;
-  max-height: 360px;
+  max-height: 440px;
   overflow-y: auto;
+}
+
+.log-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.log-list::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.45);
+  border-radius: 999px;
+}
+
+.log-list::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.55);
+  border-radius: 999px;
+}
+
+.log-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(203, 213, 225, 0.75);
 }
 
 .log-empty {
@@ -1306,4 +1331,90 @@ h2 {
     opacity: 1;
     transform: none;
   }
+}
+
+.toast-container {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+
+  display: grid;
+  gap: 10px;
+
+  width: min(320px, calc(100vw - 36px));
+}
+
+.toast {
+  padding: 12px 14px;
+
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  background: rgba(15, 23, 42, 0.94);
+  color: #f8fafc;
+
+  font-size: 0.86rem;
+  font-weight: 700;
+
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+
+  animation: toastIn 160ms ease;
+}
+
+.toast.is-warning {
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.toast.is-error {
+  border-color: rgba(244, 63, 94, 0.5);
+}
+
+.toast.is-success {
+  border-color: rgba(52, 211, 153, 0.5);
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.log-list {
+  display: grid;
+  gap: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.log-item {
+  margin: 0;
+  padding: 9px 10px;
+
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+
+  background: rgba(30, 41, 59, 0.56);
+  color: #dbeafe;
+
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.log-success {
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.log-warning {
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.log-danger {
+  border-color: rgba(244, 63, 94, 0.4);
 }

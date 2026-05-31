@@ -26,10 +26,10 @@ function updateInventoryCapacityFromEquipment() {
     }
   }
 
-  setInventoryCapacity(
-    inventory.baseSlots + extraSlots,
-    inventory.baseMaxWeight + extraWeight
-  );
+  const totalSlots = inventory.baseSlots + extraSlots;
+  const totalWeight = inventory.baseMaxWeight + extraWeight;
+
+  setInventoryCapacity(totalSlots, totalWeight);
 }
 
 function wearInventoryItem(slotIndex) {
@@ -68,7 +68,11 @@ function wearInventoryItem(slotIndex) {
   updateInventoryScreen();
   updateEquipmentScreen();
 
-  showMessage(t("equipped", { item: getItemName(item) }));
+  const message = t("equipped", { item: getItemName(item) });
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
   autoSave();
 }
 
@@ -146,7 +150,11 @@ function unequipItem(equipSlot) {
   updateInventoryScreen();
   updateEquipmentScreen();
 
-  showMessage(t("unequipped", { item: getItemName(item) }));
+  const message = t("unequipped", { item: getItemName(item) });
+
+  showMessage(message, "success");
+  addLog(message, "info");
+
   autoSave();
 }
 

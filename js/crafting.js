@@ -288,7 +288,10 @@ function craftSelectedRecipe() {
   updateCraftingScreen();
   updateInventoryScreen();
 
-  showMessage(t("crafted", { item: getItemName(resultItem) }));
+    const message = t("crafted", { item: getItemName(resultItem) });
+
+    showMessage(message, "success");
+    addLog(message, "success");
 
   autoSave();
 }

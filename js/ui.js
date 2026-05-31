@@ -13,7 +13,6 @@ const hungerIconFill = document.getElementById("hungerIconFill");
 const energyIconFill = document.getElementById("energyIconFill");
 
 const statusText = document.getElementById("status");
-const messageText = document.getElementById("alertMessage");
 const inventoryGrid = document.getElementById("inventoryGrid");
 const inventorySlotsText = document.getElementById("inventorySlots");
 const inventoryWeightText = document.getElementById("inventoryWeight");
@@ -21,7 +20,11 @@ const sleepHoursSelect = document.getElementById("sleepHours");
 const areaSelect = document.getElementById("areaSelect");
 const searchButton = document.getElementById("searchBtn");
 const languageButtons = document.querySelectorAll("[data-language]");
-let messageTimeoutId;
+
+const logList = document.getElementById("logList");
+const toastContainer = document.getElementById("toastContainer");
+const MAX_LOG_ITEMS = 10;
+
 
 let playerNickname = "Survivor";
 let playerRegion = "meadow";
@@ -149,17 +152,23 @@ hungerIconFill.style.setProperty("--empty", 100 - clamp(hunger, 0, 100) + "%");
 energyIconFill.style.setProperty("--empty", 100 - clamp(energy, 0, 100) + "%");
 }
 
-function showMessage(message) {
-  clearTimeout(messageTimeoutId);
+function showMessage(message, type = "warning") {
+  if (!toastContainer) {
+    return;
+  }
 
-  messageText.textContent = message;
-  messageText.hidden = false;
-  messageText.classList.add("is-visible");
+  const toast = document.createElement("div");
+  toast.classList.add("toast", "is-" + type);
+  toast.textContent = message;
 
-  messageTimeoutId = setTimeout(function () {
-    messageText.textContent = "";
-    messageText.hidden = true;
-    messageText.classList.remove("is-visible");
+  toastContainer.appendChild(toast);
+
+  setTimeout(function () {
+    toast.classList.add("is-hiding");
+
+    setTimeout(function () {
+      toast.remove();
+    }, 180);
   }, 3000);
 }
 
@@ -508,8 +517,6 @@ function applyLanguage() {
   updateScreen();
   updateCraftingScreen();
   updateCraftResultScreen();
-  updateRecipesScreen();
-  autoSave();
 }
 
 function updateLanguageButtons() {
@@ -517,4 +524,45 @@ function updateLanguageButtons() {
     button.classList.toggle("is-active", button.dataset.language === currentLanguage);
   }
   
+}
+
+function showToast(message, type = "warning") {
+  if (!toastContainer) {
+    return;
+  }
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", "is-" + type);
+  toast.textContent = message;
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(function () {
+    toast.remove();
+  }, 3000);
+}
+
+
+function addLog(message, type = "info") {
+  if (!logList) {
+    return;
+  }
+
+  const emptyLog = logList.querySelector(".log-empty");
+
+  if (emptyLog) {
+    emptyLog.remove();
+  }
+
+  const logItem = document.createElement("p");
+  logItem.classList.add("log-item", "log-" + type);
+  logItem.textContent = message;
+
+  logList.prepend(logItem);
+
+  const logItems = logList.querySelectorAll(".log-item");
+
+  if (logItems.length > MAX_LOG_ITEMS) {
+    logItems[logItems.length - 1].remove();
+  }
 }
