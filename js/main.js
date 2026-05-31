@@ -203,6 +203,7 @@ updateInventoryCapacityFromEquipment();
 updateInventoryScreen();
 updateEquipmentScreen();
 updateCraftingScreen();
+updateRecipesScreen();
 setupCraftDropZones();
 setupEquipmentDropZones();
 updateSearchButton(0);

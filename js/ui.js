@@ -47,6 +47,8 @@ const recipesBtn = document.getElementById("recipesBtn");
 const recipesPanel = document.getElementById("recipesPanel");
 const closeRecipesBtn = document.getElementById("closeRecipesBtn");
 
+const recipeList = document.getElementById("recipeList");
+
 if (recipesBtn && recipesPanel && closeRecipesBtn) {
   recipesBtn.addEventListener("click", function () {
     recipesPanel.hidden = !recipesPanel.hidden;
@@ -55,6 +57,94 @@ if (recipesBtn && recipesPanel && closeRecipesBtn) {
   closeRecipesBtn.addEventListener("click", function () {
     recipesPanel.hidden = true;
   });
+}
+
+function updateRecipesScreen() {
+  if (!recipeList) {
+    return;
+  }
+
+  recipeList.innerHTML = "";
+
+  for (let recipeId in recipesDatabase) {
+    const recipe = recipesDatabase[recipeId];
+
+    if (!recipe.isPublic) {
+      continue;
+    }
+
+    const recipeRow = document.createElement("article");
+    recipeRow.classList.add("recipe-row");
+
+    const ingredientsWrapper = document.createElement("div");
+    ingredientsWrapper.classList.add("recipe-ingredients");
+
+    const ingredientIds = Object.keys(recipe.ingredients);
+
+    ingredientIds.forEach(function (itemId, index) {
+      const ingredientItem = itemsDatabase[itemId];
+      const ingredientAmount = recipe.ingredients[itemId];
+
+      if (!ingredientItem) {
+        return;
+      }
+
+      const ingredientElement = document.createElement("span");
+      ingredientElement.classList.add("recipe-item");
+
+      const ingredientImage = document.createElement("img");
+      ingredientImage.src = ingredientItem.imageSrc;
+      ingredientImage.alt = getItemName(ingredientItem);
+
+      const ingredientName = document.createElement("span");
+
+      if (ingredientAmount > 1) {
+        ingredientName.textContent =
+          getItemName(ingredientItem) + " x" + ingredientAmount;
+      } else {
+        ingredientName.textContent = getItemName(ingredientItem);
+      }
+
+      ingredientElement.append(ingredientImage, ingredientName);
+      ingredientsWrapper.appendChild(ingredientElement);
+
+      if (index < ingredientIds.length - 1) {
+        const plusElement = document.createElement("span");
+        plusElement.classList.add("recipe-plus");
+        plusElement.textContent = "+";
+        ingredientsWrapper.appendChild(plusElement);
+      }
+    });
+
+    const equalsElement = document.createElement("span");
+    equalsElement.classList.add("recipe-equals");
+    equalsElement.textContent = "=";
+
+    const resultItem = itemsDatabase[recipe.resultItemId];
+
+    const resultWrapper = document.createElement("div");
+    resultWrapper.classList.add("recipe-result");
+
+    if (resultItem) {
+      const resultImage = document.createElement("img");
+      resultImage.src = resultItem.imageSrc;
+      resultImage.alt = getItemName(resultItem);
+
+      const resultName = document.createElement("span");
+
+      if (recipe.resultQuantity > 1) {
+        resultName.textContent =
+          getItemName(resultItem) + " x" + recipe.resultQuantity;
+      } else {
+        resultName.textContent = getItemName(resultItem);
+      }
+
+      resultWrapper.append(resultImage, resultName);
+    }
+
+    recipeRow.append(ingredientsWrapper, equalsElement, resultWrapper);
+    recipeList.appendChild(recipeRow);
+  }
 }
 
 const equipmentSlots = document.querySelectorAll(".equipment-slot");
@@ -517,6 +607,7 @@ function applyLanguage() {
   updateScreen();
   updateCraftingScreen();
   updateCraftResultScreen();
+  updateRecipesScreen();
 }
 
 function updateLanguageButtons() {
