@@ -40,7 +40,7 @@ const regionBackgrounds = {
   lake: "img/lake.png",
   trail: "img/trail.png",
   mountain: "img/mountain.png",
-  abadonedVillage: "img/abadonedVillage.png"
+  abandonedVillage: "img/abandonedVillage.png"
 };
 
 const recipesBtn = document.getElementById("recipesBtn");

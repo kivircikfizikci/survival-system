@@ -25,7 +25,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/dryWood.png",
     weight: 0.7,
-    maxStack: 1
+    maxStack: 3
   },
   insect: {
     id: "insect",
@@ -43,7 +43,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/reed.png",
     weight: 0.2,
-    maxStack: 4
+    maxStack: 16
   },
   sharpStone: {
     id: "sharpStone",
@@ -70,6 +70,16 @@ const itemsDatabase = {
     type: "usable",
     category: "food",
     imageSrc: "img/freshWater.png",
+    weight: 0.5,
+    maxStack: 1,
+    hungerRestore: 2
+  },
+  boiledWater: {
+    id: "boiledWater",
+    nameKey: "boiledWater",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/boiledWater.png",
     weight: 0.5,
     maxStack: 1,
     hungerRestore: 2
@@ -118,16 +128,7 @@ const itemsDatabase = {
     type: "material",
     category: "natural",
     imageSrc: "img/rope.png",
-    weight: 1.5,
-    maxStack: 1
-  },
-  pebble: {
-    id: "pebble",
-    nameKey: "pebble",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/pebble.png",
-    weight: 0.2,
+    weight: 0.4,
     maxStack: 4
   },
   dryGrass: {
@@ -652,87 +653,96 @@ const areasDatabase = {
   meadow: {
     nameKey: "meadow",
     loot: [
+      { itemId: "dryGrass", chance: 35 },
+      { itemId: "plantFiber", chance: 30 },
       { itemId: "blackberry", chance: 25 },
       { itemId: "insect", chance: 20 },
-      { itemId: "dryGrass", chance: 20 },
-      { itemId: "pebble", chance: 10 }
+      { itemId: "dryLeaf", chance: 20 },
+      { itemId: "pebble", chance: 15 },
+      { itemId: "wildHerb", chance: 10 },
+      { itemId: "smallFlower", chance: 15 },
+      { itemId: "honeycomb", chance: 5 }
     ]
   },
   lake: {
     nameKey: "lake",
     loot: [
-      { itemId: "fish", chance: 5 },
-      { itemId: "freshWater", chance: 30 },
-      { itemId: "reed", chance: 25 },
-      { itemId: "frog", chance: 10 },
-      { itemId: "clay", chance: 10 },
-      { itemId: "pebble", chance: 10 }
-      
+      { itemId: "freshWater", chance: 35 },
+      { itemId: "reed", chance: 30 },
+      { itemId: "clay", chance: 15 },
+      { itemId: "pebble", chance: 15 },
+      { itemId: "frog", chance: 12 },
+      { itemId: "fish", chance: 8 },
+      { itemId: "oldFishNet", chance: 5 },
+      { itemId: "plasticBottle", chance: 5 },
+      { itemId: "worm", chance: 15 },
+      { itemId: "snail", chance: 10 }
     ]
   },
   trail: {
     nameKey: "trail",
     loot: [
-      { itemId: "branch", chance: 20 },
-      { itemId: "dryWood", chance: 15 },
-      { itemId: "stick", chance: 20 },
-      { itemId: "mushroom", chance: 15 },
-      { itemId: "sharpStone", chance: 15 },
-      { itemId: "pebble", chance: 10 },
-      { itemId: "blackberry", chance: 15 },
-      { itemId: "insect", chance: 15 }
+      { itemId: "stick", chance: 35 },
+      { itemId: "branch", chance: 28 },
+      { itemId: "dryWood", chance: 22 },
+      { itemId: "dryLeaf", chance: 20 },
+      { itemId: "bark", chance: 18 },
+      { itemId: "pebble", chance: 15 },
+      { itemId: "mushroom", chance: 12 },
+      { itemId: "sharpStone", chance: 10 },
+      { itemId: "blackberry", chance: 10 },
+      { itemId: "insect", chance: 10 },
+      { itemId: "pineCone", chance: 15 },
+      { itemId: "resin", chance: 6 },
+      { itemId: "animalBone", chance: 5 },
+      { itemId: "feather", chance: 5 }
     ]
   },
   mountain: {
     nameKey: "mountain",
     loot: [
-      { itemId: "sharpStone", chance: 35 },
-      { itemId: "pebble", chance: 30 },
+      { itemId: "pebble", chance: 35 },
+      { itemId: "sharpStone", chance: 30 },
+      { itemId: "flint", chance: 18 },
+      { itemId: "coal", chance: 14 },
+      { itemId: "salt", chance: 10 },
+      { itemId: "obsidianShard", chance: 8 },
       { itemId: "ironOre", chance: 10 },
-      { itemId: "coal", chance: 10 },
+      { itemId: "copperOre", chance: 5 },
       { itemId: "rope", chance: 2 }
     ]
   },
-  abadonedVillage: {
+  abandonedVillage: {
     nameKey: "abadonedVillage",
     loot: [
-      { itemId: "basicPants", chance: 15 },
-      { itemId: "oldJacket", chance: 15 },
-      { itemId: "wornShoes", chance: 15 },
-      { itemId: "oldPants", chance: 10 },
-      { itemId: "oldHat", chance: 5 },
-      { itemId: "tshirt", chance: 20 },
-      { itemId: "hoodie", chance: 10 },
-      { itemId: "cargoPants", chance: 10 },
-      { itemId: "shorts", chance: 10 },
-      { itemId: "sandals", chance: 10 },
-      { itemId: "sneakers", chance: 10 },
+      { itemId: "tshirt", chance: 22 },
+      { itemId: "wornShoes", chance: 18 },
+      { itemId: "oldJacket", chance: 14 },
+      { itemId: "oldPants", chance: 12 },
+      { itemId: "clothScrap", chance: 12 },
+      { itemId: "tinCan", chance: 12 },
+      { itemId: "plasticBottle", chance: 10 },
+      { itemId: "hoodie", chance: 8 },
+      { itemId: "shorts", chance: 8 },
+      { itemId: "sandals", chance: 8 },
+      { itemId: "sneakers", chance: 7 },
+      { itemId: "oldHat", chance: 6 },
+      { itemId: "fingerlessGloves", chance: 5 },
+      { itemId: "rope", chance: 10 },
+      { itemId: "dirtyBandage", chance: 10 },
       { itemId: "workBoots", chance: 5 },
       { itemId: "leatherJacket", chance: 5 },
-      { itemId: "fingerlessGloves", chance: 5 },
-      { itemId: "winterGloves", chance: 5 },
-      { itemId: "schoolBag", chance: 6 },
-      { itemId: "hikingBag", chance: 2 },
-      { itemId: "militaryBag", chance: 3 },
-      { itemId: "rope", chance: 10 }
+      { itemId: "winterGloves", chance: 6 },
+      { itemId: "schoolBag", chance: 3 },
+      { itemId: "cargoPants", chance: 8 },
+      { itemId: "hikingBag", chance: 1 },
+      { itemId: "militaryBag", chance: 2 }
     ]
   }
 };
 
 const recipesDatabase = {
-  rope: {
-    id: "rope",
-    nameKey: "rope",
-    resultItemId: "rope",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "basic",
-    ingredients: {
-      reed: 3,
-      dryGrass: 1
-    }
-  },
-   bandage: {
+  bandage: {
     id: "bandage",
     nameKey: "bandage",
     resultItemId: "bandage",
@@ -744,6 +754,17 @@ const recipesDatabase = {
       freshWater: 1
     }
   },
+  dirtyBandage: {
+    id: "dirtyBandage",
+    nameKey: "dirtyBandage",
+    resultItemId: "dirtyBandage",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "medical",
+    ingredients: {
+      clothScrap: 1,
+    }
+  },
   sterileBandage: {
     id: "sterileBandage",
     nameKey: "sterileBandage",
@@ -752,7 +773,7 @@ const recipesDatabase = {
     isPublic: false,
     category: "medical",
     ingredients: {
-      clothScrap: 1,
+      bandage: 1,
       boiledWater: 1
     }
   },
@@ -766,6 +787,54 @@ const recipesDatabase = {
     ingredients: {
       freshWater: 1,
       dryWood: 1
+    }
+  },
+  rope: {
+    id: "rope",
+    nameKey: "rope",
+    resultItemId: "rope",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "basic",
+    ingredients: {
+      reed: 3,
+      dryGrass: 1
+    }
+  },
+  boiledWater: {
+    id: "boiledWater",
+    nameKey: "boiledWater",
+    resultItemId: "boiledWater",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      freshWater: 1,
+      dryWood: 1
+    }
+  },
+  herbalPaste: {
+    id: "herbalPaste",
+    nameKey: "herbalPaste",
+    resultItemId: "herbalPaste",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "medical",
+    ingredients: {
+      wildHerb: 2,
+      smallFlower: 1
+    }
+  },
+  herbalPaste: {
+    id: "herbalPaste",
+    nameKey: "herbalPaste",
+    resultItemId: "herbalPaste",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "medical",
+    ingredients: {
+      wildHerb: 1,
+      honeycomb: 1
     }
   },
   stoneAxe: {
@@ -831,6 +900,18 @@ const recipesDatabase = {
       branch: 2,
       sharpStone: 2,
       rope: 1
+    }
+  },
+  clothScrap: {
+    id: "clothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "material",
+    ingredients: {
+      tshirt: 1,
+      stoneKnife: 1
     }
   }
 };
