@@ -138,8 +138,8 @@ const itemsDatabase = {
     imageSrc: "img/dryGrass.png",
     weight: 0.1,
     maxStack: 32
-   },
-   ironOre: {
+  },
+  ironOre: {
     id: "ironOre",
     nameKey: "ironOre",
     type: "material",
@@ -147,8 +147,8 @@ const itemsDatabase = {
     imageSrc: "img/ironOre.png",
     weight: 2,
     maxStack: 1
-   },
-   coal: {
+  },
+  coal: {
     id: "coal",
     nameKey: "coal",
     type: "material",
@@ -156,8 +156,8 @@ const itemsDatabase = {
     imageSrc: "img/coal.png",
     weight: 1,
     maxStack: 2
-   },
-   oldPants: {
+  },
+  oldPants: {
     id: "oldPants",
     nameKey: "oldPants",
     type: "clothing",
@@ -348,8 +348,8 @@ const itemsDatabase = {
     maxStack: 1,
     extraSlots: 14,
     extraWeight: 12
-   },
-   militaryBag: {
+  },
+  militaryBag: {
     id: "militaryBag",
     nameKey: "militaryBag",
     type: "bag",
@@ -360,7 +360,7 @@ const itemsDatabase = {
     maxStack: 1,
     extraSlots: 10,
     extraWeight: 8
-   },
+  },
   bandage: {
     id: "bandage",
     nameKey: "bandage",
@@ -473,8 +473,179 @@ const itemsDatabase = {
     imageSrc: "img/stick.png",
     weight: 0.5,
     maxStack: 8
-   },
-
+  },
+  wildHerb: {
+    id: "wildHerb",
+    nameKey: "wildHerb",
+    type: "material",
+    category: "medical",
+    imageSrc: "img/wildHerb.png",
+    weight: 0.05,
+    maxStack: 16
+  },
+  plantFiber: {
+    id: "plantFiber",
+    nameKey: "plantFiber",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/plantFiber.png",
+    weight: 0.03,
+    maxStack: 32
+  },
+  smallFlower: {
+    id: "smallFlower",
+    nameKey: "smallFlower",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/smallFlower.png",
+    weight: 0.02,
+    maxStack: 32
+  },
+  bark: {
+    id: "bark",
+    nameKey: "bark",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/bark.png",
+    weight: 0.1,
+    maxStack: 15
+  },
+  pineCone: {
+    id: "pineCone",
+    nameKey: "pineCone",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/pineCone.png",
+    weight: 0.08,
+    maxStack: 20
+  },
+  feather: {
+    id: "feather",
+    nameKey: "feather",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/feather.png",
+    weight: 0.01,
+    maxStack: 64
+  },
+  flint: {
+    id: "flint",
+    nameKey: "flint",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/flint.png",
+    weight: 0.25,
+    maxStack: 12
+  },
+  copperOre: {
+    id: "copperOre",
+    nameKey: "copperOre",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/copperOre.png",
+    weight: 1.0,
+    maxStack: 1
+  },
+  salt: {
+    id: "salt",
+    nameKey: "salt",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/salt.png",
+    weight: 0.5,
+    maxStack: 8
+  },
+  oldFishNet: {
+    id: "oldFishNet",
+    nameKey: "oldFishNet",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/oldFishNet.png",
+    weight: 0.8,
+    maxStack: 1
+  },
+  honeycomb: {
+    id: "honeycomb",
+    nameKey: "honeycomb",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/honeycomb.png",
+    weight: 0.15,
+    maxStack: 4,
+    hungerRestore: 10
+  },
+  dryLeaf: {
+    id: "dryLeaf",
+    nameKey: "dryLeaf",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/dryLeaf.png",
+    weight: 0.02,
+    maxStack: 64
+  },
+  resin: {
+    id: "resin",
+    nameKey: "resin",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/resin.png",
+    weight: 0.1,
+    maxStack: 8
+  },
+  animalBone: {
+    id: "animalBone",
+    nameKey: "animalBone",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/animalBone.png",
+    weight: 0.3,
+    maxStack: 4
+  },
+  obsidianShard: {
+    id: "obsidianShard",
+    nameKey: "obsidianShard",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/obsidianShard.png",
+    weight: 0.35,
+    maxStack: 6
+  },
+  plasticBottle: {
+    id: "plasticBottle",
+    nameKey: "plasticBottle",
+    type: "material",
+    category: "container",
+    imageSrc: "img/plasticBottle.png",
+    weight: 0.25,
+    maxStack: 1
+  },
+  tinCan: {
+    id: "tinCan",
+    nameKey: "tinCan",
+    type: "material",
+    category: "container",
+    imageSrc: "img/tinCan.png",
+    weight: 0.18,
+    maxStack: 8
+  },
+  worm: {
+    id: "worm",
+    nameKey: "worm",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/worm.png",
+    weight: 0.02,
+    maxStack: 16
+  },
+  snail: {
+    id: "snail",
+    nameKey: "snail",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/snail.png",
+    weight: 0.06,
+    maxStack: 12
+  }
 };
 
 const areasDatabase = {
