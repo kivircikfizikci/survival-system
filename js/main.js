@@ -2,6 +2,7 @@ loadGame();
 updateInventoryCapacityFromEquipment();
 applyLanguage();
 updateStatusText();
+updateRecipeFilterButtons();
 updateScreen();
 
 const SEARCH_COOLDOWN_SECONDS = 5;

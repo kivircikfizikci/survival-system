@@ -25,7 +25,6 @@ const logList = document.getElementById("logList");
 const toastContainer = document.getElementById("toastContainer");
 const MAX_LOG_ITEMS = 10;
 
-
 let playerNickname = "Survivor";
 let playerRegion = "meadow";
 let playerProfession = "Explorer";
@@ -46,7 +45,9 @@ const regionBackgrounds = {
 const recipesBtn = document.getElementById("recipesBtn");
 const recipesPanel = document.getElementById("recipesPanel");
 const closeRecipesBtn = document.getElementById("closeRecipesBtn");
-
+const recipeFilters = document.getElementById("recipeFilters");
+const recipeFilterButtons = document.querySelectorAll(".recipe-filter-btn");
+let selectedRecipeCategory = "basic";
 const recipeList = document.getElementById("recipeList");
 
 if (recipesBtn && recipesPanel && closeRecipesBtn) {
@@ -70,6 +71,10 @@ function updateRecipesScreen() {
     const recipe = recipesDatabase[recipeId];
 
     if (!isRecipeVisible(recipe)) {
+      continue;
+    }
+
+    if (recipe.category !== selectedRecipeCategory) {
       continue;
     }
 
@@ -146,6 +151,24 @@ function updateRecipesScreen() {
     recipeList.appendChild(recipeRow);
   }
 }
+
+function updateRecipeFilterButtons() {
+  recipeFilterButtons.forEach(function (button) {
+    if (button.dataset.category === selectedRecipeCategory) {
+      button.classList.add("is-active");
+    } else {
+      button.classList.remove("is-active");
+    }
+  });
+}
+
+recipeFilterButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    selectedRecipeCategory = button.dataset.category;
+    updateRecipeFilterButtons();
+    updateRecipesScreen();
+  });
+});
 
 const equipmentSlots = document.querySelectorAll(".equipment-slot");
 
