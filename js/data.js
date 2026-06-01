@@ -411,7 +411,8 @@ const itemsDatabase = {
     weight: 1,
     maxStack: 1,
     damage: 8,
-    durability: 40
+    durability: 40,
+    maxDurability: 40
   },
   stonePickaxe: {
     id: "stonePickaxe",
@@ -422,7 +423,8 @@ const itemsDatabase = {
     weight: 1.2,
     maxStack: 1,
     damage: 10,
-    durability: 35
+    durability: 35,
+    maxDurability: 35
   },
   stoneKnife: {
     id: "stoneKnife",
@@ -433,7 +435,8 @@ const itemsDatabase = {
     weight: 0.5,
     maxStack: 1,
     damage: 6,
-    durability: 30
+    durability: 30,
+    maxDurability: 30
   },
   stoneShovel: {
     id: "stoneShovel",
@@ -444,7 +447,8 @@ const itemsDatabase = {
     weight: 1.5,
     maxStack: 1,
     damage: 5,
-    durability: 45
+    durability: 45,
+    maxDurability: 45
   },
   stoneSpear: {
     id: "stoneSpear",
@@ -455,7 +459,8 @@ const itemsDatabase = {
     weight: 1.2,
     maxStack: 1,
     damage: 10,
-    durability: 25
+    durability: 25,
+    maxDurability: 25
   },
   clothScrap: {
     id: "clothScrap",
@@ -646,6 +651,15 @@ const itemsDatabase = {
     imageSrc: "img/snail.png",
     weight: 0.06,
     maxStack: 12
+  },
+  leatherScrap: {
+    id: "leatherScarp",
+    nameKey: "leatherScrap",
+    type: "material",
+    category: "material",
+    imageSrc: "img/leatherScrap.png",
+    weight: 0.3,
+    maxStack: 8
   }
 };
 
@@ -713,7 +727,7 @@ const areasDatabase = {
     ]
   },
   abandonedVillage: {
-    nameKey: "abadonedVillage",
+    nameKey: "abandonedVillage",
     loot: [
       { itemId: "tshirt", chance: 22 },
       { itemId: "wornShoes", chance: 18 },
@@ -909,6 +923,244 @@ const recipesDatabase = {
     ingredients: {
       tshirt: 1,
       stoneKnife: 1
+    }
+  },
+  oldPantsToClothScrap: {
+    id: "oldPantsToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 3,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      oldPants: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  oldJacketToClothScrap: {
+    id: "oldJacketToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 4,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      oldJacket: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  wornShoesToLeatherScrap: {
+    id: "wornShoesToLeatherScrap",
+    nameKey: "leatherScrap",
+    resultItemId: "leatherScrap",
+    resultQuantity: 2,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      wornShoes: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 4
+    }
+  },
+  cargoPantsToClothScrap: {
+    id: "cargoPantsToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 5,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      cargoPants: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 4
+    }
+  },
+  shortsToClothScrap: {
+    id: "shortsToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 2,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      shorts: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  sandalsToClothScrap: {
+    id: "sandalsToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      sandals: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 2
+    }
+  },
+  sneakersToClothScrap: {
+    id: "sneakersToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      sneakers: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 2
+    }
+  },
+  workBootsToLeatherScrap: {
+    id: "workBootsToLeatherScrap",
+    nameKey: "leatherScrap",
+    resultItemId: "leatherScrap",
+    resultQuantity: 2,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      workBoots: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 4
+    }
+  },
+  leatherJacketToLeatherScrap: {
+    id: "leatherJacketToLeatherScrap",
+    nameKey: "leatherScrap",
+    resultItemId: "leatherScrap",
+    resultQuantity: 4,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      leatherJacket: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 4
+    }
+  },
+  fingerlessGlovesToLeatherScrap: {
+    id: "fingerlessGlovesToLeatherScrap",
+    nameKey: "leatherScrap",
+    resultItemId: "leatherScrap",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      fingerlessGloves: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  winterGlovesToClothScrap: {
+    id: "winterGlovesToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      winterGloves: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  oldHatToClothScrap: {
+    id: "oldHatToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 2,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      oldHat: 1
+    }, 
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  tshirtToClothScrap: {
+    id: "tshirtToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 2,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      tshirt: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 1
+    }
+  },
+  hoodieToClothScrap: {
+    id: "hoodieToClothScrap",
+    nameKey: "clothScrap",
+    resultItemId: "clothScrap",
+    resultQuantity: 4,
+    isPublic: true,
+    category: "clothing",
+    ingredients: {
+      hoodie: 1
+    },
+    requiredTools: {
+      stoneKnife: 1
+    },
+    toolDurabilityCost: {
+      stoneKnife: 4
     }
   }
 };

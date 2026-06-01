@@ -114,6 +114,31 @@ function loadGame() {
   restoreEquipment(saveData.equipment);
   restoreCraftSlots(saveData.craftSlots);
 
+  function restoreItem(savedItem) {
+  if (savedItem === null) {
+    return null;
+  }
+
+  let databaseItem = itemsDatabase[savedItem.id];
+
+  if (!databaseItem) {
+    databaseItem = Object.values(itemsDatabase).find(function (item) {
+      return item.id === savedItem.id;
+    });
+  }
+
+  if (!databaseItem) {
+    return savedItem;
+  }
+
+  return {
+    ...databaseItem,
+    quantity: savedItem.quantity ?? 1,
+    durability: savedItem.durability ?? databaseItem.durability,
+    maxDurability: savedItem.maxDurability ?? databaseItem.maxDurability
+  };
+}
+
   if (saveData.discoveredRecipes) {
     discoveredRecipes = saveData.discoveredRecipes;
   }

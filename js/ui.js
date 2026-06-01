@@ -84,17 +84,22 @@ function updateRecipesScreen() {
     const ingredientsWrapper = document.createElement("div");
     ingredientsWrapper.classList.add("recipe-ingredients");
 
-    const ingredientIds = Object.keys(recipe.ingredients);
+    const recipeInputItems = {
+      ...recipe.ingredients,
+      ...(recipe.requiredTools || {})
+    };
+
+    const ingredientIds = Object.keys(recipeInputItems);
 
     ingredientIds.forEach(function (itemId, index) {
       const ingredientItem = itemsDatabase[itemId];
-      const ingredientAmount = recipe.ingredients[itemId];
+      const ingredientAmount = recipeInputItems[itemId];
 
       if (!ingredientItem) {
         return;
       }
 
-      const ingredientElement = document.createElement("span");
+      const ingredientElement = document.createElement("div");
       ingredientElement.classList.add("recipe-item");
 
       const ingredientImage = document.createElement("img");
@@ -150,6 +155,27 @@ function updateRecipesScreen() {
     recipeRow.append(ingredientsWrapper, equalsElement, resultWrapper);
     recipeList.appendChild(recipeRow);
   }
+}
+
+function hasDurability(item) {
+  return typeof item.durability === "number";
+}
+
+function createDurabilityBadge(item) {
+  const durabilityBadge = document.createElement("span");
+  durabilityBadge.classList.add("item-durability");
+
+  const databaseItem = itemsDatabase[item.id];
+  const maxDurability =
+    item.maxDurability ||
+    databaseItem?.maxDurability ||
+    databaseItem?.durability ||
+    item.durability;
+
+  durabilityBadge.textContent = item.durability + "/" + maxDurability;
+  durabilityBadge.title = "Durability: " + item.durability + "/" + maxDurability;
+
+  return durabilityBadge;
 }
 
 function updateRecipeFilterButtons() {
@@ -376,6 +402,10 @@ function updateInventoryScreen() {
       itemInfo.append(itemImage, itemName);
       slot.appendChild(itemInfo);
       slot.appendChild(itemWeight);
+
+      if (hasDurability(item)) {
+        slot.appendChild(createDurabilityBadge(item));
+      }
 
       if (item.quantity > 1) {
         let quantityBadge = document.createElement("span");

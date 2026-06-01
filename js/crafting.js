@@ -207,20 +207,66 @@ function getCraftItemCounts() {
 }
 
 function isRecipeMatch(recipe, craftCounts) {
-  const ingredientIds = Object.keys(recipe.ingredients);
+  const requiredItems = {
+    ...recipe.ingredients,
+    ...(recipe.requiredTools || {})
+  };
+
+  const requiredItemIds = Object.keys(requiredItems);
   const craftItemIds = Object.keys(craftCounts);
 
-  if (ingredientIds.length !== craftItemIds.length) {
+  if (requiredItemIds.length !== craftItemIds.length) {
     return false;
   }
 
-  for (let itemId of ingredientIds) {
-    if (craftCounts[itemId] !== recipe.ingredients[itemId]) {
+  for (let itemId of requiredItemIds) {
+    if (craftCounts[itemId] !== requiredItems[itemId]) {
       return false;
     }
   }
 
   return true;
+}
+
+function applyToolDurabilityCost(recipe) {
+  if (!recipe.toolDurabilityCost) {
+    return;
+  }
+
+  for (let toolId in recipe.toolDurabilityCost) {
+    const durabilityCost = recipe.toolDurabilityCost[toolId];
+
+    for (let i = 0; i < craftSlots.length; i++) {
+      const item = craftSlots[i];
+
+      if (item === null || item.id !== toolId) {
+        continue;
+      }
+
+      if (typeof item.durability !== "number") {
+        const databaseItem = itemsDatabase[item.id];
+
+        if (databaseItem && typeof databaseItem.durability === "number") {
+          item.durability = databaseItem.durability;
+          item.maxDurability = databaseItem.maxDurability || databaseItem.durability;
+        } else {
+          return;
+        }
+      }
+
+      item.durability -= durabilityCost;
+
+      if (item.durability <= 0) {
+        const brokenToolName = getItemName(item);
+        craftSlots[i] = null;
+
+        showMessage(t("toolBroke", { item: brokenToolName }), "warning");
+        addLog(t("toolBroke", { item: brokenToolName }), "warning");
+      }
+
+      return;
+    }
+  }
 }
 
 function getMatchingRecipe() {
@@ -320,15 +366,27 @@ function craftSelectedRecipe() {
   }
 
   consumeCraftIngredients(recipe);
-  addItem(craftedItem);
+  applyToolDurabilityCost(recipe);
+
+  const added = addItem(craftedItem);
+
+  if (!added) {
+    showMessage(t("notEnoughInventorySpace"));
+    updateCraftingScreen();
+    updateInventoryScreen();
+    autoSave();
+    return;
+  }
+
   checkRecipeDiscoveryByItem(craftedItem.id);
+
   updateCraftingScreen();
   updateInventoryScreen();
 
-    const message = t("crafted", { item: getItemName(resultItem) });
+  const message = t("crafted", { item: getItemName(resultItem) });
 
-    showMessage(message, "success");
-    addLog(message, "success");
+  showMessage(message, "success");
+  addLog(message, "success");
 
   autoSave();
 }
