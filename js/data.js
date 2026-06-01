@@ -765,18 +765,6 @@ const recipeDiscoveryRules = {
 };
 
 const recipesDatabase = {
-  bandage: {
-    id: "bandage",
-    nameKey: "bandage",
-    resultItemId: "bandage",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "medical",
-    ingredients: {
-      clothScrap: 1,
-      freshWater: 1
-    }
-  },
   dirtyBandage: {
     id: "dirtyBandage",
     nameKey: "dirtyBandage",
@@ -786,6 +774,18 @@ const recipesDatabase = {
     category: "medical",
     ingredients: {
       clothScrap: 1,
+    }
+  },
+  bandage: {
+    id: "bandage",
+    nameKey: "bandage",
+    resultItemId: "bandage",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "medical",
+    ingredients: {
+      dirtyBandage: 1,
+      freshWater: 1
     }
   },
   sterileBandage: {
