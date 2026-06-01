@@ -446,12 +446,12 @@ const itemsDatabase = {
     damage: 5,
     durability: 45
   },
-  woodenSpear: {
-    id: "woodenSpear",
-    nameKey: "woodenSpear",
+  stoneSpear: {
+    id: "stoneSpear",
+    nameKey: "stoneSpear",
     type: "weapon",
     category: "weapon",
-    imageSrc: "img/woodenSpear.png",
+    imageSrc: "img/stoneSpear.png",
     weight: 1.2,
     maxStack: 1,
     damage: 10,
@@ -741,6 +741,15 @@ const areasDatabase = {
   }
 };
 
+const recipeDiscoveryRules = {
+  wildHerb: ["herbalPaste"],
+  honeycomb: ["herbalPaste"],
+  dryWood: ["boiledWater"],
+  sharpStone: ["stoneKnife", "stoneAxe", "stoneShovel", "stoneSpear"],
+  ironOre: ["stonePickaxe"],
+  boiledWater: ["sterileBandage"]
+};
+
 const recipesDatabase = {
   bandage: {
     id: "bandage",
@@ -777,43 +786,7 @@ const recipesDatabase = {
       boiledWater: 1
     }
   },
-  boiledWater: {
-    id: "boiledWater",
-    nameKey: "boiledWater",
-    resultItemId: "boiledWater",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "natural",
-    ingredients: {
-      freshWater: 1,
-      dryWood: 1
-    }
-  },
-  rope: {
-    id: "rope",
-    nameKey: "rope",
-    resultItemId: "rope",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "basic",
-    ingredients: {
-      reed: 3,
-      dryGrass: 1
-    }
-  },
-  boiledWater: {
-    id: "boiledWater",
-    nameKey: "boiledWater",
-    resultItemId: "boiledWater",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "survival",
-    ingredients: {
-      freshWater: 1,
-      dryWood: 1
-    }
-  },
-  herbalPaste: {
+    herbalPaste: {
     id: "herbalPaste",
     nameKey: "herbalPaste",
     resultItemId: "herbalPaste",
@@ -835,6 +808,30 @@ const recipesDatabase = {
     ingredients: {
       wildHerb: 1,
       honeycomb: 1
+    }
+  },
+  boiledWater: {
+    id: "boiledWater",
+    nameKey: "boiledWater",
+    resultItemId: "boiledWater",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      freshWater: 1,
+      dryWood: 1
+    }
+  },
+  rope: {
+    id: "rope",
+    nameKey: "rope",
+    resultItemId: "rope",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "basic",
+    ingredients: {
+      reed: 3,
+      dryGrass: 1
     }
   },
   stoneAxe: {
@@ -889,10 +886,10 @@ const recipesDatabase = {
       rope: 1
     }
   },
-  woodenSpear: {
-    id: "woodenSpear",
-    nameKey: "woodenSpear",
-    resultItemId: "woodenSpear",
+  stoneSpear: {
+    id: "stoneSpear",
+    nameKey: "stoneSpear",
+    resultItemId: "stoneSpear",
     resultQuantity: 1,
     isPublic: false,
     category: "tools",

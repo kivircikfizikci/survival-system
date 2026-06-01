@@ -15,7 +15,13 @@ function isRecipeVisible(recipe) {
 }
 
 function discoverRecipe(recipeId) {
-  if (!recipesDatabase[recipeId]) {
+  const recipe = recipesDatabase[recipeId];
+
+  if (!recipe) {
+    return;
+  }
+
+  if (recipe.isPublic) {
     return;
   }
 
@@ -27,13 +33,12 @@ function discoverRecipe(recipeId) {
 
   updateRecipesScreen();
 
-  showMessage(t("recipeDiscovered", {
-    recipe: t(recipesDatabase[recipeId].nameKey)
-  }), "success");
+  const message = t("recipeDiscovered", {
+    recipe: t(recipe.nameKey)
+  });
 
-  addLog(t("recipeDiscovered", {
-    recipe: t(recipesDatabase[recipeId].nameKey)
-  }), "success");
+  showMessage(message, "success");
+  addLog(message, "success");
 
   autoSave();
 }
@@ -316,7 +321,7 @@ function craftSelectedRecipe() {
 
   consumeCraftIngredients(recipe);
   addItem(craftedItem);
-
+  checkRecipeDiscoveryByItem(craftedItem.id);
   updateCraftingScreen();
   updateInventoryScreen();
 
@@ -326,6 +331,18 @@ function craftSelectedRecipe() {
     addLog(message, "success");
 
   autoSave();
+}
+
+function checkRecipeDiscoveryByItem(itemId) {
+  const recipeIds = recipeDiscoveryRules[itemId];
+
+  if (!recipeIds) {
+    return;
+  }
+
+  for (let recipeId of recipeIds) {
+    discoverRecipe(recipeId);
+  }
 }
 
 function canAddItemToInventory(item) {

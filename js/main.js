@@ -81,6 +81,8 @@ document.getElementById("searchBtn").addEventListener("click", function () {
     showMessage(message, "success");
     addLog(message, "success");
 
+    checkRecipeDiscoveryByItem(foundItem.id);
+
     startSearchCooldown();
     autoSave();
   }
