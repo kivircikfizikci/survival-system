@@ -124,7 +124,6 @@ const translations = {
     invalidRecipeResult: "That recipe's result is invalid.",
     notEnoughInventorySpace: "You don't have enough inventory space.",
     crafted: "Crafted {item}.",
-    publicRecipes: "Public Recipes",
     log: "Log",
     logEmpty: "Log is empty."
 
@@ -252,7 +251,6 @@ const translations = {
     invalidRecipeResult: "Bu tarifin sonucu geçersiz.",
     notEnoughInventorySpace: "Envanterinde yeterli alan yok.",
     crafted: "{item} uretildi.",
-    publicRecipes: "Herkese Acik Tarifler",
     log: "Günlük",
     logEmpty: "Günlük boş.",
   }
