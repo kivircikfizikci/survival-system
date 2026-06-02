@@ -510,6 +510,12 @@ body {
   justify-content: space-evenly;
 }
 
+.recipe-tool-group {
+  border: 1px dashed rgba(52, 211, 153, 0.35);
+  border-radius: 10px;
+  padding: 4px;
+}
+
 .recipe-item,
 .recipe-result {
   display: flex;

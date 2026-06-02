@@ -60,6 +60,13 @@ if (recipesBtn && recipesPanel && closeRecipesBtn) {
   });
 }
 
+let recipeToolCycleIndex = 0;
+
+setInterval(function () {
+  recipeToolCycleIndex++;
+  updateRecipesScreen();
+}, 1500);
+
 function updateRecipesScreen() {
   if (!recipeList) {
     return;
@@ -84,63 +91,101 @@ function updateRecipesScreen() {
     const ingredientsWrapper = document.createElement("div");
     ingredientsWrapper.classList.add("recipe-ingredients");
 
-    const recipeInputItems = {
+    const normalInputItems = {
       ...recipe.ingredients,
       ...(recipe.requiredTools || {})
     };
 
-    if (recipe.requiredToolGroups) {
-      for (let groupName in recipe.requiredToolGroups) {
-        const firstToolId = toolGroups[groupName][0];
-        recipeInputItems[firstToolId] = recipe.requiredToolGroups[groupName];
-      }
+    const normalInputIds = Object.keys(normalInputItems);
+
+    function addPlus() {
+      const plusElement = document.createElement("span");
+      plusElement.classList.add("recipe-plus");
+      plusElement.textContent = "+";
+      ingredientsWrapper.appendChild(plusElement);
     }
 
-    const ingredientIds = Object.keys(recipeInputItems);
-
-    ingredientIds.forEach(function (itemId, index) {
-      const ingredientItem = itemsDatabase[itemId];
-      const ingredientAmount = recipeInputItems[itemId];
-
-      if (!ingredientItem) {
+    function addRecipeItem(item, amount, extraClassName = "") {
+      if (!item) {
         return;
       }
 
-      const ingredientElement = document.createElement("div");
-      ingredientElement.classList.add("recipe-item");
+      const itemElement = document.createElement("div");
+      itemElement.classList.add("recipe-item");
 
-      const ingredientImage = document.createElement("img");
-      ingredientImage.src = ingredientItem.imageSrc;
-      ingredientImage.alt = getItemName(ingredientItem);
-
-      const ingredientName = document.createElement("span");
-
-      if (ingredientAmount > 1) {
-        ingredientName.textContent =
-          getItemName(ingredientItem) + " x" + ingredientAmount;
-      } else {
-        ingredientName.textContent = getItemName(ingredientItem);
+      if (extraClassName) {
+        itemElement.classList.add(extraClassName);
       }
 
-      ingredientElement.append(ingredientImage, ingredientName);
-      ingredientsWrapper.appendChild(ingredientElement);
+      const itemImage = document.createElement("img");
+      itemImage.src = item.imageSrc;
+      itemImage.alt = getItemName(item);
 
-      if (index < ingredientIds.length - 1) {
-        const plusElement = document.createElement("span");
-        plusElement.classList.add("recipe-plus");
-        plusElement.textContent = "+";
-        ingredientsWrapper.appendChild(plusElement);
+      const itemName = document.createElement("span");
+      itemName.textContent =
+        amount > 1
+          ? getItemName(item) + " x" + amount
+          : getItemName(item);
+
+      itemElement.append(itemImage, itemName);
+      ingredientsWrapper.appendChild(itemElement);
+    }
+
+    normalInputIds.forEach(function (itemId, index) {
+      addRecipeItem(itemsDatabase[itemId], normalInputItems[itemId]);
+
+      if (index < normalInputIds.length - 1) {
+        addPlus();
       }
     });
+
+    if (recipe.requiredToolGroups) {
+      for (let groupName in recipe.requiredToolGroups) {
+        const groupItems = toolGroups[groupName] || [];
+
+        const visibleToolIds = groupItems.filter(function (toolId) {
+          const toolItem = itemsDatabase[toolId];
+
+          if (!toolItem) {
+            return false;
+          }
+
+          const toolRecipe = recipesDatabase[toolId];
+
+          if (!toolRecipe) {
+            return true;
+          }
+
+          return toolRecipe.isPublic || discoveredRecipes.includes(toolId);
+        });
+
+        if (visibleToolIds.length === 0) {
+          continue;
+        }
+
+        if (ingredientsWrapper.children.length > 0) {
+          addPlus();
+        }
+
+        const selectedToolId =
+          visibleToolIds[recipeToolCycleIndex % visibleToolIds.length];
+
+        addRecipeItem(
+          itemsDatabase[selectedToolId],
+          recipe.requiredToolGroups[groupName],
+          "recipe-tool-group"
+        );
+      }
+    }
 
     const equalsElement = document.createElement("span");
     equalsElement.classList.add("recipe-equals");
     equalsElement.textContent = "=";
 
-    const resultItem = itemsDatabase[recipe.resultItemId];
-
     const resultWrapper = document.createElement("div");
     resultWrapper.classList.add("recipe-result");
+
+    const resultItem = itemsDatabase[recipe.resultItemId];
 
     if (resultItem) {
       const resultImage = document.createElement("img");
@@ -148,13 +193,10 @@ function updateRecipesScreen() {
       resultImage.alt = getItemName(resultItem);
 
       const resultName = document.createElement("span");
-
-      if (recipe.resultQuantity > 1) {
-        resultName.textContent =
-          getItemName(resultItem) + " x" + recipe.resultQuantity;
-      } else {
-        resultName.textContent = getItemName(resultItem);
-      }
+      resultName.textContent =
+        recipe.resultQuantity > 1
+          ? getItemName(resultItem) + " x" + recipe.resultQuantity
+          : getItemName(resultItem);
 
       resultWrapper.append(resultImage, resultName);
     }
@@ -267,6 +309,7 @@ areaSelect.addEventListener("change", function () {
   updateScreen();
   saveGame();
 });
+
 let searchButtonRemainingSeconds = 0;
 let currentStatus = {
   key: "statusAwake",
@@ -628,6 +671,26 @@ function updateCraftResultScreen() {
   resultName.textContent = getItemName(resultItem);
 
   craftResultSlot.append(resultImage, resultName);
+}
+
+function getVisibleToolGroupItems(groupName) {
+  const groupItems = toolGroups[groupName] || [];
+
+  return groupItems.filter(function (itemId) {
+    const item = itemsDatabase[itemId];
+
+    if (!item) {
+      return false;
+    }
+
+    const recipe = recipesDatabase[itemId];
+
+    if (!recipe) {
+      return true;
+    }
+
+    return recipe.isPublic || discoveredRecipes.includes(itemId);
+  });
 }
 
 function updateSearchButton(remainingSeconds) {
