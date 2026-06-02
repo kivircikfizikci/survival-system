@@ -275,7 +275,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/coal.png",
     weight: 1,
-    maxStack: 2
+    maxStack: 8
   },
   flint: {
     id: "flint",
@@ -321,6 +321,15 @@ const itemsDatabase = {
     imageSrc: "img/woodLog.png",
     weight: 2.5,
     maxStack: 1
+  },
+  charcoal: {
+    id: "charcoal",
+    nameKey: "charcoal",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/charcoal.png",
+    weight: 1.5,
+    maxStack: 8
   },
   // Clothing Items
   oldPants: {
@@ -601,7 +610,8 @@ const itemsDatabase = {
     maxStack: 1,
     damage: 8,
     durability: 40,
-    maxDurability: 40
+    maxDurability: 40,
+    toolTags: ["axe"]
   },
   stonePickaxe: {
     id: "stonePickaxe",
@@ -613,7 +623,8 @@ const itemsDatabase = {
     maxStack: 1,
     damage: 10,
     durability: 35,
-    maxDurability: 35
+    maxDurability: 35,
+    toolTags: ["pickaxe"]
   },
   stoneKnife: {
     id: "stoneKnife",
@@ -638,7 +649,8 @@ const itemsDatabase = {
     maxStack: 1,
     damage: 5,
     durability: 45,
-    maxDurability: 45
+    maxDurability: 45,
+    toolTags: ["shovel"]
   },
   stoneSpear: {
     id: "stoneSpear",
@@ -650,7 +662,8 @@ const itemsDatabase = {
     maxStack: 1,
     damage: 10,
     durability: 25,
-    maxDurability: 25
+    maxDurability: 25,
+    toolTags: ["spear"]
   },
   obsidianKnife: {
     id: "obsidianKnife",
@@ -674,8 +687,9 @@ const itemsDatabase = {
     weight: 1,
     maxStack: 1,
     damage: 15,
-    durability: 30,
-    maxDurability: 30
+    durability: 35,
+    maxDurability: 35,
+    toolTags: ["spear"]
   },
   boneKnife: {
     id: "boneKnife",
@@ -686,8 +700,8 @@ const itemsDatabase = {
     weight: 0.2,
     maxStack: 1,
     damage: 8,
-    durability: 25,
-    maxDurability: 25,
+    durability: 40,
+    maxDurability: 40,
     toolTags: ["knife"]
   },
   boneNeedle: {
@@ -700,6 +714,71 @@ const itemsDatabase = {
     maxStack: 1,
     durability: 20,
     maxDurability: 20
+  },
+  copperPickaxe: {
+    id: "copperPickaxe",
+    nameKey: "copperPickaxe",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/copperPickaxe.png",
+    weight: 1.2,
+    maxStack: 1,
+    damage: 10,
+    durability: 56,
+    maxDurability: 56,
+    toolTags: ["pickaxe"]
+  },
+  copperShovel: {
+    id: "copperShovel",
+    nameKey: "copperShovel",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/copperShovel.png",
+    weight: 1.5,
+    maxStack: 1,
+    damage: 5,
+    durability: 72,
+    maxDurability: 72,
+    toolTags: ["shovel"]
+  },
+  copperAxe: {
+    id: "copperAxe",
+    nameKey: "copperAxe",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/copperAxe.png",
+    weight: 1,
+    maxStack: 1,
+    damage: 8,
+    durability: 64,
+    maxDurability: 64,
+    toolTags: ["axe"]
+  },
+  copperKnife: {
+    id: "copperKnife",
+    nameKey: "copperKnife",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/copperKnife.png",
+    weight: 0.6,
+    maxStack: 1,
+    damage: 12,
+    durability: 48,
+    maxDurability: 48,
+    toolTags: ["knife"]
+  },
+  copperSpear: {
+    id: "copperSpear",
+    nameKey: "copperSpear",
+    type: "weapon",
+    category: "weapon",
+    imageSrc: "img/copperSpear.png",
+    weight: 1.2,
+    maxStack: 1,
+    damage: 10,
+    durability: 40,
+    maxDurability: 40,
+    toolTags: ["spear"]
   },
   // Scrap Materials
   clothScrap: {
@@ -752,7 +831,7 @@ const itemsDatabase = {
   fireStarter: {
     id: "fireStarter",
     nameKey: "fireStarter",
-    type: "tool",
+    type: "material",
     category: "survival",
     imageSrc: "img/fireStarter.png",
     weight: 0.2,
@@ -807,8 +886,98 @@ const itemsDatabase = {
     weight: 0.1,
     maxStack: 4,
     hungerRestore: 8
-  }
-
+  },
+  // Smelting Items
+  clayPickaxeMold: {
+    id: "clayPickaxeMold",
+    nameKey: "clayPickaxeMold",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/clayPickaxeMold.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  clayShovelMold: {
+    id: "clayShovelMold",
+    nameKey: "clayShovelMold",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/clayShovelMold.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  clayAxeMold: {
+    id: "clayAxeMold",
+    nameKey: "clayAxeMold",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/clayAxeMold.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  clayKnifeMold: {
+    id: "clayKnifeMold",
+    nameKey: "clayKnifeMold",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/clayKnifeMold.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  claySpearMold: {
+    id: "claySpearMold",
+    nameKey: "claySpearMold",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/claySpearMold.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  copperPickaxeHead: {
+    id: "copperPickaxeHead",
+    nameKey: "copperPickaxeHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/copperPickaxeHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  copperAxeHead: {
+    id: "copperAxeHead",
+    nameKey: "copperAxeHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/copperAxeHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  copperShovelHead: {
+    id: "copperShovelHead",
+    nameKey: "copperShovelHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/copperShovelHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  copperKnifeBlade: {
+    id: "copperKnifeBlade",
+    nameKey: "copperKnifeBlade",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/copperKnifeBlade.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  copperSpearHead: {
+    id: "copperSpearHead",
+    nameKey: "copperSpearHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/copperSpearHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
 };
 
 const areasDatabase = {
@@ -831,13 +1000,13 @@ const areasDatabase = {
     loot: [
       { itemId: "freshWater", chance: 35 },
       { itemId: "reed", chance: 30 },
-      { itemId: "clay", chance: 18, requiredTool: "stoneShovel", toolDurabilityCost: 1 },
+      { itemId: "clay", chance: 98, requiredToolGroups: "shovel", toolDurabilityCost: 1 },
       { itemId: "pebble", chance: 15 },
       { itemId: "frog", chance: 12 },
       { itemId: "fish", chance: 8 },
       { itemId: "oldFishNet", chance: 5 },
       { itemId: "plasticBottle", chance: 5 },
-      { itemId: "worm", chance: 10, requiredTool: "stoneShovel", toolDurabilityCost: 1 },
+      { itemId: "worm", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 1 },
       { itemId: "snail", chance: 10 }
     ]
   },
@@ -854,7 +1023,7 @@ const areasDatabase = {
       { itemId: "sharpStone", chance: 10 },
       { itemId: "blackberry", chance: 10 },
       { itemId: "insect", chance: 10 },
-      { itemId: "woodLog", chance: 10, requiredTool: "stoneAxe", toolDurabilityCost: 1 },
+      { itemId: "woodLog", chance: 10, requiredToolGroups: "axe", toolDurabilityCost: 1 },
       { itemId: "pineCone", chance: 15 },
       { itemId: "resin", chance: 6 },
       { itemId: "animalBone", chance: 5 },
@@ -867,11 +1036,11 @@ const areasDatabase = {
       { itemId: "pebble", chance: 35 },
       { itemId: "sharpStone", chance: 30 },
       { itemId: "flint", chance: 18 },
-      { itemId: "salt", chance: 10, requiredTool: "stoneShovel", toolDurabilityCost: 1 },
-      { itemId: "obsidianShard", chance: 8, requiredTool: "stonePickaxe", toolDurabilityCost: 1 },
-      { itemId: "coal", chance: 14, requiredTool: "stonePickaxe", toolDurabilityCost: 1 },
-      { itemId: "ironOre", chance: 6, requiredTool: "stonePickaxe", toolDurabilityCost: 2 },
-      { itemId: "copperOre", chance: 5, requiredTool: "stonePickaxe", toolDurabilityCost: 2 },
+      { itemId: "salt", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 1 },
+      { itemId: "obsidianShard", chance: 8, requiredToolGroups: "pickaxe", toolDurabilityCost: 1 },
+      { itemId: "coal", chance: 14, requiredToolGroups: "pickaxe", toolDurabilityCost: 1 },
+      { itemId: "ironOre", chance: 6, requiredToolGroups: "pickaxe", toolDurabilityCost: 2 },
+      { itemId: "copperOre", chance: 5, requiredToolGroups: "pickaxe", toolDurabilityCost: 2 },
       { itemId: "rope", chance: 2 }
     ]
   },
@@ -912,15 +1081,29 @@ const recipeDiscoveryRules = {
   boiledWater: ["sterileBandage"],
   obsidianShard: ["obsidianKnife"],
   leatherScrap: ["leatherPouch"],
-  animalBone: ["boneSpear", "boneKnife", "boneNeedle"]
+  animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
+  clay: ["clayPickaxeMold", "clayShovelMold", "clayAxeMold", "claySpearMold", "clayKnifeMold"],
+  clayPickaxeMold: ["copperPickaxeHead"],
+  clayShovelMold: ["copperShovelHead"],
+  clayAxeMold: ["copperAxeHead"],
+  claySpearMold: ["copperSpearHead"],
+  clayKnifeMold: ["copperKnifeBlade"],
+  copperPickaxeHead: ["copperPickaxe"],
+  copperShovelHead: ["copperShovel"],
+  copperSpearHead: ["copperSpear"],
+  copperAxeHead: ["copperAxe"],
+  copperKnifeBlade: ["copperKnife"]
 };
 
 const toolGroups = {
-  knife: ["stoneKnife", "boneKnife", "obsidianKnife"]
+  knife: ["stoneKnife", "boneKnife", "obsidianKnife", "copperKnife"],
+  pickaxe: ["stonePickaxe", "copperPickaxe"],
+  axe: ["stoneAxe", "copperAxe"],
+  shovel: ["stoneShovel", "copperShovel"],
+  spear: ["stoneSpear", "boneSpear", "copperSpear"]
 };
 
 const recipesDatabase = {
-
   // Basic Recipes
   rope: {
     id: "rope",
@@ -970,7 +1153,7 @@ const recipesDatabase = {
       boiledWater: 1
     }
   },
-  herbalPaste: {
+  herbalPasteFromFlower: {
     id: "herbalPasteFromFlower",
     nameKey: "herbalPaste",
     resultItemId: "herbalPaste",
@@ -982,7 +1165,7 @@ const recipesDatabase = {
       smallFlower: 1
     }
   },
-  herbalPaste: {
+  herbalPasteFromHoneycomb: {
     id: "herbalPasteFromHoneycomb",
     nameKey: "herbalPaste",
     resultItemId: "herbalPaste",
@@ -1111,6 +1294,71 @@ const recipesDatabase = {
       sharpStone: 1
     }
   },
+  copperAxe: {
+    id: "copperAxe",
+    nameKey: "copperAxe",
+    resultItemId: "copperAxe",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      rope: 2,
+      copperAxeHead: 1
+    }
+  },
+  copperKnife: {
+    id: "copperKnife",
+    nameKey: "copperKnife",
+    resultItemId: "copperKnife",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      stick: 1,
+      rope: 1,
+      copperKnifeBlade: 1
+    }
+  },
+  copperPickaxe: {
+    id: "copperPickaxe",
+    nameKey: "copperPickaxe",
+    resultItemId: "copperPickaxe",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      rope: 2,
+      copperPickaxeHead: 1
+    }
+  },
+  copperShovel: {
+    id: "copperShovel",
+    nameKey: "copperShovel",
+    resultItemId: "copperShovel",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 1,
+      rope: 1,
+      copperShovelHead: 1
+    }
+  },
+  copperSpear: {
+    id: "copperSpear",
+    nameKey: "copperSpear",
+    resultItemId: "copperSpear",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      rope: 1,
+      copperSpearHead: 1
+    }
+  },
   // Survival Recipes
   boiledWater: {
     id: "boiledWater",
@@ -1136,7 +1384,7 @@ const recipesDatabase = {
       insect: 1
     }
   },
-  fireStarter: {
+  fireStarterFromResin: {
     id: "fireStarterFromResin",
     nameKey: "fireStarter",
     resultItemId: "fireStarter",
@@ -1149,7 +1397,7 @@ const recipesDatabase = {
       resin: 1
     }
   },
-  fireStarter: {
+  fireStarterFromPineCone: {
     id: "fireStarterFromPineCone",
     nameKey: "fireStarter",
     resultItemId: "fireStarter",
@@ -1172,6 +1420,19 @@ const recipesDatabase = {
       stick: 1,
       dryLeaf: 3,
       resin: 1
+    }
+  },
+  charcoal: {
+    id: "charcoal",
+    nameKey: "charcoal",
+    resultItemId: "charcoal",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "survival",
+    ingredients: {
+      woodLog: 2,
+      dryGrass: 4,
+      fireStarter: 1
     }
   },
   // Cooking Recipes
@@ -1482,6 +1743,142 @@ const recipesDatabase = {
     },
     toolDurabilityCost: {
       knife: 2
+    }
+  },
+  // Smelting Recipes
+  clayPickaxeMold: {
+    id: "clayPickaxeMold",
+    nameKey: "clayPickaxeMold",
+    resultItemId: "clayPickaxeMold",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      clay: 6,
+    }
+  },
+  clayShovelMold: {
+    id: "clayShovelMold",
+    nameKey: "clayShovelMold",
+    resultItemId: "clayShovelMold",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      clay: 4,
+    }
+  },
+  clayAxeMold: {
+    id: "clayAxeMold",
+    nameKey: "clayAxeMold",
+    resultItemId: "clayAxeMold",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      clay: 5,
+    }
+  },
+  clayKnifeMold: {
+    id: "clayKnifeMold",
+    nameKey: "clayKnifeMold",
+    resultItemId: "clayKnifeMold",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      clay: 2,
+    }
+  },
+  claySpearMold: {
+    id: "claySpearMold",
+    nameKey: "claySpearMold",
+    resultItemId: "claySpearMold",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      clay: 3,
+    }
+  },
+  copperPickaxeHead: {
+    id: "copperPickaxeHead",
+    nameKey: "copperPickaxeHead",
+    resultItemId: "copperPickaxeHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      copperOre: 3,
+      charcoal: 1,
+      clayPickaxeMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  copperAxeHead: {
+    id: "copperAxeHead",
+    nameKey: "copperAxeHead",
+    resultItemId: "copperAxeHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      copperOre: 3,
+      charcoal: 1,
+      clayAxeMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  copperKnifeBlade: {
+    id: "copperKnifeBlade",
+    nameKey: "copperKnifeBlade",
+    resultItemId: "copperKnifeBlade",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      copperOre: 1,
+      charcoal: 1,
+      clayKnifeMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  copperSpearHead: {
+    id: "copperSpearHead",
+    nameKey: "copperSpearHead",
+    resultItemId: "copperSpearHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      copperOre: 1,
+      charcoal: 1,
+      claySpearMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  copperShovelHead: {
+    id: "copperShovelHead",
+    nameKey: "copperShovelHead",
+    resultItemId: "copperShovelHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      copperOre: 2,
+      charcoal: 1,
+      clayShovelMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
     }
   }
 };
