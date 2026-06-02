@@ -186,7 +186,8 @@ const translations = {
     copperShovel: "Copper Shovel",
     copperAxe: "Copper Axe",
     copperKnife: "Copper Knife",
-    copperSpear: "Copper Spear"
+    copperSpear: "Copper Spear",
+    toolBroke: "Tool Broke"
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -374,6 +375,7 @@ const translations = {
     copperAxe: "Bakır Balta",
     copperKnife: "Bakır Bıçak",
     copperSpear: "Bakır Mızrak",
+    toolBroke: "Eşya Kırıldı"
   }
 };
 

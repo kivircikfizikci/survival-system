@@ -34,7 +34,9 @@ function applyInventoryToolDurability(toolData, durabilityCost) {
     return;
   }
 
-  tool.durability -= durabilityCost;
+  const finalDurabilityCost = getToolDurabilityCost(tool, durabilityCost);
+
+  tool.durability -= finalDurabilityCost;
 
   if (tool.durability <= 0) {
     const toolName = getItemName(tool);

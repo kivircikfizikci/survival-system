@@ -611,7 +611,8 @@ const itemsDatabase = {
     damage: 8,
     durability: 40,
     maxDurability: 40,
-    toolTags: ["axe"]
+    toolTags: ["axe"],
+    toolTier: "stone"
   },
   stonePickaxe: {
     id: "stonePickaxe",
@@ -624,7 +625,8 @@ const itemsDatabase = {
     damage: 10,
     durability: 35,
     maxDurability: 35,
-    toolTags: ["pickaxe"]
+    toolTags: ["pickaxe"],
+    toolTier: "stone"
   },
   stoneKnife: {
     id: "stoneKnife",
@@ -637,7 +639,8 @@ const itemsDatabase = {
     damage: 6,
     durability: 30,
     maxDurability: 30,
-    toolTags: ["knife"]
+    toolTags: ["knife"],
+    toolTier: "stone"
   },
   stoneShovel: {
     id: "stoneShovel",
@@ -650,7 +653,8 @@ const itemsDatabase = {
     damage: 5,
     durability: 45,
     maxDurability: 45,
-    toolTags: ["shovel"]
+    toolTags: ["shovel"],
+    toolTier: "stone"
   },
   stoneSpear: {
     id: "stoneSpear",
@@ -663,7 +667,8 @@ const itemsDatabase = {
     damage: 10,
     durability: 25,
     maxDurability: 25,
-    toolTags: ["spear"]
+    toolTags: ["spear"],
+    toolTier: "stone"
   },
   obsidianKnife: {
     id: "obsidianKnife",
@@ -676,7 +681,8 @@ const itemsDatabase = {
     damage: 12,
     durability: 60,
     maxDurability: 60,
-    toolTags: ["knife"]
+    toolTags: ["knife"],
+    toolTier: "obsidian"
   },
   boneSpear: {
     id: "boneSpear",
@@ -689,7 +695,8 @@ const itemsDatabase = {
     damage: 15,
     durability: 35,
     maxDurability: 35,
-    toolTags: ["spear"]
+    toolTags: ["spear"],
+    toolTier: "bone"
   },
   boneKnife: {
     id: "boneKnife",
@@ -702,7 +709,8 @@ const itemsDatabase = {
     damage: 8,
     durability: 40,
     maxDurability: 40,
-    toolTags: ["knife"]
+    toolTags: ["knife"],
+    toolTier: "bone"
   },
   boneNeedle: {
     id: "boneNeedle",
@@ -726,7 +734,8 @@ const itemsDatabase = {
     damage: 10,
     durability: 56,
     maxDurability: 56,
-    toolTags: ["pickaxe"]
+    toolTags: ["pickaxe"],
+    toolTier: "copper"
   },
   copperShovel: {
     id: "copperShovel",
@@ -739,7 +748,8 @@ const itemsDatabase = {
     damage: 5,
     durability: 72,
     maxDurability: 72,
-    toolTags: ["shovel"]
+    toolTags: ["shovel"],
+    toolTier: "copper"
   },
   copperAxe: {
     id: "copperAxe",
@@ -752,7 +762,8 @@ const itemsDatabase = {
     damage: 8,
     durability: 64,
     maxDurability: 64,
-    toolTags: ["axe"]
+    toolTags: ["axe"],
+    toolTier: "copper"
   },
   copperKnife: {
     id: "copperKnife",
@@ -765,7 +776,8 @@ const itemsDatabase = {
     damage: 12,
     durability: 48,
     maxDurability: 48,
-    toolTags: ["knife"]
+    toolTags: ["knife"],
+    toolTier: "copper"
   },
   copperSpear: {
     id: "copperSpear",
@@ -778,7 +790,8 @@ const itemsDatabase = {
     damage: 10,
     durability: 40,
     maxDurability: 40,
-    toolTags: ["spear"]
+    toolTags: ["spear"],
+    toolTier: "copper"
   },
   // Scrap Materials
   clothScrap: {
@@ -1733,16 +1746,16 @@ const recipesDatabase = {
     resultItemId: "leatherPouch",
     resultQuantity: 1,
     isPublic: false,
-    category: "bag",
+    category: "survival",
     ingredients: {
       leatherScrap: 4,
-      rope: 1
+      plantFiber: 1
     },
-    requiredToolGroups: {
-      knife: 1
+    requiredTools: {
+      boneNeedle: 1
     },
     toolDurabilityCost: {
-      knife: 2
+      boneNeedle: 2
     }
   },
   // Smelting Recipes

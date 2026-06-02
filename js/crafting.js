@@ -218,6 +218,18 @@ function getCraftItemCounts() {
   return counts;
 }
 
+function getToolDurabilityCost(item, baseCost) {
+  if (!item) {
+    return baseCost;
+  }
+
+  if (item.toolTier === "copper") {
+    return Math.max(1, Math.ceil(baseCost * 0.5));
+  }
+
+  return baseCost;
+}
+
 function isRecipeMatch(recipe, craftCounts) {
   const requiredItems = { ...recipe.ingredients };
 
@@ -290,7 +302,9 @@ function applyToolDurabilityCost(recipe) {
         continue;
       }
 
-      item.durability -= durabilityCost;
+      const finalDurabilityCost = getToolDurabilityCost(item, durabilityCost);
+
+      item.durability -= finalDurabilityCost;
 
       if (item.durability <= 0) {
         const brokenToolName = getItemName(item);
