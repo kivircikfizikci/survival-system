@@ -157,8 +157,19 @@ const translations = {
     notEnoughInventorySpace: "You don't have enough inventory space.",
     crafted: "Crafted {item}.",
     log: "Log",
-    logEmpty: "Log is empty."
-
+    logEmpty: "Log is empty.",
+    boneNeedle: "Bone Needle",
+    boneKnife: "Bone Knife",
+    boneSpear: "Bone Spear",
+    cookedFish: "Cooked Fish",
+    cookedFrog: "Cooked Frog",
+    cookedMushroom: "Cooked Mushroom",
+    fireStarter: "Fire Starter",
+    fishBait: "Fish Bait",
+    leatherPouch: "Leather Pouch",
+    obsidianKnife: "Obsidian Knife",
+    woodLog: "Wood Log",
+    simpleTorch: "Simple Torch"
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -317,6 +328,18 @@ const translations = {
     crafted: "{item} uretildi.",
     log: "Günlük",
     logEmpty: "Günlük boş.",
+    boneNeedle: "Kemik İğne",
+    boneKnife: "Kemik Bıçak",
+    boneSpear: "Kemik Mızrak",
+    cookedFish: "Pişmiş Balık",
+    cookedFrog: "Pişmiş Kurbağa",
+    cookedMushroom: "Pişmiş Mantar",
+    fireStarter: "Ateş Başlatıcı",
+    fishBait: "Balık Yemi",
+    leatherPouch: "Deri Kesesi",
+    obsidianKnife: "Obsidyen Bıçak",
+    woodLog: "Odun Kütüğü",
+    simpleTorch: "Basit Meşale"
   }
 };
 
