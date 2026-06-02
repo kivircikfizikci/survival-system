@@ -200,6 +200,18 @@ function getCraftItemCounts() {
       }
 
       counts[item.id] += item.quantity || 1;
+
+      if (item.toolTags) {
+        for (let tag of item.toolTags) {
+          const groupKey = "toolGroup:" + tag;
+
+          if (!counts[groupKey]) {
+            counts[groupKey] = 0;
+          }
+
+          counts[groupKey] += item.quantity || 1;
+        }
+      }
     }
   }
 
@@ -207,20 +219,48 @@ function getCraftItemCounts() {
 }
 
 function isRecipeMatch(recipe, craftCounts) {
-  const requiredItems = {
-    ...recipe.ingredients,
-    ...(recipe.requiredTools || {})
-  };
+  const requiredItems = { ...recipe.ingredients };
 
-  const requiredItemIds = Object.keys(requiredItems);
-  const craftItemIds = Object.keys(craftCounts);
-
-  if (requiredItemIds.length !== craftItemIds.length) {
-    return false;
+  if (recipe.requiredTools) {
+    for (let toolId in recipe.requiredTools) {
+      requiredItems[toolId] = recipe.requiredTools[toolId];
+    }
   }
 
-  for (let itemId of requiredItemIds) {
-    if (craftCounts[itemId] !== requiredItems[itemId]) {
+  if (recipe.requiredToolGroups) {
+    for (let groupName in recipe.requiredToolGroups) {
+      requiredItems["toolGroup:" + groupName] = recipe.requiredToolGroups[groupName];
+    }
+  }
+
+  for (let requiredId in requiredItems) {
+    if (craftCounts[requiredId] !== requiredItems[requiredId]) {
+      return false;
+    }
+  }
+
+  for (let itemId in craftCounts) {
+    if (itemId.startsWith("toolGroup:")) {
+      continue;
+    }
+
+    if (requiredItems[itemId]) {
+      continue;
+    }
+
+    const item = craftSlots.find(function (slotItem) {
+      return slotItem !== null && slotItem.id === itemId;
+    });
+
+    if (!item || !item.toolTags) {
+      return false;
+    }
+
+    const isUsedAsRequiredGroup = item.toolTags.some(function (tag) {
+      return requiredItems["toolGroup:" + tag];
+    });
+
+    if (!isUsedAsRequiredGroup) {
       return false;
     }
   }
@@ -233,25 +273,21 @@ function applyToolDurabilityCost(recipe) {
     return;
   }
 
-  for (let toolId in recipe.toolDurabilityCost) {
-    const durabilityCost = recipe.toolDurabilityCost[toolId];
+  for (let toolKey in recipe.toolDurabilityCost) {
+    const durabilityCost = recipe.toolDurabilityCost[toolKey];
 
     for (let i = 0; i < craftSlots.length; i++) {
       const item = craftSlots[i];
 
-      if (item === null || item.id !== toolId) {
+      if (item === null) {
         continue;
       }
 
-      if (typeof item.durability !== "number") {
-        const databaseItem = itemsDatabase[item.id];
+      const isExactTool = item.id === toolKey;
+      const isToolGroup = isItemInToolGroup(item, toolKey);
 
-        if (databaseItem && typeof databaseItem.durability === "number") {
-          item.durability = databaseItem.durability;
-          item.maxDurability = databaseItem.maxDurability || databaseItem.durability;
-        } else {
-          return;
-        }
+      if (!isExactTool && !isToolGroup) {
+        continue;
       }
 
       item.durability -= durabilityCost;
@@ -446,4 +482,12 @@ function consumeCraftIngredients(recipe) {
       craftSlots[i] = null;
     }
   }
+}
+
+function isItemInToolGroup(item, groupName) {
+  if (item === null) {
+    return false;
+  }
+
+  return item.toolTags && item.toolTags.includes(groupName);
 }

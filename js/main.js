@@ -8,6 +8,44 @@ updateScreen();
 const SEARCH_COOLDOWN_SECONDS = 5;
 let searchCooldownTimer = null;
 
+function findItemInInventory(itemId) {
+  for (let i = 0; i < inventory.items.length; i++) {
+    const item = inventory.items[i];
+
+    if (item !== null && item.id === itemId) {
+      return {
+        item: item,
+        slotIndex: i
+      };
+    }
+  }
+
+  return null;
+}
+
+function applyInventoryToolDurability(toolData, durabilityCost) {
+  if (!toolData || !durabilityCost) {
+    return;
+  }
+
+  const tool = toolData.item;
+
+  if (typeof tool.durability !== "number") {
+    return;
+  }
+
+  tool.durability -= durabilityCost;
+
+  if (tool.durability <= 0) {
+    const toolName = getItemName(tool);
+
+    inventory.items[toolData.slotIndex] = null;
+
+    showMessage(t("toolBroke", { item: toolName }), "warning");
+    addLog(t("toolBroke", { item: toolName }), "warning");
+  }
+}
+
 function getRandomLoot(areaId) {
   const area = areasDatabase[areaId];
 
@@ -15,19 +53,38 @@ function getRandomLoot(areaId) {
     return null;
   }
 
+  const availableLoot = area.loot.filter(function (lootEntry) {
+    if (!lootEntry.requiredTool) {
+      return true;
+    }
+
+    return findItemInInventory(lootEntry.requiredTool) !== null;
+  });
+
+  if (availableLoot.length === 0) {
+    return null;
+  }
+
   let totalChance = 0;
 
-  for (let lootEntry of area.loot) {
+  for (let lootEntry of availableLoot) {
     totalChance += lootEntry.chance;
   }
 
   let roll = Math.random() * totalChance;
 
-  for (let lootEntry of area.loot) {
+  for (let lootEntry of availableLoot) {
     roll -= lootEntry.chance;
 
     if (roll <= 0) {
-      return itemsDatabase[lootEntry.itemId];
+      const foundItem = itemsDatabase[lootEntry.itemId];
+
+      if (lootEntry.requiredTool) {
+        const toolData = findItemInInventory(lootEntry.requiredTool);
+        applyInventoryToolDurability(toolData, lootEntry.toolDurabilityCost || 1);
+      }
+
+      return foundItem;
     }
   }
 

@@ -1,4 +1,5 @@
 const itemsDatabase = {
+  // Basic & Natural Items
   blackberry: {
     id: "blackberry",
     nameKey: "blackberry",
@@ -74,16 +75,6 @@ const itemsDatabase = {
     maxStack: 1,
     hungerRestore: 2
   },
-  boiledWater: {
-    id: "boiledWater",
-    nameKey: "boiledWater",
-    type: "usable",
-    category: "food",
-    imageSrc: "img/boiledWater.png",
-    weight: 0.5,
-    maxStack: 1,
-    hungerRestore: 2
-  },
   frog: {
     id: "frog",
     nameKey: "frog",
@@ -140,6 +131,134 @@ const itemsDatabase = {
     weight: 0.1,
     maxStack: 32
   },
+  stick: {
+    id: "stick",
+    nameKey: "stick",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/stick.png",
+    weight: 0.5,
+    maxStack: 8
+  },
+  plantFiber: {
+    id: "plantFiber",
+    nameKey: "plantFiber",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/plantFiber.png",
+    weight: 0.03,
+    maxStack: 32
+  },
+  smallFlower: {
+    id: "smallFlower",
+    nameKey: "smallFlower",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/smallFlower.png",
+    weight: 0.02,
+    maxStack: 32
+  },
+  bark: {
+    id: "bark",
+    nameKey: "bark",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/bark.png",
+    weight: 0.1,
+    maxStack: 15
+  },
+  pineCone: {
+    id: "pineCone",
+    nameKey: "pineCone",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/pineCone.png",
+    weight: 0.08,
+    maxStack: 20
+  },
+  feather: {
+    id: "feather",
+    nameKey: "feather",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/feather.png",
+    weight: 0.01,
+    maxStack: 64
+  },
+  honeycomb: {
+    id: "honeycomb",
+    nameKey: "honeycomb",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/honeycomb.png",
+    weight: 0.15,
+    maxStack: 4,
+    hungerRestore: 10
+  },
+  dryLeaf: {
+    id: "dryLeaf",
+    nameKey: "dryLeaf",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/dryLeaf.png",
+    weight: 0.02,
+    maxStack: 64
+  },
+  resin: {
+    id: "resin",
+    nameKey: "resin",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/resin.png",
+    weight: 0.1,
+    maxStack: 8
+  },
+  animalBone: {
+    id: "animalBone",
+    nameKey: "animalBone",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/animalBone.png",
+    weight: 0.3,
+    maxStack: 4
+  },
+  plasticBottle: {
+    id: "plasticBottle",
+    nameKey: "plasticBottle",
+    type: "material",
+    category: "container",
+    imageSrc: "img/plasticBottle.png",
+    weight: 0.25,
+    maxStack: 1
+  },
+  tinCan: {
+    id: "tinCan",
+    nameKey: "tinCan",
+    type: "material",
+    category: "container",
+    imageSrc: "img/tinCan.png",
+    weight: 0.18,
+    maxStack: 8
+  },
+  worm: {
+    id: "worm",
+    nameKey: "worm",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/worm.png",
+    weight: 0.02,
+    maxStack: 16
+  },
+  snail: {
+    id: "snail",
+    nameKey: "snail",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/snail.png",
+    weight: 0.06,
+    maxStack: 12
+  },
+  // Resource Items
   ironOre: {
     id: "ironOre",
     nameKey: "ironOre",
@@ -158,6 +277,52 @@ const itemsDatabase = {
     weight: 1,
     maxStack: 2
   },
+  flint: {
+    id: "flint",
+    nameKey: "flint",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/flint.png",
+    weight: 0.25,
+    maxStack: 12
+  },
+  copperOre: {
+    id: "copperOre",
+    nameKey: "copperOre",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/copperOre.png",
+    weight: 1.0,
+    maxStack: 1
+  },
+  salt: {
+    id: "salt",
+    nameKey: "salt",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/salt.png",
+    weight: 0.5,
+    maxStack: 8
+  },
+  obsidianShard: {
+    id: "obsidianShard",
+    nameKey: "obsidianShard",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/obsidianShard.png",
+    weight: 0.35,
+    maxStack: 6
+  },
+  woodLog: {
+    id: "woodLog",
+    nameKey: "woodLog",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/woodLog.png",
+    weight: 2.5,
+    maxStack: 1
+  },
+  // Clothing Items
   oldPants: {
     id: "oldPants",
     nameKey: "oldPants",
@@ -326,6 +491,7 @@ const itemsDatabase = {
     extraSlots: 0,
     extraWeight: 0
   },
+  // Bags and Containers
   schoolBag: {
     id: "schoolBag",
     nameKey: "schoolBag",
@@ -362,6 +528,19 @@ const itemsDatabase = {
     extraSlots: 10,
     extraWeight: 8
   },
+  leatherPouch: {
+    id: "leatherPouch",
+    nameKey: "leatherPouch",
+    type: "bag",
+    category: "bag",
+    equipSlot: "bag",
+    imageSrc: "img/leatherPouch.png",
+    weight: 0.5,
+    maxStack: 1,
+    extraSlots: 4,
+    extraWeight: 3
+    },
+  // Medical Items
   bandage: {
     id: "bandage",
     nameKey: "bandage",
@@ -402,6 +581,16 @@ const itemsDatabase = {
     maxStack: 5,
     healAmount: 12
   },
+  wildHerb: {
+    id: "wildHerb",
+    nameKey: "wildHerb",
+    type: "material",
+    category: "medical",
+    imageSrc: "img/wildHerb.png",
+    weight: 0.05,
+    maxStack: 16
+  },
+  // Tools and Weapons
   stoneAxe: {
     id: "stoneAxe",
     nameKey: "stoneAxe",
@@ -436,7 +625,8 @@ const itemsDatabase = {
     maxStack: 1,
     damage: 6,
     durability: 30,
-    maxDurability: 30
+    maxDurability: 30,
+    toolTags: ["knife"]
   },
   stoneShovel: {
     id: "stoneShovel",
@@ -462,6 +652,56 @@ const itemsDatabase = {
     durability: 25,
     maxDurability: 25
   },
+  obsidianKnife: {
+    id: "obsidianKnife",
+    nameKey: "obsidianKnife",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/obsidianKnife.png",
+    weight: 0.6,
+    maxStack: 1,
+    damage: 12,
+    durability: 60,
+    maxDurability: 60,
+    toolTags: ["knife"]
+  },
+  boneSpear: {
+    id: "boneSpear",
+    nameKey: "boneSpear",
+    type: "weapon",
+    category: "weapon",
+    imageSrc: "img/boneSpear.png",
+    weight: 1,
+    maxStack: 1,
+    damage: 15,
+    durability: 30,
+    maxDurability: 30
+  },
+  boneKnife: {
+    id: "boneKnife",
+    nameKey: "boneKnife",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/boneKnife.png",
+    weight: 0.2,
+    maxStack: 1,
+    damage: 8,
+    durability: 25,
+    maxDurability: 25,
+    toolTags: ["knife"]
+  },
+  boneNeedle: {
+    id: "boneNeedle",
+    nameKey: "boneNeedle",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/boneNeedle.png",
+    weight: 0.1,
+    maxStack: 1,
+    durability: 20,
+    maxDurability: 20
+  },
+  // Scrap Materials
   clothScrap: {
     id: "clothScrap",
     nameKey: "clothScrap",
@@ -471,196 +711,104 @@ const itemsDatabase = {
     weight: 0.1,
     maxStack: 16
   },
-  stick: {
-    id: "stick",
-    nameKey: "stick",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/stick.png",
-    weight: 0.5,
-    maxStack: 8
-  },
-  wildHerb: {
-    id: "wildHerb",
-    nameKey: "wildHerb",
-    type: "material",
-    category: "medical",
-    imageSrc: "img/wildHerb.png",
-    weight: 0.05,
-    maxStack: 16
-  },
-  plantFiber: {
-    id: "plantFiber",
-    nameKey: "plantFiber",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/plantFiber.png",
-    weight: 0.03,
-    maxStack: 32
-  },
-  smallFlower: {
-    id: "smallFlower",
-    nameKey: "smallFlower",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/smallFlower.png",
-    weight: 0.02,
-    maxStack: 32
-  },
-  bark: {
-    id: "bark",
-    nameKey: "bark",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/bark.png",
-    weight: 0.1,
-    maxStack: 15
-  },
-  pineCone: {
-    id: "pineCone",
-    nameKey: "pineCone",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/pineCone.png",
-    weight: 0.08,
-    maxStack: 20
-  },
-  feather: {
-    id: "feather",
-    nameKey: "feather",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/feather.png",
-    weight: 0.01,
-    maxStack: 64
-  },
-  flint: {
-    id: "flint",
-    nameKey: "flint",
-    type: "material",
-    category: "resource",
-    imageSrc: "img/flint.png",
-    weight: 0.25,
-    maxStack: 12
-  },
-  copperOre: {
-    id: "copperOre",
-    nameKey: "copperOre",
-    type: "material",
-    category: "resource",
-    imageSrc: "img/copperOre.png",
-    weight: 1.0,
-    maxStack: 1
-  },
-  salt: {
-    id: "salt",
-    nameKey: "salt",
-    type: "material",
-    category: "resource",
-    imageSrc: "img/salt.png",
-    weight: 0.5,
-    maxStack: 8
-  },
-  oldFishNet: {
-    id: "oldFishNet",
-    nameKey: "oldFishNet",
-    type: "tool",
-    category: "tool",
-    imageSrc: "img/oldFishNet.png",
-    weight: 0.8,
-    maxStack: 1
-  },
-  honeycomb: {
-    id: "honeycomb",
-    nameKey: "honeycomb",
-    type: "usable",
-    category: "food",
-    imageSrc: "img/honeycomb.png",
-    weight: 0.15,
-    maxStack: 4,
-    hungerRestore: 10
-  },
-  dryLeaf: {
-    id: "dryLeaf",
-    nameKey: "dryLeaf",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/dryLeaf.png",
-    weight: 0.02,
-    maxStack: 64
-  },
-  resin: {
-    id: "resin",
-    nameKey: "resin",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/resin.png",
-    weight: 0.1,
-    maxStack: 8
-  },
-  animalBone: {
-    id: "animalBone",
-    nameKey: "animalBone",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/animalBone.png",
-    weight: 0.3,
-    maxStack: 4
-  },
-  obsidianShard: {
-    id: "obsidianShard",
-    nameKey: "obsidianShard",
-    type: "material",
-    category: "resource",
-    imageSrc: "img/obsidianShard.png",
-    weight: 0.35,
-    maxStack: 6
-  },
-  plasticBottle: {
-    id: "plasticBottle",
-    nameKey: "plasticBottle",
-    type: "material",
-    category: "container",
-    imageSrc: "img/plasticBottle.png",
-    weight: 0.25,
-    maxStack: 1
-  },
-  tinCan: {
-    id: "tinCan",
-    nameKey: "tinCan",
-    type: "material",
-    category: "container",
-    imageSrc: "img/tinCan.png",
-    weight: 0.18,
-    maxStack: 8
-  },
-  worm: {
-    id: "worm",
-    nameKey: "worm",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/worm.png",
-    weight: 0.02,
-    maxStack: 16
-  },
-  snail: {
-    id: "snail",
-    nameKey: "snail",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/snail.png",
-    weight: 0.06,
-    maxStack: 12
-  },
   leatherScrap: {
-    id: "leatherScarp",
+    id: "leatherScrap",
     nameKey: "leatherScrap",
     type: "material",
     category: "material",
     imageSrc: "img/leatherScrap.png",
     weight: 0.3,
     maxStack: 8
+  },
+  // Survival Items
+  boiledWater: {
+    id: "boiledWater",
+    nameKey: "boiledWater",
+    type: "usable",
+    category: "survival",
+    imageSrc: "img/boiledWater.png",
+    weight: 0.5,
+    maxStack: 1,
+    hungerRestore: 2
+  },
+  fishBait: {
+    id: "fishBait",
+    nameKey: "fishBait",
+    type: "material",
+    category: "survival",
+    imageSrc: "img/fishBait.png",
+    weight: 0.1,
+    maxStack: 16
+  },
+  oldFishNet: {
+    id: "oldFishNet",
+    nameKey: "oldFishNet",
+    type: "tool",
+    category: "survival",
+    imageSrc: "img/oldFishNet.png",
+    weight: 0.8,
+    maxStack: 1
+  },
+  fireStarter: {
+    id: "fireStarter",
+    nameKey: "fireStarter",
+    type: "tool",
+    category: "survival",
+    imageSrc: "img/fireStarter.png",
+    weight: 0.2,
+    maxStack: 1
+  },
+  simpleTorch: {
+    id: "simpleTorch",
+    nameKey: "simpleTorch",
+    type: "tool",
+    category: "survival",
+    imageSrc: "img/simpleTorch.png",
+    weight: 0.3,
+    maxStack: 1
+  },
+  // Cooked Food
+  cookedFish: {
+    id: "cookedFish",
+    nameKey: "cookedFish",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedFish.png",
+    weight: 0.4,
+    maxStack: 4,
+    hungerRestore: 20
+  },
+  cookedFrog: {
+    id: "cookedFrog",
+    nameKey: "cookedFrog",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedFrog.png",
+    weight: 0.3,
+    maxStack: 4,
+    hungerRestore: 15
+  },
+  cookedMushroom: {
+    id: "cookedMushroom",
+    nameKey: "cookedMushroom",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedMushroom.png",
+    weight: 0.2,
+    maxStack: 4,
+    hungerRestore: 10
+  },
+  cookedSnail: {
+    id: "cookedSnail",
+    nameKey: "cookedSnail",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedSnail.png",
+    weight: 0.1,
+    maxStack: 4,
+    hungerRestore: 8
   }
+
 };
 
 const areasDatabase = {
@@ -683,13 +831,13 @@ const areasDatabase = {
     loot: [
       { itemId: "freshWater", chance: 35 },
       { itemId: "reed", chance: 30 },
-      { itemId: "clay", chance: 15 },
+      { itemId: "clay", chance: 18, requiredTool: "stoneShovel", toolDurabilityCost: 1 },
       { itemId: "pebble", chance: 15 },
       { itemId: "frog", chance: 12 },
       { itemId: "fish", chance: 8 },
       { itemId: "oldFishNet", chance: 5 },
       { itemId: "plasticBottle", chance: 5 },
-      { itemId: "worm", chance: 15 },
+      { itemId: "worm", chance: 10, requiredTool: "stoneShovel", toolDurabilityCost: 1 },
       { itemId: "snail", chance: 10 }
     ]
   },
@@ -706,6 +854,7 @@ const areasDatabase = {
       { itemId: "sharpStone", chance: 10 },
       { itemId: "blackberry", chance: 10 },
       { itemId: "insect", chance: 10 },
+      { itemId: "woodLog", chance: 10, requiredTool: "stoneAxe", toolDurabilityCost: 1 },
       { itemId: "pineCone", chance: 15 },
       { itemId: "resin", chance: 6 },
       { itemId: "animalBone", chance: 5 },
@@ -718,11 +867,11 @@ const areasDatabase = {
       { itemId: "pebble", chance: 35 },
       { itemId: "sharpStone", chance: 30 },
       { itemId: "flint", chance: 18 },
-      { itemId: "coal", chance: 14 },
-      { itemId: "salt", chance: 10 },
-      { itemId: "obsidianShard", chance: 8 },
-      { itemId: "ironOre", chance: 10 },
-      { itemId: "copperOre", chance: 5 },
+      { itemId: "salt", chance: 10, requiredTool: "stoneShovel", toolDurabilityCost: 1 },
+      { itemId: "obsidianShard", chance: 8, requiredTool: "stonePickaxe", toolDurabilityCost: 1 },
+      { itemId: "coal", chance: 14, requiredTool: "stonePickaxe", toolDurabilityCost: 1 },
+      { itemId: "ironOre", chance: 6, requiredTool: "stonePickaxe", toolDurabilityCost: 2 },
+      { itemId: "copperOre", chance: 5, requiredTool: "stonePickaxe", toolDurabilityCost: 2 },
       { itemId: "rope", chance: 2 }
     ]
   },
@@ -756,15 +905,36 @@ const areasDatabase = {
 };
 
 const recipeDiscoveryRules = {
-  wildHerb: ["herbalPaste"],
-  honeycomb: ["herbalPaste"],
+  wildHerb: ["herbalPasteFromFlower"],
+  honeycomb: ["herbalPasteFromHoneycomb"],
   dryWood: ["boiledWater"],
-  sharpStone: ["stoneKnife", "stoneAxe", "stoneShovel", "stoneSpear"],
-  ironOre: ["stonePickaxe"],
-  boiledWater: ["sterileBandage"]
+  sharpStone: ["stoneKnife", "stoneAxe", "stoneShovel", "stoneSpear", "stonePickaxe"],
+  boiledWater: ["sterileBandage"],
+  obsidianShard: ["obsidianKnife"],
+  leatherScrap: ["leatherPouch"],
+  animalBone: ["boneSpear", "boneKnife", "boneNeedle"]
+};
+
+const toolGroups = {
+  knife: ["stoneKnife", "boneKnife", "obsidianKnife"]
 };
 
 const recipesDatabase = {
+
+  // Basic Recipes
+  rope: {
+    id: "rope",
+    nameKey: "rope",
+    resultItemId: "rope",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "basic",
+    ingredients: {
+      reed: 3,
+      dryGrass: 1
+    }
+  },
+  // Medical Recipes
   dirtyBandage: {
     id: "dirtyBandage",
     nameKey: "dirtyBandage",
@@ -800,8 +970,8 @@ const recipesDatabase = {
       boiledWater: 1
     }
   },
-    herbalPaste: {
-    id: "herbalPaste",
+  herbalPaste: {
+    id: "herbalPasteFromFlower",
     nameKey: "herbalPaste",
     resultItemId: "herbalPaste",
     resultQuantity: 1,
@@ -813,7 +983,7 @@ const recipesDatabase = {
     }
   },
   herbalPaste: {
-    id: "herbalPaste",
+    id: "herbalPasteFromHoneycomb",
     nameKey: "herbalPaste",
     resultItemId: "herbalPaste",
     resultQuantity: 1,
@@ -824,30 +994,7 @@ const recipesDatabase = {
       honeycomb: 1
     }
   },
-  boiledWater: {
-    id: "boiledWater",
-    nameKey: "boiledWater",
-    resultItemId: "boiledWater",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "survival",
-    ingredients: {
-      freshWater: 1,
-      dryWood: 1
-    }
-  },
-  rope: {
-    id: "rope",
-    nameKey: "rope",
-    resultItemId: "rope",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "basic",
-    ingredients: {
-      reed: 3,
-      dryGrass: 1
-    }
-  },
+  // Tool Recipes
   stoneAxe: {
     id: "stoneAxe",
     nameKey: "stoneAxe",
@@ -913,18 +1060,174 @@ const recipesDatabase = {
       rope: 1
     }
   },
-  clothScrap: {
-    id: "clothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
+  obsidianKnife: {
+    id: "obsidianKnife",
+    nameKey: "obsidianKnife",
+    resultItemId: "obsidianKnife",
     resultQuantity: 1,
-    isPublic: true,
-    category: "material",
+    isPublic: false,
+    category: "tools",
     ingredients: {
-      tshirt: 1,
-      stoneKnife: 1
+      obsidianShard: 2,
+      stick: 1,
+      rope: 1
     }
   },
+  boneSpear: {
+    id: "boneSpear",
+    nameKey: "boneSpear",
+    resultItemId: "boneSpear",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      animalBone: 1,
+      branch: 1,
+      rope: 1
+    }
+  },
+  boneKnife: {
+    id: "boneKnife",
+    nameKey: "boneKnife",
+    resultItemId: "boneKnife",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      animalBone: 1,
+      stick: 1,
+      rope: 1
+    }
+  },
+  boneNeedle: {
+    id: "boneNeedle",
+    nameKey: "boneNeedle",
+    resultItemId: "boneNeedle",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      animalBone: 1,
+      sharpStone: 1
+    }
+  },
+  // Survival Recipes
+  boiledWater: {
+    id: "boiledWater",
+    nameKey: "boiledWater",
+    resultItemId: "boiledWater",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      freshWater: 1,
+      dryWood: 1
+    }
+  },
+  fishBait: {
+    id: "fishBait",
+    nameKey: "fishBait",
+    resultItemId: "fishBait",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "survival",
+    ingredients: {
+      worm: 1,
+      insect: 1
+    }
+  },
+  fireStarter: {
+    id: "fireStarterFromResin",
+    nameKey: "fireStarter",
+    resultItemId: "fireStarter",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "survival",
+    ingredients: {
+      dryLeaf: 2,
+      dryGrass: 2,
+      resin: 1
+    }
+  },
+  fireStarter: {
+    id: "fireStarterFromPineCone",
+    nameKey: "fireStarter",
+    resultItemId: "fireStarter",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "survival",
+    ingredients: {
+      pineCone: 1,
+      dryLeaf: 2
+    }
+  },
+  simpleTorch: {
+    id: "simpleTorch",
+    nameKey: "simpleTorch",
+    resultItemId: "simpleTorch",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "survival",
+    ingredients: {
+      stick: 1,
+      dryLeaf: 3,
+      resin: 1
+    }
+  },
+  // Cooking Recipes
+  cookedFish: {
+    id: "cookedFish",
+    nameKey: "cookedFish",
+    resultItemId: "cookedFish",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "cooking",
+    ingredients: {
+      fish: 1,
+      dryWood: 1,
+      fireStarter: 1
+    }
+  },
+  cookedFrog: {
+    id: "cookedFrog",
+    nameKey: "cookedFrog",
+    resultItemId: "cookedFrog",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "cooking",
+    ingredients: {
+      frog: 1,
+      dryWood: 1,
+      fireStarter: 1
+    }
+  },
+  cookedMushroom: {
+    id: "cookedMushroom",
+    nameKey: "cookedMushroom",
+    resultItemId: "cookedMushroom",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "cooking",
+    ingredients: {
+      mushroom: 1,
+      dryWood: 1,
+      fireStarter: 1
+    }
+  },
+  cookedSnail: {
+    id: "cookedSnail",
+    nameKey: "cookedSnail",
+    resultItemId: "cookedSnail",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "cooking",
+    ingredients: {
+      snail: 1,
+      dryWood: 1,
+      fireStarter: 1
+    }
+  },
+  // Clothing to Scrap Recipes
   oldPantsToClothScrap: {
     id: "oldPantsToClothScrap",
     nameKey: "clothScrap",
@@ -935,11 +1238,11 @@ const recipesDatabase = {
     ingredients: {
       oldPants: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   oldJacketToClothScrap: {
@@ -952,11 +1255,11 @@ const recipesDatabase = {
     ingredients: {
       oldJacket: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   wornShoesToLeatherScrap: {
@@ -969,11 +1272,11 @@ const recipesDatabase = {
     ingredients: {
       wornShoes: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 4
+      knife: 4
     }
   },
   cargoPantsToClothScrap: {
@@ -986,11 +1289,11 @@ const recipesDatabase = {
     ingredients: {
       cargoPants: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 4
+      knife: 4
     }
   },
   shortsToClothScrap: {
@@ -1003,11 +1306,11 @@ const recipesDatabase = {
     ingredients: {
       shorts: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   sandalsToClothScrap: {
@@ -1020,11 +1323,11 @@ const recipesDatabase = {
     ingredients: {
       sandals: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 2
+      knife: 2
     }
   },
   sneakersToClothScrap: {
@@ -1037,11 +1340,11 @@ const recipesDatabase = {
     ingredients: {
       sneakers: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 2
+      knife: 2
     }
   },
   workBootsToLeatherScrap: {
@@ -1054,11 +1357,11 @@ const recipesDatabase = {
     ingredients: {
       workBoots: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 4
+      knife: 4
     }
   },
   leatherJacketToLeatherScrap: {
@@ -1071,11 +1374,11 @@ const recipesDatabase = {
     ingredients: {
       leatherJacket: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 4
+      knife: 4
     }
   },
   fingerlessGlovesToLeatherScrap: {
@@ -1088,11 +1391,11 @@ const recipesDatabase = {
     ingredients: {
       fingerlessGloves: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   winterGlovesToClothScrap: {
@@ -1105,11 +1408,11 @@ const recipesDatabase = {
     ingredients: {
       winterGloves: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   oldHatToClothScrap: {
@@ -1122,11 +1425,11 @@ const recipesDatabase = {
     ingredients: {
       oldHat: 1
     }, 
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   tshirtToClothScrap: {
@@ -1139,11 +1442,11 @@ const recipesDatabase = {
     ingredients: {
       tshirt: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 1
+      knife: 1
     }
   },
   hoodieToClothScrap: {
@@ -1156,11 +1459,29 @@ const recipesDatabase = {
     ingredients: {
       hoodie: 1
     },
-    requiredTools: {
-      stoneKnife: 1
+    requiredToolGroups: {
+      knife: 1
     },
     toolDurabilityCost: {
-      stoneKnife: 4
+      knife: 4
+    }
+  },
+  leatherPouch: {
+    id: "leatherPouch",
+    nameKey: "leatherPouch",
+    resultItemId: "leatherPouch",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "bag",
+    ingredients: {
+      leatherScrap: 4,
+      rope: 1
+    },
+    requiredToolGroups: {
+      knife: 1
+    },
+    toolDurabilityCost: {
+      knife: 2
     }
   }
 };

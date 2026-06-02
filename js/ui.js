@@ -89,6 +89,13 @@ function updateRecipesScreen() {
       ...(recipe.requiredTools || {})
     };
 
+    if (recipe.requiredToolGroups) {
+      for (let groupName in recipe.requiredToolGroups) {
+        const firstToolId = toolGroups[groupName][0];
+        recipeInputItems[firstToolId] = recipe.requiredToolGroups[groupName];
+      }
+    }
+
     const ingredientIds = Object.keys(recipeInputItems);
 
     ingredientIds.forEach(function (itemId, index) {
