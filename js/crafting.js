@@ -305,6 +305,7 @@ function applyToolDurabilityCost(recipe) {
       const finalDurabilityCost = getToolDurabilityCost(item, durabilityCost);
 
       item.durability -= finalDurabilityCost;
+      autoSave();
 
       if (item.durability <= 0) {
         const brokenToolName = getItemName(item);
@@ -388,6 +389,8 @@ function moveItemBetweenContainers(
   fromItem.quantity -= moveAmount;
 
   return true;
+
+  autoSave();
 }
 
 function craftSelectedRecipe() {
@@ -451,6 +454,7 @@ function checkRecipeDiscoveryByItem(itemId) {
   for (let recipeId of recipeIds) {
     discoverRecipe(recipeId);
   }
+  autoSave();
 }
 
 function canAddItemToInventory(item) {
@@ -496,6 +500,7 @@ function consumeCraftIngredients(recipe) {
       craftSlots[i] = null;
     }
   }
+  autoSave();
 }
 
 function isItemInToolGroup(item, groupName) {

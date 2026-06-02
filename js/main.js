@@ -1,5 +1,5 @@
 loadGame();
-updateInventoryCapacityFromEquipment();
+updateInventoryCapacityFromEquipment(false);
 applyLanguage();
 updateStatusText();
 updateRecipeFilterButtons();
@@ -13,10 +13,19 @@ function findItemInInventory(itemId) {
     const item = inventory.items[i];
 
     if (item !== null && item.id === itemId) {
-      return {
-        item: item,
-        slotIndex: i
-      };
+      return { item, slotIndex: i };
+    }
+  }
+
+  return null;
+}
+
+function findToolGroupInInventory(groupName) {
+  for (let i = 0; i < inventory.items.length; i++) {
+    const item = inventory.items[i];
+
+    if (item !== null && item.toolTags && item.toolTags.includes(groupName)) {
+      return { item, slotIndex: i };
     }
   }
 
@@ -24,48 +33,44 @@ function findItemInInventory(itemId) {
 }
 
 function applyInventoryToolDurability(toolData, durabilityCost) {
-  if (!toolData || !durabilityCost) {
-    return;
-  }
+  if (!toolData || !durabilityCost) return;
 
   const tool = toolData.item;
 
-  if (typeof tool.durability !== "number") {
-    return;
-  }
+  if (typeof tool.durability !== "number") return;
 
   const finalDurabilityCost = getToolDurabilityCost(tool, durabilityCost);
-
   tool.durability -= finalDurabilityCost;
 
   if (tool.durability <= 0) {
     const toolName = getItemName(tool);
-
     inventory.items[toolData.slotIndex] = null;
 
     showMessage(t("toolBroke", { item: toolName }), "warning");
     addLog(t("toolBroke", { item: toolName }), "warning");
   }
+
+  autoSave();
 }
 
 function getRandomLoot(areaId) {
   const area = areasDatabase[areaId];
 
-  if (!area) {
-    return null;
-  }
+  if (!area) return null;
 
   const availableLoot = area.loot.filter(function (lootEntry) {
-    if (!lootEntry.requiredTool) {
-      return true;
+    if (lootEntry.requiredTool) {
+      return findItemInInventory(lootEntry.requiredTool) !== null;
     }
 
-    return findItemInInventory(lootEntry.requiredTool) !== null;
+    if (lootEntry.requiredToolGroups) {
+      return findToolGroupInInventory(lootEntry.requiredToolGroups) !== null;
+    }
+
+    return true;
   });
 
-  if (availableLoot.length === 0) {
-    return null;
-  }
+  if (availableLoot.length === 0) return null;
 
   let totalChance = 0;
 
@@ -83,6 +88,11 @@ function getRandomLoot(areaId) {
 
       if (lootEntry.requiredTool) {
         const toolData = findItemInInventory(lootEntry.requiredTool);
+        applyInventoryToolDurability(toolData, lootEntry.toolDurabilityCost || 1);
+      }
+
+      if (lootEntry.requiredToolGroups) {
+        const toolData = findToolGroupInInventory(lootEntry.requiredToolGroups);
         applyInventoryToolDurability(toolData, lootEntry.toolDurabilityCost || 1);
       }
 
@@ -161,13 +171,8 @@ document.getElementById("workBtn").addEventListener("click", function () {
   energy -= 15;
   hunger -= 10;
 
-  if (hunger < 0) {
-    hunger = 0;
-  }
-
-  if (energy < 0) {
-    energy = 0;
-  }
+  if (hunger < 0) hunger = 0;
+  if (energy < 0) energy = 0;
 
   updateScreen();
   autoSave();
@@ -200,13 +205,8 @@ document.getElementById("sleepBtn").addEventListener("click", function () {
     energy += selectedHours * 10;
     hunger -= selectedHours * 5;
 
-    if (energy > 100) {
-      energy = 100;
-    }
-
-    if (hunger < 0) {
-      hunger = 0;
-    }
+    if (energy > 100) energy = 100;
+    if (hunger < 0) hunger = 0;
 
     isSleeping = false;
     setAwakeStatus();
@@ -240,36 +240,21 @@ setInterval(function () {
     energy -= 1;
   }
 
-  if (hunger < 0) {
-    hunger = 0;
-  }
-
-  if (energy < 0) {
-    energy = 0;
-  }
+  if (hunger < 0) hunger = 0;
+  if (energy < 0) energy = 0;
 
   if (hunger < 20) {
     health -= 5;
   }
 
-  if (health < 0) {
-    health = 0;
-  }
+  if (health < 0) health = 0;
 
   updateScreen();
   autoSave();
 }, GAME_HOUR_MS);
 
-// Kayıt varsa yükle, yoksa varsayılan kapasiteyi ayarla
-if (loadGame()) {
-  updateRegionBackground(playerRegion);
-} else {
-  setInventoryCapacity(inventory.baseSlots, inventory.baseMaxWeight);
-  updateRegionBackground(playerRegion);
-}
-
 updateLanguageButtons();
-updateInventoryCapacityFromEquipment();
+updateInventoryCapacityFromEquipment(false);
 updateInventoryScreen();
 updateEquipmentScreen();
 updateCraftingScreen();

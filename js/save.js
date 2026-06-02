@@ -1,29 +1,34 @@
 const SAVE_KEY = "survivalSystemSave";
+let isLoadingGame = false;
 
 function restoreItem(savedItem) {
   if (savedItem === null) {
     return null;
   }
 
-  // Önce doğrudan key ile ara
   let databaseItem = itemsDatabase[savedItem.id];
 
-  // Bulamazsa item id üzerinden ara
   if (!databaseItem) {
     databaseItem = Object.values(itemsDatabase).find(function (item) {
       return item.id === savedItem.id;
     });
   }
 
-  // Database'de hâlâ yoksa eski kaydı koru
   if (!databaseItem) {
     return savedItem;
   }
 
-  return {
+  const restoredItem = {
     ...databaseItem,
+    ...savedItem,
     quantity: savedItem.quantity ?? 1
   };
+
+  if (typeof databaseItem.maxDurability === "number") {
+    restoredItem.maxDurability = databaseItem.maxDurability;
+  }
+
+  return restoredItem;
 }
 
 function restoreInventory(savedInventory) {
@@ -106,6 +111,8 @@ function loadGame() {
     return;
   }
 
+  isLoadingGame = true;
+
   health = saveData.health ?? health;
   hunger = saveData.hunger ?? hunger;
   energy = saveData.energy ?? energy;
@@ -113,31 +120,6 @@ function loadGame() {
   restoreInventory(saveData.inventory);
   restoreEquipment(saveData.equipment);
   restoreCraftSlots(saveData.craftSlots);
-
-  function restoreItem(savedItem) {
-  if (savedItem === null) {
-    return null;
-  }
-
-  let databaseItem = itemsDatabase[savedItem.id];
-
-  if (!databaseItem) {
-    databaseItem = Object.values(itemsDatabase).find(function (item) {
-      return item.id === savedItem.id;
-    });
-  }
-
-  if (!databaseItem) {
-    return savedItem;
-  }
-
-  return {
-    ...databaseItem,
-    quantity: savedItem.quantity ?? 1,
-    durability: savedItem.durability ?? databaseItem.durability,
-    maxDurability: savedItem.maxDurability ?? databaseItem.maxDurability
-  };
-}
 
   if (saveData.discoveredRecipes) {
     discoveredRecipes = saveData.discoveredRecipes;
@@ -152,6 +134,8 @@ function loadGame() {
   }
 
   updateInventoryCapacityFromEquipment();
+
+  isLoadingGame = false;
 }
 
 function resetSave() {

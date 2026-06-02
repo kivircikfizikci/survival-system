@@ -13,7 +13,7 @@ function isEquipableItem(item) {
   return item.type === "clothing" || item.type === "bag";
 }
 
-function updateInventoryCapacityFromEquipment() {
+function updateInventoryCapacityFromEquipment(showWarning = true) {
   let extraSlots = 0;
   let extraWeight = 0;
 
@@ -29,7 +29,7 @@ function updateInventoryCapacityFromEquipment() {
   const totalSlots = inventory.baseSlots + extraSlots;
   const totalWeight = inventory.baseMaxWeight + extraWeight;
 
-  setInventoryCapacity(totalSlots, totalWeight);
+  setInventoryCapacity(totalSlots, totalWeight, showWarning);
 }
 
 function wearInventoryItem(slotIndex) {
@@ -147,7 +147,7 @@ function unequipItem(equipSlot) {
   inventory.items[emptySlot] = item;
   equipment[equipSlot] = null;
 
-  updateInventoryCapacityFromEquipment();
+  updateInventoryCapacityFromEquipment(false);
 
   updateInventoryScreen();
   updateEquipmentScreen();

@@ -5,7 +5,7 @@ let inventory = {
   items: [null, null, null, null]
 };
 
-function setInventoryCapacity(totalSlots, totalWeight) {
+function setInventoryCapacity(totalSlots, totalWeight, showWarning = true) {
   inventory.maxWeight = totalWeight;
 
   while (inventory.items.length < totalSlots) {
@@ -16,7 +16,10 @@ function setInventoryCapacity(totalSlots, totalWeight) {
     const lastItem = inventory.items[inventory.items.length - 1];
 
     if (lastItem !== null) {
-      showMessage(t("cannotReduceInventory"));
+      if (showWarning) {
+        showMessage(t("cannotReduceInventorySlots"));
+      }
+
       break;
     }
 
