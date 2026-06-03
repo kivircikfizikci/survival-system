@@ -139,11 +139,34 @@
 .game-shell.game-layout {
   width: min(1500px, 100%);
   display: grid;
-  grid-template-columns: minmax(620px, 2fr) minmax(300px, 1fr) minmax(300px, 1fr);
+  grid-template-columns: minmax(620px, 1.35fr) minmax(620px, 1fr);
   gap: 12px;
   align-items: start;
 }
 
+.left-column,
+.right-column {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  align-content: start;
+}
+
+.right-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.craft-side-panel,
+.info-side-panel {
+  position: sticky;
+  top: 88px;
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
 
 .main-panel {
   display: grid;

@@ -25,6 +25,13 @@ const logList = document.getElementById("logList");
 const toastContainer = document.getElementById("toastContainer");
 const MAX_LOG_ITEMS = 10;
 
+const shelterCard = document.getElementById("shelterCard");
+const shelterTitle = document.getElementById("shelterTitle");
+const shelterRegionText = document.getElementById("shelterRegionText");
+const shelterStorageText = document.getElementById("shelterStorageText");
+const shelterWeightText = document.getElementById("shelterWeightText");
+const shelterStorageGrid = document.getElementById("shelterStorageGrid");
+
 let playerNickname = "Survivor";
 let playerRegion = "meadow";
 let playerProfession = "Explorer";
@@ -465,9 +472,15 @@ function updateInventoryScreen() {
       }
 
       slot.draggable = true;
+
       slot.addEventListener("dragstart", function (event) {
         draggedSlotIndex = i;
         dragMoveAmount = event.ctrlKey ? "one" : "all";
+      });
+
+      slot.addEventListener("dragend", function () {
+        draggedSlotIndex = null;
+        dragMoveAmount = "all";
       });
 
       slot.addEventListener("click", function (event) {
@@ -531,7 +544,7 @@ function updateInventoryScreen() {
       slot.classList.add("is-empty");
       const emptyLabel = document.createElement("span");
       emptyLabel.classList.add("empty-slot-label");
-      emptyLabel.textContent = t("empty");
+      emptyLabel.textContent = "";
       slot.appendChild(emptyLabel);
     }
 
@@ -540,6 +553,13 @@ function updateInventoryScreen() {
     });
 
     slot.addEventListener("drop", function () {
+      if (draggedShelterSlotIndex !== null) {
+        moveShelterItemToInventorySlot(draggedShelterSlotIndex, i);
+        draggedShelterSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
       if (draggedEquipmentSlot !== null) {
         unequipItem(draggedEquipmentSlot);
         draggedEquipmentSlot = null;
@@ -656,7 +676,7 @@ function updateCraftResultScreen() {
 
   if (recipe === null) {
     const emptyText = document.createElement("span");
-    emptyText.textContent = t("empty");
+    emptyText.textContent = "";
     craftResultSlot.appendChild(emptyText);
     return;
   }
@@ -732,6 +752,7 @@ function applyLanguage() {
   updateCraftingScreen();
   updateCraftResultScreen();
   updateRecipesScreen();
+  updateShelterScreen();
 }
 
 function updateLanguageButtons() {
@@ -756,8 +777,6 @@ function showToast(message, type = "warning") {
     toast.remove();
   }, 3000);
 }
-
-
 function addLog(message, type = "info") {
   if (!logList) {
     return;
@@ -779,5 +798,133 @@ function addLog(message, type = "info") {
 
   if (logItems.length > MAX_LOG_ITEMS) {
     logItems[logItems.length - 1].remove();
+  }
+}
+
+function updateShelterScreen() {
+  if (!shelterCard) {
+    return;
+  }
+
+  if (
+    playerShelter === null ||
+    playerShelter.regionId !== areaSelect.value
+  ) {
+    shelterCard.hidden = true;
+    return;
+  }
+
+  shelterCard.hidden = false;
+
+  const usedSlots = playerShelter.storageItems.filter(function (item) {
+    return item !== null;
+  }).length;
+
+  const shelterWeight = playerShelter.storageItems.reduce(function (total, item) {
+    if (item === null) {
+      return total;
+    }
+
+    return total + item.weight * (item.quantity || 1);
+  }, 0);
+
+  shelterTitle.textContent = playerShelter.type;
+
+  shelterRegionText.textContent =
+    getAreaName(areasDatabase[playerShelter.regionId]);
+
+  shelterStorageText.textContent =
+    usedSlots + " / " + playerShelter.storageSlots + " slots";
+
+  shelterWeightText.textContent =
+    shelterWeight.toFixed(1) + " / " + playerShelter.maxWeight + " kg";
+
+  shelterStorageGrid.innerHTML = "";
+
+  for (let i = 0; i < playerShelter.storageSlots; i++) {
+    const slot = document.createElement("div");
+    slot.classList.add("shelter-storage-slot");
+    slot.dataset.shelterSlot = i;
+
+    slot.addEventListener("dragover", function (event) {
+      event.preventDefault();
+    });
+
+    slot.addEventListener("drop", function () {
+      const shelterSlotIndex = Number(slot.dataset.shelterSlot);
+
+      if (draggedShelterSlotIndex !== null) {
+        moveShelterItem(draggedShelterSlotIndex, shelterSlotIndex);
+        draggedShelterSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
+      if (draggedSlotIndex !== null) {
+        moveInventoryItemToShelterSlot(draggedSlotIndex, shelterSlotIndex);
+        draggedSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+    });
+
+    const item = playerShelter.storageItems[i];
+
+    if (item === null) {
+      slot.draggable = false;
+
+      const emptyLabel = document.createElement("span");
+      emptyLabel.classList.add("shelter-empty-label");
+      emptyLabel.textContent = "";
+
+      slot.appendChild(emptyLabel);
+    } else {
+      slot.classList.add("is-filled");
+      slot.draggable = true;
+
+      slot.addEventListener("dragstart", function () {
+        draggedShelterSlotIndex = Number(slot.dataset.shelterSlot);
+        dragMoveAmount = "all";
+      });
+
+      slot.addEventListener("dragend", function () {
+        draggedShelterSlotIndex = null;
+        dragMoveAmount = "all";
+      });
+
+      if ((item.quantity || 1) > 1) {
+        const quantityBadge = document.createElement("span");
+        quantityBadge.classList.add("quantity-badge");
+        quantityBadge.textContent = "x" + item.quantity;
+        slot.appendChild(quantityBadge);
+      }
+
+      const itemInfo = document.createElement("div");
+      itemInfo.classList.add("item-info");
+
+      const img = document.createElement("img");
+      img.classList.add("item-image");
+      img.src = item.imageSrc;
+      img.alt = getItemName(item);
+
+      const name = document.createElement("strong");
+      name.textContent = getItemName(item);
+
+      itemInfo.append(img, name);
+      slot.appendChild(itemInfo);
+
+      if (hasDurability(item)) {
+        slot.appendChild(createDurabilityBadge(item));
+      }
+
+      const itemWeight = document.createElement("span");
+      itemWeight.classList.add("item-weight");
+      itemWeight.textContent =
+        ((item.weight || 0) * (item.quantity || 1)).toFixed(2) + " kg";
+
+      slot.appendChild(itemWeight);
+    }
+
+    shelterStorageGrid.appendChild(slot);
   }
 }

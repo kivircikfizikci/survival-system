@@ -178,6 +178,27 @@ function useInventoryItem(slotIndex) {
     return;
   }
 
+  if (item.id === "tent") {
+    if (playerShelter !== null) {
+      showMessage(t("alreadyHaveShelter"));
+      return;
+    }
+
+    removeOneItem(slotIndex);
+
+    createShelter();
+
+    updateInventoryScreen();
+    updateShelterScreen();
+
+    const message = t("shelterCreated");
+    showMessage(message, "success");
+    addLog(message, "success");
+
+    autoSave();
+    return;
+  }
+
   if (item.type !== "usable") {
     showMessage(t("cannotUseItem"));
     return;

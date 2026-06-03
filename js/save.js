@@ -85,6 +85,8 @@ function saveGame() {
     equipment: equipment,
     craftSlots: craftSlots,
 
+    playerShelter: playerShelter,
+
     discoveredRecipes: discoveredRecipes,
 
     currentLanguage: currentLanguage,
@@ -131,6 +133,10 @@ function loadGame() {
 
   if (saveData.selectedAreaId && areaSelect) {
     areaSelect.value = saveData.selectedAreaId;
+  }
+
+  if (saveData.playerShelter) {
+    playerShelter = saveData.playerShelter;
   }
 
   updateInventoryCapacityFromEquipment();

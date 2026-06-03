@@ -1,5 +1,5 @@
 .inventory-panel {
-  padding: 18px;
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   background: rgba(15, 23, 42, 0.72);
@@ -36,7 +36,7 @@
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .inventory-slot {
@@ -44,7 +44,7 @@
   display: grid;
   min-height: 156px;
   overflow: hidden;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.06);
@@ -63,7 +63,7 @@
 
 .item-info {
   display: grid;
-  padding-bottom: 44px;
+  padding-bottom: 40px;
   min-height: 100%;
   grid-template-rows: 1fr auto;
   gap: 8px;
@@ -208,22 +208,27 @@
 }
 
 .slot-action {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border: 0;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.88);
-  color: #f8fafc;
+
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.7);
+
   cursor: pointer;
   font-size: 0;
   font-weight: 900;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+
+  box-shadow: none;
+
   transition:
-    transform 120ms ease,
-    background 120ms ease,
-    border-color 120ms ease;
+    opacity 150ms ease,
+    background 150ms ease,
+    color 150ms ease;
 }
 
 .slot-action:hover {
@@ -231,7 +236,6 @@
 }
 
 .use-action {
-  background: linear-gradient(180deg, rgba(96, 165, 250, 0.95), rgba(37, 99, 235, 0.9));
   color: #eff6ff;
   border-color: rgba(147, 197, 253, 0.5);
 }
@@ -244,7 +248,7 @@
 
 .use-action::before {
   content: "✓";
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .wear-action::before {
@@ -254,7 +258,7 @@
 
 .drop-action::before {
   content: "×";
-  font-size: 17px;
+  font-size: 12px;
   line-height: 1;
 }
 
@@ -268,8 +272,8 @@
 }
 
 .drop-action:hover {
-  background: rgba(225, 29, 72, 0.9);
-  border-color: rgba(251, 113, 133, 0.75);
+  background: rgba(220, 38, 38, 0.85);
+  color: white;
 }
 
 .item-durability {
@@ -285,7 +289,7 @@
   background: rgba(15, 23, 42, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #f8fafc;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -304,7 +308,7 @@
   background: rgba(15, 23, 42, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #f8fafc;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.02em;

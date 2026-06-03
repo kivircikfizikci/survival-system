@@ -1,0 +1,149 @@
+.shelter-card {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.shelter-card[hidden] {
+  display: none;
+}
+
+.shelter-header {
+
+  gap: 12px;
+}
+
+.shelter-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.shelter-subtitle {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.shelter-type-badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(52, 211, 153, 0.14);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: #bbf7d0;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.shelter-top {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.shelter-top h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.shelter-top small {
+  display: block;
+  margin-top: 2px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-style: italic;
+  font-weight: 800;
+}
+
+.shelter-summary {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.shelter-summary span {
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 1px solid rgba(167, 243, 208, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d1fae5;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.shelter-storage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.shelter-storage-slot {
+  position: relative;
+  display: grid;
+  min-height: 105px;
+  overflow: hidden;
+  padding: 10px;
+
+  border: 1px dashed rgba(148, 163, 184, 0.34);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.46);
+
+  place-items: center;
+
+    color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.shelter-storage-slot.is-filled {
+  border-style: solid;
+  border-color: rgba(52, 211, 153, 0.28);
+  background: rgba(30, 41, 59, 0.58);
+}
+
+.shelter-storage-slot .item-info {
+  display: grid;
+  padding-bottom: 40px;
+  min-height: 100%;
+  grid-template-rows: 1fr auto;
+  gap: 6px;
+  place-items: center;
+}
+
+.shelter-storage-slot .item-image {
+  width: min(70px, 80%);
+  height: 58px;
+  object-fit: contain;
+}
+
+.shelter-storage-slot .item-info strong {
+  max-width: 100%;
+  align-self: end;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shelter-storage-slot img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.shelter-storage-slot span {
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 0.68rem;
+  color: #e2e8f0;
+}
+
+.shelter-empty-label {
+  opacity: 0.25;
+}

@@ -1,172 +1,31 @@
 @media (max-width: 1300px) {
+  .game-shell.game-layout {
+    width: min(920px, 100%);
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .left-column,
+  .right-column {
+    grid-column: 1;
+  }
+
   .inventory-grid {
     grid-template-columns: repeat(4, minmax(120px, 1fr));
   }
 }
 
-@media (max-width: 760px) {
-  .inventory-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (hover: none) {
-  .slot-actions {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .slot-action {
-    width: 30px;
-    height: 30px;
-  }
-}
-
-
-@media (hover: none) {
-  .slot-actions {
-    opacity: 1;
-  }
-}
-
-@media (max-width: 720px) {
-  body {
-    padding: 20px;
-    padding-top: 76px;
-  }
-
-  .language-switcher {
-    left: auto;
-    right: 20px;
-  }
-
-  .inventory-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .inventory-header {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .inventory-summary {
-    justify-content: flex-start;
-  }
-
-  .actions,
-  .sleep-controls,
-  .search-controls {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-
-  .profile-top {
-    grid-template-columns: 1fr;
-  }
-
-  .equipment-side h2,
-  .equipment-title-placeholder {
-    visibility: visible;
-  }
-
-  .equipment-column {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .right-equipment .equipment-column {
-    grid-template-columns: 1fr;
-  }
-
-  .status-meters {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .inventory-slot {
-    min-height: 196px;
-    padding-bottom: 58px;
-  }
-
-  .slot-actions {
-    inset: auto 10px 10px;
-    display: flex;
-    padding: 0;
-    background: transparent;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .slot-action {
-    flex: 1;
-    min-height: 38px;
-    padding: 0 10px;
-  }
-
-  .item-weight {
-    bottom: 26px;
-  }
-
-  .inventory-slot:hover .item-image,
-  .inventory-slot:focus-within .item-image {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .recipe-filters {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 1200px) {
-  .recipes-panel {
-    position: static;
-    width: 100%;
-    margin-top: 14px;
-  }
-}
-
-@media (max-width: 1300px) {
-  .game-shell.game-layout {
-    width: min(920px, 100%);
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .main-panel {
-    grid-column: 1 / -1;
-  }
-
-  .craft-side-panel {
-    grid-column: 1;
-    position: static;
-  }
-
-  .info-side-panel {
-    grid-column: 2;
-    position: static;
-    display: grid;
-    gap: 12px;
-  }
-}
-
 @media (max-width: 1000px) {
-  .game-shell.game-layout {
-    width: min(920px, 100%);
+  .right-bottom-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
   }
 
-  .main-panel,
   .craft-side-panel,
   .info-side-panel {
-    grid-column: 1;
     position: static;
     align-self: stretch;
   }
+
   .craft-grid {
     grid-template-columns: repeat(3, 72px);
   }
@@ -175,9 +34,6 @@
   .recipes-card,
   .log-card {
     width: 100%;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    min-height: 520px;
   }
 }
 
@@ -216,8 +72,105 @@
   }
 }
 
-@media (hover: none) {
+@media (max-width: 760px) {
+  body {
+    padding: 20px;
+  }
+
+  .inventory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .inventory-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .inventory-summary {
+    justify-content: flex-start;
+  }
+
+  .shelter-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .shelter-summary {
+    justify-content: flex-start;
+  }
+
+  .shelter-storage-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .actions,
+  .sleep-controls,
+  .search-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .profile-top {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-side h2,
+  .equipment-title-placeholder {
+    visibility: visible;
+  }
+
+  .equipment-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .right-equipment .equipment-column {
+    grid-template-columns: 1fr;
+  }
+
+  .status-meters {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .recipe-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .shelter-storage-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
   .equipment-remove {
     opacity: 1;
+  }
+
+  .inventory-slot {
+    min-height: 196px;
+    padding-bottom: 58px;
+  }
+
+  .slot-actions {
+    inset: auto 10px 10px;
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .slot-action {
+    flex: 1;
+    min-height: 38px;
+    padding: 0 10px;
+  }
+
+  .inventory-slot:hover .item-image,
+  .inventory-slot:focus-within .item-image {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -929,6 +929,17 @@ const itemsDatabase = {
     weight: 0.3,
     maxStack: 1
   },
+  tent: {
+    id: "tent",
+    nameKey: "tent",
+    type: "usable",
+    category: "survival",
+    imageSrc: "img/tent.png",
+    weight: 5,
+    stackable: false,
+    usable: true,
+    itemType: "shelter"
+  },
   // Cooked Food
   cookedFish: {
     id: "cookedFish",
@@ -1208,7 +1219,7 @@ const recipeDiscoveryRules = {
   sharpStone: ["stoneKnife", "stoneAxe", "stoneShovel", "stoneSpear", "stonePickaxe"],
   boiledWater: ["sterileBandage"],
   obsidianShard: ["obsidianKnife"],
-  leatherScrap: ["leatherPouch"],
+  leatherScrap: ["leatherPouch", "tent"],
   animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
   clay: ["clayPickaxeMold", "clayShovelMold", "clayAxeMold", "claySpearMold", "clayKnifeMold"],
   clayPickaxeMold: ["copperPickaxeHead"],
@@ -1608,6 +1619,38 @@ const recipesDatabase = {
       dryLeaf: 2
     }
   },
+  leatherPouch: {
+    id: "leatherPouch",
+    nameKey: "leatherPouch",
+    resultItemId: "leatherPouch",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      leatherScrap: 4,
+      plantFiber: 1
+    },
+    requiredTools: {
+      boneNeedle: 1
+    },
+    toolDurabilityCost: {
+      boneNeedle: 2
+    }
+  },
+  tent: {
+    id: "tent",
+    nameKey: "tent",
+    resultItemId: "tent",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+
+    ingredients: {
+      leatherScrap: 8,
+      rope: 8,
+      branch: 7
+    }
+  },
   simpleTorch: {
     id: "simpleTorch",
     nameKey: "simpleTorch",
@@ -1924,24 +1967,6 @@ const recipesDatabase = {
     },
     toolDurabilityCost: {
       knife: 4
-    }
-  },
-  leatherPouch: {
-    id: "leatherPouch",
-    nameKey: "leatherPouch",
-    resultItemId: "leatherPouch",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "survival",
-    ingredients: {
-      leatherScrap: 4,
-      plantFiber: 1
-    },
-    requiredTools: {
-      boneNeedle: 1
-    },
-    toolDurabilityCost: {
-      boneNeedle: 2
     }
   },
   // Smelting Recipes

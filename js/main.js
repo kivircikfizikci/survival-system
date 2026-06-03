@@ -230,6 +230,7 @@ for (let languageButton of languageButtons) {
 
 if (areaSelect) {
   areaSelect.addEventListener("change", function () {
+    updateShelterScreen();
     autoSave();
   });
 }
@@ -257,6 +258,7 @@ updateLanguageButtons();
 updateInventoryCapacityFromEquipment(false);
 updateInventoryScreen();
 updateEquipmentScreen();
+updateShelterScreen();
 updateCraftingScreen();
 updateRecipesScreen();
 setupCraftDropZones();
