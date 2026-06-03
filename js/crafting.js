@@ -223,6 +223,10 @@ function getToolDurabilityCost(item, baseCost) {
     return baseCost;
   }
 
+  if (item.toolTier === "iron") {
+    return Math.max(1, Math.ceil(baseCost * 0.25));
+  }
+
   if (item.toolTier === "copper") {
     return Math.max(1, Math.ceil(baseCost * 0.5));
   }

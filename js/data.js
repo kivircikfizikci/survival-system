@@ -793,6 +793,76 @@ const itemsDatabase = {
     toolTags: ["spear"],
     toolTier: "copper"
   },
+  ironPickaxe: {
+    id: "ironPickaxe",
+    nameKey: "ironPickaxe",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/ironPickaxe.png",
+    weight: 1.2,
+    maxStack: 1,
+    damage: 12,
+    durability: 70,
+    maxDurability: 70,
+    toolTags: ["pickaxe"],
+    toolTier: "iron"
+  },
+  ironShovel: {
+    id: "ironShovel",
+    nameKey: "ironShovel",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/ironShovel.png",
+    weight: 1.5,
+    maxStack: 1,
+    damage: 7,
+    durability: 90,
+    maxDurability: 90,
+    toolTags: ["shovel"],
+    toolTier: "iron"
+  },
+  ironAxe: {
+    id: "ironAxe",
+    nameKey: "ironAxe",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/ironAxe.png",
+    weight: 1,
+    maxStack: 1,
+    damage: 16,
+    durability: 80,
+    maxDurability: 80,
+    toolTags: ["axe"],
+    toolTier: "iron"
+  },
+  ironKnife: {
+    id: "ironKnife",
+    nameKey: "ironKnife",
+    type: "tool",
+    category: "tool",
+    imageSrc: "img/ironKnife.png",
+    weight: 0.6,
+    maxStack: 1,
+    damage: 18,
+    durability: 60,
+    maxDurability: 60,
+    toolTags: ["knife"],
+    toolTier: "iron"
+  },
+  ironSpear: {
+    id: "ironSpear",
+    nameKey: "ironSpear",
+    type: "weapon",
+    category: "weapon",
+    imageSrc: "img/ironSpear.png",
+    weight: 1.2,
+    maxStack: 1,
+    damage: 20,
+    durability: 50,
+    maxDurability: 50,
+    toolTags: ["spear"],
+    toolTier: "iron"
+  },
   // Scrap Materials
   clothScrap: {
     id: "clothScrap",
@@ -991,6 +1061,51 @@ const itemsDatabase = {
     weight: 0.5,
     maxStack: 1
   },
+  ironPickaxeHead: {
+    id: "ironPickaxeHead",
+    nameKey: "ironPickaxeHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/ironPickaxeHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  ironAxeHead: {
+    id: "ironAxeHead",
+    nameKey: "ironAxeHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/ironAxeHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  ironShovelHead: {
+    id: "ironShovelHead",
+    nameKey: "ironShovelHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/ironShovelHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  ironKnifeBlade: {
+    id: "ironKnifeBlade",
+    nameKey: "ironKnifeBlade",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/ironKnifeBlade.png",
+    weight: 0.5,
+    maxStack: 1
+  },
+  ironSpearHead: {
+    id: "ironSpearHead",
+    nameKey: "ironSpearHead",
+    type: "material",
+    category: "smelting",
+    imageSrc: "img/ironSpearHead.png",
+    weight: 0.5,
+    maxStack: 1
+  },
 };
 
 const areasDatabase = {
@@ -1013,13 +1128,13 @@ const areasDatabase = {
     loot: [
       { itemId: "freshWater", chance: 35 },
       { itemId: "reed", chance: 30 },
-      { itemId: "clay", chance: 98, requiredToolGroups: "shovel", toolDurabilityCost: 1 },
+      { itemId: "clay", chance: 98, requiredToolGroups: "shovel", toolDurabilityCost: 4 },
       { itemId: "pebble", chance: 15 },
       { itemId: "frog", chance: 12 },
       { itemId: "fish", chance: 8 },
       { itemId: "oldFishNet", chance: 5 },
       { itemId: "plasticBottle", chance: 5 },
-      { itemId: "worm", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 1 },
+      { itemId: "worm", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 4 },
       { itemId: "snail", chance: 10 }
     ]
   },
@@ -1036,7 +1151,7 @@ const areasDatabase = {
       { itemId: "sharpStone", chance: 10 },
       { itemId: "blackberry", chance: 10 },
       { itemId: "insect", chance: 10 },
-      { itemId: "woodLog", chance: 10, requiredToolGroups: "axe", toolDurabilityCost: 1 },
+      { itemId: "woodLog", chance: 10, requiredToolGroups: "axe", toolDurabilityCost: 8 },
       { itemId: "pineCone", chance: 15 },
       { itemId: "resin", chance: 6 },
       { itemId: "animalBone", chance: 5 },
@@ -1049,11 +1164,11 @@ const areasDatabase = {
       { itemId: "pebble", chance: 35 },
       { itemId: "sharpStone", chance: 30 },
       { itemId: "flint", chance: 18 },
-      { itemId: "salt", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 1 },
-      { itemId: "obsidianShard", chance: 8, requiredToolGroups: "pickaxe", toolDurabilityCost: 1 },
-      { itemId: "coal", chance: 14, requiredToolGroups: "pickaxe", toolDurabilityCost: 1 },
-      { itemId: "ironOre", chance: 6, requiredToolGroups: "pickaxe", toolDurabilityCost: 2 },
-      { itemId: "copperOre", chance: 5, requiredToolGroups: "pickaxe", toolDurabilityCost: 2 },
+      { itemId: "salt", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 4 },
+      { itemId: "obsidianShard", chance: 8, requiredToolGroups: "pickaxe", toolDurabilityCost: 12 },
+      { itemId: "coal", chance: 14, requiredToolGroups: "pickaxe", toolDurabilityCost: 4 },
+      { itemId: "ironOre", chance: 6, requiredToolGroups: "pickaxe", toolDurabilityCost: 8 },
+      { itemId: "copperOre", chance: 5, requiredToolGroups: "pickaxe", toolDurabilityCost: 4 },
       { itemId: "rope", chance: 2 }
     ]
   },
@@ -1105,15 +1220,21 @@ const recipeDiscoveryRules = {
   copperShovelHead: ["copperShovel"],
   copperSpearHead: ["copperSpear"],
   copperAxeHead: ["copperAxe"],
-  copperKnifeBlade: ["copperKnife"]
+  copperKnifeBlade: ["copperKnife"],
+  ironOre: ["ironAxeHead", "ironSpearHead", "ironShovelHead", "ironPickaxeHead", "ironKnifeBlade"],
+  ironPickaxeHead: ["ironPickaxe"],
+  ironShovelHead: ["ironShovel"],
+  ironSpearHead: ["ironSpear"],
+  ironAxeHead: ["ironAxe"],
+  ironKnifeBlade: ["ironKnife"]
 };
 
 const toolGroups = {
-  knife: ["stoneKnife", "boneKnife", "obsidianKnife", "copperKnife"],
-  pickaxe: ["stonePickaxe", "copperPickaxe"],
-  axe: ["stoneAxe", "copperAxe"],
-  shovel: ["stoneShovel", "copperShovel"],
-  spear: ["stoneSpear", "boneSpear", "copperSpear"]
+  knife: ["stoneKnife", "boneKnife", "obsidianKnife", "copperKnife", "ironKnife"],
+  pickaxe: ["stonePickaxe", "copperPickaxe", "ironPickaxe"],
+  axe: ["stoneAxe", "copperAxe", "ironAxe"],
+  shovel: ["stoneShovel", "copperShovel", "ironShovel"],
+  spear: ["stoneSpear", "boneSpear", "copperSpear", "ironSpear"]
 };
 
 const recipesDatabase = {
@@ -1370,6 +1491,71 @@ const recipesDatabase = {
       branch: 2,
       rope: 1,
       copperSpearHead: 1
+    }
+  },
+  ironAxe: {
+    id: "ironAxe",
+    nameKey: "ironAxe",
+    resultItemId: "ironAxe",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      rope: 2,
+      ironAxeHead: 1
+    }
+  },
+  ironKnife: {
+    id: "ironKnife",
+    nameKey: "ironKnife",
+    resultItemId: "ironKnife",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      stick: 1,
+      rope: 1,
+      ironKnifeBlade: 1
+    }
+  },
+  ironPickaxe: {
+    id: "ironPickaxe",
+    nameKey: "ironPickaxe",
+    resultItemId: "ironPickaxe",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      rope: 2,
+      ironPickaxeHead: 1
+    }
+  },
+  ironShovel: {
+    id: "ironShovel",
+    nameKey: "ironShovel",
+    resultItemId: "ironShovel",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 1,
+      rope: 1,
+      ironShovelHead: 1
+    }
+  },
+  ironSpear: {
+    id: "ironSpear",
+    nameKey: "ironSpear",
+    resultItemId: "ironSpear",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    ingredients: {
+      branch: 2,
+      rope: 1,
+      ironSpearHead: 1
     }
   },
   // Survival Recipes
@@ -1893,5 +2079,86 @@ const recipesDatabase = {
     requiredTools: {
       fireStarter: 1
     }
-  }
+  },
+    ironPickaxeHead: {
+    id: "ironPickaxeHead",
+    nameKey: "ironPickaxeHead",
+    resultItemId: "ironPickaxeHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      ironOre: 3,
+      charcoal: 1,
+      clayPickaxeMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  ironAxeHead: {
+    id: "ironAxeHead",
+    nameKey: "ironAxeHead",
+    resultItemId: "ironAxeHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      ironOre: 3,
+      charcoal: 1,
+      clayAxeMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  ironKnifeBlade: {
+    id: "ironKnifeBlade",
+    nameKey: "ironKnifeBlade",
+    resultItemId: "ironKnifeBlade",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      ironOre: 1,
+      charcoal: 1,
+      clayKnifeMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  ironSpearHead: {
+    id: "ironSpearHead",
+    nameKey: "ironSpearHead",
+    resultItemId: "ironSpearHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      ironOre: 1,
+      charcoal: 1,
+      claySpearMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  ironShovelHead: {
+    id: "ironShovelHead",
+    nameKey: "ironShovelHead",
+    resultItemId: "ironShovelHead",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "smelting",
+    ingredients: {
+      ironOre: 2,
+      charcoal: 1,
+      clayShovelMold: 1
+    },
+    requiredTools: {
+      fireStarter: 1
+    }
+  },
+  
 };
