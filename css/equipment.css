@@ -1,0 +1,94 @@
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 96px);
+  gap: 10px;
+}
+
+.eft-layout {
+  align-items: start;
+}
+
+.equipment-side {
+  display: grid;
+  gap: 10px;
+}
+
+.equipment-side h2 {
+  font-size: 0.9rem;
+  color: #86efac;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.equipment-title-placeholder {
+  visibility: hidden;
+  user-select: none;
+}
+
+.equipment-column {
+  display: grid;
+  gap: 10px;
+}
+
+.equipment-slot {
+  min-height: 82px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.65);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  position: relative;
+  overflow: hidden;
+}
+
+.equipment-slot img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.equipment-slot.is-equipped {
+  border-style: solid;
+  color: #f8fafc;
+  background: rgba(52, 211, 153, 0.16);
+  border-color: rgba(110, 231, 183, 0.6);
+}
+
+.equipment-slot span {
+  display: block;
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.equipment-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 150ms ease,
+    background 150ms ease,
+    color 150ms ease;
+}
+
+
+
+.equipment-slot:hover .equipment-remove {
+  opacity: 1;
+}
+
+.equipment-remove:hover {
+  background: rgba(220, 38, 38, 0.85);
+  color: white;
+}

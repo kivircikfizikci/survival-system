@@ -35,11 +35,11 @@ let draggedEquipmentSlot = null;
 let dragMoveAmount = "all";
 
 const regionBackgrounds = {
-  meadow: "img/meadow.png",
-  lake: "img/lake.png",
-  trail: "img/trail.png",
-  mountain: "img/mountain.png",
-  abandonedVillage: "img/abandonedVillage.png"
+  meadow: "../img/meadow.png",
+  lake: "../img/lake.png",
+  trail: "../img/trail.png",
+  mountain: "../img/mountain.png",
+  abandonedVillage: "../img/abandonedVillage.png"
 };
 
 const recipesBtn = document.getElementById("recipesBtn");
