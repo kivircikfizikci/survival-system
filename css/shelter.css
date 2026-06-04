@@ -147,3 +147,24 @@
 .shelter-empty-label {
   opacity: 0.25;
 }
+
+.destroy-shelter-button {
+  border: 0;
+  border-radius: 8px;
+
+  padding: 8px 12px;
+
+  background: rgba(239, 68, 68, 0.15);
+  color: #fecaca;
+
+  cursor: pointer;
+
+  font-size: 0.8rem;
+  font-weight: 800;
+
+  transition: background 150ms ease;
+}
+
+.destroy-shelter-button:hover {
+  background: rgba(239, 68, 68, 0.3);
+}

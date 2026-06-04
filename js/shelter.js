@@ -183,3 +183,49 @@ function stackStorageItems(targetItem, sourceItem) {
 
   return sourceItem.quantity <= 0;
 }
+
+function isShelterEmpty() {
+  if (!playerShelter) {
+    return true;
+  }
+
+  return playerShelter.storageItems.every(function (item) {
+    return item === null;
+  });
+}
+
+function destroyShelter() {
+  if (!playerShelter) {
+    return;
+  }
+
+  if (!isShelterEmpty()) {
+    showMessage(t("emptyShelterFirst"));
+    return;
+  }
+
+  addItem({
+    ...itemsDatabase.tent,
+    quantity: 1
+  });
+
+  playerShelter = null;
+
+  updateInventoryScreen();
+  updateShelterScreen();
+
+  const message = t("shelterRemoved");
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  autoSave();
+}
+
+const destroyShelterButton = document.getElementById("destroyShelterButton");
+
+if (destroyShelterButton) {
+  destroyShelterButton.addEventListener("click", function () {
+    destroyShelter();
+  });
+}

@@ -191,7 +191,10 @@ const translations = {
     copperAxe: "Copper Axe",
     copperKnife: "Copper Knife",
     copperSpear: "Copper Spear",
-    toolBroke: "Tool Broke"
+    toolBroke: "Tool Broke",
+    pack: "Pack",
+    emptyShelterFirst: "You must empty shelter storage first.",
+    shelterRemoved:"Shelter packed."
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -383,7 +386,10 @@ const translations = {
     copperAxe: "Bakır Balta",
     copperKnife: "Bakır Bıçak",
     copperSpear: "Bakır Mızrak",
-    toolBroke: "Eşya Kırıldı"
+    toolBroke: "Eşya Kırıldı",
+    pack: "Topla",
+    emptyShelterFirst: "Çadırı toplamadan önce depoyu boşaltmalısın.",
+    shelterRemoved: "Çadır toplandı."
   }
 };
 
