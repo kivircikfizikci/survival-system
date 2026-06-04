@@ -331,6 +331,51 @@ const itemsDatabase = {
     weight: 1.5,
     maxStack: 8
   },
+  animalHide: {
+    id: "animalHide",
+    nameKey: "animalHide",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/animalHide.png",
+    weight: 0.8,
+    maxStack: 4
+  },
+  leather: {
+    id: "leather",
+    nameKey: "leather",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/leather.png",
+    weight: 0.6,
+    maxStack: 6
+  },
+  leatherStrip: {
+    id: "leatherStrip",
+    nameKey: "leatherStrip",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/leatherStrip.png",
+    weight: 0.1,
+    maxStack: 32
+  },
+  splitWood: {
+    id: "splitWood",
+    nameKey: "splitWood",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/splitWood.png",
+    weight: 0.65,
+    maxStack: 4
+  },
+  woodPlank: {
+    id: "woodPlank",
+    nameKey: "woodPlank",
+    type: "material",
+    category: "resource",
+    imageSrc: "img/woodPlank.png",
+    weight: 0.4,
+    maxStack: 8
+  },
   // Clothing Items
   oldPants: {
     id: "oldPants",
@@ -890,7 +935,7 @@ const itemsDatabase = {
     category: "survival",
     imageSrc: "img/boiledWater.png",
     weight: 0.5,
-    maxStack: 1,
+    maxStack: 16,
     hungerRestore: 2
   },
   fishBait: {
@@ -947,7 +992,31 @@ const itemsDatabase = {
     category: "workstation",
     imageSrc: "img/campfire.png",
     weight: 4,
-    maxStack: 1
+    maxStack: 1,
+    durability: 25,
+    maxDurability: 25
+  },
+  tanningRack: {
+    id:"tanningRack",
+    nameKey: "tanningRack",
+    type: "usable",
+    category: "workstation",
+    imageSrc: "img/tanningRack.png",
+    weight: 3,
+    maxStack: 1,
+    durability: 40,
+    maxDurability: 40
+  },
+  choppingBlock: {
+    id: "choppingBlock",
+    nameKey: "choppingBlock",
+    type: "usable",
+    category: "workstation",
+    imageSrc: "img/choppingBlock.png",
+    weight: 2,
+    maxStack: 1,
+    durability: 50,
+    maxDurability: 50
   },
   // Cooked Food
   cookedFish: {
@@ -1171,7 +1240,7 @@ const areasDatabase = {
       { itemId: "sharpStone", chance: 10 },
       { itemId: "blackberry", chance: 10 },
       { itemId: "insect", chance: 10 },
-      { itemId: "woodLog", chance: 10, requiredToolGroups: "axe", toolDurabilityCost: 8 },
+      { itemId: "woodLog", chance: 90, requiredToolGroups: "axe", toolDurabilityCost: 8 },
       { itemId: "pineCone", chance: 15 },
       { itemId: "resin", chance: 6 },
       { itemId: "animalBone", chance: 5 },
@@ -1231,6 +1300,9 @@ const recipeDiscoveryRules = {
   fireStarter: ["campfire", "boiledWater"],
   campfire: ["cookedFish", "cookedFrog", "cookedSnail", "cookedMushroom"],
   animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
+  animalHide: ["leather", "tanningRack"],
+  tanningRack: ["leather", "leatherStrip"],
+  woodLog: ["choppingBlock", "splitWood", "woodPlank"],
   clay: ["clayPickaxeMold", "clayShovelMold", "clayAxeMold", "claySpearMold", "clayKnifeMold"],
   clayPickaxeMold: ["copperPickaxeHead"],
   clayShovelMold: ["copperShovelHead"],
@@ -1270,6 +1342,62 @@ const recipesDatabase = {
     ingredients: {
       reed: 3,
       dryGrass: 1
+    }
+  },
+  leatherStrip: {
+    id: "leatherStrip",
+    nameKey: "leatherStrip",
+    resultItemId: "leatherStrip",
+    resultQuantity: 4,
+    isPublic: false,
+    category: "basic",
+    ingredients: {
+      leather: 1
+    },
+    requiredToolGroups: {
+      knife: 1
+    },
+    toolDurabilityCost: {
+      knife: 4
+    }
+  },
+  woodPlank: {
+    id: "woodPlank",
+    nameKey: "woodPlank",
+    resultItemId: "woodPlank",
+    resultQuantity: 2,
+    isPublic: false,
+    requiredWorkstation: "choppingBlock",
+    category: "basic",
+    ingredients: {
+      woodLog: 1
+    },
+    requiredToolGroups: {
+      axe: 1,
+      knife: 1
+    },
+    toolDurabilityCost: {
+      axe: 8,
+      knife: 8
+    }
+  },
+  splitWood: {
+    id: "splitWood",
+    nameKey: "splitWood",
+    resultItemId: "splitWood",
+    resultQuantity: 4,
+    isPublic: false,
+    requiredWorkstation: "choppingBlock",
+    category: "basic",
+    ingredients: {
+      woodLog: 1,
+      rope: 1
+    },
+    requiredToolGroups: {
+      axe: 1
+    },
+    toolDurabilityCost: {
+      axe: 4
     }
   },
   // Medical Recipes
@@ -1586,12 +1714,11 @@ const recipesDatabase = {
     resultItemId: "boiledWater",
     resultQuantity: 1,
     isPublic: false,
+    requiredWorkstation: "campfire",
     category: "survival",
     ingredients: {
-      freshWater: 1,
-      dryWood: 1
-    },
-    requiredWorkstation: "campfire"
+      freshWater: 1
+    }
   },
   fishBait: {
     id: "fishBait",
@@ -1674,6 +1801,41 @@ const recipesDatabase = {
       fireStarter: 1
     }
   },
+  choppingBlock: {
+    id: "choppingBlock",
+    nameKey: "choppingBlock",
+    resultItemId: "choppingBlock",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      woodLog: 1
+    },
+    requiredToolGroups: {
+      axe: 1
+    },
+    toolDurabilityCost: {
+      boneNeedle: 6
+    }
+  },
+  tanningRack: {
+    id: "tanningRack",
+    nameKey: "tanningRack",
+    resultItemId: "tanningRack",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      stick: 4,
+      rope: 2
+    },
+    requiredToolGroups: {
+      knife: 1
+    },
+    toolDurabilityCost: {
+      knife: 12
+    }
+  },
   simpleTorch: {
     id: "simpleTorch",
     nameKey: "simpleTorch",
@@ -1698,6 +1860,24 @@ const recipesDatabase = {
       woodLog: 2,
       dryGrass: 4,
       fireStarter: 1
+    }
+  },
+  leather: {
+    id: "leather",
+    nameKey: "leather",
+    resultItemId: "leather",
+    resultQuantity: 1,
+    isPublic: false,
+    requiredWorkstation: "tanningRack",
+    category: "survival",
+    ingredients: {
+      animalHide: 1
+    },
+    requiredToolGroups: {
+      knife: 1
+    },
+    toolDurabilityCost: {
+      knife: 4
     }
   },
   // Cooking Recipes

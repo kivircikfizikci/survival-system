@@ -198,6 +198,13 @@ const translations = {
     campfire: "Camp Fire",
     workstationAlreadyPlaced: "In the {regionLabel} region, the workstation is already placed.",
     workstationPlaced: "{item} workstation placed for this {regionLabel}.",
+    choppingBlock: "Chopping Block",
+    tanningRack: "Tanning Rack",
+    splitWood: "Split Wood",
+    woodPlank: "Wood Plank",
+    animalHide: "Animal Hide",
+    leather: "Leather",
+    leatherStrip: "Leather Strip",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -396,6 +403,13 @@ const translations = {
     campfire: "Kamp Ateşi",
     workstationAlreadyPlaced: "{regionLabel} bölgesinde bu iş istasyonu zaten yerleştirilmiş durumda.",
     workstationPlaced: "{regionLabel} bölgesine {item} iş istasyonu eklendi.",
+    choppingBlock: "Kesme Tahtası",
+    tanningRack: "Deri Tabaklama",
+    splitWood: "Parçalanmış Odun",
+    woodPlank: "Kalas",
+    animalHide: "Hayvan Derisi",
+    leather: "Deri",
+    leatherStrip: "Deri Şerit",
   }
 };
 
