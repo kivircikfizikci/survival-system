@@ -940,6 +940,15 @@ const itemsDatabase = {
     usable: true,
     itemType: "shelter"
   },
+  campfire: {
+    id: "campfire",
+    nameKey: "campfire",
+    type: "usable",
+    category: "workstation",
+    imageSrc: "img/campfire.png",
+    weight: 4,
+    maxStack: 1
+  },
   // Cooked Food
   cookedFish: {
     id: "cookedFish",
@@ -1215,11 +1224,12 @@ const areasDatabase = {
 const recipeDiscoveryRules = {
   wildHerb: ["herbalPasteFromFlower"],
   honeycomb: ["herbalPasteFromHoneycomb"],
-  dryWood: ["boiledWater"],
   sharpStone: ["stoneKnife", "stoneAxe", "stoneShovel", "stoneSpear", "stonePickaxe"],
   boiledWater: ["sterileBandage"],
   obsidianShard: ["obsidianKnife"],
   leatherScrap: ["leatherPouch", "tent"],
+  fireStarter: ["campfire", "boiledWater"],
+  campfire: ["cookedFish", "cookedFrog", "cookedSnail", "cookedMushroom"],
   animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
   clay: ["clayPickaxeMold", "clayShovelMold", "clayAxeMold", "claySpearMold", "clayKnifeMold"],
   clayPickaxeMold: ["copperPickaxeHead"],
@@ -1580,7 +1590,8 @@ const recipesDatabase = {
     ingredients: {
       freshWater: 1,
       dryWood: 1
-    }
+    },
+    requiredWorkstation: "campfire"
   },
   fishBait: {
     id: "fishBait",
@@ -1644,11 +1655,23 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
-
     ingredients: {
       leatherScrap: 8,
       rope: 8,
       branch: 7
+    }
+  },
+  campfire: {
+    id: "campfire",
+    nameKey: "campfire",
+    resultItemId: "campfire",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    ingredients: {
+      pebble: 8,
+      woodLog: 4,
+      fireStarter: 1
     }
   },
   simpleTorch: {
@@ -1683,12 +1706,12 @@ const recipesDatabase = {
     nameKey: "cookedFish",
     resultItemId: "cookedFish",
     resultQuantity: 1,
-    isPublic: true,
+    isPublic: false,
+    requiredWorkstation: "campfire",
     category: "cooking",
     ingredients: {
       fish: 1,
-      dryWood: 1,
-      fireStarter: 1
+      dryWood: 1
     }
   },
   cookedFrog: {
@@ -1696,12 +1719,12 @@ const recipesDatabase = {
     nameKey: "cookedFrog",
     resultItemId: "cookedFrog",
     resultQuantity: 1,
-    isPublic: true,
+    isPublic: false,
+    requiredWorkstation: "campfire",
     category: "cooking",
     ingredients: {
       frog: 1,
-      dryWood: 1,
-      fireStarter: 1
+      dryWood: 1
     }
   },
   cookedMushroom: {
@@ -1709,12 +1732,12 @@ const recipesDatabase = {
     nameKey: "cookedMushroom",
     resultItemId: "cookedMushroom",
     resultQuantity: 1,
-    isPublic: true,
+    isPublic: false,
+    requiredWorkstation: "campfire",
     category: "cooking",
     ingredients: {
       mushroom: 1,
-      dryWood: 1,
-      fireStarter: 1
+      dryWood: 1
     }
   },
   cookedSnail: {
@@ -1722,12 +1745,12 @@ const recipesDatabase = {
     nameKey: "cookedSnail",
     resultItemId: "cookedSnail",
     resultQuantity: 1,
-    isPublic: true,
+    isPublic: false,
+    requiredWorkstation: "campfire",
     category: "cooking",
     ingredients: {
       snail: 1,
-      dryWood: 1,
-      fireStarter: 1
+      dryWood: 1
     }
   },
   // Clothing to Scrap Recipes
@@ -2105,7 +2128,7 @@ const recipesDatabase = {
       fireStarter: 1
     }
   },
-    ironPickaxeHead: {
+  ironPickaxeHead: {
     id: "ironPickaxeHead",
     nameKey: "ironPickaxeHead",
     resultItemId: "ironPickaxeHead",
@@ -2185,5 +2208,4 @@ const recipesDatabase = {
       fireStarter: 1
     }
   },
-  
 };

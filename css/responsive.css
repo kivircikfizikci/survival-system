@@ -152,25 +152,30 @@
 
   .inventory-slot {
     min-height: 196px;
-    padding-bottom: 58px;
   }
 
   .slot-actions {
-    inset: auto 10px 10px;
-    display: flex;
     opacity: 1;
     pointer-events: auto;
   }
 
   .slot-action {
     flex: 1;
-    min-height: 38px;
-    padding: 0 10px;
+    min-width: 24px;
+    height: 24px;
   }
 
   .inventory-slot:hover .item-image,
   .inventory-slot:focus-within .item-image {
     opacity: 1;
     transform: none;
+  }
+
+  .item-info {
+    display: grid;
+    min-height: 100%;
+    grid-template-rows: 1fr auto;
+    gap: 8px;
+    place-items: center;
   }
 }

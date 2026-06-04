@@ -121,7 +121,13 @@ function updateRecipesScreen() {
       itemElement.classList.add("recipe-item");
 
       if (extraClassName) {
-        itemElement.classList.add(extraClassName);
+        const classNames = extraClassName.split(" ");
+
+        for (let className of classNames) {
+          if (className) {
+            itemElement.classList.add(className);
+          }
+        }
       }
 
       const itemImage = document.createElement("img");
@@ -181,6 +187,24 @@ function updateRecipesScreen() {
           itemsDatabase[selectedToolId],
           recipe.requiredToolGroups[groupName],
           "recipe-tool-group"
+        );
+      }
+    }
+
+    if (recipe.requiredWorkstation) {
+      const workstationItem = itemsDatabase[recipe.requiredWorkstation];
+
+      if (workstationItem) {
+        if (ingredientsWrapper.children.length > 0) {
+          addPlus();
+        }
+
+        addRecipeItem(
+          workstationItem,
+          1,
+          hasWorkstation(recipe.requiredWorkstation)
+            ? "recipe-workstation"
+            : "recipe-workstation recipe-workstation-missing"
         );
       }
     }
@@ -314,6 +338,8 @@ areaSelect.addEventListener("change", function () {
   playerRegion = areaSelect.value;
   updateRegionBackground(playerRegion);
   updateScreen();
+  updateShelterScreen();
+  updateWorkstationScreen();
   saveGame();
 });
 
@@ -667,6 +693,51 @@ function updateCraftingScreen() {
   updateCraftResultScreen();
 }
 
+function updateWorkstationScreen() {
+  const workstationSlotElements = document.querySelectorAll(".workstation-slot");
+
+  if (!workstationSlotElements.length) {
+    return;
+  }
+
+  const currentRegionWorkstations = getCurrentRegionWorkstations();
+
+  for (let slotElement of workstationSlotElements) {
+    const workstationId = slotElement.dataset.workstationSlot;
+    const workstation = currentRegionWorkstations[workstationId];
+
+    slotElement.innerHTML = "";
+    slotElement.classList.remove("is-active");
+
+    if (!workstation) {
+      continue;
+    }
+
+    const workstationItem = itemsDatabase[workstation.itemId];
+
+    if (!workstationItem) {
+      continue;
+    }
+
+    slotElement.classList.add("is-active");
+
+    const image = document.createElement("img");
+    image.src = workstationItem.imageSrc;
+    image.alt = getItemName(workstationItem);
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.classList.add("workstation-remove");
+    removeButton.title = t("remove");
+
+    removeButton.addEventListener("click", function () {
+      removeWorkstation(workstationId);
+    });
+
+    slotElement.append(image, removeButton);
+  }
+}
+
 const craftResultSlot = document.getElementById("craftResultSlot");
 
 function updateCraftResultScreen() {
@@ -751,6 +822,7 @@ function applyLanguage() {
   updateScreen();
   updateCraftingScreen();
   updateCraftResultScreen();
+  updateWorkstationScreen();
   updateRecipesScreen();
   updateShelterScreen();
 }
@@ -777,6 +849,7 @@ function showToast(message, type = "warning") {
     toast.remove();
   }, 3000);
 }
+
 function addLog(message, type = "info") {
   if (!logList) {
     return;

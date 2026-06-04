@@ -6,6 +6,73 @@ let craftSlots = [
 
 let draggedCraftSlotIndex = null;
 
+const workstationSlots = ["campfire", "choppingBlock", "tanningRack"];
+
+let regionWorkstations = {
+  meadow: {},
+  lake: {},
+  trail: {},
+  mountain: {},
+  abandonedVillage: {}
+};
+
+function getCurrentRegionWorkstations() {
+  return regionWorkstations[areaSelect.value];
+}
+
+function hasWorkstation(workstationId) {
+  const currentRegionWorkstations = getCurrentRegionWorkstations();
+
+  return currentRegionWorkstations[workstationId] !== null &&
+    currentRegionWorkstations[workstationId] !== undefined;
+}
+
+function placeWorkstation(workstationId, item) {
+  const currentRegionWorkstations = getCurrentRegionWorkstations();
+
+if (hasWorkstation(workstationId)) {
+  showMessage(
+    t("workstationAlreadyPlaced", {
+      regionLabel: getAreaName(
+        areasDatabase[areaSelect.value]
+      )
+    })
+  );
+
+  return false;
+}
+
+  currentRegionWorkstations[workstationId] = {
+    id: item.id,
+    itemId: item.id
+  };
+
+  updateWorkstationScreen();
+  autoSave();
+
+  return true;
+}
+
+function removeWorkstation(workstationId) {
+  const currentRegionWorkstations = getCurrentRegionWorkstations();
+  const workstation = currentRegionWorkstations[workstationId];
+
+  if (!workstation) {
+    return;
+  }
+
+  addItem({
+    ...itemsDatabase[workstation.itemId],
+    quantity: 1
+  });
+
+  currentRegionWorkstations[workstationId] = null;
+
+  updateWorkstationScreen();
+  updateInventoryScreen();
+  autoSave();
+}
+
 function isRecipeVisible(recipe) {
   if (recipe.isPublic) {
     return true;
@@ -402,6 +469,14 @@ function craftSelectedRecipe() {
 
   if (recipe === null) {
     showMessage(t("noMatchingRecipe"));
+    return;
+  }
+
+  if (recipe.requiredWorkstation && !hasWorkstation(recipe.requiredWorkstation)) {
+    showMessage(t("requiresWorkstation", {
+      workstation: getItemName(itemsDatabase[recipe.requiredWorkstation])
+    }));
+
     return;
   }
 

@@ -194,7 +194,10 @@ const translations = {
     toolBroke: "Tool Broke",
     pack: "Pack",
     emptyShelterFirst: "You must empty shelter storage first.",
-    shelterRemoved:"Shelter packed."
+    shelterRemoved:"Shelter packed.",
+    campfire: "Camp Fire",
+    workstationAlreadyPlaced: "In the {regionLabel} region, the workstation is already placed.",
+    workstationPlaced: "{item} workstation placed for this {regionLabel}.",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -389,7 +392,10 @@ const translations = {
     toolBroke: "Eşya Kırıldı",
     pack: "Topla",
     emptyShelterFirst: "Çadırı toplamadan önce depoyu boşaltmalısın.",
-    shelterRemoved: "Çadır toplandı."
+    shelterRemoved: "Çadır toplandı.",
+    campfire: "Kamp Ateşi",
+    workstationAlreadyPlaced: "{regionLabel} bölgesinde bu iş istasyonu zaten yerleştirilmiş durumda.",
+    workstationPlaced: "{regionLabel} bölgesine {item} iş istasyonu eklendi.",
   }
 };
 

@@ -85,6 +85,8 @@ function saveGame() {
     equipment: equipment,
     craftSlots: craftSlots,
 
+    regionWorkstations: regionWorkstations,
+
     playerShelter: playerShelter,
 
     discoveredRecipes: discoveredRecipes,
@@ -137,6 +139,10 @@ function loadGame() {
 
   if (saveData.playerShelter) {
     playerShelter = saveData.playerShelter;
+  }
+
+  if (saveData.regionWorkstations) {
+    regionWorkstations = saveData.regionWorkstations;
   }
 
   updateInventoryCapacityFromEquipment();

@@ -260,6 +260,7 @@ updateInventoryScreen();
 updateEquipmentScreen();
 updateShelterScreen();
 updateCraftingScreen();
+updateWorkstationScreen();
 updateRecipesScreen();
 setupCraftDropZones();
 setupEquipmentDropZones();

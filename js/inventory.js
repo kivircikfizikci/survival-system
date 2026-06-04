@@ -199,6 +199,32 @@ function useInventoryItem(slotIndex) {
     return;
   }
 
+  if (item.id === "campfire") {
+  const placed = placeWorkstation("campfire", item);
+
+  if (!placed) {
+    return;
+  }
+
+  removeOneItem(slotIndex);
+
+  const message = t("workstationPlaced", {
+    item: getItemName(item),
+    regionLabel: getAreaName(
+    areasDatabase[areaSelect.value]
+  )
+  });
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  updateInventoryScreen();
+  updateWorkstationScreen();
+  autoSave();
+
+  return;
+}
+
   if (item.type !== "usable") {
     showMessage(t("cannotUseItem"));
     return;
