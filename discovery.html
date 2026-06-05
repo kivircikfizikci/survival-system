@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Discovery Map</title>
+
+  <link rel="stylesheet" href="css/discovery.css" />
+</head>
+<body>
+
+  <main class="discovery-shell">
+
+    <section class="discovery-map-panel">
+        <div class="map-viewport" id="mapViewport">
+        <div class="map-title-overlay" id="mapTitle">Meadow</div>
+
+        <div class="map-grid" id="mapGrid"></div>
+
+        <div class="map-controls map-controls-overlay">
+            <button type="button" id="zoomOutButton">-</button>
+            <span id="zoomText">100%</span>
+            <button type="button" id="zoomInButton">+</button>
+        </div>
+        </div>
+    </section>
+
+    <aside class="discovery-side-panel">
+      <section class="side-card">
+        <h2>Action Panel</h2>
+        <p id="tileActionText">Move around the map.</p>
+      </section>
+
+      <section class="side-card">
+        <h2>Activity Log</h2>
+        <div class="discovery-log" id="discoveryLog"></div>
+      </section>
+    </aside>
+
+  </main>
+
+  <script src="js/maps/meadowMap.js"></script>
+
+  <script src="js/discoveryState.js"></script>
+  <script src="js/discoveryUtils.js"></script>
+  <script src="js/discoveryMap.js"></script>
+  <script src="js/discovery.js"></script>
+</body>
+</html>

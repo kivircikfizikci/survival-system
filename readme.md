@@ -1,8 +1,10 @@
-#Yapılacaklar Listesi
-wood log - > charcoal recipe campfire kısmında
+#Planlar..
 
-UI kısmında bölgede hareket et, araştır, ilerle mekaniği istiyorum.
-Map olacak grid sistem, map üzerinde 16x16 alanda hareket edeceğiz.
-Karşımıza dost veya düşman canlılar çıkabilecek.
+Tile lootTable
+Search tile
 
-Animal Hunting System
+Loot
+Encounter
+Shelter
+Workstation
+Mine System
