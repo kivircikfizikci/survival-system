@@ -1,3 +1,15 @@
+function createResourceTiles(tileIds, lootTable) {
+  const resourceTiles = {};
+
+  for (let tileId of tileIds) {
+    resourceTiles[tileId] = {
+      lootTable: lootTable
+    };
+  }
+
+  return resourceTiles;
+}
+
 const meadowMap = {
   id: "meadow",
   nameKey: "Meadow",
@@ -40,26 +52,57 @@ const meadowMap = {
     "AA1", "AA2", "AA3", "AA4", "AA7", "AA27", "AA28", "AA31", "AA32",
     "AB1", "AB2", "AB3", "AB4", "AB7", "AB11", "AB27", "AB28", "AB31", "AB32",
     "AC1", "AC2", "AC3", "AC9", "AC10", "AC11", "AC12", "AC18", "AC19", "AC20", "AC21", "AC28", "AC29", "AC30", "AC31", "AC32",
-    "AD1", "AD2", "AD3", "AD4", "AD11", "AD12", "AD13", "AD19", "AD20", "AD21", "AD22", "AD23", "AD29", "AD30", "AD31", "AD32",
+    "AD1", "AD2", "AD3", "AD4", "AD11", "AD12", "AD13", "AD19", "AD20", "AD21", "AD22", "AD29", "AD30", "AD31", "AD32",
     "AE1", "AE2", "AE11", "AE12", "AE13", "AE19", "AE20", "AE21", "AE22", "AE30", "AE31", "AE32",
     "AF11", "AF12", "AF13", "AF19", "AF20", "AF21", "AF22", "AF32",
 
   ],
 
   resourceTiles: {
-    "D5": {
-      lootTable: "meadowBush"
-    },
-    "E9": {
-      lootTable: "dryGrassPatch"
-    },
-    "J6": {
-      lootTable: "fallenBranch"
-    },
-    "M12": {
-      lootTable: "wildHerbPatch"
-    }
+    ...createResourceTiles(
+        ["E15", "E16", "E27", "F15", "F16", "F26", "K12", "P16", "U11", "Y24", "Z10", "AA8", "AC6", "AD23", "AE23", "AF23", ],
+        "meadowBush"
+    ),
+
+    ...createResourceTiles(
+        ["S16", "U17", "W18", "X18", "Y17", "Z16", "AA23", "AA24", "AA26", "AB10", "AB12", "AB19", "AB21", "AC13", "AC14", "AD15", "AD18", "AD25", "AE15", "AE18", "AE27", "AF4", "AF5", "AF6", "AF15", "AF18", "AF28"],
+        "dryGrassPatch"
+    ),
+
+    ...createResourceTiles(
+        ["G22", "H4", "I4", "K10", "L10", "W1", "W2", "W3", "Z5", "Z6", "AA5", "AB5", "AC4", "AD14", "AE14", ],
+        "fallenBranch"
+    ),
+
+    ...createResourceTiles(
+        ["B18", "B19", "D1", "D2", "D3", "D9", "E2", "E8", "E9", "F8", "F3", "F9", "H11", "H23", "J24", "K23", "O14", "O23", "P23", "S23", "S26", "R27", "V1", "V2", "V3", "V7", "V8", "V10", "W7", "W8", "W9", "W10", "X8", "X9", "X10", "X28", "Y8", "Y9", "Y11", "Y28", "Z8", "Z9", "Z11", "Z30", "AA30", "AD10", "AE10", "AC22", "AC23", ],
+        "wildHerbPatch"
+    )
   },
+
+  lootTables: {
+    meadowBush: [
+        { itemId: "blackberry", chance: 10, quantity: 1 },
+        { itemId: "dryLeaf", chance: 15, quantity: 1 },
+        { itemId: "insect", chance: 10, quantity: 1 }
+    ],
+
+    dryGrassPatch: [
+        { itemId: "dryGrass", chance: 20, quantity: 1 },
+        { itemId: "plantFiber", chance: 5, quantity: 1 }
+    ],
+
+    fallenBranch: [
+        { itemId: "stick", chance: 35, quantity: 1 },
+        { itemId: "branch", chance: 25, quantity: 1 },
+        { itemId: "bark", chance: 20, quantity: 1 }
+    ],
+
+    wildHerbPatch: [
+        { itemId: "wildHerb", chance: 25, quantity: 1 },
+        { itemId: "smallFlower", chance: 15, quantity: 1 }
+    ]
+    },
 
   exits: {
     "AF16": {

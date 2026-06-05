@@ -2,10 +2,11 @@ const DISCOVERY_SAVE_KEY = "survivalSystemDiscoverySave";
 
 let discoveryState = {
   currentMapId: "meadow",
-  x: 7,
-  y: 7,
+  x: 16,
+  y: 16,
   tileSize: 48,
   zoom: 1,
+  pendingLoot: null,
   visitedTiles: {
     meadow: []
   }

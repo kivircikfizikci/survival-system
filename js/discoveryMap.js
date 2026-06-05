@@ -1,7 +1,7 @@
 const mapViewport = document.getElementById("mapViewport");
 const mapGrid = document.getElementById("mapGrid");
 const mapTitle = document.getElementById("mapTitle");
-const tileActionText = document.getElementById("tileActionText");
+const tileActions = document.getElementById("tileActions");
 const discoveryLog = document.getElementById("discoveryLog");
 const zoomText = document.getElementById("zoomText");
 
@@ -94,30 +94,78 @@ function renderDiscoveryMap() {
   }
 
     updateDiscoveryHeader();
-    updateTileActionText();
+    updateTileActionPanel();
 
     requestAnimationFrame(function () {
         updateMapCamera();
     });
 }
 
-function updateTileActionText() {
+function updateTileActionPanel() {
+  if (!tileActions) {
+    return;
+  }
+
+  tileActions.innerHTML = "";
+
+  if (discoveryState.pendingLoot) {
+    const item = itemsDatabase[discoveryState.pendingLoot.itemId];
+
+    if (item) {
+      const lootCard = document.createElement("div");
+      lootCard.classList.add("found-loot-card");
+
+      const image = document.createElement("img");
+      image.src = item.imageSrc;
+      image.alt = getDiscoveryItemName(item);
+
+      const info = document.createElement("div");
+
+      const title = document.createElement("strong");
+      title.textContent = getDiscoveryItemName(item);
+
+      const quantity = document.createElement("span");
+      quantity.textContent = "x" + discoveryState.pendingLoot.quantity;
+
+      info.append(title, quantity);
+      lootCard.append(image, info);
+
+      const actions = document.createElement("div");
+      actions.classList.add("found-loot-actions");
+
+      const takeButton = document.createElement("button");
+      takeButton.type = "button";
+      takeButton.classList.add("tile-action-button");
+      takeButton.textContent = "Take";
+      takeButton.addEventListener("click", takePendingLoot);
+
+      const leaveButton = document.createElement("button");
+      leaveButton.type = "button";
+      leaveButton.classList.add("tile-action-button", "secondary");
+      leaveButton.textContent = "Leave";
+      leaveButton.addEventListener("click", leavePendingLoot);
+
+      actions.append(takeButton, leaveButton);
+
+      tileActions.append(lootCard, actions);
+    }
+  }
+
   const currentTileId = getTileId(discoveryState.x, discoveryState.y);
   const tileData = getTileSpecialData(currentTileId);
 
   if (tileData.exit) {
-    tileActionText.textContent =
-      "Exit available: " + tileData.exit.label;
-    return;
-  }
+    const exitButton = document.createElement("button");
+    exitButton.type = "button";
+    exitButton.classList.add("tile-action-button", "secondary");
+    exitButton.textContent = "Go to " + tileData.exit.label;
 
-  if (tileData.resource) {
-    tileActionText.textContent =
-      "Resource area: " + tileData.resource.lootTable;
-    return;
-  }
+    exitButton.addEventListener("click", function () {
+      travelToMap(tileData.exit);
+    });
 
-  tileActionText.textContent = "Move around the map.";
+    tileActions.appendChild(exitButton);
+  }
 }
 
 function updateMapCamera() {

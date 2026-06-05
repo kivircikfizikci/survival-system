@@ -10,10 +10,12 @@ function movePlayerTo(x, y) {
   discoveryState.y = y;
 
   markCurrentTileVisited();
+  rollCurrentTileLoot();
 
   saveDiscoveryState();
   renderDiscoveryMap();
 }
+
 function setDiscoveryZoom(newZoom) {
  const minZoom = 0.5;
  const maxZoom = 1.5;
@@ -25,6 +27,38 @@ function setDiscoveryZoom(newZoom) {
 
   saveDiscoveryState();
   renderDiscoveryMap();
+}
+
+function searchCurrentTile() {
+  const currentTileId = getTileId(discoveryState.x, discoveryState.y);
+  const tileData = getTileSpecialData(currentTileId);
+
+  if (!tileData.resource) {
+    return;
+  }
+
+  addDiscoveryLog("Searched " + currentTileId + ".");
+}
+
+function travelToMap(exitData) {
+  if (!mapsDatabase[exitData.targetMapId]) {
+    addDiscoveryLog("Target map is not ready yet.");
+    return;
+  }
+
+  discoveryState.currentMapId = exitData.targetMapId;
+  discoveryState.x = exitData.targetPosition.x;
+  discoveryState.y = exitData.targetPosition.y;
+
+  if (!discoveryState.visitedTiles[discoveryState.currentMapId]) {
+    discoveryState.visitedTiles[discoveryState.currentMapId] = [];
+  }
+
+  markCurrentTileVisited();
+  saveDiscoveryState();
+  renderDiscoveryMap();
+
+  addDiscoveryLog("Entered " + exitData.label + ".");
 }
 
 zoomInButton.addEventListener("click", function () {
@@ -43,3 +77,11 @@ window.addEventListener("resize", function () {
 
 loadDiscoveryState();
 renderDiscoveryMap();
+
+requestAnimationFrame(function () {
+  updateMapCamera();
+
+  requestAnimationFrame(function () {
+    updateMapCamera();
+  });
+});
