@@ -1,7 +1,13 @@
 function createResourceTiles(tileIds, lootTable) {
   const resourceTiles = {};
+  const uniqueTileIds = [...new Set(tileIds)];
 
-  for (let tileId of tileIds) {
+  for (let tileId of uniqueTileIds) {
+    if (!parseTileId(tileId)) {
+      console.warn("Invalid resource tile id:", tileId);
+      continue;
+    }
+
     resourceTiles[tileId] = {
       lootTable: lootTable
     };
