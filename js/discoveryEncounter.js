@@ -11,6 +11,11 @@ const encounterDatabase = {
             spear: 25
         },
 
+          huntToolDurabilityCost: {
+            knife: 1,
+            spear: 1
+        },
+
         lootTable: [
             { itemId: "rawMeat", chance: 50, quantity: 1 },
             { itemId: "animalHide", chance: 20, quantity: 1 },
@@ -28,6 +33,11 @@ const encounterDatabase = {
         huntToolBonuses: {
             spear: 35,
             knife: 5
+        },
+
+          huntToolDurabilityCost: {
+            spear: 2,
+            knife: 2
         },
 
         lootTable: [
@@ -238,6 +248,93 @@ function getFinalHuntChance(encounterData) {
   return Math.min(95, baseChance + toolBonus);
 }
 
+function getDiscoveryToolDurabilityCost(tool, baseCost) {
+  if (!tool) {
+    return baseCost;
+  }
+
+  if (tool.toolTier === "iron") {
+    return Math.max(1, Math.ceil(baseCost * 0.25));
+  }
+
+  if (tool.toolTier === "copper") {
+    return Math.max(1, Math.ceil(baseCost * 0.5));
+  }
+
+  return baseCost;
+}
+
+function getSelectedHuntToolDurabilityCost(encounterData) {
+  if (!discoveryState.selectedHuntTool) {
+    return 0;
+  }
+
+  if (!encounterData.huntToolDurabilityCost) {
+    return 1;
+  }
+
+  const selectedToolGroup = discoveryState.selectedHuntTool.toolGroup;
+
+  return encounterData.huntToolDurabilityCost[selectedToolGroup] || 1;
+}
+
+function applySelectedHuntToolDurabilityCost(encounterData) {
+  if (!discoveryState.selectedHuntTool) {
+    return true;
+  }
+
+  const saveData = getMainSaveData();
+
+  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+    discoveryState.selectedHuntTool = null;
+    addDiscoveryLog(t("selectedHuntToolMissing"));
+    return false;
+  }
+
+  const selectedTool = discoveryState.selectedHuntTool;
+  const inventoryItem = saveData.inventory.items[selectedTool.slotIndex];
+
+  if (
+    inventoryItem === null ||
+    inventoryItem.id !== selectedTool.itemId ||
+    !inventoryItem.toolTags ||
+    !inventoryItem.toolTags.includes(selectedTool.toolGroup)
+  ) {
+    discoveryState.selectedHuntTool = null;
+    saveDiscoveryState();
+    addDiscoveryLog(t("selectedHuntToolMissing"));
+    updateTileActionPanel();
+    return false;
+  }
+
+  if (typeof inventoryItem.durability !== "number") {
+    return true;
+  }
+
+  const baseCost = getSelectedHuntToolDurabilityCost(encounterData);
+  const finalCost = getDiscoveryToolDurabilityCost(inventoryItem, baseCost);
+
+  inventoryItem.durability -= finalCost;
+
+  if (inventoryItem.durability <= 0) {
+    const toolName = getDiscoveryItemName(inventoryItem);
+
+    saveData.inventory.items[selectedTool.slotIndex] = null;
+    discoveryState.selectedHuntTool = null;
+
+    addDiscoveryLog(
+      t("huntToolBroke", {
+        tool: toolName
+      })
+    );
+  }
+
+  saveMainSaveData(saveData);
+  saveDiscoveryState();
+
+  return true;
+}
+
 function huntPendingEncounter() {
   if (!discoveryState.pendingEncounter) {
     return;
@@ -249,6 +346,13 @@ function huntPendingEncounter() {
   if (!encounterData || !encounterData.canHunt) {
     return;
   }
+
+  const toolStillAvailable =
+    applySelectedHuntToolDurabilityCost(encounterData);
+
+    if (!toolStillAvailable) {
+    return;
+    }
 
 const finalHuntChance = getFinalHuntChance(encounterData);
 const huntRoll = Math.random() * 100;

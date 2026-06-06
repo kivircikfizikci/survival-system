@@ -223,6 +223,8 @@ const translations = {
     enteredMap: "Entered {map}.",
     huntChance: "Hunt chance: {chance}%",
     noTool: "No Tool",
+    selectedHuntToolMissing: "Selected hunt tool is no longer available.",
+    huntToolBroke: "{tool} broke.",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -446,6 +448,8 @@ const translations = {
     enteredMap: "{map} bölgesine geçtin.",
     huntChance: "Av başarı şansı: {chance}%",
     noTool: "Aletsiz",
+    selectedHuntToolMissing: "Seçili av aleti artık mevcut değil.",
+    huntToolBroke: "{tool} kırıldı."
   }
 };
 
