@@ -10,7 +10,9 @@ function movePlayerTo(x, y) {
   discoveryState.y = y;
 
   markCurrentTileVisited();
+
   rollCurrentTileLoot();
+  rollCurrentTileEncounter();
 
   saveDiscoveryState();
   renderDiscoveryMap();

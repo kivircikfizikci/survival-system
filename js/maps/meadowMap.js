@@ -90,7 +90,38 @@ const meadowMap = {
         { itemId: "wildHerb", chance: 25, quantity: 1 },
         { itemId: "smallFlower", chance: 15, quantity: 1 }
     ]
-    },
+  },
+
+  encounterTiles: {
+    ...createEncounterTiles(
+      [
+        ...createTileRange("R7", "T13"), ...createTileRange("R1", "U6"), ...createTileRange("V12", "Z16"),
+        "K14",
+        "L14"
+      ],
+      "meadowAnimalZone"
+    ),
+
+    ...createEncounterTiles(
+      [
+        ...createTileRange("C20", "F23")
+      ],
+      "meadowDangerZone"
+    )
+  },
+
+  encounterTables: {
+    meadowAnimalZone: [
+      { id: "rabbit", type: "friendly", chance: 10 },
+      { id: "deer", type: "friendly", chance: 5 },
+      { id: "wildDog", type: "enemy", chance: 3 }
+    ],
+
+    meadowDangerZone: [
+      { id: "wildDog", type: "enemy", chance: 8 },
+      { id: "strayDog", type: "friendly", chance: 4 }
+    ]
+  },
 
   exits: {
     "AF16": {

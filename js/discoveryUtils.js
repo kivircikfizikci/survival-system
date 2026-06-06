@@ -36,6 +36,9 @@ function getTileSpecialData(tileId) {
   return {
     isBlocked: map.blockedTiles.includes(tileId),
     resource: map.resourceTiles[tileId] || null,
+    encounter: map.encounterTiles
+      ? map.encounterTiles[tileId] || null
+      : null,
     exit: map.exits[tileId] || null
   };
 }

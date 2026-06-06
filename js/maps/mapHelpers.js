@@ -76,3 +76,21 @@ function createTileRange(startTileId, endTileId) {
 
   return tiles;
 }
+
+function createEncounterTiles(tileIds, encounterTable) {
+  const encounterTiles = {};
+  const uniqueTileIds = [...new Set(tileIds)];
+
+  for (let tileId of uniqueTileIds) {
+    if (!parseTileId(tileId)) {
+      console.warn("Invalid encounter tile id:", tileId);
+      continue;
+    }
+
+    encounterTiles[tileId] = {
+      encounterTable: encounterTable
+    };
+  }
+
+  return encounterTiles;
+}

@@ -151,6 +151,39 @@ function updateTileActionPanel() {
     }
   }
 
+  if (discoveryState.pendingEncounter) {
+    const encounter = discoveryState.pendingEncounter;
+
+    const encounterCard = document.createElement("div");
+    encounterCard.classList.add(
+      "encounter-card",
+      encounter.type === "enemy"
+        ? "encounter-card-enemy"
+        : "encounter-card-friendly"
+    );
+
+    const title = document.createElement("strong");
+    title.textContent = getEncounterName(encounter.id);
+
+    const description = document.createElement("span");
+    description.textContent = getEncounterDescription(encounter);
+
+    encounterCard.append(title, description);
+
+    const actions = document.createElement("div");
+    actions.classList.add("found-loot-actions");
+
+    const ignoreButton = document.createElement("button");
+    ignoreButton.type = "button";
+    ignoreButton.classList.add("tile-action-button", "secondary");
+    ignoreButton.textContent = "Ignore";
+    ignoreButton.addEventListener("click", clearPendingEncounter);
+
+    actions.appendChild(ignoreButton);
+
+    tileActions.append(encounterCard, actions);
+  }
+
   const currentTileId = getTileId(discoveryState.x, discoveryState.y);
   const tileData = getTileSpecialData(currentTileId);
 

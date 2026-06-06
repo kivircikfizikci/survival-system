@@ -7,6 +7,7 @@ let discoveryState = {
   tileSize: 48,
   zoom: 1,
   pendingLoot: null,
+  pendingEncounter: null,
   visitedTiles: {
     meadow: []
   }
