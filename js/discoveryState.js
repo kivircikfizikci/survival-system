@@ -9,6 +9,7 @@ let discoveryState = {
   pendingLoot: null,
   pendingEncounter: null,
   selectedHuntTool: null,
+  selectedFightTool: null,
   visitedTiles: {
     meadow: []
   }

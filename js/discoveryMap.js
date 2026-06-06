@@ -244,13 +244,92 @@ function updateTileActionPanel() {
       actions.appendChild(huntButton);
     }
 
-    const ignoreButton = document.createElement("button");
-    ignoreButton.type = "button";
-    ignoreButton.classList.add("tile-action-button", "secondary");
-    ignoreButton.textContent = t("ignore");
-    ignoreButton.addEventListener("click", clearPendingEncounter);
+    if (encounterData && encounterData.canFight) {
+      const fightChanceText = document.createElement("span");
+      fightChanceText.classList.add("encounter-hunt-chance");
 
-    actions.appendChild(ignoreButton);
+      fightChanceText.textContent = t("fightChance", {
+        chance: getFinalFightChance(encounterData)
+      });
+
+      encounterCard.appendChild(fightChanceText);
+
+      const fightToolSelector = document.createElement("div");
+      fightToolSelector.classList.add("hunt-tool-selector");
+
+      const noToolButton = document.createElement("button");
+      noToolButton.type = "button";
+      noToolButton.classList.add("hunt-tool-button");
+
+      if (discoveryState.selectedFightTool === null) {
+        noToolButton.classList.add("is-selected");
+      }
+
+      noToolButton.textContent = t("noTool");
+
+      noToolButton.addEventListener("click", function () {
+        clearSelectedFightTool();
+      });
+
+      fightToolSelector.appendChild(noToolButton);
+
+      const availableFightTools = getAvailableFightTools(encounterData);
+
+      for (let toolData of availableFightTools) {
+        const toolItem = itemsDatabase[toolData.itemId];
+
+        if (!toolItem) {
+          continue;
+        }
+
+        const toolButton = document.createElement("button");
+        toolButton.type = "button";
+        toolButton.classList.add("hunt-tool-button");
+
+        if (
+          discoveryState.selectedFightTool &&
+          discoveryState.selectedFightTool.slotIndex === toolData.slotIndex
+        ) {
+          toolButton.classList.add("is-selected");
+        }
+
+        toolButton.textContent = getFightToolButtonLabel(toolData);
+
+        toolButton.addEventListener("click", function () {
+          selectFightTool(toolData);
+        });
+
+        fightToolSelector.appendChild(toolButton);
+      }
+
+      encounterCard.appendChild(fightToolSelector);
+    }
+
+    if (encounterData && encounterData.canFight) {
+      const fightButton = document.createElement("button");
+      fightButton.type = "button";
+      fightButton.classList.add("tile-action-button");
+      fightButton.textContent = t("fight");
+      fightButton.addEventListener("click", fightPendingEncounter);
+
+      const fleeButton = document.createElement("button");
+      fleeButton.type = "button";
+      fleeButton.classList.add("tile-action-button", "secondary");
+      fleeButton.textContent = t("flee");
+      fleeButton.addEventListener("click", fleePendingEncounter);
+
+      actions.append(fightButton, fleeButton);
+    }
+
+    if (!encounterData || !encounterData.canFight) {
+      const ignoreButton = document.createElement("button");
+      ignoreButton.type = "button";
+      ignoreButton.classList.add("tile-action-button", "secondary");
+      ignoreButton.textContent = t("ignore");
+      ignoreButton.addEventListener("click", clearPendingEncounter);
+
+      actions.appendChild(ignoreButton);
+    }
 
     tileActions.append(encounterCard, actions);
   }

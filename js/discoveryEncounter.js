@@ -47,19 +47,41 @@ const encounterDatabase = {
         ]
     },
 
-  wildDog: {
-    id: "wildDog",
-    name: "Wild Dog",
-    type: "enemy",
-    canHunt: false
-  },
+    wildDog: {
+        id: "wildDog",
+        name: "Wild Dog",
+        type: "enemy",
+        canHunt: false,
+        canFight: true,
 
-  strayDog: {
-    id: "strayDog",
-    name: "Stray Dog",
-    type: "friendly",
-    canHunt: false
-  }
+        fightChance: 45,
+        fleeEnergyCost: 8,
+        failedFightDamage: 12,
+
+        fightToolBonuses: {
+            knife: 15,
+            spear: 25
+        },
+
+        fightToolDurabilityCost: {
+            knife: 1,
+            spear: 2
+        },
+
+        lootTable: [
+            { itemId: "rawMeat", chance: 35, quantity: 1 },
+            { itemId: "animalHide", chance: 20, quantity: 1 },
+            { itemId: "animalBone", chance: 25, quantity: 1 }
+        ]
+    },
+
+    strayDog: {
+        id: "strayDog",
+        name: "Stray Dog",
+        type: "friendly",
+        canHunt: false,
+        canFight: false
+    }
 };
 
 function rollEncounterFromTable(encounterTableId) {
@@ -117,6 +139,7 @@ function rollCurrentTileEncounter() {
 function clearPendingEncounter() {
   discoveryState.pendingEncounter = null;
   discoveryState.selectedHuntTool = null;
+  discoveryState.selectedFightTool = null;
 
   saveDiscoveryState();
   updateTileActionPanel();
@@ -431,6 +454,314 @@ if (huntRoll > finalHuntChance) {
   };
 
   addDiscoveryLog(t("huntSucceeded"));
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function getAvailableFightTools(encounterData) {
+  const saveData = getMainSaveData();
+
+  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+    return [];
+  }
+
+  if (!encounterData.fightToolBonuses) {
+    return [];
+  }
+
+  const availableTools = [];
+
+  for (let slotIndex = 0; slotIndex < saveData.inventory.items.length; slotIndex++) {
+    const item = saveData.inventory.items[slotIndex];
+
+    if (item === null || !item.toolTags) {
+      continue;
+    }
+
+    for (let toolGroupName in encounterData.fightToolBonuses) {
+      if (item.toolTags.includes(toolGroupName)) {
+        availableTools.push({
+          slotIndex: slotIndex,
+          itemId: item.id,
+          toolGroup: toolGroupName,
+          bonus: encounterData.fightToolBonuses[toolGroupName]
+        });
+
+        break;
+      }
+    }
+  }
+
+  return availableTools;
+}
+
+function selectFightTool(toolData) {
+  discoveryState.selectedFightTool = toolData;
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function clearSelectedFightTool() {
+  discoveryState.selectedFightTool = null;
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function getSelectedFightToolBonus(encounterData) {
+  if (!discoveryState.selectedFightTool || !encounterData.fightToolBonuses) {
+    return 0;
+  }
+
+  const selectedToolGroup = discoveryState.selectedFightTool.toolGroup;
+
+  return encounterData.fightToolBonuses[selectedToolGroup] || 0;
+}
+
+function getFinalFightChance(encounterData) {
+  const baseChance = encounterData.fightChance || 0;
+  const toolBonus = getSelectedFightToolBonus(encounterData);
+
+  return Math.min(95, baseChance + toolBonus);
+}
+
+function getFightToolButtonLabel(toolData) {
+  const toolItem = getSavedInventoryItem(toolData.slotIndex);
+  const databaseItem = itemsDatabase[toolData.itemId];
+
+  if (!toolItem || !databaseItem) {
+    return "";
+  }
+
+  let label =
+    getDiscoveryItemName(databaseItem) +
+    " +" +
+    toolData.bonus +
+    "%";
+
+  if (
+    typeof toolItem.durability === "number" &&
+    typeof toolItem.maxDurability === "number"
+  ) {
+    label +=
+      " (" +
+      toolItem.durability +
+      "/" +
+      toolItem.maxDurability +
+      ")";
+  }
+
+  return label;
+}
+
+function getSelectedFightToolDurabilityCost(encounterData) {
+  if (!discoveryState.selectedFightTool) {
+    return 0;
+  }
+
+  if (!encounterData.fightToolDurabilityCost) {
+    return 1;
+  }
+
+  const selectedToolGroup = discoveryState.selectedFightTool.toolGroup;
+
+  return encounterData.fightToolDurabilityCost[selectedToolGroup] || 1;
+}
+
+function applySelectedFightToolDurabilityCost(encounterData) {
+  if (!discoveryState.selectedFightTool) {
+    return true;
+  }
+
+  const saveData = getMainSaveData();
+
+  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+    discoveryState.selectedFightTool = null;
+    addDiscoveryLog(t("selectedFightToolMissing"));
+    return false;
+  }
+
+  const selectedTool = discoveryState.selectedFightTool;
+  const inventoryItem = saveData.inventory.items[selectedTool.slotIndex];
+
+  if (
+    inventoryItem === null ||
+    inventoryItem.id !== selectedTool.itemId ||
+    !inventoryItem.toolTags ||
+    !inventoryItem.toolTags.includes(selectedTool.toolGroup)
+  ) {
+    discoveryState.selectedFightTool = null;
+    saveDiscoveryState();
+    addDiscoveryLog(t("selectedFightToolMissing"));
+    updateTileActionPanel();
+    return false;
+  }
+
+  if (typeof inventoryItem.durability !== "number") {
+    return true;
+  }
+
+  const baseCost = getSelectedFightToolDurabilityCost(encounterData);
+  const finalCost = getDiscoveryToolDurabilityCost(inventoryItem, baseCost);
+
+  inventoryItem.durability -= finalCost;
+
+  if (inventoryItem.durability <= 0) {
+    const toolName = getDiscoveryItemName(inventoryItem);
+
+    saveData.inventory.items[selectedTool.slotIndex] = null;
+    discoveryState.selectedFightTool = null;
+
+    addDiscoveryLog(
+      t("fightToolBroke", {
+        tool: toolName
+      })
+    );
+  }
+
+  saveMainSaveData(saveData);
+  saveDiscoveryState();
+
+  return true;
+}
+
+function updateMainCharacterStat(statName, amount) {
+  const saveData = getMainSaveData();
+
+  if (!saveData) {
+    return false;
+  }
+
+  const currentValue = saveData[statName] ?? 100;
+  const newValue = Math.max(0, Math.min(100, currentValue + amount));
+
+  saveData[statName] = newValue;
+  saveMainSaveData(saveData);
+
+  return true;
+}
+
+function getMainCharacterStat(statName) {
+  const saveData = getMainSaveData();
+
+  if (!saveData) {
+    return 100;
+  }
+
+  return saveData[statName] ?? 100;
+}
+
+function fleePendingEncounter() {
+  if (!discoveryState.pendingEncounter) {
+    return;
+  }
+
+  const encounter = discoveryState.pendingEncounter;
+  const encounterData = encounterDatabase[encounter.id];
+
+  const energyCost = encounterData.fleeEnergyCost || 5;
+  const currentEnergy = getMainCharacterStat("energy");
+
+  if (currentEnergy < energyCost) {
+    addDiscoveryLog(t("notEnoughEnergyToFlee"));
+    return;
+  }
+
+  updateMainCharacterStat("energy", -energyCost);
+
+  discoveryState.pendingEncounter = null;
+  discoveryState.selectedFightTool = null;
+
+  addDiscoveryLog(t("fleeSucceeded"));
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function rollFightLoot(encounterData) {
+  if (!encounterData || !encounterData.lootTable) {
+    return null;
+  }
+
+  let roll = Math.random() * 100;
+  let cumulativeChance = 0;
+
+  for (let lootEntry of encounterData.lootTable) {
+    cumulativeChance += lootEntry.chance;
+
+    if (roll <= cumulativeChance) {
+      return {
+        itemId: lootEntry.itemId,
+        quantity: lootEntry.quantity || 1
+      };
+    }
+  }
+
+  return null;
+}
+
+function fightPendingEncounter() {
+  if (!discoveryState.pendingEncounter) {
+    return;
+  }
+
+  const encounter = discoveryState.pendingEncounter;
+  const encounterData = encounterDatabase[encounter.id];
+
+  if (!encounterData || !encounterData.canFight) {
+    return;
+  }
+
+  const toolStillAvailable =
+    applySelectedFightToolDurabilityCost(encounterData);
+
+  if (!toolStillAvailable) {
+    return;
+  }
+
+  const finalFightChance = getFinalFightChance(encounterData);
+  const fightRoll = Math.random() * 100;
+
+  discoveryState.pendingEncounter = null;
+  discoveryState.selectedFightTool = null;
+
+  if (fightRoll > finalFightChance) {
+    const damage = encounterData.failedFightDamage || 10;
+
+    updateMainCharacterStat("health", -damage);
+
+    addDiscoveryLog(
+      t("fightFailed", {
+        damage: damage
+      })
+    );
+
+    saveDiscoveryState();
+    updateTileActionPanel();
+
+    return;
+  }
+
+  const lootResult = rollFightLoot(encounterData);
+
+  if (!lootResult) {
+    addDiscoveryLog(t("fightSucceededNoLoot"));
+
+    saveDiscoveryState();
+    updateTileActionPanel();
+
+    return;
+  }
+
+  discoveryState.pendingLoot = {
+    tileId: encounter.tileId,
+    itemId: lootResult.itemId,
+    quantity: lootResult.quantity
+  };
+
+  addDiscoveryLog(t("fightSucceeded"));
 
   saveDiscoveryState();
   updateTileActionPanel();
