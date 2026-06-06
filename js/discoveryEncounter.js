@@ -83,6 +83,7 @@ function rollCurrentTileEncounter() {
   const tileData = getTileSpecialData(currentTileId);
 
   discoveryState.pendingEncounter = null;
+  discoveryState.selectedHuntTool = null;
 
   if (!tileData.encounter) {
     return;
@@ -105,6 +106,8 @@ function rollCurrentTileEncounter() {
 
 function clearPendingEncounter() {
   discoveryState.pendingEncounter = null;
+  discoveryState.selectedHuntTool = null;
+
   saveDiscoveryState();
   updateTileActionPanel();
 }
@@ -159,43 +162,78 @@ function rollEncounterLoot(encounterData) {
   return null;
 }
 
-function playerHasToolGroup(toolGroupName) {
+function getAvailableHuntTools(encounterData) {
   const saveData = getMainSaveData();
 
   if (!saveData || !saveData.inventory || !saveData.inventory.items) {
-    return false;
+    return [];
   }
 
-  const groupItems = toolGroups[toolGroupName] || [];
-
-  return saveData.inventory.items.some(function (item) {
-    return item !== null && groupItems.includes(item.id);
-  });
-}
-
-function getBestHuntToolBonus(encounterData) {
   if (!encounterData.huntToolBonuses) {
-    return 0;
+    return [];
   }
 
-  let bestBonus = 0;
+  const availableTools = [];
 
-  for (let toolGroupName in encounterData.huntToolBonuses) {
-    if (playerHasToolGroup(toolGroupName)) {
-      const bonus = encounterData.huntToolBonuses[toolGroupName];
+  for (let slotIndex = 0; slotIndex < saveData.inventory.items.length; slotIndex++) {
+    const item = saveData.inventory.items[slotIndex];
 
-      if (bonus > bestBonus) {
-        bestBonus = bonus;
+    if (item === null) {
+      continue;
+    }
+
+    if (!item.toolTags) {
+      continue;
+    }
+
+    for (let toolGroupName in encounterData.huntToolBonuses) {
+      if (item.toolTags.includes(toolGroupName)) {
+        availableTools.push({
+          slotIndex: slotIndex,
+          itemId: item.id,
+          toolGroup: toolGroupName,
+          bonus: encounterData.huntToolBonuses[toolGroupName]
+        });
+
+        break;
       }
     }
   }
 
-  return bestBonus;
+  return availableTools;
+}
+
+function selectHuntTool(toolData) {
+  discoveryState.selectedHuntTool = toolData;
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function clearSelectedHuntTool() {
+  discoveryState.selectedHuntTool = null;
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function getSelectedHuntToolBonus(encounterData) {
+  if (!discoveryState.selectedHuntTool) {
+    return 0;
+  }
+
+  if (!encounterData.huntToolBonuses) {
+    return 0;
+  }
+
+  const selectedToolGroup = discoveryState.selectedHuntTool.toolGroup;
+
+  return encounterData.huntToolBonuses[selectedToolGroup] || 0;
 }
 
 function getFinalHuntChance(encounterData) {
   const baseChance = encounterData.huntChance || 0;
-  const toolBonus = getBestHuntToolBonus(encounterData);
+  const toolBonus = getSelectedHuntToolBonus(encounterData);
 
   return Math.min(95, baseChance + toolBonus);
 }

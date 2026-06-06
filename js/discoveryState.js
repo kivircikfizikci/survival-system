@@ -8,6 +8,7 @@ let discoveryState = {
   zoom: 1,
   pendingLoot: null,
   pendingEncounter: null,
+  selectedHuntTool: null,
   visitedTiles: {
     meadow: []
   }

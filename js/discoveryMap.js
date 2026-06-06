@@ -170,16 +170,67 @@ function updateTileActionPanel() {
 
     encounterCard.append(title, description);
 
-    if (encounterData && encounterData.canHunt) {
-      const huntChanceText = document.createElement("span");
-      huntChanceText.classList.add("encounter-hunt-chance");
+  if (encounterData && encounterData.canHunt) {
+    const huntChanceText = document.createElement("span");
+    huntChanceText.classList.add("encounter-hunt-chance");
 
-      huntChanceText.textContent = t("huntChance", {
-        chance: getFinalHuntChance(encounterData)
+    huntChanceText.textContent = t("huntChance", {
+      chance: getFinalHuntChance(encounterData)
+    });
+
+    encounterCard.appendChild(huntChanceText);
+
+    const toolSelector = document.createElement("div");
+    toolSelector.classList.add("hunt-tool-selector");
+
+    const noToolButton = document.createElement("button");
+    noToolButton.type = "button";
+    noToolButton.classList.add("hunt-tool-button");
+
+    if (discoveryState.selectedHuntTool === null) {
+      noToolButton.classList.add("is-selected");
+    }
+
+    noToolButton.textContent = t("noTool");
+
+    noToolButton.addEventListener("click", function () {
+      clearSelectedHuntTool();
+    });
+
+    toolSelector.appendChild(noToolButton);
+
+    const availableTools = getAvailableHuntTools(encounterData);
+
+    for (let toolData of availableTools) {
+      const toolItem = itemsDatabase[toolData.itemId];
+
+      if (!toolItem) {
+        continue;
+      }
+
+      const toolButton = document.createElement("button");
+      toolButton.type = "button";
+      toolButton.classList.add("hunt-tool-button");
+
+      if (
+        discoveryState.selectedHuntTool &&
+        discoveryState.selectedHuntTool.slotIndex === toolData.slotIndex
+      ) {
+        toolButton.classList.add("is-selected");
+      }
+
+      toolButton.textContent =
+        getDiscoveryItemName(toolItem) + " +" + toolData.bonus + "%";
+
+      toolButton.addEventListener("click", function () {
+        selectHuntTool(toolData);
       });
 
-      encounterCard.appendChild(huntChanceText);
+      toolSelector.appendChild(toolButton);
     }
+
+    encounterCard.appendChild(toolSelector);
+  }
 
     const actions = document.createElement("div");
     actions.classList.add("found-loot-actions");

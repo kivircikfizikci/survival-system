@@ -221,7 +221,8 @@ const translations = {
     pickedUpDiscoveryLoot: "Picked up {item} x{quantity}.",
     targetMapNotReady: "Target map is not ready yet.",
     enteredMap: "Entered {map}.",
-    huntChance: "Hunt chance: {chance}%"
+    huntChance: "Hunt chance: {chance}%",
+    noTool: "No Tool",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -443,7 +444,8 @@ const translations = {
     pickedUpDiscoveryLoot: "{item} x{quantity} aldın.",
     targetMapNotReady: "Hedef harita henüz hazır değil.",
     enteredMap: "{map} bölgesine geçtin.",
-    huntChance: "Av başarı şansı: {chance}%"
+    huntChance: "Av başarı şansı: {chance}%",
+    noTool: "Aletsiz",
   }
 };
 
