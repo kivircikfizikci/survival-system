@@ -316,7 +316,8 @@ body {
   bottom: 3px;
   z-index: 5;
 
-  color: #142434;
+  color: #a5c1e0;
+  text-shadow: 1px 1px 4px rgba(2, 6, 23, 0.5);
   font-size: calc(var(--tile-size) * 0.24);
   font-weight: 900;
   line-height: 1;

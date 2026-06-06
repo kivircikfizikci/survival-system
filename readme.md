@@ -1,4 +1,5 @@
 #Planlar..
+trailMap.js içindeki lootTables ayarlanacak.
 
 Tile lootTable
 Search tile
@@ -8,3 +9,5 @@ Encounter
 Shelter
 Workstation
 Mine System
+
+Encounter sistemi yapılacak.

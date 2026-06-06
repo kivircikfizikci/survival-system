@@ -1,22 +1,10 @@
-function createResourceTiles(tileIds, lootTable) {
-  const resourceTiles = {};
-
-  for (let tileId of tileIds) {
-    resourceTiles[tileId] = {
-      lootTable: lootTable
-    };
-  }
-
-  return resourceTiles;
-}
-
 const meadowMap = {
   id: "meadow",
   nameKey: "Meadow",
   width: 32,
   height: 32,
 
-  backgroundImage: "img/maps/meadow-test.png",
+  backgroundImage: "img/maps/meadow-map.png",
 
   startPosition: {
     x: 16,
@@ -108,14 +96,10 @@ const meadowMap = {
     "AF16": {
       targetMapId: "trail",
       targetPosition: {
-        x: 31,
-        y: 15
+        x: 16,
+        y: 30
       },
       label: "Trail"
     }
   }
-};
-
-const mapsDatabase = {
-  meadow: meadowMap
 };
