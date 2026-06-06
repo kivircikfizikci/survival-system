@@ -474,6 +474,22 @@ body {
   color: #bbf7d0;
 }
 
+.tile-encounter-marker {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  z-index: 4;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+  background: rgba(251, 146, 60, 0.95);
+  box-shadow: 0 0 8px rgba(251, 146, 60, 0.55);
+
+  pointer-events: none;
+}
+
 @media (max-width: 1100px) {
   body {
     padding: 12px;

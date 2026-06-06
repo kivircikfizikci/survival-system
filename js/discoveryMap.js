@@ -69,6 +69,14 @@ function renderDiscoveryMap() {
         tileButton.classList.add("has-resource");
       }
 
+      if (tileData.encounter) {
+        tileButton.classList.add("has-encounter");
+
+        const encounterMarker = document.createElement("span");
+        encounterMarker.classList.add("tile-encounter-marker");
+        tileButton.appendChild(encounterMarker);
+      }
+
       if (tileData.exit) {
         tileButton.classList.add("has-exit");
       }
