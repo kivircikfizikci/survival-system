@@ -1,29 +1,41 @@
 const encounterDatabase = {
-  rabbit: {
-    id: "rabbit",
-    name: "Rabbit",
-    type: "friendly",
-    canHunt: true,
-    huntChance: 35,
-    lootTable: [
-      { itemId: "rawMeat", chance: 45, quantity: 1 },
-      { itemId: "animalHide", chance: 20, quantity: 1 },
-      { itemId: "animalBone", chance: 15, quantity: 1 }
-    ]
-  },
+    rabbit: {
+        id: "rabbit",
+        name: "Rabbit",
+        type: "friendly",
+        canHunt: true,
+        huntChance: 45,
 
-  deer: {
-    id: "deer",
-    name: "Deer",
-    type: "friendly",
-    canHunt: true,
-    huntChance: 10,
-    lootTable: [
-      { itemId: "rawMeat", chance: 65, quantity: 2 },
-      { itemId: "animalHide", chance: 45, quantity: 1 },
-      { itemId: "animalBone", chance: 25, quantity: 1 }
-    ]
-  },
+        huntToolBonuses: {
+            knife: 15,
+            spear: 25
+        },
+
+        lootTable: [
+            { itemId: "rawMeat", chance: 50, quantity: 1 },
+            { itemId: "animalHide", chance: 20, quantity: 1 },
+            { itemId: "animalBone", chance: 15, quantity: 1 }
+        ]
+    },
+
+    deer: {
+        id: "deer",
+        name: "Deer",
+        type: "friendly",
+        canHunt: true,
+        huntChance: 20,
+
+        huntToolBonuses: {
+            spear: 35,
+            knife: 5
+        },
+
+        lootTable: [
+            { itemId: "rawMeat", chance: 65, quantity: 2 },
+            { itemId: "animalHide", chance: 45, quantity: 1 },
+            { itemId: "animalBone", chance: 25, quantity: 1 }
+        ]
+    },
 
   wildDog: {
     id: "wildDog",
@@ -147,6 +159,47 @@ function rollEncounterLoot(encounterData) {
   return null;
 }
 
+function playerHasToolGroup(toolGroupName) {
+  const saveData = getMainSaveData();
+
+  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+    return false;
+  }
+
+  const groupItems = toolGroups[toolGroupName] || [];
+
+  return saveData.inventory.items.some(function (item) {
+    return item !== null && groupItems.includes(item.id);
+  });
+}
+
+function getBestHuntToolBonus(encounterData) {
+  if (!encounterData.huntToolBonuses) {
+    return 0;
+  }
+
+  let bestBonus = 0;
+
+  for (let toolGroupName in encounterData.huntToolBonuses) {
+    if (playerHasToolGroup(toolGroupName)) {
+      const bonus = encounterData.huntToolBonuses[toolGroupName];
+
+      if (bonus > bestBonus) {
+        bestBonus = bonus;
+      }
+    }
+  }
+
+  return bestBonus;
+}
+
+function getFinalHuntChance(encounterData) {
+  const baseChance = encounterData.huntChance || 0;
+  const toolBonus = getBestHuntToolBonus(encounterData);
+
+  return Math.min(95, baseChance + toolBonus);
+}
+
 function huntPendingEncounter() {
   if (!discoveryState.pendingEncounter) {
     return;
@@ -159,9 +212,10 @@ function huntPendingEncounter() {
     return;
   }
 
-  const huntRoll = Math.random() * 100;
+const finalHuntChance = getFinalHuntChance(encounterData);
+const huntRoll = Math.random() * 100;
 
-  if (huntRoll > encounterData.huntChance) {
+if (huntRoll > finalHuntChance) {
     addDiscoveryLog(
       t("huntEscaped", {
         encounter: getEncounterName(encounter.id)

@@ -146,13 +146,13 @@ function updateTileActionPanel() {
       leaveButton.addEventListener("click", leavePendingLoot);
 
       actions.append(takeButton, leaveButton);
-
       tileActions.append(lootCard, actions);
     }
   }
 
   if (discoveryState.pendingEncounter) {
     const encounter = discoveryState.pendingEncounter;
+    const encounterData = encounterDatabase[encounter.id];
 
     const encounterCard = document.createElement("div");
     encounterCard.classList.add(
@@ -170,17 +170,25 @@ function updateTileActionPanel() {
 
     encounterCard.append(title, description);
 
+    if (encounterData && encounterData.canHunt) {
+      const huntChanceText = document.createElement("span");
+      huntChanceText.classList.add("encounter-hunt-chance");
+
+      huntChanceText.textContent = t("huntChance", {
+        chance: getFinalHuntChance(encounterData)
+      });
+
+      encounterCard.appendChild(huntChanceText);
+    }
+
     const actions = document.createElement("div");
     actions.classList.add("found-loot-actions");
-
-    const encounterData = encounterDatabase[encounter.id];
 
     if (encounterData && encounterData.canHunt) {
       const huntButton = document.createElement("button");
       huntButton.type = "button";
       huntButton.classList.add("tile-action-button");
       huntButton.textContent = t("hunt");
-
       huntButton.addEventListener("click", huntPendingEncounter);
 
       actions.appendChild(huntButton);

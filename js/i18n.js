@@ -220,7 +220,8 @@ const translations = {
     inventoryFullOrTooHeavy: "Inventory is full or too heavy.",
     pickedUpDiscoveryLoot: "Picked up {item} x{quantity}.",
     targetMapNotReady: "Target map is not ready yet.",
-    enteredMap: "Entered {map}."
+    enteredMap: "Entered {map}.",
+    huntChance: "Hunt chance: {chance}%"
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -441,7 +442,8 @@ const translations = {
     inventoryFullOrTooHeavy: "Envanter dolu veya çok ağır.",
     pickedUpDiscoveryLoot: "{item} x{quantity} aldın.",
     targetMapNotReady: "Hedef harita henüz hazır değil.",
-    enteredMap: "{map} bölgesine geçtin."
+    enteredMap: "{map} bölgesine geçtin.",
+    huntChance: "Av başarı şansı: {chance}%"
   }
 };
 
