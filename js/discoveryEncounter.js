@@ -213,6 +213,45 @@ function getAvailableHuntTools(encounterData) {
   return availableTools;
 }
 
+function getSavedInventoryItem(slotIndex) {
+  const saveData = getMainSaveData();
+
+  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+    return null;
+  }
+
+  return saveData.inventory.items[slotIndex] || null;
+}
+
+function getHuntToolButtonLabel(toolData) {
+  const toolItem = getSavedInventoryItem(toolData.slotIndex);
+  const databaseItem = itemsDatabase[toolData.itemId];
+
+  if (!toolItem || !databaseItem) {
+    return "";
+  }
+
+  let label =
+    getDiscoveryItemName(databaseItem) +
+    " +" +
+    toolData.bonus +
+    "%";
+
+  if (
+    typeof toolItem.durability === "number" &&
+    typeof toolItem.maxDurability === "number"
+  ) {
+    label +=
+      " (" +
+      toolItem.durability +
+      "/" +
+      toolItem.maxDurability +
+      ")";
+  }
+
+  return label;
+}
+
 function selectHuntTool(toolData) {
   discoveryState.selectedHuntTool = toolData;
 

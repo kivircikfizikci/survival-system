@@ -439,11 +439,17 @@ body {
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 4px;
+  overflow: hidden;
 }
 
 .hunt-tool-button {
   min-height: 28px;
   padding: 5px 8px;
+
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   border: 1px solid rgba(148, 163, 184, 0.26);
   border-radius: 7px;

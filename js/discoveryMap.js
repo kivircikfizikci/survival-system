@@ -219,8 +219,7 @@ function updateTileActionPanel() {
         toolButton.classList.add("is-selected");
       }
 
-      toolButton.textContent =
-        getDiscoveryItemName(toolItem) + " +" + toolData.bonus + "%";
+      toolButton.textContent = getHuntToolButtonLabel(toolData);
 
       toolButton.addEventListener("click", function () {
         selectHuntTool(toolData);
