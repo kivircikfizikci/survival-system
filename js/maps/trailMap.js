@@ -23,7 +23,7 @@ const trailMap = {
     "K1", ...createTileRange("K8", "K14"), "K18", "K19", "K23", "K24", "K28",
     "L1", "L2", ...createTileRange("L6", "L14"), "L18", "L19", "L22", "L23", "L24", "L25",
     "M1", "M2", "M3", "M8", ...createTileRange("M10", "M13"), "M18", "M22", "M23", "M25", "M26",
-    ...createTileRange("N1", "N6"), "N8", "N11", "N12", "N15", "N16", "N22", "N25", 
+    ...createTileRange("N1", "N6"), "N8", "N11", "N12", "N15", "N16", "N22", "N25", "N29",
     ...createTileRange("O1", "O5"), "O15", "O16", "O20", "O22", "O24", "O25",
     "P4", "P10", "P16", "P17", "P22", "P24", "P25", "P26", "P28",
     "Q1", "Q2", "Q9", "Q10", "Q11", "Q19", "Q20",
@@ -44,18 +44,26 @@ const trailMap = {
 
   resourceTiles: {
     ...createResourceTiles(
-      ["D12", "D13", "E12"],
+      ["P29"],
       "fallenBranch"
     ),
 
     ...createResourceTiles(
-      ["H18", "I18", "J18"],
+      ["M29", "J29", "D27", "G24"],
       "mushroomPatch"
     ),
 
     ...createResourceTiles(
-      ["M10", "M11", "N10"],
-      "trailBush"
+      ["K30"],
+      "wildHerbPatch"
+    ),
+
+    ...createResourceTiles(
+        [ "S24", "S25", "S26", "R21", "O18", "O19", "Q13", "O10", "O9", "N9", "N10", "O8", "R5", "R6", "Q4", "Q3", "P3",
+            ...createTileRange("Q21", "Q31"), ...createTileRange("R24", "R31"), ...createTileRange("P18", "P21"), ...createTileRange("Q14", "R17"), ...createTileRange("O11", "P13"), 
+            ...createTileRange("P5", "Q8"), 
+        ],
+       "pebblePatch"
     )
   },
 
@@ -92,10 +100,13 @@ const trailMap = {
       { itemId: "wildHerb", chance: 10, quantity: 1 }
     ],
 
-    trailBush: [
-      { itemId: "blackberry", chance: 20, quantity: 1 },
-      { itemId: "dryLeaf", chance: 30, quantity: 1 },
-      { itemId: "insect", chance: 10, quantity: 1 }
+    wildHerbPatch: [
+      { itemId: "wildHerb", chance: 25, quantity: 1 },
+      { itemId: "smallFlower", chance: 15, quantity: 1 }
+    ],
+
+    pebblePatch: [
+        { itemId: "pebble", chance: 25, quantity: 1 },
     ]
   }
 };
