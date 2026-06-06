@@ -55,3 +55,21 @@ function loadDiscoveryState() {
     markCurrentTileVisited();
   }
 }
+
+function loadDiscoveryLanguage() {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return;
+  }
+
+  try {
+    const saveData = JSON.parse(savedData);
+
+    if (saveData.currentLanguage) {
+      currentLanguage = saveData.currentLanguage;
+    }
+  } catch (error) {
+    console.error("Language could not be loaded:", error);
+  }
+}

@@ -44,7 +44,7 @@ function searchCurrentTile() {
 
 function travelToMap(exitData) {
   if (!mapsDatabase[exitData.targetMapId]) {
-    addDiscoveryLog("Target map is not ready yet.");
+    addDiscoveryLog(t("targetMapNotReady"));
     return;
   }
 
@@ -60,7 +60,11 @@ function travelToMap(exitData) {
   saveDiscoveryState();
   renderDiscoveryMap();
 
-  addDiscoveryLog("Entered " + exitData.label + ".");
+  addDiscoveryLog(
+    t("enteredMap", {
+      map: exitData.label
+    })
+  );
 }
 
 zoomInButton.addEventListener("click", function () {
@@ -77,6 +81,7 @@ window.addEventListener("resize", function () {
   });
 });
 
+loadDiscoveryLanguage();
 loadDiscoveryState();
 renderDiscoveryMap();
 

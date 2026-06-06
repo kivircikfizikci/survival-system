@@ -153,16 +153,15 @@ function takePendingLoot() {
   );
 
   if (!added) {
-    addDiscoveryLog("Inventory is full or too heavy.");
+    addDiscoveryLog(t("inventoryFullOrTooHeavy"));
     return;
   }
 
   addDiscoveryLog(
-    "Picked up " +
-    getDiscoveryItemName(item) +
-    " x" +
-    pendingLoot.quantity +
-    "."
+    t("pickedUpDiscoveryLoot", {
+      item: getDiscoveryItemName(item),
+      quantity: pendingLoot.quantity
+    })
   );
 
   discoveryState.pendingLoot = null;

@@ -136,13 +136,13 @@ function updateTileActionPanel() {
       const takeButton = document.createElement("button");
       takeButton.type = "button";
       takeButton.classList.add("tile-action-button");
-      takeButton.textContent = "Take";
+      takeButton.textContent = t("take");
       takeButton.addEventListener("click", takePendingLoot);
 
       const leaveButton = document.createElement("button");
       leaveButton.type = "button";
       leaveButton.classList.add("tile-action-button", "secondary");
-      leaveButton.textContent = "Leave";
+      leaveButton.textContent = t("leave");
       leaveButton.addEventListener("click", leavePendingLoot);
 
       actions.append(takeButton, leaveButton);
@@ -173,10 +173,23 @@ function updateTileActionPanel() {
     const actions = document.createElement("div");
     actions.classList.add("found-loot-actions");
 
+    const encounterData = encounterDatabase[encounter.id];
+
+    if (encounterData && encounterData.canHunt) {
+      const huntButton = document.createElement("button");
+      huntButton.type = "button";
+      huntButton.classList.add("tile-action-button");
+      huntButton.textContent = t("hunt");
+
+      huntButton.addEventListener("click", huntPendingEncounter);
+
+      actions.appendChild(huntButton);
+    }
+
     const ignoreButton = document.createElement("button");
     ignoreButton.type = "button";
     ignoreButton.classList.add("tile-action-button", "secondary");
-    ignoreButton.textContent = "Ignore";
+    ignoreButton.textContent = t("ignore");
     ignoreButton.addEventListener("click", clearPendingEncounter);
 
     actions.appendChild(ignoreButton);
@@ -191,7 +204,9 @@ function updateTileActionPanel() {
     const exitButton = document.createElement("button");
     exitButton.type = "button";
     exitButton.classList.add("tile-action-button", "secondary");
-    exitButton.textContent = "Go to " + tileData.exit.label;
+    exitButton.textContent = t("goToMap", {
+      map: tileData.exit.label
+    });
 
     exitButton.addEventListener("click", function () {
       travelToMap(tileData.exit);
