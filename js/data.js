@@ -1332,16 +1332,15 @@ const toolGroups = {
 
 const recipesDatabase = {
   // Basic Recipes
-  rope: {
-    id: "rope",
-    nameKey: "rope",
+  ropeFiber: {
+    id: "ropeFiber",
+    nameKey: "ropeFiber",
     resultItemId: "rope",
     resultQuantity: 1,
     isPublic: true,
     category: "basic",
     ingredients: {
-      reed: 3,
-      dryGrass: 1
+      plantFiber: 4
     }
   },
   leatherStrip: {

@@ -65,8 +65,13 @@ function renderDiscoveryMap() {
         tileButton.classList.add("is-blocked");
       }
 
-      if (tileData.resource) {
+      if (tileData.resource && !tileData.resource.isDefault) {
         tileButton.classList.add("has-resource");
+
+        const resourceMarker = document.createElement("span");
+        resourceMarker.classList.add("tile-resource-marker");
+
+        tileButton.appendChild(resourceMarker);
       }
 
       if (tileData.encounter) {
@@ -74,6 +79,7 @@ function renderDiscoveryMap() {
 
         const encounterMarker = document.createElement("span");
         encounterMarker.classList.add("tile-encounter-marker");
+
         tileButton.appendChild(encounterMarker);
       }
 

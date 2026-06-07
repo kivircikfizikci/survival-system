@@ -162,19 +162,8 @@ body {
   right: 5px;
 
   color: #facc15;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   font-weight: 900;
-}
-
-.map-tile.has-resource::before {
-  content: "◆";
-
-  position: absolute;
-  left: 5px;
-  bottom: 4px;
-
-  color: #86efac;
-  font-size: 0.7rem;
 }
 
 .discovery-side-panel {
@@ -474,9 +463,9 @@ body {
   color: #bbf7d0;
 }
 
+.tile-resource-marker,
 .tile-encounter-marker {
   position: absolute;
-  right: 5px;
   bottom: 5px;
   z-index: 4;
 
@@ -484,10 +473,27 @@ body {
   height: 8px;
 
   border-radius: 50%;
-  background: rgba(251, 146, 60, 0.95);
-  box-shadow: 0 0 8px rgba(251, 146, 60, 0.55);
 
   pointer-events: none;
+}
+
+.tile-resource-marker {
+  left: 5px;
+
+  background: rgba(134, 239, 172, 0.95);
+  box-shadow: 0 0 8px rgba(134, 239, 172, 0.55);
+}
+
+.tile-encounter-marker {
+  right: 5px;
+
+  background: rgba(251, 146, 60, 0.95);
+  box-shadow: 0 0 8px rgba(251, 146, 60, 0.55);
+}
+
+body:not(.show-map-debug-markers) .tile-resource-marker,
+body:not(.show-map-debug-markers) .tile-encounter-marker {
+  display: none;
 }
 
 @media (max-width: 1100px) {

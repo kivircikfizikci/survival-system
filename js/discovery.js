@@ -32,6 +32,17 @@ function setDiscoveryZoom(newZoom) {
   renderDiscoveryMap();
 }
 
+function debugMarkers() {
+  document.body.classList.toggle("show-map-debug-markers");
+
+  const isEnabled = document.body.classList.contains("show-map-debug-markers");
+
+  console.log(
+    "Map debug markers:",
+    isEnabled ? "ON" : "OFF"
+  );
+}
+
 function searchCurrentTile() {
   const currentTileId = getTileId(discoveryState.x, discoveryState.y);
   const tileData = getTileSpecialData(currentTileId);

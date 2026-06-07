@@ -111,7 +111,7 @@ const meadowMap = {
     ],
   },
 
-  /* encounterTiles: {
+   encounterTiles: {
     ...createEncounterTiles(
       [
         "E2", "F3",  ...createTileRange("G3", "I5"),  ...createTileRange("F6", "M11"), ...createTileRange("E14", "G16"),  
@@ -131,7 +131,7 @@ const meadowMap = {
       ],
       "meadowDangerZone"
     )
-  },*/
+  },
 
   encounterTables: {
     meadowAnimalZone: [
