@@ -71,14 +71,59 @@ encounterTables: {
   ]
 },
 
-  exits: {
-    "AF16": {
+ exits: {
+    "A29": {
+      targetMapId: "lake",
+      targetPosition: {
+        x: 30,
+        y: 0
+      },
+      label: "Lake"
+    },
+
+    "B26": {
       targetMapId: "mine",
       targetPosition: {
-        x: 16,
-        y: 30
+        x: 15,
+        y: 32
       },
       label: "Mine"
-    }
-  }
+    },
+
+    "B21": {
+      targetMapId: "mine",
+      targetPosition: {
+        x: 15,
+        y: 32
+      },
+      label: "Mine"
+    },
+
+    "F24": {
+      targetMapId: "mine",
+      targetPosition: {
+        x: 15,
+        y: 32
+      },
+      label: "Mine"
+    },
+
+    "J27": {
+      targetMapId: "mine",
+      targetPosition: {
+        x: 15,
+        y: 32
+      },
+      label: "Mine"
+    },
+
+    "Z1": {
+      targetMapId: "mistyHills",
+      targetPosition: {
+        x: 1,
+        y: 1
+      },
+      label: "Misty Hills"
+    },
+ }
 };

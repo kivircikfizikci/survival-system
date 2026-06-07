@@ -86,8 +86,8 @@ encounterTables: {
     "AE1": {
       targetMapId: "mountain",
       targetPosition: {
-        x: 30,
-        y: 0
+        x: 0,
+        y: 28
       },
       label: "Mountain"
     },
@@ -100,6 +100,5 @@ encounterTables: {
       },
       label: "Abandoned village"
     },
-    
  }
 };
