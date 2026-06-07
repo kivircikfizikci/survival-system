@@ -1,87 +1,301 @@
 const encounterDatabase = {
-    rabbit: {
-        id: "rabbit",
-        name: "Rabbit",
-        type: "friendly",
-        canHunt: true,
-        huntChance: 45,
+  rabbit: {
+    id: "rabbit",
+    name: "Rabbit",
+    type: "friendly",
+    canHunt: true,
+    canFight: false,
+    huntChance: 50,
+    huntToolBonuses: {
+      knife: 15,
+      spear: 20
+    },
+    huntToolDurabilityCost: {
+      knife: 1,
+      spear: 1
+    },
+    lootTable: [
+      { itemId: "rabbitMeat", chance: 55, quantity: 1 },
+      { itemId: "rabbitFur", chance: 35, quantity: 1 },
+      { itemId: "smallBones", chance: 20, quantity: 2 }
+    ]
+  },
 
-        huntToolBonuses: {
-            knife: 15,
-            spear: 25
-        },
+  deer: {
+    id: "deer",
+    name: "Deer",
+    type: "friendly",
+    canHunt: true,
+    canFight: false,
+    huntChance: 22,
+    huntToolBonuses: {
+      spear: 35,
+      knife: 5
+    },
+    huntToolDurabilityCost: {
+      spear: 2,
+      knife: 4
+    },
+    lootTable: [
+      { itemId: "rawMeat", chance: 70, quantity: 2 },
+      { itemId: "animalHide", chance: 45, quantity: 1 },
+      { itemId: "animalBone", chance: 28, quantity: 1 }
+    ]
+  },
 
-          huntToolDurabilityCost: {
-            knife: 1,
-            spear: 1
-        },
+  smallBird: {
+    id: "smallBird",
+    name: "Small Bird",
+    type: "friendly",
+    canHunt: true,
+    canFight: false,
+    huntChance: 35,
+    huntToolBonuses: {
+      spear: 10,
+      knife: 5
+    },
+    huntToolDurabilityCost: {
+      spear: 1,
+      knife: 1
+    },
+    lootTable: [
+      { itemId: "feather", chance: 75, quantity: 1 }
+    ]
+  },
 
-        lootTable: [
-            { itemId: "rawMeat", chance: 50, quantity: 1 },
-            { itemId: "animalHide", chance: 20, quantity: 1 },
-            { itemId: "animalBone", chance: 15, quantity: 1 }
-        ]
+  mufflon: {
+    id: "mufflon",
+    name: "Mufflon",
+    type: "friendly",
+    canHunt: true,
+    canFight: false,
+    huntChance: 18,
+    huntToolBonuses: {
+      spear: 35,
+      knife: 5
+    },
+    huntToolDurabilityCost: {
+      spear: 2,
+      knife: 4
+    },
+    lootTable: [
+      { itemId: "wool", chance: 55, quantity: 2 },
+      { itemId: "rawMeat", chance: 65, quantity: 2 }
+    ]
+  },
+
+  beeHive: {
+    id: "beeHive",
+    name: "Bee Hive",
+    type: "friendly",
+    canHunt: true,
+    canFight: false,
+    huntChance: 35,
+    huntToolBonuses: {
+      spear: 25,
+      knife: 10
+    },
+    huntToolDurabilityCost: {
+      spear: 1,
+      knife: 1
+    },
+    lootTable: [
+      { itemId: "honeycomb", chance: 60, quantity: 1 },
+      { itemId: "beeswax", chance: 30, quantity: 1 }
+    ]
+  },
+
+  wildDog: {
+    id: "wildDog",
+    name: "Wild Dog",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 45,
+    fleeEnergyCost: 8,
+    failedFightDamage: 12,
+    fightToolBonuses: {
+      knife: 15,
+      spear: 25
+    },
+    fightToolDurabilityCost: {
+      knife: 2,
+      spear: 4
+    },
+    lootTable: [
+      { itemId: "rawMeat", chance: 35, quantity: 2 },
+      { itemId: "animalHide", chance: 22, quantity: 1 },
+      { itemId: "animalBone", chance: 28, quantity: 2 }
+    ]
+  },
+
+  wolf: {
+    id: "wolf",
+    name: "Wolf",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 32,
+    fleeEnergyCost: 12,
+    failedFightDamage: 20,
+    fightToolBonuses: {
+      knife: 12,
+      spear: 30
+    },
+    fightToolDurabilityCost: {
+      knife: 4,
+      spear: 6
+    },
+    lootTable: [
+      { itemId: "wolfPelt", chance: 40, quantity: 1 },
+      { itemId: "rawMeat", chance: 45, quantity: 2 },
+      { itemId: "animalBone", chance: 30, quantity: 1 },
+      { itemId: "wolfTooth", chance: 18, quantity: 2 }
+    ]
+  },
+
+  wildBoar: {
+    id: "wildBoar",
+    name: "Wild Boar",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 35,
+    fleeEnergyCost: 10,
+    failedFightDamage: 18,
+    fightToolBonuses: {
+      knife: 8,
+      spear: 30
+    },
+    fightToolDurabilityCost: {
+      knife: 8,
+      spear: 12
+    },
+    lootTable: [
+      { itemId: "thickHide", chance: 45, quantity: 1 },
+      { itemId: "animalFat", chance: 35, quantity: 2 },
+      { itemId: "animalBone", chance: 30, quantity: 2 }
+    ]
+  },
+
+  snake: {
+    id: "snake",
+    name: "Snake",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 42,
+    fleeEnergyCost: 7,
+    failedFightDamage: 10,
+    fightToolBonuses: {
+      knife: 20,
+      spear: 15
+    },
+    fightToolDurabilityCost: {
+      knife: 1,
+      spear: 2
+    },
+    lootTable: [
+      { itemId: "venomSac", chance: 30, quantity: 1 },
+      { itemId: "snakeSkin", chance: 45, quantity: 1 }
+    ]
+  },
+
+  bear: {
+    id: "bear",
+    name: "Bear",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 12,
+    fleeEnergyCost: 18,
+    failedFightDamage: 40,
+    fightToolBonuses: {
+      knife: 5,
+      spear: 25
+    },
+    fightToolDurabilityCost: {
+      knife: 6,
+      spear: 10
+    },
+    lootTable: [
+      { itemId: "bearPelt", chance: 35, quantity: 1 },
+      { itemId: "bearClaw", chance: 20, quantity: 1 },
+      { itemId: "animalFat", chance: 45, quantity: 2 },
+      { itemId: "animalBone", chance: 30, quantity: 2 },
+      { itemId: "rawMeat", chance: 65, quantity: 4 }
+    ]
+  },
+
+  alligator: {
+    id: "alligator",
+    name: "Alligator",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 18,
+    fleeEnergyCost: 16,
+    failedFightDamage: 32,
+    fightToolBonuses: {
+      knife: 5,
+      spear: 30
+    },
+    fightToolDurabilityCost: {
+      knife: 6,
+      spear: 20
+    },
+    lootTable: [
+      { itemId: "scalyHide", chance: 45, quantity: 1 },
+      { itemId: "animalFat", chance: 35, quantity: 2 },
+      { itemId: "animalBone", chance: 30, quantity: 2 },
+      { itemId: "rawMeat", chance: 60, quantity: 2 }
+    ]
+  },
+
+  fish: {
+    id: "fish",
+    name: "Fish",
+    type: "friendly",
+    canHunt: true,
+    canFight: false,
+    huntChance: 25,
+    huntToolBonuses: {
+      spear: 30,
+      knife: 5
+    },
+    huntToolDurabilityCost: {
+      spear: 1,
+      knife: 4
+    },
+    lootTable: [
+      { itemId: "fishMeat", chance: 65, quantity: 1 },
+      { itemId: "fishOil", chance: 20, quantity: 1 },
+      { itemId: "fishBone", chance: 25, quantity: 1 }
+    ]
+  },
+
+  spider: {
+    id: "spider",
+    name: "Spider",
+    type: "enemy",
+    canHunt: false,
+    canFight: true,
+    fightChance: 50,
+    fleeEnergyCost: 6,
+    failedFightDamage: 4,
+    fightToolBonuses: {
+      knife: 20,
+      spear: 10
+    },
+    fightToolDurabilityCost: {
+      knife: 1,
+      spear: 2
     },
 
-    deer: {
-        id: "deer",
-        name: "Deer",
-        type: "friendly",
-        canHunt: true,
-        huntChance: 20,
-
-        huntToolBonuses: {
-            spear: 35,
-            knife: 5
-        },
-
-          huntToolDurabilityCost: {
-            spear: 2,
-            knife: 2
-        },
-
-        lootTable: [
-            { itemId: "rawMeat", chance: 65, quantity: 2 },
-            { itemId: "animalHide", chance: 45, quantity: 1 },
-            { itemId: "animalBone", chance: 25, quantity: 1 }
-        ]
-    },
-
-    wildDog: {
-        id: "wildDog",
-        name: "Wild Dog",
-        type: "enemy",
-        canHunt: false,
-        canFight: true,
-
-        fightChance: 45,
-        fleeEnergyCost: 8,
-        failedFightDamage: 12,
-
-        fightToolBonuses: {
-            knife: 15,
-            spear: 25
-        },
-
-        fightToolDurabilityCost: {
-            knife: 1,
-            spear: 2
-        },
-
-        lootTable: [
-            { itemId: "rawMeat", chance: 35, quantity: 1 },
-            { itemId: "animalHide", chance: 20, quantity: 1 },
-            { itemId: "animalBone", chance: 25, quantity: 1 }
-        ]
-    },
-
-    strayDog: {
-        id: "strayDog",
-        name: "Stray Dog",
-        type: "friendly",
-        canHunt: false,
-        canFight: false
-    }
+    lootTable: [
+      { itemId: "spiderSilk", chance: 45, quantity: 1 }
+    ]
+  }
 };
 
 function rollEncounterFromTable(encounterTableId) {

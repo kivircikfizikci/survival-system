@@ -55,16 +55,6 @@ const itemsDatabase = {
     weight: 0.4,
     maxStack: 8
   },
-  fish: {
-    id: "fish",
-    nameKey: "fish",
-    type: "usable",
-    category: "food",
-    imageSrc: "img/fish.png",
-    weight: 0.5,
-    maxStack: 1,
-    hungerRestore: 20
-  },
   freshWater: {
     id: "freshWater",
     nameKey: "freshWater",
@@ -176,25 +166,6 @@ const itemsDatabase = {
     weight: 0.08,
     maxStack: 20
   },
-  feather: {
-    id: "feather",
-    nameKey: "feather",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/feather.png",
-    weight: 0.01,
-    maxStack: 64
-  },
-  honeycomb: {
-    id: "honeycomb",
-    nameKey: "honeycomb",
-    type: "usable",
-    category: "food",
-    imageSrc: "img/honeycomb.png",
-    weight: 0.15,
-    maxStack: 4,
-    hungerRestore: 10
-  },
   dryLeaf: {
     id: "dryLeaf",
     nameKey: "dryLeaf",
@@ -212,15 +183,6 @@ const itemsDatabase = {
     imageSrc: "img/resin.png",
     weight: 0.1,
     maxStack: 8
-  },
-  animalBone: {
-    id: "animalBone",
-    nameKey: "animalBone",
-    type: "material",
-    category: "natural",
-    imageSrc: "img/animalBone.png",
-    weight: 0.3,
-    maxStack: 4
   },
   plasticBottle: {
     id: "plasticBottle",
@@ -330,15 +292,6 @@ const itemsDatabase = {
     imageSrc: "img/charcoal.png",
     weight: 1.5,
     maxStack: 8
-  },
-  animalHide: {
-    id: "animalHide",
-    nameKey: "animalHide",
-    type: "material",
-    category: "resource",
-    imageSrc: "img/animalHide.png",
-    weight: 0.8,
-    maxStack: 4
   },
   leather: {
     id: "leather",
@@ -1194,6 +1147,180 @@ const itemsDatabase = {
     imageSrc: "img/ironSpearHead.png",
     weight: 0.5,
     maxStack: 1
+  },
+  // Animal Items
+  rabbitMeat: {
+    id: "rabbitMeat",
+    nameKey: "rabbitMeat",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/rabbitMeat.png",
+    weight: 0.35,
+    maxStack: 5,
+    hungerRestore: 8
+  },
+  rabbitFur: {
+    id: "rabbitFur",
+    nameKey: "rabbitFur",
+    type: "material",
+    category: "material",
+    imageSrc: "img/rabbitFur.png",
+    weight: 0.15,
+    maxStack: 10
+  },
+  smallBones: {
+    id: "smallBones",
+    nameKey: "smallBones",
+    type: "material",
+    category: "material",
+    imageSrc: "img/smallBones.png",
+    weight: 0.08,
+    maxStack: 24
+  },
+  feather: {
+    id: "feather",
+    nameKey: "feather",
+    type: "material",
+    category: "natural",
+    imageSrc: "img/feather.png",
+    weight: 0.01,
+    maxStack: 64
+  },
+  wolfPelt: {
+    id: "wolfPelt",
+    nameKey: "wolfPelt",
+    type: "material",
+    category: "material",
+    imageSrc: "img/wolfPelt.png",
+    weight: 1.2,
+    maxStack: 5
+  },
+  wolfTooth: {
+    id: "wolfTooth",
+    nameKey: "wolfTooth",
+    type: "material",
+    category: "material",
+    imageSrc: "img/wolfTooth.png",
+    weight: 0.05,
+    maxStack: 24
+  },
+  thickHide: {
+    id: "thickHide",
+    nameKey: "thickHide",
+    type: "material",
+    category: "material",
+    imageSrc: "img/thickHide.png",
+    weight: 1.4,
+    maxStack: 5
+  },
+  animalFat: {
+    id: "animalFat",
+    nameKey: "animalFat",
+    type: "material",
+    category: "material",
+    imageSrc: "img/animalFat.png",
+    weight: 0.35,
+    maxStack: 10
+  },
+  venomSac: {
+    id: "venomSac",
+    nameKey: "venomSac",
+    type: "material",
+    category: "material",
+    imageSrc: "img/venomSac.png",
+    weight: 0.1,
+    maxStack: 16
+  },
+  snakeSkin: {
+    id: "snakeSkin",
+    nameKey: "snakeSkin",
+    type: "material",
+    category: "material",
+    imageSrc: "img/snakeSkin.png",
+    weight: 0.05,
+    maxStack: 24
+  },
+  wool: {
+    id: "wool",
+    nameKey: "wool",
+    type: "material",
+    category: "material",
+    imageSrc: "img/wool.png",
+    weight: 0.25,
+    maxStack: 10
+  },
+  beeswax: {
+    id: "beeswax",
+    nameKey: "beeswax",
+    type: "material",
+    category: "material",
+    imageSrc: "img/beeswax.png",
+    weight: 0.2,
+    maxStack: 10
+  },
+  bearPelt: {
+    id: "bearPelt",
+    nameKey: "bearPelt",
+    type: "material",
+    category: "material",
+    imageSrc: "img/bearPelt.png",
+    weight: 2.5,
+    maxStack: 3
+  },
+  bearClaw: {
+    id: "bearClaw",
+    nameKey: "bearClaw",
+    type: "material",
+    category: "material",
+    imageSrc: "img/bearClaw.png",
+    weight: 0.8,
+    maxStack: 4
+  },
+  scalyHide: {
+    id: "scalyHide",
+    nameKey: "scalyHide",
+    type: "material",
+    category: "material",
+    imageSrc: "img/scalyHide.png",
+    weight: 1.6,
+    maxStack: 5
+  },
+  fishMeat: {
+    id: "fishMeat",
+    nameKey: "fishMeat",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/fishMeat.png",
+    weight: 0.4,
+    maxStack: 5,
+    hungerRestore: 10
+  },
+  fishOil: {
+    id: "fishOil",
+    nameKey: "fishOil",
+    type: "material",
+    category: "material",
+    imageSrc: "img/fishOil.png",
+    weight: 0.10,
+    maxStack: 12
+  },
+  fishBone: {
+    id: "fishBone",
+    nameKey: "fishBone",
+    type: "material",
+    category: "material",
+    imageSrc: "img/fishBone.png",
+    weight: 0.05,
+    maxStack: 20
+  },
+  spiderSilk: {
+    id: "spiderSilk",
+    nameKey: "spiderSilk",
+    type: "material",
+    category: "material",
+    imageSrc: "img/spiderSilk.png",
+    weight: 0.05,
+    maxStack: 20
   },
 };
 

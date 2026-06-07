@@ -226,8 +226,8 @@ const trailMap = {
     "P1": {
       targetMapId: "lake",
       targetPosition: {
-        x: 0,
-        y: 15
+        x: 16,
+        y: 31
       },
       label: "Lake"
     }

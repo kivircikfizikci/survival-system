@@ -1,4 +1,8 @@
 const mapsDatabase = {
   meadow: meadowMap,
-  trail: trailMap
+  trail: trailMap,
+  lake: lakeMap,
+  mountain: mountainMap,
+  mine: mineMap,
+  abandonedVillage: abandonedVillageMap,
 };
