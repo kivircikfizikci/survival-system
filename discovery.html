@@ -3,12 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>Survival System | Discovery</title>
   <title>Discovery Map</title>
 
-  <link rel="stylesheet" href="css/discovery.css" />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/discovery.css">
 </head>
 <body>
+
+  <header class="top-navbar">
+  <div class="brand-block">
+    <p class="eyebrow">SURVIVAL SYSTEM</p>
+  </div>
+
+  <nav class="navbar-menu" aria-label="Game menu">
+    <a class="navbar-link" href="index.html" data-i18n="base">Base</a>
+    <a class="navbar-link is-active" href="discovery.html" data-i18n="discovery">Discovery</a>
+  </nav>
+
+  <div class="language-switcher" aria-label="Language switcher">
+    <button class="language-button is-active" type="button" data-language="en" aria-label="English">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30" width="1000" height="600" aria-hidden="true">
+        <clipPath id="t">
+          <path d="M25,15h25v15zv15h-25zh-25v-15zv-15h25z"/>
+        </clipPath>
+        <path d="M0,0v30h50v-30z" fill="#012169"/>
+        <path d="M0,0 50,30M50,0 0,30" stroke="#fff" stroke-width="6"/>
+        <path d="M0,0 50,30M50,0 0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+        <path d="M-1 11h22v-12h8v12h22v8h-22v12h-8v-12h-22z" fill="#C8102E" stroke="#FFF" stroke-width="2"/>
+      </svg>
+    </button>
+
+        <button class="language-button" type="button" data-language="tr" aria-label="Turkce">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 -30000 90000 60000" aria-hidden="true">
+        <path fill="#e30a17" d="m0-30000h90000v60000H0z"/>
+        <path fill="#fff" d="m41750 0 13568-4408-8386 11541V-7133l8386 11541zm925 8021a15000 15000 0 1 1 0-16042 12000 12000 0 1 0 0 16042z"/>
+      </svg>
+    </button>
+
+  </div>
+</header>
 
   <main class="discovery-shell">
 

@@ -13,7 +13,7 @@ body {
     linear-gradient(135deg, #111827 0%, #18212f 52%, #211b2f 100%);
   color: #f8fafc;
   font-family: Arial, sans-serif;
-  padding: 32px;
+  padding: 24px;
   transition: background 320ms ease;
 }
 

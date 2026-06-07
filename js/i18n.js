@@ -237,6 +237,8 @@ const translations = {
     fightFailed: "Fight failed. You lost {damage} health.",
     fightToolBroke: "{tool} broke.",
     selectedFightToolMissing: "Selected fight tool is no longer available.",
+    base: "Base",
+    discovery: "Discovery",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -474,6 +476,8 @@ const translations = {
     fightFailed: "Savaş başarısız oldu. {damage} can kaybettin.",
     fightToolBroke: "{tool} kırıldı.",
     selectedFightToolMissing: "Seçili savaş aleti artık mevcut değil.",
+    base: "Başlangıç",
+    discovery: "Keşif",
   }
 };
 
