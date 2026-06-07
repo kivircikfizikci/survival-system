@@ -9,9 +9,9 @@ const meadowMap = {
   defaultLootTable: "meadowGeneralArea",
 
   startPosition: {
-    x: 16,
-    y: 16
-  },
+      x: 16,
+      y: 16
+    },
 
   blockedTiles: [
     "A5", "A6", "A11", "A12", "A13", "A18", "A19", "A23", "A24", "A25", "A26", "A27", "A28", "A29",
@@ -71,6 +71,17 @@ const meadowMap = {
   },
 
   lootTables: {
+    meadowGeneralArea: [
+        { itemId: "dryGrass", chance: 10, quantity: 1 },
+        { itemId: "dryLeaf", chance: 7, quantity: 1 },
+        { itemId: "plantFiber", chance: 6, quantity: 1 },
+        { itemId: "smallFlower", chance: 5, quantity: 1 },
+        { itemId: "wildHerb", chance: 4, quantity: 1 },
+        { itemId: "pebble", chance: 4, quantity: 1 },
+        { itemId: "insect", chance: 3, quantity: 1 },
+        { itemId: "stick", chance: 3, quantity: 1 },
+        { itemId: "feather", chance: 2, quantity: 1 }
+    ],
     meadowBush: [
       { itemId: "blackberry", chance: 35, quantity: 1 },
       { itemId: "dryLeaf", chance: 20, quantity: 1 },
@@ -97,21 +108,15 @@ const meadowMap = {
       { itemId: "plantFiber", chance: 15, quantity: 1 },
       { itemId: "insect", chance: 8, quantity: 1 }
     ],
-    
-    meadowGeneralArea: [
-        { itemId: "dryGrass", chance: 10, quantity: 1 },
-        { itemId: "dryLeaf", chance: 7, quantity: 1 },
-        { itemId: "plantFiber", chance: 6, quantity: 1 },
-        { itemId: "smallFlower", chance: 5, quantity: 1 },
-        { itemId: "wildHerb", chance: 4, quantity: 1 },
-        { itemId: "pebble", chance: 4, quantity: 1 },
-        { itemId: "insect", chance: 3, quantity: 1 },
-        { itemId: "stick", chance: 3, quantity: 1 },
-        { itemId: "feather", chance: 2, quantity: 1 }
-    ],
   },
 
    encounterTiles: {
+    ...createEncounterTiles(
+      [
+        ...createTileRange("A1", "Z32"), 
+      ],
+      "meadowDangerZone"
+    ),
     ...createEncounterTiles(
       [
         "E2", "F3",  ...createTileRange("G3", "I5"),  ...createTileRange("F6", "M11"), ...createTileRange("E14", "G16"),  
@@ -124,13 +129,6 @@ const meadowMap = {
       ],
       "meadowAnimalZone"
     ),
-
-    ...createEncounterTiles(
-      [
-        ...createTileRange("A1", "Z32"), 
-      ],
-      "meadowDangerZone"
-    )
   },
 
   encounterTables: {

@@ -6,7 +6,7 @@ const trailMap = {
 
   backgroundImage: "img/maps/trail-map.png",
 
-  //defaultLootTable: "trailGeneralArea",
+  defaultLootTable: "trailGeneralArea",
 
   startPosition: {
       x: 16,
@@ -43,6 +43,7 @@ const trailMap = {
       ...createTileRange("AC7", "AF10"), ...createTileRange("AC12", "AF14"), "AC15", ...createTileRange("AC20", "AC25"), ...createTileRange("AC28", "AC32"),
       ...createTileRange("AD19", "AF25"), ...createTileRange("AD28", "AF32"),
   ],
+
   resourceTiles: {
     ...createResourceTiles(
       [ 
@@ -53,10 +54,10 @@ const trailMap = {
       "trailPathDebris"
     ),
 
-    // Sol ve sağ yoğun çam/ağaç zemini
     ...createResourceTiles(
       [
-        
+        "G28", "G29", "H28", "H29", "B28", "C29", "D29", "D30", "E29", "B32", "C32", "M21", "M20", "L20", "K21", "M17", "I14", "M15", "P14", "K5", "H4", "H5", "E6", "J7", "D14", "D15",
+        "W9", "W10", "AA7", "X11", "AE11", "Y13", "Z15", "Y16", "W17", "U21", "W20", "Z20", "AD18", "AE17", "AF17", "AF15", "AA27", "AC27", "AE27", 
       ],
       "pineForestFloor"
     ),
@@ -69,7 +70,6 @@ const trailMap = {
       "fallenBranchArea"
     ),
 
-    // Patika kenarı çiçek / ot / lif alanları
     ...createResourceTiles(
       [
         "N31", "L30", "K29", "J29", "J30", "I31", "G31", "E31", "A31", "A28", "C27", "D27", "F27", "F24", "H25", "L26", "N26", 
@@ -79,7 +79,6 @@ const trailMap = {
       "herbTrailEdge"
     ),
 
-    // Gölge/nemli cepler - mantar alanları
     ...createResourceTiles(
       [
         "I32", "B30", "E27", "G24", "G21", "H23", "I28", "K22", "K15", "P15", "K6", "D10", "E11", "E15", "F4", "J3", "K2", "M4", "R3", "T3", "S5", "Y7", "Z8", "X10",
@@ -88,18 +87,18 @@ const trailMap = {
       "mushroomPatch"
     ),
 
-    // Ağaç dipleri / kuş yuvası hissi
     ...createResourceTiles(
       [
-        "H30", "F30", "E30", "D31", "B29", "G26", "F25", "G22", "J24", "O26", "M24", "L21", "M19", "I19", "G17",  "H15", "J15", "O14", "L5", "I3", "F5", 
+        "H30", "F30", "E30", "D31", "B29", "G26", "F25", "G22", "J24", "O26", "M24", "L21", "M19", "I19", "G17",  "H15", "J15", "O14", "L5", "I3", "F5", "K4", "I5", 
+        "G10", "E10", "C12", "E14", "O7", "S4", "S11", "V9", "Z7", "AA12", "Y15", "X17", "AE16", "AA20", "V21", "V27", "AB26", "Y29",
       ],
       "birdNestArea"
     ),
 
-    // Eski patika kalıntıları / insan izi
     ...createResourceTiles(
       [
-        
+        "P30", "N30", "M29", "J31", "M27", "J26", "I24", "D28", "O23", "N20", "O17", "H18", "J16", "N14", "M9", "M6", "M5", "L3", "J5", "J8", "E13", "P2", "R4", "S6", 
+        "R7", "P9", "Q12", "T11", "X9", "Z12", "AF11", "AB16", "AB18", "X19", "V18", "T20", "S21", "V26", "X25", "Z26", "T29", "T31", "Y32",
       ],
       "oldTrailTrash"
     )
@@ -173,21 +172,22 @@ const trailMap = {
   encounterTiles: {
     ...createEncounterTiles(
       [
-        
+        ...createTileRange("A26", "N32"), ...createTileRange("T26", "AF32"), ...createTileRange("U18", "Y21"), ...createTileRange("I14", "M19"),
       ],
       "trailSmallAnimals"
     ),
 
     ...createEncounterTiles(
       [
-        
+        ...createTileRange("E4", "K6"), ...createTileRange("J2", "S5"), "T3", "I3", ...createTileRange("D9", "F15"), "C12", "C13", ...createTileRange("V10", "AA7"),
+        ...createTileRange("Z11", "AF16"),
       ],
       "trailWildPath"
     ),
 
     ...createEncounterTiles(
       [
-        
+        ...createTileRange("A1", "M32"), ...createTileRange("S1", "AF32"),
       ],
       "trailDangerZone"
     )
