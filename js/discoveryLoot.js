@@ -30,7 +30,7 @@ function rollCurrentTileLoot() {
 
   discoveryState.pendingLoot = null;
 
-  if (!tileData.resource) {
+  if (tileData.isBlocked || !tileData.resource) {
     return;
   }
 

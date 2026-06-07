@@ -6,6 +6,8 @@ const meadowMap = {
 
   backgroundImage: "img/maps/meadow-map.png",
 
+  defaultLootTable: "meadowGeneralArea",
+
   startPosition: {
     x: 16,
     y: 16
@@ -65,54 +67,75 @@ const meadowMap = {
     ...createResourceTiles(
         ["B18", "B19", "D1", "D2", "D3", "D9", "E2", "E8", "E9", "F8", "F3", "F9", "H11", "H23", "J24", "K23", "O14", "O23", "P23", "S23", "S26", "R27", "V1", "V2", "V3", "V7", "V8", "V10", "W7", "W8", "W9", "W10", "X8", "X9", "X10", "X28", "Y8", "Y9", "Y11", "Y28", "Z8", "Z9", "Z11", "Z30", "AA30", "AD10", "AE10", "AC22", "AC23", ],
         "wildHerbPatch"
-    )
+    ),
   },
 
   lootTables: {
     meadowBush: [
-        { itemId: "blackberry", chance: 10, quantity: 1 },
-        { itemId: "dryLeaf", chance: 15, quantity: 1 },
-        { itemId: "insect", chance: 10, quantity: 1 }
+      { itemId: "blackberry", chance: 35, quantity: 1 },
+      { itemId: "dryLeaf", chance: 20, quantity: 1 },
+      { itemId: "insect", chance: 10, quantity: 1 },
+      { itemId: "plantFiber", chance: 10, quantity: 1 }
     ],
 
     dryGrassPatch: [
-        { itemId: "dryGrass", chance: 20, quantity: 1 },
-        { itemId: "plantFiber", chance: 5, quantity: 1 }
+      { itemId: "dryGrass", chance: 45, quantity: 1 },
+      { itemId: "plantFiber", chance: 25, quantity: 1 },
+      { itemId: "dryLeaf", chance: 15, quantity: 1 }
     ],
 
     fallenBranch: [
-        { itemId: "stick", chance: 35, quantity: 1 },
-        { itemId: "branch", chance: 25, quantity: 1 },
-        { itemId: "bark", chance: 20, quantity: 1 }
+      { itemId: "stick", chance: 35, quantity: 1 },
+      { itemId: "branch", chance: 25, quantity: 1 },
+      { itemId: "bark", chance: 18, quantity: 1 },
+      { itemId: "dryWood", chance: 12, quantity: 1 }
     ],
 
     wildHerbPatch: [
-        { itemId: "wildHerb", chance: 25, quantity: 1 },
-        { itemId: "smallFlower", chance: 15, quantity: 1 }
-    ]
+      { itemId: "wildHerb", chance: 35, quantity: 1 },
+      { itemId: "smallFlower", chance: 25, quantity: 1 },
+      { itemId: "plantFiber", chance: 15, quantity: 1 },
+      { itemId: "insect", chance: 8, quantity: 1 }
+    ],
+    
+    meadowGeneralArea: [
+        { itemId: "dryGrass", chance: 10, quantity: 1 },
+        { itemId: "dryLeaf", chance: 7, quantity: 1 },
+        { itemId: "plantFiber", chance: 6, quantity: 1 },
+        { itemId: "smallFlower", chance: 5, quantity: 1 },
+        { itemId: "wildHerb", chance: 4, quantity: 1 },
+        { itemId: "pebble", chance: 4, quantity: 1 },
+        { itemId: "insect", chance: 3, quantity: 1 },
+        { itemId: "stick", chance: 3, quantity: 1 },
+        { itemId: "feather", chance: 2, quantity: 1 }
+    ],
   },
 
-  encounterTiles: {
+  /* encounterTiles: {
     ...createEncounterTiles(
       [
-        ...createTileRange("R7", "T13"), ...createTileRange("R1", "U6"), ...createTileRange("V12", "Z16"),
-        "K14",
-        "L14"
+        "E2", "F3",  ...createTileRange("G3", "I5"),  ...createTileRange("F6", "M11"), ...createTileRange("E14", "G16"),  
+        "C12", "B13", "D15", "C16", "B18", "B19", "B22", "C23", "D24", "E24",  ...createTileRange("F25", "H27"),  ...createTileRange("A30", "C32"),
+        ...createTileRange("H30", "O32"),  ...createTileRange("J25", "O28"),  ...createTileRange("R28", "U30"),
+        ...createTileRange("W28", "AA30"),  ...createTileRange("AE24", "AF27"),  ...createTileRange("Q23", "T26"),
+        ...createTileRange("I16", "N20"),  ...createTileRange("I11", "T15"),  ...createTileRange("J1", "V6"),
+        ...createTileRange("U8", "Z13"),  ...createTileRange("AF4", "AF10"),  ...createTileRange("Z5", "AC7"),
+        ...createTileRange("P17", "S19"), ...createTileRange("U21", "Z25"),
       ],
       "meadowAnimalZone"
     ),
 
     ...createEncounterTiles(
       [
-        ...createTileRange("C20", "F23")
+        ...createTileRange("A1", "Z32"), 
       ],
       "meadowDangerZone"
     )
-  },
+  },*/
 
   encounterTables: {
     meadowAnimalZone: [
-      { id: "rabbit", type: "friendly", chance: 90 },
+      { id: "rabbit", type: "friendly", chance: 10 },
       { id: "deer", type: "friendly", chance: 5 },
       { id: "wildDog", type: "enemy", chance: 3 }
     ],

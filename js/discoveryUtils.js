@@ -33,12 +33,28 @@ function isInsideMap(x, y) {
 function getTileSpecialData(tileId) {
   const map = getCurrentMap();
 
+  const specificResource =
+    map.resourceTiles && map.resourceTiles[tileId]
+      ? map.resourceTiles[tileId]
+      : null;
+
+  const defaultResource =
+    map.defaultLootTable
+      ? {
+          lootTable: map.defaultLootTable,
+          isDefault: true
+        }
+      : null;
+
   return {
     isBlocked: map.blockedTiles.includes(tileId),
-    resource: map.resourceTiles[tileId] || null,
+
+    resource: specificResource || defaultResource,
+
     encounter: map.encounterTiles
       ? map.encounterTiles[tileId] || null
       : null,
+
     exit: map.exits[tileId] || null
   };
 }
