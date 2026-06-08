@@ -103,6 +103,7 @@ const trailMap = {
       "oldTrailTrash"
     )
   },
+  
   lootTables: {
   trailGeneralArea: [
     { itemId: "dryLeaf", chance: 9, quantity: 1 },
