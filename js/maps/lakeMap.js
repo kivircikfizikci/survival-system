@@ -32,42 +32,60 @@ const lakeMap = {
    encounterTiles: {
     ...createEncounterTiles(
       [
-        ...createTileRange("A1", "Z32"), 
+       "A10", "A11", "B12", "B13", "C13", "C14", "C15", "D13", "D14", "C15", "D16", "D17", "E19", "F19", "G19", "G20", "G21", "H21", "H22", "I23", "J23", "K24", "L25", "M26", "O27",
+       "P27", "Q27", "R27", "T26", "U25", "V24", "V25", "W24", "W23", "X23", "Y21", "Z20", ...createTileRange("Z19", "AA13"), "Y12", "Y11", ...createTileRange("Y10", "W7"), "W6", "W5",
+       "W4", ...createTileRange("V4", "U1"), 
       ],
       "lakeDangerZone"
     ),
     ...createEncounterTiles(
       [
-
+        ...createTileRange("A1", "S7"), ...createTileRange("E8", "V15"), ...createTileRange("I16", "W21"), ...createTileRange("M22", "S25"), 
+        "C8", "C9", "D8", "D9", "D10", "K22", "L22", "L23", "T23", "T22", "U22", ...createTileRange("X19", "X13"), ...createTileRange("W15", "W11"), ...createTileRange("U7", "T5"), 
       ],
-      "lakeAnimalZone"
+      "lakeZone"
+    ),
+    ...createEncounterTiles(
+      [
+        "A13", "A18", "A19", ...createTileRange("A20", "D32"), "E24", ...createTileRange("E25", "G32"), "H27", "I27", ...createTileRange("H28", "L32"), ...createTileRange("M30", "N32"), 
+        ...createTileRange("T32", "AF29"), "S32", "S31", "Y28", "Z28", "Z27", ...createTileRange("AA28", "AF26"), ...createTileRange("AC25", "AF24"), "AE19", "AB11", "X3"
+      ],
+      "lakeTreeZone"
+    ),
+    ...createEncounterTiles(
+      [
+        "A15", "B15", "B16", "C16", "C17", "C18", "D18", "E18", "D19", "D20", "E21", "E22", "F22", "F23", "G23", "G24", "H25", "I26", "J26", "K27", "L27", "M28", "N28", "O28", "P29", "Q29", 
+        "P30", "Q30", "P31", "Q31", "P32", "Q32", "R29", "R28", "S28", "T28", "U27", "V27", "W27", "X26", "Y25", "Z25", "Z24", "AA24", "AA23", "AB22", "AB21", "AB20", "AB19", "AB18",
+        "AC17",  "AD16", "AE15", "AE14", "AF13", "AF12", "AE11", "AE10", "AD10", "AD9", "AD8", "AE7", "AE6", "AE5", "AE4", "AD4", "AC3", "AC2", "AD2", "AD1", "AE1"
+      ],
+      "lakePathRoad"
     ),
   },
 
 encounterTables: {
-  lakeShore: [
-    { id: "fish", type: "friendly", chance: 10 },
-    { id: "smallBird", type: "friendly", chance: 5 },
-    { id: "snake", type: "enemy", chance: 3 }
+  lakeZone: [
+    { id: "fish", type: "friendly", chance: 10 }
   ],
-
-  lakeAnimalZone: [
+  lakeTreeZone: [
     { id: "deer", type: "friendly", chance: 5 },
     { id: "smallBird", type: "friendly", chance: 5 },
     { id: "fish", type: "friendly", chance: 6 },
     { id: "snake", type: "enemy", chance: 3 }
   ],
-
   lakeDangerZone: [
     { id: "alligator", type: "enemy", chance: 5 },
-    { id: "snake", type: "enemy", chance: 6 },
-    { id: "fish", type: "friendly", chance: 4 },
-    { id: "smallBird", type: "friendly", chance: 2 }
-  ],
+    { id: "snake", type: "enemy", chance: 5 },
+    { id: "smallBird", type: "friendly", chance: 5 },
+    { id: "deer", type: "friendly", chance: 5 },
+    { id: "wolf", type: "enemy", chance: 5 },
+    { id: "wildDog", type: "enemy", chance: 5 },
+    { id: "wildBoar", type: "enemy", chance: 5 }
 
-  lakeFishingSpot: [
-    { id: "fish", type: "friendly", chance: 18 },
-    { id: "snake", type: "enemy", chance: 2 }
+  ],
+  lakePathRoad: [
+    { id: "snake", type: "enemy", chance: 2 },
+    { id: "wolf", type: "enemy", chance: 1 },
+    { id: "wildDog", type: "enemy", chance: 2 }
   ]
 },
 
