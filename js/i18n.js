@@ -258,6 +258,10 @@ const translations = {
     fishBone: "Fish Bone",
     spiderSilk: "Spider Silk",
     rawMeat: "Raw Meat",
+    invalidResourceTileId: "Invalid resource tile id: {tileId}",
+    invalidEncounterTileId: "Invalid encounter tile id: {tileId}",
+    invalidRequiredItemTileId: "Invalid required item tile id: {tileId}",
+    makeshiftRaft: "Makeshift Raft",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -516,6 +520,10 @@ const translations = {
     fishBone: "Balık Kılçığı",
     spiderSilk: "Örümcek İpeği",
     rawMeat: "Çiğ Et",
+    invalidResourceTileId: "Geçersiz kaynak tile id: {tileId}",
+    invalidEncounterTileId: "Geçersiz encounter tile id: {tileId}",
+    invalidRequiredItemTileId: "Geçersiz geçiş gereksinimi tile id: {tileId}",
+    makeshiftRaft: "İlkel Sal",
   }
 };
 

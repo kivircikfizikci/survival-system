@@ -55,8 +55,48 @@ function getTileSpecialData(tileId) {
       ? map.encounterTiles[tileId] || null
       : null,
 
+    requiredItem: map.requiredItemTiles
+      ? map.requiredItemTiles[tileId] || null
+      : null,
+
     exit: map.exits[tileId] || null
   };
+}
+
+function playerHasDiscoveryRequiredItem(itemId) {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return false;
+  }
+
+  try {
+    const saveData = JSON.parse(savedData);
+
+    if (!saveData.inventory || !saveData.inventory.items) {
+      return false;
+    }
+
+    return saveData.inventory.items.some(function (item) {
+      return item !== null && item.id === itemId;
+    });
+  } catch (error) {
+    console.error("Main save could not be checked:", error);
+    return false;
+  }
+}
+
+function canEnterRequiredItemTile(x, y) {
+  const tileId = getTileId(x, y);
+  const tileData = getTileSpecialData(tileId);
+
+  if (!tileData.requiredItem) {
+    return true;
+  }
+
+  return playerHasDiscoveryRequiredItem(
+    tileData.requiredItem.requiredItemId
+  );
 }
 
 function isBlockedTile(x, y) {
@@ -79,6 +119,10 @@ function canMoveTo(x, y) {
   }
 
   if (isBlockedTile(x, y)) {
+    return false;
+  }
+
+  if (!canEnterRequiredItemTile(x, y)) {
     return false;
   }
 

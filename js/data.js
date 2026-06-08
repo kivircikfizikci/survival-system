@@ -1322,6 +1322,16 @@ const itemsDatabase = {
     weight: 0.05,
     maxStack: 20
   },
+  // Vehicle
+  makeshiftRaft: {
+    id: "makeshiftRaft",
+    nameKey: "makeshiftRaft",
+    type: "material",
+    category: "vehicle",
+    imageSrc: "img/makeshiftRaft.png",
+    weight: 8,
+    maxStack: 1
+  },
 };
 
 const areasDatabase = {
@@ -1426,6 +1436,7 @@ const recipeDiscoveryRules = {
   leatherScrap: ["leatherPouch", "tent"],
   fireStarter: ["campfire", "boiledWater"],
   campfire: ["cookedFish", "cookedFrog", "cookedSnail", "cookedMushroom"],
+  makeshiftRaft: ["woodLog"],
   animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
   animalHide: ["leather", "tanningRack"],
   tanningRack: ["leather", "leatherStrip"],
@@ -2003,6 +2014,30 @@ const recipesDatabase = {
       knife: 1
     },
     toolDurabilityCost: {
+      knife: 4
+    }
+  },
+  makeshiftRaft: {
+    id: "makeshiftRaft",
+    nameKey: "makeshiftRaft",
+    resultItemId: "makeshiftRaft",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+
+    ingredients: {
+      woodLog: 4,
+      stick: 4,
+      rope: 8
+    },
+
+    requiredToolGroups: {
+      axe: 1,
+      knife: 1
+    },
+
+    toolDurabilityCost: {
+      axe: 6,
       knife: 4
     }
   },

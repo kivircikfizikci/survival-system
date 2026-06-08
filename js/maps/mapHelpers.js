@@ -4,7 +4,11 @@ function createResourceTiles(tileIds, lootTable) {
 
   for (let tileId of uniqueTileIds) {
     if (!parseTileId(tileId)) {
-      console.warn("Invalid resource tile id:", tileId);
+      console.warn(
+        getMapHelperText("invalidResourceTileId", {
+          tileId: tileId
+        })
+      );
       continue;
     }
 
@@ -83,7 +87,11 @@ function createEncounterTiles(tileIds, encounterTable) {
 
   for (let tileId of uniqueTileIds) {
     if (!parseTileId(tileId)) {
-      console.warn("Invalid encounter tile id:", tileId);
+      console.warn(
+        getMapHelperText("invalidEncounterTileId", {
+          tileId: tileId
+        })
+      );
       continue;
     }
 
@@ -93,4 +101,47 @@ function createEncounterTiles(tileIds, encounterTable) {
   }
 
   return encounterTiles;
+}
+
+function getMapHelperText(key, params = {}) {
+  if (typeof t === "function") {
+    return t(key, params);
+  }
+
+  const fallbackTexts = {
+    invalidResourceTileId: "Invalid resource tile id: {tileId}",
+    invalidEncounterTileId: "Invalid encounter tile id: {tileId}",
+    invalidRequiredItemTileId: "Invalid required item tile id: {tileId}"
+  };
+
+  let text = fallbackTexts[key] || key;
+
+  for (let paramName in params) {
+    text = text.replace("{" + paramName + "}", params[paramName]);
+  }
+
+  return text;
+}
+
+function createRequiredItemTiles(tileIds, requiredItemId) {
+  const requiredItemTiles = {};
+  const uniqueTileIds = [...new Set(tileIds)];
+
+  for (let tileId of uniqueTileIds) {
+    if (!parseTileId(tileId)) {
+      console.warn(
+        getMapHelperText("invalidRequiredItemTileId", {
+          tileId: tileId
+        })
+      );
+
+      continue;
+    }
+
+    requiredItemTiles[tileId] = {
+      requiredItemId: requiredItemId
+    };
+  }
+
+  return requiredItemTiles;
 }

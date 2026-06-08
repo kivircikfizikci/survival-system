@@ -83,6 +83,15 @@ function renderDiscoveryMap() {
         tileButton.appendChild(encounterMarker);
       }
 
+      if (tileData.requiredItem) {
+        tileButton.classList.add("has-required-item");
+
+        const requiredItemMarker = document.createElement("span");
+        requiredItemMarker.classList.add("tile-required-item-marker");
+
+        tileButton.appendChild(requiredItemMarker);
+      }
+
       if (tileData.exit) {
         tileButton.classList.add("has-exit");
       }

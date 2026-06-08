@@ -496,6 +496,27 @@ body:not(.show-map-debug-markers) .tile-encounter-marker {
   display: none;
 }
 
+.tile-required-item-marker {
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  z-index: 4;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+  background: rgba(165, 96, 250, 0.95);
+  box-shadow: 0 0 8px rgba(97, 54, 150, 0.95);
+
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+body:not(.show-map-debug-markers) .tile-required-item-marker {
+  display: none;
+}
+
 @media (max-width: 1100px) {
   body {
     padding: 12px;
