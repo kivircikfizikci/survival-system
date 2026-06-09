@@ -1,5 +1,6 @@
 const SAVE_KEY = "survivalSystemSave";
 let isLoadingGame = false;
+let isSavingGame = false;
 
 function restoreItem(savedItem) {
   if (savedItem === null) {
@@ -76,27 +77,34 @@ function restoreCraftSlots(savedCraftSlots) {
 }
 
 function saveGame() {
+  if (isSavingGame) {
+    return;
+  }
+
+  isSavingGame = true;
+
   const saveData = {
     health: health,
     hunger: hunger,
     energy: energy,
 
     isSleeping: isSleeping,
+    activeSleepSlotIndex: activeSleepSlotIndex,
+    sleepSession: sleepSession,
 
     inventory: inventory,
     equipment: equipment,
     craftSlots: craftSlots,
 
     regionWorkstations: regionWorkstations,
-
     playerShelter: playerShelter,
-
     discoveredRecipes: discoveredRecipes,
-
     currentLanguage: currentLanguage,
   };
 
   localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
+
+  isSavingGame = false;
 }
 
 function loadGame() {
@@ -122,7 +130,13 @@ function loadGame() {
   hunger = saveData.hunger ?? hunger;
   energy = saveData.energy ?? energy;
 
-  isSleeping: isSleeping,
+  isSleeping = saveData.isSleeping || false;
+  activeSleepSlotIndex =
+    typeof saveData.activeSleepSlotIndex === "number"
+      ? saveData.activeSleepSlotIndex
+      : null;
+
+  sleepSession = saveData.sleepSession || null;
 
   restoreInventory(saveData.inventory);
   restoreEquipment(saveData.equipment);
@@ -145,6 +159,17 @@ function loadGame() {
   }
 
   updateInventoryCapacityFromEquipment();
+
+  processSleepProgress();
+
+  syncSleepStateFromSave();
+
+  if (isSleeping && sleepSession && sleepSession.active) {
+    startSleepTimer();
+  }
+
+  updateScreen();
+  updateInventoryScreen();
 
   isLoadingGame = false;
 }

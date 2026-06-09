@@ -77,8 +77,14 @@ function getUsedSlots() {
   return usedSlots;
 }
 
-
 function addItem(item) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
   if (getCurrentWeight() + item.weight > inventory.maxWeight) {
     showMessage(t("tooHeavy"));
     return false;
@@ -111,6 +117,13 @@ function addItem(item) {
 }
 
 function removeOneItem(slotIndex) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
   const item = inventory.items[slotIndex];
 
   if (item === null) {
@@ -128,12 +141,19 @@ function removeOneItem(slotIndex) {
 }
 
 function removeItem(slotIndex) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   inventory.items[slotIndex] = null;
   updateInventoryScreen();
   autoSave();
 }
 
 function dropInventoryItem(slotIndex) {
+   refreshBaseSleepState();
   const item = inventory.items[slotIndex];
 
   if (item === null) {
@@ -152,6 +172,13 @@ function dropInventoryItem(slotIndex) {
 }
 
 function moveInventoryItem(fromSlot, toSlot) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
   if (fromSlot === toSlot) {
     return;
   }
@@ -166,6 +193,29 @@ function moveInventoryItem(fromSlot, toSlot) {
   autoSave();
 }
 
+function syncSleepStateFromSave() {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return;
+  }
+
+  try {
+    const saveData = JSON.parse(savedData);
+
+    isSleeping = saveData.isSleeping === true;
+
+    activeSleepSlotIndex =
+      typeof saveData.activeSleepSlotIndex === "number"
+        ? saveData.activeSleepSlotIndex
+        : null;
+
+    sleepSession = saveData.sleepSession || null;
+  } catch (error) {
+    console.error("Sleep state could not be synced:", error);
+  }
+}
+
 function stopSleeping(reasonKey) {
   if (sleepIntervalId !== null) {
     clearInterval(sleepIntervalId);
@@ -174,6 +224,7 @@ function stopSleeping(reasonKey) {
 
   isSleeping = false;
   activeSleepSlotIndex = null;
+  sleepSession = null;
 
   updateScreen();
   updateInventoryScreen();
@@ -187,12 +238,8 @@ function stopSleeping(reasonKey) {
   autoSave();
 }
 
-function applySleepItemDurabilityCost() {
-  if (activeSleepSlotIndex === null) {
-    return;
-  }
-
-  const sleepItem = inventory.items[activeSleepSlotIndex];
+function applySleepItemDurabilityCost(slotIndex) {
+  const sleepItem = inventory.items[slotIndex];
 
   if (!sleepItem || sleepItem.category !== "sleep" || !sleepItem.sleepData) {
     return;
@@ -210,7 +257,7 @@ function applySleepItemDurabilityCost() {
   if (sleepItem.durability <= 0) {
     const itemName = getItemName(sleepItem);
 
-    inventory.items[activeSleepSlotIndex] = null;
+    inventory.items[slotIndex] = null;
 
     const message = t("sleepItemBroke", {
       item: itemName
@@ -218,40 +265,6 @@ function applySleepItemDurabilityCost() {
 
     showMessage(message);
     addLog(message);
-  }
-}
-
-function applySleepTick() {
-  if (activeSleepSlotIndex === null) {
-    stopSleeping();
-    return;
-  }
-
-  const sleepItem = inventory.items[activeSleepSlotIndex];
-
-  if (!sleepItem || sleepItem.category !== "sleep" || !sleepItem.sleepData) {
-    stopSleeping();
-    return;
-  }
-
-  const sleepData = sleepItem.sleepData;
-
-  if (hunger <= sleepData.hungerCostPerTick) {
-    stopSleeping("wokeUpHungry");
-    return;
-  }
-
-  changeEnergy(sleepData.energyPerTick || 1);
-  changeHealth(sleepData.healthPerTick || 0);
-  changeHunger(-(sleepData.hungerCostPerTick || 1));
-
-  updateScreen();
-  updateInventoryScreen();
-  autoSave();
-
-  if (energy >= 100) {
-    applySleepItemDurabilityCost();
-    stopSleeping("wokeUpRested");
   }
 }
 
@@ -270,7 +283,7 @@ function startSleeping(slotIndex) {
 
   const sleepData = item.sleepData;
 
-  if (hunger <= sleepData.hungerCostPerTick) {
+  if (hunger <= (sleepData.hungerCostPerTick || 1)) {
     showMessage(t("tooHungryToSleep"));
     return;
   }
@@ -283,6 +296,14 @@ function startSleeping(slotIndex) {
   isSleeping = true;
   activeSleepSlotIndex = slotIndex;
 
+  sleepSession = {
+    active: true,
+    slotIndex: slotIndex,
+    itemId: item.id,
+    startedAt: Date.now(),
+    lastTickAt: Date.now()
+  };
+
   const message = t("sleepStarted", {
     item: getItemName(item)
   });
@@ -294,12 +315,94 @@ function startSleeping(slotIndex) {
   updateInventoryScreen();
   autoSave();
 
+  startSleepTimer();
+}
+
+function processSleepProgress() {
+  if (!sleepSession || !sleepSession.active) {
+    return;
+  }
+
+  const slotIndex = sleepSession.slotIndex;
+  const sleepItem = inventory.items[slotIndex];
+
+  if (!sleepItem || sleepItem.id !== sleepSession.itemId) {
+    stopSleeping();
+    return;
+  }
+
+  if (!sleepItem.sleepData) {
+    stopSleeping();
+    return;
+  }
+
+  const sleepData = sleepItem.sleepData;
+  const now = Date.now();
+  const tickMs = gameConfig.sleepTickMs || 30000;
+
+  const elapsedMs = now - sleepSession.lastTickAt;
+  const elapsedTicks = Math.floor(elapsedMs / tickMs);
+
+  if (elapsedTicks <= 0) {
+    return;
+  }
+
+  for (let i = 0; i < elapsedTicks; i++) {
+    if (energy >= 100) {
+      applySleepItemDurabilityCost(slotIndex);
+      stopSleeping("wokeUpRested");
+      return;
+    }
+
+    if (hunger <= (sleepData.hungerCostPerTick || 1)) {
+      stopSleeping("wokeUpHungry");
+      return;
+    }
+
+    changeEnergy(sleepData.energyPerTick || 1);
+    changeHealth(sleepData.healthPerTick || 0);
+    changeHunger(-(sleepData.hungerCostPerTick || 1));
+
+    sleepSession.lastTickAt += tickMs;
+
+    if (energy >= 100) {
+      applySleepItemDurabilityCost(slotIndex);
+      stopSleeping("wokeUpRested");
+      return;
+    }
+  }
+
+  updateScreen();
+  updateInventoryScreen();
+  if (!isSavingGame) {
+    autoSave();
+  }
+}
+
+function startSleepTimer() {
+  if (sleepIntervalId !== null) {
+    clearInterval(sleepIntervalId);
+  }
+
   sleepIntervalId = setInterval(function () {
-    applySleepTick();
-  }, gameConfig.sleepTickMs);
+    processSleepProgress();
+  }, 1000);
+}
+
+function refreshBaseSleepState() {
+  if (typeof processSleepProgress === "function") {
+    processSleepProgress();
+  }
+
+  if (typeof syncSleepStateFromSave === "function") {
+    syncSleepStateFromSave();
+  }
+
+  updateScreen();
 }
 
 function useInventoryItem(slotIndex) {
+  refreshBaseSleepState();
   const item = inventory.items[slotIndex];
 
   if (item === null) {

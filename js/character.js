@@ -3,8 +3,9 @@ let hunger = 100;
 let energy = 100;
 
 let isSleeping = false;
-let sleepIntervalId = null;
 let activeSleepSlotIndex = null;
+let sleepIntervalId = null;
+let sleepSession = null;
 
 let discoveredRecipes = [];
 

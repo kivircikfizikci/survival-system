@@ -66,6 +66,13 @@ function hasWorkstation(workstationId) {
 }
 
 function placeWorkstation(workstationId, item) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
   const currentRegionWorkstations = getCurrentRegionWorkstations();
 
 if (hasWorkstation(workstationId)) {
@@ -90,6 +97,13 @@ if (hasWorkstation(workstationId)) {
 }
 
 function removeWorkstation(workstationId) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
   const currentRegionWorkstations = getCurrentRegionWorkstations();
   const workstation = currentRegionWorkstations[workstationId];
 
@@ -147,6 +161,12 @@ function discoverRecipe(recipeId) {
 }
 
 function moveInventoryItemToCraftSlot(inventorySlotIndex, craftSlotIndex, amount = "all") {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   const moved = moveItemBetweenContainers(
     inventory.items,
     inventorySlotIndex,
@@ -218,6 +238,12 @@ function quickMoveCraftItemToInventory(craftSlotIndex, amount = "all") {
 }
 
 function moveCraftItemToInventorySlot(craftSlotIndex, inventorySlotIndex, amount = "all") {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   const moved = moveItemBetweenContainers(
     craftSlots,
     craftSlotIndex,
@@ -237,6 +263,12 @@ function moveCraftItemToInventorySlot(craftSlotIndex, inventorySlotIndex, amount
 }
 
 function moveCraftItem(craftFromSlot, craftToSlot, amount = "all") {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   if (craftFromSlot === craftToSlot) {
     return;
   }
@@ -449,6 +481,13 @@ function moveItemBetweenContainers(
   amount,
   fullMessageKey
 ) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
   const fromItem = fromContainer[fromIndex];
 
   if (fromItem === null) {
@@ -501,6 +540,12 @@ function moveItemBetweenContainers(
 }
 
 function craftSelectedRecipe() {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   const recipe = getMatchingRecipe();
 
   if (recipe === null) {

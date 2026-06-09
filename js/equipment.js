@@ -33,6 +33,12 @@ function updateInventoryCapacityFromEquipment(showWarning = true) {
 }
 
 function wearInventoryItem(slotIndex) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   const item = inventory.items[slotIndex];
 
   if (item === null) {
@@ -78,6 +84,12 @@ function wearInventoryItem(slotIndex) {
 }
 
 function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
   const newItem = inventory.items[slotIndex];
 
   if (newItem === null) {
@@ -119,6 +131,13 @@ function wearInventoryItemToSlot(slotIndex, targetEquipSlot) {
 }
 
 function unequipItem(equipSlot) {
+    refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+  
   const item = equipment[equipSlot];
 
   if (item === null) {

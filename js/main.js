@@ -3,9 +3,6 @@ updateInventoryCapacityFromEquipment(false);
 applyLanguage();
 updateRecipeFilterButtons();
 updateScreen();
-isSleeping = false;
-sleepIntervalId = null;
-activeSleepSlotIndex = null;
 
 function findItemInInventory(itemId) {
   for (let i = 0; i < inventory.items.length; i++) {

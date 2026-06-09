@@ -1,17 +1,26 @@
-
 const zoomInButton = document.getElementById("zoomInButton");
 const zoomOutButton = document.getElementById("zoomOutButton");
 
 let sleepingDiscoveryLogShown = false;
+let wokeUpDiscoveryLogShown = false;
 
 function updateDiscoverySleepNotice() {
-  if (isPlayerSleepingFromSave()) {
+  const isSleepingNow = isPlayerSleepingFromSave();
+
+  if (isSleepingNow) {
+    wokeUpDiscoveryLogShown = false;
+
     if (!sleepingDiscoveryLogShown) {
       addDiscoveryLog(t("sleepingDiscoveryNotice"));
       sleepingDiscoveryLogShown = true;
     }
 
     return;
+  }
+
+  if (sleepingDiscoveryLogShown && !wokeUpDiscoveryLogShown) {
+    addDiscoveryLog(t("wokeUpRested"));
+    wokeUpDiscoveryLogShown = true;
   }
 
   sleepingDiscoveryLogShown = false;
@@ -213,3 +222,12 @@ requestAnimationFrame(function () {
     updateMapCamera();
   });
 });
+
+setInterval(function () {
+  const changed = processSleepProgressFromSave();
+
+  if (changed) {
+    updateDiscoverySleepNotice();
+    renderDiscoveryMap();
+  }
+}, 1000);
