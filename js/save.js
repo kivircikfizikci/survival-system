@@ -92,7 +92,6 @@ function saveGame() {
     discoveredRecipes: discoveredRecipes,
 
     currentLanguage: currentLanguage,
-    selectedAreaId: areaSelect ? areaSelect.value : "meadow"
   };
 
   localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
@@ -131,10 +130,6 @@ function loadGame() {
 
   if (saveData.currentLanguage) {
     currentLanguage = saveData.currentLanguage;
-  }
-
-  if (saveData.selectedAreaId && areaSelect) {
-    areaSelect.value = saveData.selectedAreaId;
   }
 
   if (saveData.playerShelter) {

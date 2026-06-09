@@ -10,14 +10,52 @@ const workstationSlots = ["campfire", "choppingBlock", "tanningRack"];
 
 let regionWorkstations = {
   meadow: {},
-  lake: {},
   trail: {},
+  lake: {},
   mountain: {},
+  mine: {},
   abandonedVillage: {}
 };
 
+function getCurrentRegionId() {
+  const savedDiscoveryData =
+    localStorage.getItem("survivalSystemDiscoverySave");
+
+  if (!savedDiscoveryData) {
+    return "meadow";
+  }
+
+  try {
+    const discoveryData = JSON.parse(savedDiscoveryData);
+
+    return discoveryData.currentMapId || "meadow";
+  } catch (error) {
+    console.error("Discovery region could not be loaded:", error);
+    return "meadow";
+  }
+}
+
+function getCurrentRegionName() {
+  const currentRegionId = getCurrentRegionId();
+
+  if (
+    typeof areasDatabase !== "undefined" &&
+    areasDatabase[currentRegionId]
+  ) {
+    return getAreaName(areasDatabase[currentRegionId]);
+  }
+
+  return currentRegionId;
+}
+
 function getCurrentRegionWorkstations() {
-  return regionWorkstations[areaSelect.value];
+  const currentRegionId = getCurrentRegionId();
+
+  if (!regionWorkstations[currentRegionId]) {
+    regionWorkstations[currentRegionId] = {};
+  }
+
+  return regionWorkstations[currentRegionId];
 }
 
 function hasWorkstation(workstationId) {
@@ -33,9 +71,7 @@ function placeWorkstation(workstationId, item) {
 if (hasWorkstation(workstationId)) {
   showMessage(
     t("workstationAlreadyPlaced", {
-      regionLabel: getAreaName(
-        areasDatabase[areaSelect.value]
-      )
+      regionLabel: getCurrentRegionName()
     })
   );
 

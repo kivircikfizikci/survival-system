@@ -213,10 +213,7 @@ function useInventoryItem(slotIndex) {
     removeOneItem(slotIndex);
 
     const message = t("workstationPlaced", {
-      item: getItemName(item),
-      regionLabel: getAreaName(
-      areasDatabase[areaSelect.value]
-    )
+      regionLabel: getCurrentRegionName()
     });
 
     showMessage(message, "success");

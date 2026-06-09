@@ -1,3 +1,46 @@
+const regionBackgrounds = {
+  meadow: "../img/meadow.png",
+  lake: "../img/lake.png",
+  trail: "../img/trail.png",
+  mountain: "../img/mountain.png",
+  mine: "../img/mine.png",
+  abandonedVillage: "../img/abandonedVillage.png"
+};
+
+function getSavedDiscoveryMapId() {
+  const savedData = localStorage.getItem("survivalSystemDiscoverySave");
+
+  if (!savedData) {
+    return "meadow";
+  }
+
+  try {
+    const discoveryData = JSON.parse(savedData);
+    return discoveryData.currentMapId || "meadow";
+  } catch (error) {
+    return "meadow";
+  }
+}
+
+function updateRegionBackground() {
+  const currentMapId =
+    typeof discoveryState !== "undefined"
+      ? discoveryState.currentMapId
+      : getSavedDiscoveryMapId();
+
+  const imagePath = regionBackgrounds[currentMapId] || "";
+
+  if (!imagePath) {
+    document.body.style.setProperty("--region-image", "none");
+    return;
+  }
+
+  document.body.style.setProperty(
+    "--region-image",
+    `url("${imagePath}")`
+  );
+}
+
 const itemsDatabase = {
   // Basic & Natural Items
   blackberry: {

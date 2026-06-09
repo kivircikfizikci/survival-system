@@ -5,14 +5,16 @@
 body {
   min-height: 100vh;
   margin: 0;
-  padding: 24px;
-
+  --region-image: none;
   background:
-    radial-gradient(circle at top left, rgba(52, 211, 153, 0.14), transparent 34rem),
-    linear-gradient(135deg, #0f172a 0%, #111827 52%, #1e1b2e 100%);
-
+    linear-gradient(135deg, rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.78)),
+    var(--region-image) center / cover no-repeat fixed,
+    radial-gradient(circle at top left, rgba(52, 211, 153, 0.16), transparent 34rem),
+    linear-gradient(135deg, #111827 0%, #18212f 52%, #211b2f 100%);
   color: #f8fafc;
   font-family: Arial, sans-serif;
+  padding: 24px;
+  transition: background 320ms ease;
 }
 
 .discovery-shell {
@@ -35,7 +37,7 @@ body {
 }
 
 .discovery-map-panel {
-  padding: 8px;
+  padding: 12px;
   min-width: 0;
 }
 

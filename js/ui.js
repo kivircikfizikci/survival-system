@@ -4,7 +4,6 @@ const energyText = document.getElementById("energy");
 const nicknameText = document.getElementById("nickname");
 const regionText = document.getElementById("region");
 const professionText = document.getElementById("profession");
-// const experienceText = document.getElementById("experience");
 const healthFill = document.getElementById("healthFill");
 const hungerFill = document.getElementById("hungerFill");
 const energyFill = document.getElementById("energyFill");
@@ -16,9 +15,6 @@ const statusText = document.getElementById("status");
 const inventoryGrid = document.getElementById("inventoryGrid");
 const inventorySlotsText = document.getElementById("inventorySlots");
 const inventoryWeightText = document.getElementById("inventoryWeight");
-const sleepHoursSelect = document.getElementById("sleepHours");
-const areaSelect = document.getElementById("areaSelect");
-const searchButton = document.getElementById("searchBtn");
 const languageButtons = document.querySelectorAll("[data-language]");
 
 const logList = document.getElementById("logList");
@@ -40,14 +36,6 @@ let playerProfession = "Explorer";
 let draggedSlotIndex = null;
 let draggedEquipmentSlot = null;
 let dragMoveAmount = "all";
-
-const regionBackgrounds = {
-  meadow: "../img/meadow.png",
-  lake: "../img/lake.png",
-  trail: "../img/trail.png",
-  mountain: "../img/mountain.png",
-  abandonedVillage: "../img/abandonedVillage.png"
-};
 
 const recipesBtn = document.getElementById("recipesBtn");
 const recipesPanel = document.getElementById("recipesPanel");
@@ -278,17 +266,6 @@ recipeFilterButtons.forEach(function (button) {
 
 const equipmentSlots = document.querySelectorAll(".equipment-slot");
 
-function updateRegionBackground(regionId) {
-  const imagePath = regionBackgrounds[regionId] || "";
-
-  if (imagePath) {
-    document.body.style.setProperty("--region-image", `url("${imagePath}")`);
-    return;
-  }
-
-  document.body.style.setProperty("--region-image", "none");
-}
-
 function updateEquipmentScreen() {
   equipmentSlots.forEach(function (slotElement) {
     const slotName = slotElement.dataset.equipSlot;
@@ -334,16 +311,6 @@ function updateEquipmentScreen() {
   });
 }
 
-areaSelect.addEventListener("change", function () {
-  playerRegion = areaSelect.value;
-  updateRegionBackground(playerRegion);
-  updateScreen();
-  updateShelterScreen();
-  updateWorkstationScreen();
-  saveGame();
-});
-
-let searchButtonRemainingSeconds = 0;
 let currentStatus = {
   key: "statusAwake",
   replacements: {}
@@ -784,19 +751,6 @@ function getVisibleToolGroupItems(groupName) {
   });
 }
 
-function updateSearchButton(remainingSeconds) {
-  searchButtonRemainingSeconds = remainingSeconds;
-
-  if (remainingSeconds > 0) {
-    searchButton.disabled = true;
-    searchButton.textContent = t("search") + " (" + remainingSeconds + ")";
-    return;
-  }
-
-  searchButton.disabled = false;
-  searchButton.textContent = t("search");
-}
-
 function updateAreaOptions() {
   const areaOptions = document.querySelectorAll("[data-area-option]");
 
@@ -815,7 +769,6 @@ function applyLanguage() {
 
   updateAreaOptions();
   updateStatusText();
-  updateSearchButton(searchButtonRemainingSeconds);
   updateInventoryScreen();
   updateEquipmentScreen();
   updateLanguageButtons();
@@ -881,7 +834,7 @@ function updateShelterScreen() {
 
   if (
     playerShelter === null ||
-    playerShelter.regionId !== areaSelect.value
+    playerShelter.regionId !== getCurrentRegionName()
   ) {
     shelterCard.hidden = true;
     return;

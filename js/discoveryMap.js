@@ -26,6 +26,8 @@ function updateDiscoveryHeader() {
 function renderDiscoveryMap() {
   const map = getCurrentMap();
 
+  updateRegionBackground();
+
   mapGrid.innerHTML = "";
 
   mapGrid.style.setProperty("--tile-size", discoveryState.tileSize + "px");
