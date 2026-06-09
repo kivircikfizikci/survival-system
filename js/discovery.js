@@ -2,7 +2,27 @@
 const zoomInButton = document.getElementById("zoomInButton");
 const zoomOutButton = document.getElementById("zoomOutButton");
 
+let sleepingDiscoveryLogShown = false;
+
+function updateDiscoverySleepNotice() {
+  if (isPlayerSleepingFromSave()) {
+    if (!sleepingDiscoveryLogShown) {
+      addDiscoveryLog(t("sleepingDiscoveryNotice"));
+      sleepingDiscoveryLogShown = true;
+    }
+
+    return;
+  }
+
+  sleepingDiscoveryLogShown = false;
+}
+
 function movePlayerTo(x, y) {
+  if (isPlayerSleepingFromSave()) {
+    updateDiscoverySleepNotice();
+    return;
+  }
+
   if (!canMoveTo(x, y)) {
     return;
   }
@@ -184,6 +204,7 @@ loadDiscoveryState();
 updateDiscoveryStaticTexts();
 updateDiscoveryLanguageButtons();
 renderDiscoveryMap();
+updateDiscoverySleepNotice();
 
 requestAnimationFrame(function () {
   updateMapCamera();

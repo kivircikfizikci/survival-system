@@ -124,6 +124,10 @@ function renderDiscoveryMap() {
     requestAnimationFrame(function () {
         updateMapCamera();
     });
+
+    if (typeof updateDiscoverySleepNotice === "function") {
+      updateDiscoverySleepNotice();
+    }
 }
 
 function updateTileActionPanel() {

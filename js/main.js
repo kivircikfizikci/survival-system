@@ -1,9 +1,11 @@
 loadGame();
 updateInventoryCapacityFromEquipment(false);
 applyLanguage();
-updateStatusText();
 updateRecipeFilterButtons();
 updateScreen();
+isSleeping = false;
+sleepIntervalId = null;
+activeSleepSlotIndex = null;
 
 function findItemInInventory(itemId) {
   for (let i = 0; i < inventory.items.length; i++) {
@@ -61,25 +63,6 @@ for (let languageButton of languageButtons) {
     autoSave();
   });
 }
-
-setInterval(function () {
-  if (!isSleeping) {
-    hunger -= 1;
-    energy -= 1;
-  }
-
-  if (hunger < 0) hunger = 0;
-  if (energy < 0) energy = 0;
-
-  if (hunger < 20) {
-    health -= 5;
-  }
-
-  if (health < 0) health = 0;
-
-  updateScreen();
-  autoSave();
-}, GAME_HOUR_MS);
 
 updateLanguageButtons();
 updateInventoryCapacityFromEquipment(false);

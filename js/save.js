@@ -81,6 +81,8 @@ function saveGame() {
     hunger: hunger,
     energy: energy,
 
+    isSleeping: isSleeping,
+
     inventory: inventory,
     equipment: equipment,
     craftSlots: craftSlots,
@@ -119,6 +121,8 @@ function loadGame() {
   health = saveData.health ?? health;
   hunger = saveData.hunger ?? hunger;
   energy = saveData.energy ?? energy;
+
+  isSleeping: isSleeping,
 
   restoreInventory(saveData.inventory);
   restoreEquipment(saveData.equipment);

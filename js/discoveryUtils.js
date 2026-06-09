@@ -114,6 +114,10 @@ function isAdjacentToPlayer(x, y) {
 }
 
 function canMoveTo(x, y) {
+  if (isPlayerSleepingFromSave()) {
+    return false;
+  }
+
   if (!isInsideMap(x, y)) {
     return false;
   }
@@ -145,5 +149,20 @@ function markCurrentTileVisited() {
 
   if (!visitedTiles.includes(currentTileId)) {
     visitedTiles.push(currentTileId);
+  }
+}
+
+function isPlayerSleepingFromSave() {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return false;
+  }
+
+  try {
+    const saveData = JSON.parse(savedData);
+    return saveData.isSleeping === true;
+  } catch (error) {
+    return false;
   }
 }

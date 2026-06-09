@@ -166,15 +166,143 @@ function moveInventoryItem(fromSlot, toSlot) {
   autoSave();
 }
 
-function useInventoryItem(slotIndex) {
+function stopSleeping(reasonKey) {
+  if (sleepIntervalId !== null) {
+    clearInterval(sleepIntervalId);
+    sleepIntervalId = null;
+  }
+
+  isSleeping = false;
+  activeSleepSlotIndex = null;
+
+  updateScreen();
+  updateInventoryScreen();
+
+  if (reasonKey) {
+    const message = t(reasonKey);
+    showMessage(message, "success");
+    addLog(message, "success");
+  }
+
+  autoSave();
+}
+
+function applySleepItemDurabilityCost() {
+  if (activeSleepSlotIndex === null) {
+    return;
+  }
+
+  const sleepItem = inventory.items[activeSleepSlotIndex];
+
+  if (!sleepItem || sleepItem.category !== "sleep" || !sleepItem.sleepData) {
+    return;
+  }
+
+  if (typeof sleepItem.durability !== "number") {
+    return;
+  }
+
+  const durabilityCost =
+    sleepItem.sleepData.durabilityCostOnSleepEnd || 1;
+
+  sleepItem.durability -= durabilityCost;
+
+  if (sleepItem.durability <= 0) {
+    const itemName = getItemName(sleepItem);
+
+    inventory.items[activeSleepSlotIndex] = null;
+
+    const message = t("sleepItemBroke", {
+      item: itemName
+    });
+
+    showMessage(message);
+    addLog(message);
+  }
+}
+
+function applySleepTick() {
+  if (activeSleepSlotIndex === null) {
+    stopSleeping();
+    return;
+  }
+
+  const sleepItem = inventory.items[activeSleepSlotIndex];
+
+  if (!sleepItem || sleepItem.category !== "sleep" || !sleepItem.sleepData) {
+    stopSleeping();
+    return;
+  }
+
+  const sleepData = sleepItem.sleepData;
+
+  if (hunger <= sleepData.hungerCostPerTick) {
+    stopSleeping("wokeUpHungry");
+    return;
+  }
+
+  changeEnergy(sleepData.energyPerTick || 1);
+  changeHealth(sleepData.healthPerTick || 0);
+  changeHunger(-(sleepData.hungerCostPerTick || 1));
+
+  updateScreen();
+  updateInventoryScreen();
+  autoSave();
+
+  if (energy >= 100) {
+    applySleepItemDurabilityCost();
+    stopSleeping("wokeUpRested");
+  }
+}
+
+function startSleeping(slotIndex) {
   const item = inventory.items[slotIndex];
 
-  if (item === null) {
+  if (!item || item.category !== "sleep" || !item.sleepData) {
+    showMessage(t("cannotUseItem"));
     return;
   }
 
   if (isSleeping) {
-    showMessage(t("cannotUseSleeping"));
+    showMessage(t("alreadySleeping"));
+    return;
+  }
+
+  const sleepData = item.sleepData;
+
+  if (hunger <= sleepData.hungerCostPerTick) {
+    showMessage(t("tooHungryToSleep"));
+    return;
+  }
+
+  if (energy >= 100) {
+    showMessage(t("wokeUpRested"));
+    return;
+  }
+
+  isSleeping = true;
+  activeSleepSlotIndex = slotIndex;
+
+  const message = t("sleepStarted", {
+    item: getItemName(item)
+  });
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  updateScreen();
+  updateInventoryScreen();
+  autoSave();
+
+  sleepIntervalId = setInterval(function () {
+    applySleepTick();
+  }, gameConfig.sleepTickMs);
+}
+
+function useInventoryItem(slotIndex) {
+  const item = inventory.items[slotIndex];
+
+  if (item === null) {
     return;
   }
 
@@ -232,11 +360,7 @@ function useInventoryItem(slotIndex) {
   }
 
   if (item.category === "food") {
-    hunger += item.hungerRestore || 0;
-
-    if (hunger > 100) {
-      hunger = 100;
-    }
+    changeHunger(item.hungerRestore || 0);
 
     removeOneItem(slotIndex);
     updateScreen();
@@ -251,11 +375,7 @@ function useInventoryItem(slotIndex) {
   }
 
   if (item.category === "medical") {
-    health += item.healAmount || 0;
-
-    if (health > 100) {
-      health = 100;
-    }
+    changeHealth(item.healAmount || 0);
 
     removeOneItem(slotIndex);
     updateScreen();
@@ -266,6 +386,16 @@ function useInventoryItem(slotIndex) {
     addLog(message, "success");
 
     autoSave();
+    return;
+  }
+
+  if (item.category === "sleep") {
+    startSleeping(slotIndex);
+    return;
+  }
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
     return;
   }
 

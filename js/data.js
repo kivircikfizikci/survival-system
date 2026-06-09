@@ -7,6 +7,10 @@ const regionBackgrounds = {
   abandonedVillage: "../img/abandonedVillage.png"
 };
 
+const gameConfig = {
+  sleepTickMs: 3000
+};
+
 function getSavedDiscoveryMapId() {
   const savedData = localStorage.getItem("survivalSystemDiscoverySave");
 
@@ -970,6 +974,60 @@ const itemsDatabase = {
     weight: 0.3,
     maxStack: 1
   },
+  leafBed: {
+    id: "leafBed",
+    nameKey: "leafBed",
+    type: "usable",
+    category: "sleep",
+    imageSrc: "img/leafBed.png",
+    weight: 1.5,
+    maxStack: 1,
+    durability: 5,
+    maxDurability: 5,
+
+    sleepData: {
+      energyPerTick: 1,
+      healthPerTick: 0.2,
+      hungerCostPerTick: 1,
+      durabilityCostOnSleepEnd: 1
+    }
+  },
+  simpleBedroll: {
+    id: "simpleBedroll",
+    nameKey: "simpleBedroll",
+    type: "usable",
+    category: "sleep",
+    imageSrc: "img/simpleBedroll.png",
+    weight: 2.2,
+    maxStack: 1,
+    durability: 12,
+    maxDurability: 12,
+
+    sleepData: {
+      energyPerTick: 2,
+      healthPerTick: 0.4,
+      hungerCostPerTick: 1,
+      durabilityCostOnSleepEnd: 1
+    }
+  },
+  warmBedroll: {
+    id: "warmBedroll",
+    nameKey: "warmBedroll",
+    type: "usable",
+    category: "sleep",
+    imageSrc: "img/warmBedroll.png",
+    weight: 3,
+    maxStack: 1,
+    durability: 20,
+    maxDurability: 20,
+
+    sleepData: {
+      energyPerTick: 3,
+      healthPerTick: 0.7,
+      hungerCostPerTick: 1,
+      durabilityCostOnSleepEnd: 1
+    }
+  },
   tent: {
     id: "tent",
     nameKey: "tent",
@@ -1478,6 +1536,8 @@ const recipeDiscoveryRules = {
   obsidianShard: ["obsidianKnife"],
   leatherScrap: ["leatherPouch", "tent"],
   fireStarter: ["campfire", "boiledWater"],
+  rabbitFur: ["warmBedroll"],
+  clothScrap: ["simpleBedroll"],
   campfire: ["cookedFish", "cookedFrog", "cookedSnail", "cookedMushroom"],
   makeshiftRaft: ["woodLog"],
   animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
@@ -1953,6 +2013,47 @@ const recipesDatabase = {
     },
     toolDurabilityCost: {
       boneNeedle: 2
+    }
+  },
+  leafBed: {
+    id: "leafBed",
+    nameKey: "leafBed",
+    resultItemId: "leafBed",
+    resultQuantity: 1,
+    isPublic: true,
+    category: "survival",
+
+    ingredients: {
+      dryLeaf: 6,
+      dryGrass: 6
+    }
+  },
+  simpleBedroll: {
+    id: "simpleBedroll",
+    nameKey: "simpleBedroll",
+    resultItemId: "simpleBedroll",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+
+    ingredients: {
+      clothScrap: 4,
+      dryGrass: 4,
+      rope: 1
+    }
+  },
+  warmBedroll: {
+    id: "warmBedroll",
+    nameKey: "warmBedroll",
+    resultItemId: "warmBedroll",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+
+    ingredients: {
+      rabbitFur: 4,
+      clothScrap: 3,
+      rope: 2
     }
   },
   tent: {

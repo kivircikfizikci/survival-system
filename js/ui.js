@@ -2,6 +2,7 @@ const healthText = document.getElementById("health");
 const hungerText = document.getElementById("hunger");
 const energyText = document.getElementById("energy");
 const nicknameText = document.getElementById("nickname");
+const statusText = document.getElementById("statusText");
 const regionText = document.getElementById("region");
 const professionText = document.getElementById("profession");
 const healthFill = document.getElementById("healthFill");
@@ -10,8 +11,6 @@ const energyFill = document.getElementById("energyFill");
 const healthIconFill = document.getElementById("healthIconFill");
 const hungerIconFill = document.getElementById("hungerIconFill");
 const energyIconFill = document.getElementById("energyIconFill");
-
-const statusText = document.getElementById("status");
 const inventoryGrid = document.getElementById("inventoryGrid");
 const inventorySlotsText = document.getElementById("inventorySlots");
 const inventoryWeightText = document.getElementById("inventoryWeight");
@@ -311,35 +310,49 @@ function updateEquipmentScreen() {
   });
 }
 
-let currentStatus = {
-  key: "statusAwake",
-  replacements: {}
-};
+function getPlayerStatusText() {
+  if (isSleeping) return t("statusLabel", { status: t("sleeping") });
+  if (hunger <= 15) return t("statusLabel", { status: t("starving") });
+  if (energy <= 15) return t("statusLabel", { status: t("exhausted") });
+  if (health <= 30) return t("statusLabel", { status: t("weak") });
+
+  return t("statusLabel", { status: t("awake") });
+}
 
 function clamp(value, min, max) {
   value = Number(value);
   return Math.max(min, Math.min(max, value));
 }
 
+function formatStat(value) {
+  return Math.round(clamp(value, 0, 100));
+}
+
+function normalizeStat(value) {
+  return Number(clamp(value, 0, 100).toFixed(2));
+}
+
 function updateScreen() {
-  healthText.textContent = health;
-  hungerText.textContent = hunger;
-  energyText.textContent = energy;
+  healthText.textContent = formatStat(health);
+  hungerText.textContent = formatStat(hunger);
+  energyText.textContent = formatStat(energy);
 
 
   nicknameText.textContent = playerNickname;
+  
+  if (statusText) { statusText.textContent = getPlayerStatusText(); }
+
   regionText.textContent = t(playerRegion);
   professionText.textContent = playerProfession;
-  // const experienceText = document.getElementById("experience");
-  // experienceText.textContent = playerXP + " XP";
+  
 
-healthFill.style.width = `${clamp(Number(health), 0, 100)}%`;
-hungerFill.style.width = `${clamp(Number(hunger), 0, 100)}%`;
-energyFill.style.width = `${clamp(Number(energy), 0, 100)}%`;
+  healthFill.style.width = `${formatStat(health)}%`;
+  hungerFill.style.width = `${formatStat(hunger)}%`;
+  energyFill.style.width = `${formatStat(energy)}%`;
 
-healthIconFill.style.setProperty("--empty", 100 - clamp(health, 0, 100) + "%");
-hungerIconFill.style.setProperty("--empty", 100 - clamp(hunger, 0, 100) + "%");
-energyIconFill.style.setProperty("--empty", 100 - clamp(energy, 0, 100) + "%");
+  healthIconFill.style.setProperty("--empty", 100 - formatStat(health) + "%");
+  hungerIconFill.style.setProperty("--empty", 100 - formatStat(hunger) + "%");
+  energyIconFill.style.setProperty("--empty", 100 - formatStat(energy) + "%");
 }
 
 function showMessage(message, type = "warning") {
@@ -368,28 +381,6 @@ function getItemName(item) {
 
 function getAreaName(area) {
   return t(area.nameKey);
-}
-
-function updateStatusText() {
-  statusText.textContent = t(currentStatus.key, currentStatus.replacements);
-}
-
-function setAwakeStatus() {
-  currentStatus = {
-    key: "statusAwake",
-    replacements: {}
-  };
-  updateStatusText();
-}
-
-function setSleepingStatus(remainingHours) {
-  currentStatus = {
-    key: "statusSleeping",
-    replacements: {
-      hours: remainingHours
-    }
-  };
-  updateStatusText();
 }
 
 function setupEquipmentDropZones() {
@@ -768,7 +759,6 @@ function applyLanguage() {
   }
 
   updateAreaOptions();
-  updateStatusText();
   updateInventoryScreen();
   updateEquipmentScreen();
   updateLanguageButtons();
