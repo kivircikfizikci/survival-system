@@ -112,7 +112,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 45,
-    fleeEnergyCost: 8,
     failedFightDamage: 12,
     fightToolBonuses: {
       knife: 15,
@@ -136,7 +135,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 32,
-    fleeEnergyCost: 12,
     failedFightDamage: 20,
     fightToolBonuses: {
       knife: 12,
@@ -161,7 +159,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 35,
-    fleeEnergyCost: 10,
     failedFightDamage: 18,
     fightToolBonuses: {
       knife: 8,
@@ -185,7 +182,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 42,
-    fleeEnergyCost: 7,
     failedFightDamage: 10,
     fightToolBonuses: {
       knife: 20,
@@ -208,7 +204,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 12,
-    fleeEnergyCost: 18,
     failedFightDamage: 40,
     fightToolBonuses: {
       knife: 5,
@@ -234,7 +229,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 18,
-    fleeEnergyCost: 16,
     failedFightDamage: 32,
     fightToolBonuses: {
       knife: 5,
@@ -281,7 +275,6 @@ const encounterDatabase = {
     canHunt: false,
     canFight: true,
     fightChance: 50,
-    fleeEnergyCost: 6,
     failedFightDamage: 4,
     fightToolBonuses: {
       knife: 20,
@@ -623,6 +616,10 @@ function huntPendingEncounter() {
     return;
   }
 
+  if (!payDiscoveryActionCost("hunt")) {
+    return;
+  }
+
   const toolStillAvailable =
     applySelectedHuntToolDurabilityCost(encounterData);
 
@@ -875,15 +872,13 @@ function fleePendingEncounter() {
   const encounter = discoveryState.pendingEncounter;
   const encounterData = encounterDatabase[encounter.id];
 
-  const energyCost = encounterData.fleeEnergyCost || 5;
-  const currentEnergy = getMainCharacterStat("energy");
-
-  if (currentEnergy < energyCost) {
-    addDiscoveryLog(t("notEnoughEnergyToFlee"));
+  if (!encounterData || !encounterData.canFight) {
     return;
   }
 
-  updateMainCharacterStat("energy", -energyCost);
+  if (!payDiscoveryActionCost("flee")) {
+    return;
+  }
 
   discoveryState.pendingEncounter = null;
   discoveryState.selectedFightTool = null;
@@ -925,6 +920,10 @@ function fightPendingEncounter() {
   const encounterData = encounterDatabase[encounter.id];
 
   if (!encounterData || !encounterData.canFight) {
+    return;
+  }
+
+  if (!payDiscoveryActionCost("fight")) {
     return;
   }
 

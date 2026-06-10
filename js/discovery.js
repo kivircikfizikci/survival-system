@@ -36,6 +36,18 @@ function movePlayerTo(x, y) {
     return;
   }
 
+  const targetTileId = getTileId(x, y);
+  const targetTileData = getTileSpecialData(targetTileId);
+
+  const moveCostType = targetTileData.requiredItem &&
+    targetTileData.requiredItem.requiredItemId === "makeshiftRaft"
+      ? "raftMove"
+      : "move";
+
+  if (!payDiscoveryActionCost(moveCostType)) {
+    return;
+  }
+
   discoveryState.x = x;
   discoveryState.y = y;
 

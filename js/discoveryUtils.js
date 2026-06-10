@@ -337,3 +337,74 @@ if (elapsedTicks <= 0) {
 
   return true;
 }
+
+function canPayDiscoveryActionCost(actionType) {
+  const actionCost = gameConfig.actionCosts[actionType];
+
+  if (!actionCost) {
+    return true;
+  }
+
+  const saveData = getMainSaveDataForDiscovery();
+
+  if (!saveData) {
+    return true;
+  }
+
+  const currentEnergy = Number(saveData.energy ?? 100);
+  const currentHunger = Number(saveData.hunger ?? 100);
+
+  if (currentEnergy < (actionCost.energy || 0)) {
+    addDiscoveryLog(t("actionTooTiring"));
+    return false;
+  }
+
+  if (currentHunger < (actionCost.hunger || 0)) {
+    addDiscoveryLog(t("actionTooHungry"));
+    return false;
+  }
+
+  return true;
+}
+
+function payDiscoveryActionCost(actionType) {
+  const actionCost = gameConfig.actionCosts[actionType];
+  
+
+  if (!actionCost) {
+    return true;
+  }
+
+  const saveData = getMainSaveData();
+
+  if (!saveData) {
+    return true;
+  }
+
+  const currentEnergy = Number(saveData.energy ?? 100);
+  const currentHunger = Number(saveData.hunger ?? 100);
+
+  if (currentEnergy < (actionCost.energy || 0)) {
+    addDiscoveryLog(t("actionTooTiring"));
+    return false;
+  }
+
+  if (currentHunger < (actionCost.hunger || 0)) {
+    addDiscoveryLog(t("actionTooHungry"));
+    return false;
+  }
+
+  saveData.energy = Math.max(
+    0,
+    Math.min(100, Number((currentEnergy - (actionCost.energy || 0)).toFixed(2)))
+  );
+
+  saveData.hunger = Math.max(
+    0,
+    Math.min(100, Number((currentHunger - (actionCost.hunger || 0)).toFixed(2)))
+  );
+  
+  saveMainSaveData(saveData);
+
+  return true;
+}

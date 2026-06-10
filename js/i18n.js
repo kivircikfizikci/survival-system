@@ -273,6 +273,10 @@ const translations = {
     weak: "Weak",
     cannotMoveSleeping: "You cannot move while sleeping.",
     sleepingDiscoveryNotice: "You are sleeping. You cannot move until you wake up.",
+    notEnoughEnergy: "You do not have enough energy.",
+    notEnoughHunger: "You are too hungry to do this.",
+    actionTooTiring: "You are too tired to do this.",
+    actionTooHungry: "You are too hungry to do this.",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -546,6 +550,10 @@ const translations = {
     weak: "Zayıf",
     cannotMoveSleeping: "Uyurken hareket edemezsin.",
     sleepingDiscoveryNotice: "Uyuyorsun. Dinlenme bitene kadar hareket edemezsin.",
+    notEnoughEnergy: "Bunun için yeterli enerjin yok.",
+    notEnoughHunger: "Bunu yapmak için çok açsın.",
+    actionTooTiring: "Bunu yapamayacak kadar yorgunsun.",
+    actionTooHungry: "Bunu yapamayacak kadar açsın."
   }
 };
 

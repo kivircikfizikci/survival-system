@@ -8,7 +8,34 @@ const regionBackgrounds = {
 };
 
 const gameConfig = {
-  sleepTickMs: 3000
+  sleepTickMs: 30000,
+
+  actionCosts: {
+    move: {
+      energy: 0.2,
+      hunger: 0.1
+    },
+
+    raftMove: {
+      energy: 0.4,
+      hunger: 0.15
+    },
+
+    hunt: {
+      energy: 3,
+      hunger: 2
+    },
+
+    fight: {
+      energy: 6,
+      hunger: 3
+    },
+
+    flee: {
+      energy: 5,
+      hunger: 2
+    }
+  }
 };
 
 function getSavedDiscoveryMapId() {
