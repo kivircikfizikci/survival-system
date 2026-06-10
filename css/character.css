@@ -35,11 +35,11 @@
 }
 
 .hunger strong {
-  color: #fb923c;
+  color: #3cfb88;
 }
 
 .energy strong {
-  color: #60a5fa;
+  color: #fae560;
 }
 
 .profile-top {
@@ -160,11 +160,11 @@
 }
 
 .status-card.hunger {
-  color: #fb923c;
+  color: #3cfb88;
 }
 
 .status-card.energy {
-  color: #60a5fa;
+  color: #fae560;
 }
 
 .meter-track {
@@ -188,12 +188,14 @@
 }
 
 .status-card.hunger .meter-fill {
-  background: linear-gradient(90deg, #fcd34d, #fb923c);
+  background: linear-gradient(90deg, #97f1bb, #3cfb88);
 }
 
 .status-card.energy .meter-fill {
-  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+  background: linear-gradient(90deg, #eee5a8, #fae560);
 }
+
+
 
 .status-card strong {
   font-size: 1.8rem;
