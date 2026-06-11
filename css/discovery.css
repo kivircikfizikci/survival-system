@@ -251,7 +251,6 @@ body {
   pointer-events: none;
 }
 
-
 .map-controls-overlay {
   position: absolute;
   right: 12px;
@@ -387,6 +386,11 @@ body {
 .found-loot-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.found-loot-list {
+  display: grid;
   gap: 8px;
 }
 

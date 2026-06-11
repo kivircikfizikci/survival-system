@@ -137,10 +137,19 @@ function updateTileActionPanel() {
 
   tileActions.innerHTML = "";
 
-  if (discoveryState.pendingLoot) {
-    const item = itemsDatabase[discoveryState.pendingLoot.itemId];
+  const pendingLootItems = getPendingLootItems();
 
-    if (item) {
+  if (pendingLootItems.length > 0) {
+    const lootList = document.createElement("div");
+    lootList.classList.add("found-loot-list");
+
+    for (let lootItem of pendingLootItems) {
+      const item = itemsDatabase[lootItem.itemId];
+
+      if (!item) {
+        continue;
+      }
+
       const lootCard = document.createElement("div");
       lootCard.classList.add("found-loot-card");
 
@@ -154,29 +163,32 @@ function updateTileActionPanel() {
       title.textContent = getDiscoveryItemName(item);
 
       const quantity = document.createElement("span");
-      quantity.textContent = "x" + discoveryState.pendingLoot.quantity;
+      quantity.textContent = "x" + lootItem.quantity;
 
       info.append(title, quantity);
       lootCard.append(image, info);
 
-      const actions = document.createElement("div");
-      actions.classList.add("found-loot-actions");
-
-      const takeButton = document.createElement("button");
-      takeButton.type = "button";
-      takeButton.classList.add("tile-action-button");
-      takeButton.textContent = t("take");
-      takeButton.addEventListener("click", takePendingLoot);
-
-      const leaveButton = document.createElement("button");
-      leaveButton.type = "button";
-      leaveButton.classList.add("tile-action-button", "secondary");
-      leaveButton.textContent = t("leave");
-      leaveButton.addEventListener("click", leavePendingLoot);
-
-      actions.append(takeButton, leaveButton);
-      tileActions.append(lootCard, actions);
+      lootList.appendChild(lootCard);
     }
+
+    const actions = document.createElement("div");
+    actions.classList.add("found-loot-actions");
+
+    const takeButton = document.createElement("button");
+    takeButton.type = "button";
+    takeButton.classList.add("tile-action-button");
+    takeButton.textContent = t("take");
+    takeButton.addEventListener("click", takePendingLoot);
+
+    const leaveButton = document.createElement("button");
+    leaveButton.type = "button";
+    leaveButton.classList.add("tile-action-button", "secondary");
+    leaveButton.textContent = t("leave");
+    leaveButton.addEventListener("click", leavePendingLoot);
+
+    actions.append(takeButton, leaveButton);
+
+    tileActions.append(lootList, actions);
   }
 
   if (discoveryState.pendingEncounter) {

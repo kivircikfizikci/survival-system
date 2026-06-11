@@ -17,7 +17,7 @@ const encounterDatabase = {
     lootTable: [
       { itemId: "rabbitMeat", chance: 55, quantity: 1 },
       { itemId: "rabbitFur", chance: 35, quantity: 1 },
-      { itemId: "smallBones", chance: 20, quantity: 2 }
+      { itemId: "smallBones", chance: 20, quantityMin: 1, quantityMax: 2 }
     ]
   },
 
@@ -37,9 +37,9 @@ const encounterDatabase = {
       knife: 4
     },
     lootTable: [
-      { itemId: "rawMeat", chance: 70, quantity: 2 },
-      { itemId: "animalHide", chance: 45, quantity: 1 },
-      { itemId: "animalBone", chance: 28, quantity: 1 }
+      { itemId: "rawMeat", chance: 80, quantityMin: 1, quantityMax: 3 },
+      { itemId: "animalHide", chance: 55, quantity: 1 },
+      { itemId: "animalBone", chance: 35, quantityMin: 1, quantityMax: 2 }
     ]
   },
 
@@ -59,7 +59,7 @@ const encounterDatabase = {
       knife: 1
     },
     lootTable: [
-      { itemId: "feather", chance: 75, quantity: 1 }
+      { itemId: "feather", chance: 75, quantityMin: 1, quantityMax: 3 }
     ]
   },
 
@@ -79,8 +79,9 @@ const encounterDatabase = {
       knife: 4
     },
     lootTable: [
-      { itemId: "wool", chance: 55, quantity: 2 },
-      { itemId: "rawMeat", chance: 65, quantity: 2 }
+      { itemId: "wool", chance: 55, quantityMin: 1, quantityMax: 3 },
+      { itemId: "rawMeat", chance: 65, quantityMin: 1, quantityMax: 3},
+      { itemId: "animalBone", chance: 65, quantityMin: 1, quantityMax: 3},
     ]
   },
 
@@ -122,9 +123,9 @@ const encounterDatabase = {
       spear: 4
     },
     lootTable: [
-      { itemId: "rawMeat", chance: 35, quantity: 2 },
+      { itemId: "rawMeat", chance: 35, quantityMin: 1, quantityMax: 2 },
       { itemId: "animalHide", chance: 22, quantity: 1 },
-      { itemId: "animalBone", chance: 28, quantity: 2 }
+      { itemId: "animalBone", chance: 28, quantityMin: 1, quantityMax: 2 }
     ]
   },
 
@@ -146,9 +147,9 @@ const encounterDatabase = {
     },
     lootTable: [
       { itemId: "wolfPelt", chance: 40, quantity: 1 },
-      { itemId: "rawMeat", chance: 45, quantity: 2 },
-      { itemId: "animalBone", chance: 30, quantity: 1 },
-      { itemId: "wolfTooth", chance: 18, quantity: 2 }
+      { itemId: "rawMeat", chance: 45, quantityMin: 1, quantityMax: 3 },
+      { itemId: "animalBone", chance: 30, quantityMin: 1, quantityMax: 2 },
+      { itemId: "wolfTooth", chance: 18, quantityMin: 1, quantityMax: 3 }
     ]
   },
 
@@ -170,8 +171,8 @@ const encounterDatabase = {
     },
     lootTable: [
       { itemId: "thickHide", chance: 45, quantity: 1 },
-      { itemId: "animalFat", chance: 35, quantity: 2 },
-      { itemId: "animalBone", chance: 30, quantity: 2 }
+      { itemId: "animalFat", chance: 35, quantityMin: 1, quantityMax: 2 },
+      { itemId: "animalBone", chance: 30, quantityMin: 1, quantityMax: 2 }
     ]
   },
 
@@ -193,7 +194,7 @@ const encounterDatabase = {
     },
     lootTable: [
       { itemId: "venomSac", chance: 30, quantity: 1 },
-      { itemId: "snakeSkin", chance: 45, quantity: 1 }
+      { itemId: "snakeSkin", chance: 45, quantityMin: 1, quantityMax: 2 }
     ]
   },
 
@@ -215,10 +216,10 @@ const encounterDatabase = {
     },
     lootTable: [
       { itemId: "bearPelt", chance: 35, quantity: 1 },
-      { itemId: "bearClaw", chance: 20, quantity: 1 },
-      { itemId: "animalFat", chance: 45, quantity: 2 },
-      { itemId: "animalBone", chance: 30, quantity: 2 },
-      { itemId: "rawMeat", chance: 65, quantity: 4 }
+      { itemId: "bearClaw", chance: 20, quantityMin: 1, quantityMax: 2 },
+      { itemId: "animalFat", chance: 45, quantityMin: 1, quantityMax: 3 },
+      { itemId: "animalBone", chance: 30, quantityMin: 1, quantityMax: 3 },
+      { itemId: "rawMeat", chance: 65, quantityMin: 2, quantityMax: 6 }
     ]
   },
 
@@ -240,9 +241,9 @@ const encounterDatabase = {
     },
     lootTable: [
       { itemId: "scalyHide", chance: 45, quantity: 1 },
-      { itemId: "animalFat", chance: 35, quantity: 2 },
-      { itemId: "animalBone", chance: 30, quantity: 2 },
-      { itemId: "rawMeat", chance: 60, quantity: 2 }
+      { itemId: "animalFat", chance: 35, quantityMin: 1, quantityMax: 2 },
+      { itemId: "animalBone", chance: 30, quantityMin: 2, quantityMax: 4 },
+      { itemId: "rawMeat", chance: 60, quantityMin: 2, quantityMax: 3 }
     ]
   },
 
@@ -286,7 +287,7 @@ const encounterDatabase = {
     },
 
     lootTable: [
-      { itemId: "spiderSilk", chance: 45, quantity: 1 }
+      { itemId: "spiderSilk", chance: 45, quantityMin: 1, quantityMax: 2 }
     ]
   }
 };
@@ -380,26 +381,55 @@ function getEncounterDescription(encounter) {
   return t("encounterSomethingNearby");
 }
 
-function rollEncounterLoot(encounterData) {
-  if (!encounterData || !encounterData.lootTable) {
-    return null;
+function getLootEntryQuantity(lootEntry) {
+  if (
+    typeof lootEntry.quantityMin === "number" &&
+    typeof lootEntry.quantityMax === "number"
+  ) {
+    return Math.floor(
+      Math.random() *
+        (lootEntry.quantityMax - lootEntry.quantityMin + 1)
+    ) + lootEntry.quantityMin;
   }
 
-  let roll = Math.random() * 100;
-  let cumulativeChance = 0;
+  return lootEntry.quantity || 1;
+}
 
-  for (let lootEntry of encounterData.lootTable) {
-    cumulativeChance += lootEntry.chance;
+function rollMultipleLootFromTable(lootTable) {
+  if (!lootTable) {
+    return [];
+  }
 
-    if (roll <= cumulativeChance) {
-      return {
+  const lootResults = [];
+
+  for (let lootEntry of lootTable) {
+    const roll = Math.random() * 100;
+
+    if (roll <= lootEntry.chance) {
+      lootResults.push({
         itemId: lootEntry.itemId,
-        quantity: lootEntry.quantity || 1
-      };
+        quantity: getLootEntryQuantity(lootEntry)
+      });
     }
   }
 
-  return null;
+  return lootResults;
+}
+
+function rollEncounterLoot(encounterData) {
+  if (!encounterData || !encounterData.lootTable) {
+    return [];
+  }
+
+  return rollMultipleLootFromTable(encounterData.lootTable);
+}
+
+function rollFightLoot(encounterData) {
+  if (!encounterData || !encounterData.lootTable) {
+    return [];
+  }
+
+  return rollMultipleLootFromTable(encounterData.lootTable);
 }
 
 function getAvailableHuntTools(encounterData) {
@@ -645,11 +675,12 @@ if (huntRoll > finalHuntChance) {
     return;
   }
 
-  const lootResult = rollEncounterLoot(encounterData);
+  const lootResults = rollEncounterLoot(encounterData);
 
   discoveryState.pendingEncounter = null;
+  discoveryState.selectedHuntTool = null;
 
-  if (!lootResult) {
+  if (lootResults.length === 0) {
     addDiscoveryLog(t("huntSucceededNoLoot"));
 
     saveDiscoveryState();
@@ -660,8 +691,7 @@ if (huntRoll > finalHuntChance) {
 
   discoveryState.pendingLoot = {
     tileId: encounter.tileId,
-    itemId: lootResult.itemId,
-    quantity: lootResult.quantity
+    items: lootResults
   };
 
   addDiscoveryLog(t("huntSucceeded"));
@@ -957,9 +987,9 @@ function fightPendingEncounter() {
     return;
   }
 
-  const lootResult = rollFightLoot(encounterData);
+  const lootResults = rollFightLoot(encounterData);
 
-  if (!lootResult) {
+  if (lootResults.length === 0) {
     addDiscoveryLog(t("fightSucceededNoLoot"));
 
     saveDiscoveryState();
@@ -970,8 +1000,7 @@ function fightPendingEncounter() {
 
   discoveryState.pendingLoot = {
     tileId: encounter.tileId,
-    itemId: lootResult.itemId,
-    quantity: lootResult.quantity
+    items: lootResults
   };
 
   addDiscoveryLog(t("fightSucceeded"));

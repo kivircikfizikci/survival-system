@@ -142,7 +142,7 @@ function loadGame() {
   restoreEquipment(saveData.equipment);
   restoreCraftSlots(saveData.craftSlots);
 
-  if (saveData.discoveredRecipes) {
+  if (Array.isArray(saveData.discoveredRecipes)) {
     discoveredRecipes = saveData.discoveredRecipes;
   }
 

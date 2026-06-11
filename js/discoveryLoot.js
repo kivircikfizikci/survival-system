@@ -133,36 +133,222 @@ function addLootToMainInventory(itemId, quantity) {
   return false;
 }
 
-function takePendingLoot() {
-  if (!discoveryState.pendingLoot) {
-    return;
-  }
-
+function getPendingLootItems() {
   const pendingLoot = discoveryState.pendingLoot;
-  const item = itemsDatabase[pendingLoot.itemId];
 
-  if (!item) {
-    discoveryState.pendingLoot = null;
-    updateTileActionPanel();
+  if (!pendingLoot) {
+    return [];
+  }
+
+  if (Array.isArray(pendingLoot)) {
+    return pendingLoot;
+  }
+
+  if (Array.isArray(pendingLoot.items)) {
+    return pendingLoot.items;
+  }
+
+  if (pendingLoot.itemId) {
+    return [pendingLoot];
+  }
+
+  return [];
+}
+
+function getLootText(lootItems) {
+  return lootItems
+    .map(function (lootItem) {
+      const item = itemsDatabase[lootItem.itemId];
+
+      if (!item) {
+        return lootItem.itemId + " x" + lootItem.quantity;
+      }
+
+      return getDiscoveryItemName(item) + " x" + lootItem.quantity;
+    })
+    .join(", ");
+}
+
+function simulateAddLootItemsToInventory(saveData, lootItems) {
+  if (!saveData || !saveData.inventory) {
+    return null;
+  }
+
+  const inventoryItems = JSON.parse(
+    JSON.stringify(saveData.inventory.items || [])
+  );
+
+  const maxWeight = saveData.inventory.maxWeight || 0;
+
+  const currentWeight = getSaveInventoryWeight(inventoryItems);
+
+  const addedWeight = lootItems.reduce(function (total, lootItem) {
+    const databaseItem = itemsDatabase[lootItem.itemId];
+
+    if (!databaseItem) {
+      return total;
+    }
+
+    return total + (databaseItem.weight || 0) * (lootItem.quantity || 1);
+  }, 0);
+
+  if (currentWeight + addedWeight > maxWeight) {
+    return null;
+  }
+
+  for (let lootItem of lootItems) {
+    const databaseItem = itemsDatabase[lootItem.itemId];
+
+    if (!databaseItem) {
+      return null;
+    }
+
+    let quantity = lootItem.quantity || 1;
+    const maxStack = databaseItem.maxStack || 1;
+
+    for (let item of inventoryItems) {
+      if (
+        item !== null &&
+        item.id === lootItem.itemId &&
+        item.quantity < maxStack
+      ) {
+        const availableSpace = maxStack - item.quantity;
+        const moveAmount = Math.min(availableSpace, quantity);
+
+        item.quantity += moveAmount;
+        quantity -= moveAmount;
+
+        if (quantity <= 0) {
+          break;
+        }
+      }
+    }
+
+    while (quantity > 0) {
+      const emptySlotIndex = inventoryItems.findIndex(function (item) {
+        return item === null;
+      });
+
+      if (emptySlotIndex === -1) {
+        return null;
+      }
+
+      const moveAmount = Math.min(maxStack, quantity);
+
+      inventoryItems[emptySlotIndex] = {
+        ...databaseItem,
+        quantity: moveAmount
+      };
+
+      quantity -= moveAmount;
+    }
+  }
+
+  return inventoryItems;
+}
+
+function unlockRecipesFromLoot(saveData, lootItems) {
+  if (!saveData) {
     return;
   }
 
-  const added = addLootToMainInventory(
-    pendingLoot.itemId,
-    pendingLoot.quantity
+  if (!saveData.discoveredRecipes) {
+    saveData.discoveredRecipes = [];
+  }
+
+  const lootItemIds = lootItems.map(function (lootItem) {
+    return lootItem.itemId;
+  });
+
+  for (let recipeId in recipesDatabase) {
+    const recipe = recipesDatabase[recipeId];
+
+    if (!recipe || recipe.isPublic) {
+      continue;
+    }
+
+    if (saveData.discoveredRecipes.includes(recipe.id)) {
+      continue;
+    }
+
+    const ingredientIds = recipe.ingredients
+      ? Object.keys(recipe.ingredients)
+      : [];
+
+    const requiredToolIds = recipe.requiredTools
+      ? Object.keys(recipe.requiredTools)
+      : [];
+
+    const unlockItemIds = [
+      ...ingredientIds,
+      ...requiredToolIds
+    ];
+
+    const shouldUnlock = lootItemIds.some(function (itemId) {
+      return unlockItemIds.includes(itemId);
+    });
+
+    if (shouldUnlock) {
+      saveData.discoveredRecipes.push(recipe.id);
+    }
+  }
+}
+
+function addPendingLootItemsToMainInventory(lootItems) {
+  const saveData = getMainSaveData();
+
+  if (!saveData || !saveData.inventory) {
+    return false;
+  }
+
+  const newInventoryItems = simulateAddLootItemsToInventory(
+    saveData,
+    lootItems
   );
+
+  if (!newInventoryItems) {
+    return false;
+  }
+
+  saveData.inventory.items = newInventoryItems;
+
+  unlockRecipesFromLoot(saveData, lootItems);
+  saveMainSaveData(saveData);
+
+  return true;
+}
+
+function takePendingLoot() {
+  const pendingLootItems = getPendingLootItems();
+
+  if (pendingLootItems.length === 0) {
+    return;
+  }
+
+  const added = addPendingLootItemsToMainInventory(pendingLootItems);
 
   if (!added) {
     addDiscoveryLog(t("inventoryFullOrTooHeavy"));
     return;
   }
 
-  addDiscoveryLog(
-    t("pickedUpDiscoveryLoot", {
-      item: getDiscoveryItemName(item),
-      quantity: pendingLoot.quantity
-    })
-  );
+  if (pendingLootItems.length === 1) {
+    const lootItem = pendingLootItems[0];
+    const item = itemsDatabase[lootItem.itemId];
+
+    addDiscoveryLog(
+      t("pickedUpDiscoveryLoot", {
+        item: getDiscoveryItemName(item),
+        quantity: lootItem.quantity
+      })
+    );
+  } else {
+    addDiscoveryLog(
+      t("pickedUpDiscoveryLootList", {
+        items: getLootText(pendingLootItems)
+      })
+    );
+  }
 
   discoveryState.pendingLoot = null;
 
