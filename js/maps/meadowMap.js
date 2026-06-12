@@ -77,6 +77,7 @@ const meadowMap = {
         { itemId: "plantFiber", chance: 6, quantity: 1 },
         { itemId: "smallFlower", chance: 5, quantity: 1 },
         { itemId: "wildHerb", chance: 4, quantity: 1 },
+        { itemId: "reed", chance: 4 },
         { itemId: "pebble", chance: 4, quantity: 1 },
         { itemId: "flint", chance: 4, quantity: 1 },
         { itemId: "insect", chance: 3, quantity: 1 },

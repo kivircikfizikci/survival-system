@@ -96,6 +96,8 @@ function saveGame() {
     equipment: equipment,
     craftSlots: craftSlots,
 
+    completedGoals: completedGoals,
+
     regionWorkstations: regionWorkstations,
     playerShelter: playerShelter,
     discoveredRecipes: discoveredRecipes,
@@ -149,6 +151,10 @@ function loadGame() {
 
   if (Array.isArray(saveData.discoveredItems)) {
     discoveredItems = saveData.discoveredItems;
+  }
+
+  if (Array.isArray(saveData.completedGoals)) {
+    completedGoals = saveData.completedGoals;
   }
 
   if (saveData.currentLanguage) {

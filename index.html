@@ -165,7 +165,7 @@
       </section>
     </section>
 
- <section class="right-column">
+ <section class="right-column" aria-label="Crafting & Recipes">
 
     <section class="side-card shelter-card" id="shelterCard" hidden>
       <div class="side-card-header shelter-header">
@@ -229,6 +229,29 @@
     </section>
   </aside>
 
+      <section class="side-card log-card">
+      <div class="log-header">
+        <h2 data-i18n="log">Log</h2>
+      </div>
+
+      <div id="logList" class="log-list">
+        <p class="log-empty" data-i18n="logEmpty">No events yet.</p>
+      </div>
+    </section>
+
+    <section class="side-card goals-panel" id="goalsPanel">
+      <button type="button" class="goals-toggle" id="goalsToggle">
+        <span data-i18n="survivalGoals">Survival Goals</span>
+        <span class="goals-arrow" id="goalsArrow">▾</span>
+      </button>
+
+      <div class="goals-content" id="goalsContent">
+        <div id="goalsList" class="goals-list"></div>
+      </div>
+    </section>
+
+
+
   <aside class="info-side-panel" aria-label="Recipes and logs">
     <section class="side-card recipes-card" id="recipesPanel" hidden>
       <div class="recipes-header">
@@ -251,15 +274,6 @@
       <div class="recipe-list" id="recipeList"></div>
     </section>
 
-    <section class="side-card log-card">
-      <div class="log-header">
-        <h2 data-i18n="log">Log</h2>
-      </div>
-
-      <div id="logList" class="log-list">
-        <p class="log-empty" data-i18n="logEmpty">No events yet.</p>
-      </div>
-    </section>
   </aside>
       </div>
 

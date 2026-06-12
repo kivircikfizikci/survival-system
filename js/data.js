@@ -7,6 +7,25 @@ const regionBackgrounds = {
   abandonedVillage: "../img/abandonedVillage.png"
 };
 
+function getRegionNameById(regionId) {
+  const regionNameKeys = {
+    meadow: "meadow",
+    trail: "trail",
+    lake: "lake",
+    mountain: "mountain",
+    mine: "mine",
+    abandonedVillage: "abandonedVillage"
+  };
+
+  const nameKey = regionNameKeys[regionId];
+
+  if (nameKey) {
+    return t(nameKey);
+  }
+
+  return regionId || t("unknownRegion");
+}
+
 const gameConfig = {
   sleepTickMs: 30000,
 
@@ -71,6 +90,51 @@ function updateRegionBackground() {
     `url("${imagePath}")`
   );
 }
+
+const goalsDatabase = [
+  {
+    id: "craftGrassWrap",
+    textKey: "goalCraftGrassWrap",
+    type: "craftedItem",
+    itemId: "grassWrap"
+  },
+  {
+    id: "craftGrassTunic",
+    textKey: "goalCraftGrassTunic",
+    type: "craftedItem",
+    itemId: "grassTunic"
+  },
+  {
+    id: "craftGrassSatchel",
+    textKey: "goalCraftGrassSatchel",
+    type: "craftedItem",
+    itemId: "grassSatchel"
+  },
+  {
+    id: "craftStoneKnife",
+    textKey: "goalCraftStoneKnife",
+    type: "craftedItem",
+    itemId: "stoneKnife"
+  },
+  {
+    id: "craftStoneAxe",
+    textKey: "goalCraftStoneAxe",
+    type: "craftedItem",
+    itemId: "stoneAxe"
+  },
+  {
+    id: "craftLeafBed",
+    textKey: "goalCraftLeafBed",
+    type: "craftedItem",
+    itemId: "leafBed"
+  },
+  {
+    id: "reachTrail",
+    textKey: "goalReachTrail",
+    type: "reachedMap",
+    mapId: "trail"
+  }
+];
 
 const itemsDatabase = {
   // Basic & Natural Items

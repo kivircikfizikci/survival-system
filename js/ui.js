@@ -44,6 +44,12 @@ const recipeFilterButtons = document.querySelectorAll(".recipe-filter-btn");
 let selectedRecipeCategory = "basic";
 const recipeList = document.getElementById("recipeList");
 
+const goalsList = document.getElementById("goalsList");
+const goalsPanel = document.getElementById("goalsPanel");
+const goalsToggle = document.getElementById("goalsToggle");
+const goalsContent = document.getElementById("goalsContent");
+const goalsArrow = document.getElementById("goalsArrow");
+
 if (recipesBtn && recipesPanel && closeRecipesBtn) {
   recipesBtn.addEventListener("click", function () {
     recipesPanel.hidden = !recipesPanel.hidden;
@@ -390,6 +396,8 @@ function updateScreen() {
   healthIconFill.style.setProperty("--empty", 100 - formatStat(health) + "%");
   hungerIconFill.style.setProperty("--empty", 100 - formatStat(hunger) + "%");
   energyIconFill.style.setProperty("--empty", 100 - formatStat(energy) + "%");
+
+  updateGoalsPanel();
 }
 
 function showMessage(message, type = "warning") {
@@ -861,7 +869,7 @@ function updateShelterScreen() {
 
   if (
     playerShelter === null ||
-    playerShelter.regionId !== getCurrentRegionName()
+    playerShelter.regionId !== getCurrentRegionId()
   ) {
     shelterCard.hidden = true;
     return;
@@ -883,8 +891,9 @@ function updateShelterScreen() {
 
   shelterTitle.textContent = playerShelter.type;
 
-  shelterRegionText.textContent =
-    getAreaName(areasDatabase[playerShelter.regionId]);
+  if (playerShelter && shelterRegionText) {
+    shelterRegionText.textContent = getRegionNameById(playerShelter.regionId);
+  }
 
   shelterStorageText.textContent =
     usedSlots + " / " + playerShelter.storageSlots + " slots";
@@ -980,4 +989,116 @@ function updateShelterScreen() {
 
     shelterStorageGrid.appendChild(slot);
   }
+}
+
+function completeGoal(goalId) {
+  if (!goalId) {
+    return;
+  }
+
+  if (!completedGoals.includes(goalId)) {
+    completedGoals.push(goalId);
+  }
+}
+
+function isGoalCompleted(goalId) {
+  return completedGoals.includes(goalId);
+}
+
+function checkGoalsByCraftedItem(itemId) {
+  goalsDatabase.forEach(function (goal) {
+    if (goal.type !== "craftedItem") {
+      return;
+    }
+
+    if (goal.itemId === itemId) {
+      completeGoal(goal.id);
+    }
+  });
+}
+
+function getCurrentDiscoveryMapIdForGoals() {
+  const savedDiscoveryData = localStorage.getItem("survivalSystemDiscoverySave");
+
+  if (!savedDiscoveryData) {
+    return "meadow";
+  }
+
+  try {
+    const discoveryData = JSON.parse(savedDiscoveryData);
+    return discoveryData.currentMapId || "meadow";
+  } catch (error) {
+    return "meadow";
+  }
+}
+
+function checkGoalsByCurrentMap() {
+  const currentMapId = getCurrentDiscoveryMapIdForGoals();
+
+  goalsDatabase.forEach(function (goal) {
+    if (goal.type !== "reachedMap") {
+      return;
+    }
+
+    if (goal.mapId === currentMapId) {
+      completeGoal(goal.id);
+    }
+  });
+}
+
+function updateGoalsPanel() {
+  if (!goalsList) {
+    return;
+  }
+
+  checkGoalsByCurrentMap();
+
+  goalsList.innerHTML = "";
+
+  goalsDatabase.forEach(function (goal) {
+    const goalElement = document.createElement("div");
+    goalElement.classList.add("goal-item");
+
+    if (isGoalCompleted(goal.id)) {
+      goalElement.classList.add("goal-completed");
+    }
+
+    const checkbox = document.createElement("span");
+    checkbox.classList.add("goal-check");
+    checkbox.textContent = isGoalCompleted(goal.id) ? "✓" : "○";
+
+    const text = document.createElement("span");
+    text.classList.add("goal-text");
+    text.textContent = t(goal.textKey);
+
+    goalElement.append(checkbox, text);
+    goalsList.appendChild(goalElement);
+  });
+
+  updateGoalsPanelState();
+}
+
+let isGoalsPanelOpen = false;
+
+function updateGoalsPanelState() {
+  if (!goalsPanel || !goalsContent || !goalsArrow) {
+    return;
+  }
+
+  if (isGoalsPanelOpen) {
+    goalsPanel.classList.add("goals-open");
+    goalsContent.style.maxHeight = goalsContent.scrollHeight + "px";
+    goalsArrow.textContent = "▴";
+  } else {
+    goalsPanel.classList.remove("goals-open");
+    goalsContent.style.maxHeight = "0px";
+    goalsArrow.textContent = "▾";
+  }
+}
+
+if (goalsToggle) {
+  goalsToggle.addEventListener("click", function () {
+    isGoalsPanelOpen = !isGoalsPanelOpen;
+    updateGoalsPanelState();
+  });
 }

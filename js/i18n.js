@@ -281,6 +281,15 @@ const translations = {
     grassSatchel: "Grass Satchel",
     grassTunic: "Grass Tunic",
     grassWrap: "Grass Wrap",
+    survivalGoals: "Survival Goals",
+    goalCraftGrassWrap: "Craft a grass wrap",
+    goalCraftGrassTunic: "Craft a grass tunic",
+    goalCraftGrassSatchel: "Craft a grass satchel",
+    goalCraftStoneKnife: "Craft a stone knife",
+    goalCraftStoneAxe: "Craft a stone axe",
+    goalCraftLeafBed: "Craft a leaf bed",
+    goalReachTrail: "Reach the trail region",
+    unknownRegion: "Unknown region",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -562,6 +571,15 @@ const translations = {
     grassSatchel: "Ot Askılı Kese",
     grassTunic: "Ot Tunik",
     grassWrap: "Ot Bel Sargısı",
+    survivalGoals: "Hayatta Kalma Hedefleri",
+    goalCraftGrassWrap: "Ot bel sargısı üret",
+    goalCraftGrassTunic: "Ot tunik üret",
+    goalCraftGrassSatchel: "Ot askılı kese üret",
+    goalCraftStoneKnife: "Taş bıçak üret",
+    goalCraftStoneAxe: "Taş balta üret",
+    goalCraftLeafBed: "Yaprak yatak üret",
+    goalReachTrail: "Patika bölgesine ulaş",
+    unknownRegion: "Bilinmeyen bölge",
   }
 };
 

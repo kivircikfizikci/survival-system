@@ -1,8 +1,6 @@
 #Planlar..
 ---- Acil Yapılacak ----
-    Data.js düzeltmesi yapılacak!!!!
-
-    Kıyafetlerin Durabiltyleri olacak savaş gördükçe azalacak ve en sonunda scrap verecek.
+        Kıyafetlerin Durabiltyleri olacak savaş gördükçe azalacak ve en sonunda scrap verecek.
 
 ---- Kısa Zamanda ----
 Shelter System v2
@@ -20,5 +18,13 @@ Mine System v1.
 Fishing System v1.
     Fishing spot tile kısımlarında -> fishBait / spear / oldFishNet gibi itemlarla -> Fish roll atacağız -> fishMeat, fishOil, fishBone elde etcez.
 
+
+Görev Sistemi v1
+- Bir ot kıyafet üret
+- Bir çanta üret
+- Bir taş bıçak üret
+- Bir balta üret
+- Uyuyabileceğin bir yatak üret
+- Trail bölgesine geç
 
 

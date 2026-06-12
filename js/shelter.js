@@ -3,7 +3,7 @@ let draggedShelterSlotIndex = null;
 function createShelter() {
   playerShelter = {
     type: "Tent",
-    regionId: currentRegionId(),
+    regionId: getCurrentRegionId(),
     storageSlots: 16,
     maxWeight: 50,
     storageItems: Array(16).fill(null)

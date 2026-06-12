@@ -132,34 +132,11 @@ function removeRecipeIngredientGroups(recipe) {
 }
 
 function getCurrentRegionId() {
-  const savedDiscoveryData =
-    localStorage.getItem("survivalSystemDiscoverySave");
-
-  if (!savedDiscoveryData) {
-    return "meadow";
-  }
-
-  try {
-    const discoveryData = JSON.parse(savedDiscoveryData);
-
-    return discoveryData.currentMapId || "meadow";
-  } catch (error) {
-    console.error("Discovery region could not be loaded:", error);
-    return "meadow";
-  }
+  return playerRegion || "meadow";
 }
 
 function getCurrentRegionName() {
-  const currentRegionId = getCurrentRegionId();
-
-  if (
-    typeof areasDatabase !== "undefined" &&
-    areasDatabase[currentRegionId]
-  ) {
-    return getAreaName(areasDatabase[currentRegionId]);
-  }
-
-  return currentRegionId;
+  return getRegionNameById(getCurrentRegionId());
 }
 
 function getCurrentRegionWorkstations() {
@@ -820,6 +797,9 @@ function craftSelectedRecipe() {
   }
 
   discoverItem(craftedItem.id);
+
+  checkGoalsByCraftedItem(craftedItem.id);
+  updateGoalsPanel();
 
   updateCraftingScreen();
   updateInventoryScreen();
