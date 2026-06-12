@@ -99,6 +99,7 @@ function saveGame() {
     regionWorkstations: regionWorkstations,
     playerShelter: playerShelter,
     discoveredRecipes: discoveredRecipes,
+    discoveredItems: discoveredItems,
     currentLanguage: currentLanguage,
   };
 
@@ -144,6 +145,10 @@ function loadGame() {
 
   if (Array.isArray(saveData.discoveredRecipes)) {
     discoveredRecipes = saveData.discoveredRecipes;
+  }
+
+  if (Array.isArray(saveData.discoveredItems)) {
+    discoveredItems = saveData.discoveredItems;
   }
 
   if (saveData.currentLanguage) {

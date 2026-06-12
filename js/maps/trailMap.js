@@ -113,6 +113,7 @@ const trailMap = {
     { itemId: "dryGrass", chance: 5, quantity: 1 },
     { itemId: "insect", chance: 4, quantity: 1 },
     { itemId: "pebble", chance: 4, quantity: 1 },
+    { itemId: "flint", chance: 18, quantity: 1 },
     { itemId: "plantFiber", chance: 4, quantity: 1 },
     { itemId: "resin", chance: 2, quantity: 1 }
   ],
@@ -121,6 +122,7 @@ const trailMap = {
     { itemId: "stick", chance: 12, quantity: 1 },
     { itemId: "dryLeaf", chance: 16, quantity: 1 },
     { itemId: "pebble", chance: 18, quantity: 1 },
+    { itemId: "flint", chance: 15, quantity: 1 },
     { itemId: "insect", chance: 10, quantity: 1 },
     { itemId: "feather", chance: 6, quantity: 1 }
   ],

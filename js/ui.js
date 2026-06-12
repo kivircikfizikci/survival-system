@@ -86,7 +86,7 @@ function updateRecipesScreen() {
     ingredientsWrapper.classList.add("recipe-ingredients");
 
     const normalInputItems = {
-      ...recipe.ingredients,
+      ...(recipe.ingredients || {}),
       ...(recipe.requiredTools || {})
     };
 
@@ -138,6 +138,43 @@ function updateRecipesScreen() {
         addPlus();
       }
     });
+
+    if (recipe.ingredientGroups) {
+      for (let groupName in recipe.ingredientGroups) {
+        const groupData = recipe.ingredientGroups[groupName];
+
+        if (!groupData || !Array.isArray(groupData.itemIds)) {
+          continue;
+        }
+
+        const visibleItemIds = groupData.itemIds.filter(function (itemId) {
+          return itemsDatabase[itemId];
+        });
+
+        if (visibleItemIds.length === 0) {
+          continue;
+        }
+
+        if (ingredientsWrapper.children.length > 0) {
+          addPlus();
+        }
+
+        let cycleIndex = 0;
+
+        if (typeof recipeToolCycleIndex !== "undefined") {
+          cycleIndex = recipeToolCycleIndex;
+        }
+
+        const selectedGroupItemId =
+          visibleItemIds[cycleIndex % visibleItemIds.length];
+
+        addRecipeItem(
+          itemsDatabase[selectedGroupItemId],
+          groupData.amount || 1,
+          "recipe-ingredient-group"
+        );
+      }
+    }
 
     if (recipe.requiredToolGroups) {
       for (let groupName in recipe.requiredToolGroups) {

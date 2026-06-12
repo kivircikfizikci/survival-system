@@ -111,6 +111,7 @@ function addItem(item) {
     quantity: item.quantity || 1
   };
 
+  discoverItem(item.id);
   updateInventoryScreen();
   autoSave();
   return true;

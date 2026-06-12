@@ -1,6 +1,8 @@
 #Planlar..
 ---- Acil Yapılacak ----
-    Başlangıçtan ilerleyerek gelişme kısmı izlenecek.
+    Data.js düzeltmesi yapılacak!!!!
+
+    Kıyafetlerin Durabiltyleri olacak savaş gördükçe azalacak ve en sonunda scrap verecek.
 
 ---- Kısa Zamanda ----
 Shelter System v2

@@ -247,17 +247,58 @@ function simulateAddLootItemsToInventory(saveData, lootItems) {
   return inventoryItems;
 }
 
+function isRecipeDiscoveryConditionMetForSave(recipe, saveData) {
+  const discoveredItemList = Array.isArray(saveData.discoveredItems)
+    ? saveData.discoveredItems
+    : [];
+
+  const anyList = Array.isArray(recipe.discoverByAny)
+    ? recipe.discoverByAny
+    : [];
+
+  const allList = Array.isArray(recipe.discoverByAll)
+    ? recipe.discoverByAll
+    : [];
+
+  const hasAnyCondition = anyList.length > 0;
+  const hasAllCondition = allList.length > 0;
+
+  if (!hasAnyCondition && !hasAllCondition) {
+    return false;
+  }
+
+  const anyPassed =
+    !hasAnyCondition ||
+    anyList.some(function (itemId) {
+      return discoveredItemList.includes(itemId);
+    });
+
+  const allPassed =
+    !hasAllCondition ||
+    allList.every(function (itemId) {
+      return discoveredItemList.includes(itemId);
+    });
+
+  return anyPassed && allPassed;
+}
+
 function unlockRecipesFromLoot(saveData, lootItems) {
   if (!saveData) {
     return;
   }
 
-  if (!saveData.discoveredRecipes) {
+  if (!Array.isArray(saveData.discoveredItems)) {
+    saveData.discoveredItems = [];
+  }
+
+  if (!Array.isArray(saveData.discoveredRecipes)) {
     saveData.discoveredRecipes = [];
   }
 
-  const lootItemIds = lootItems.map(function (lootItem) {
-    return lootItem.itemId;
+  lootItems.forEach(function (lootItem) {
+    if (!saveData.discoveredItems.includes(lootItem.itemId)) {
+      saveData.discoveredItems.push(lootItem.itemId);
+    }
   });
 
   for (let recipeId in recipesDatabase) {
@@ -271,24 +312,7 @@ function unlockRecipesFromLoot(saveData, lootItems) {
       continue;
     }
 
-    const ingredientIds = recipe.ingredients
-      ? Object.keys(recipe.ingredients)
-      : [];
-
-    const requiredToolIds = recipe.requiredTools
-      ? Object.keys(recipe.requiredTools)
-      : [];
-
-    const unlockItemIds = [
-      ...ingredientIds,
-      ...requiredToolIds
-    ];
-
-    const shouldUnlock = lootItemIds.some(function (itemId) {
-      return unlockItemIds.includes(itemId);
-    });
-
-    if (shouldUnlock) {
+    if (isRecipeDiscoveryConditionMetForSave(recipe, saveData)) {
       saveData.discoveredRecipes.push(recipe.id);
     }
   }

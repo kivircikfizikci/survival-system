@@ -419,7 +419,7 @@ const translations = {
     recipeCategory_basic: "Temel",
     recipeCategory_medical: "Tibbi",
     recipeCategory_tools: "Aletler",
-    recipeCategory_smelting: "Smelting",
+    recipeCategory_smelting: "Döküm",
     recipeCategory_survival: "Hayatta Kalma",
     recipeCategory_cooking: "Yemek",
     recipeCategory_clothing: "Giysi",

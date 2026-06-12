@@ -421,3 +421,9 @@
   opacity: 0.45;
   filter: grayscale(1);
 }
+
+.recipe-ingredient-group {
+  border: 1px solid rgba(129, 86, 172, 0.518);
+  border-radius: 10px;
+  padding: 4px;
+}

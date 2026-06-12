@@ -78,6 +78,7 @@ const meadowMap = {
         { itemId: "smallFlower", chance: 5, quantity: 1 },
         { itemId: "wildHerb", chance: 4, quantity: 1 },
         { itemId: "pebble", chance: 4, quantity: 1 },
+        { itemId: "flint", chance: 4, quantity: 1 },
         { itemId: "insect", chance: 3, quantity: 1 },
         { itemId: "stick", chance: 3, quantity: 1 },
         { itemId: "feather", chance: 2, quantity: 1 }
@@ -110,7 +111,7 @@ const meadowMap = {
     ],
   },
 
-   encounterTiles: {
+  encounterTiles: {
     ...createEncounterTiles(
       [
         ...createTileRange("A1", "Z32"), 

@@ -8,6 +8,7 @@ let sleepIntervalId = null;
 let sleepSession = null;
 
 let discoveredRecipes = [];
+let discoveredItems = [];
 
 let playerShelter = null;
 

@@ -17,6 +17,120 @@ let regionWorkstations = {
   abandonedVillage: {}
 };
 
+function getInventoryItemCount(itemId) {
+  let count = 0;
+
+  inventory.items.forEach(function (item) {
+    if (item && item.id === itemId) {
+      count += item.quantity || 1;
+    }
+  });
+
+  return count;
+}
+
+function getIngredientGroupTotalCount(groupData) {
+  if (!groupData || !Array.isArray(groupData.itemIds)) {
+    return 0;
+  }
+
+  return groupData.itemIds.reduce(function (total, itemId) {
+    return total + getInventoryItemCount(itemId);
+  }, 0);
+}
+
+function hasEnoughIngredientGroups(recipe) {
+  if (!recipe.ingredientGroups) {
+    return true;
+  }
+
+  for (let groupName in recipe.ingredientGroups) {
+    const groupData = recipe.ingredientGroups[groupName];
+    const requiredAmount = groupData.amount || 1;
+    const totalAvailable = getIngredientGroupTotalCount(groupData);
+
+    if (totalAvailable < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function removeInventoryItemQuantity(itemId, amount) {
+  let remainingAmount = amount;
+
+  for (let slotIndex = 0; slotIndex < inventory.items.length; slotIndex++) {
+    const item = inventory.items[slotIndex];
+
+    if (!item || item.id !== itemId) {
+      continue;
+    }
+
+    const itemQuantity = item.quantity || 1;
+    const removeAmount = Math.min(itemQuantity, remainingAmount);
+
+    item.quantity = itemQuantity - removeAmount;
+    remainingAmount -= removeAmount;
+
+    if (item.quantity <= 0) {
+      inventory.items[slotIndex] = null;
+    }
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function removeIngredientGroupItems(groupData) {
+  if (!groupData || !Array.isArray(groupData.itemIds)) {
+    return false;
+  }
+
+  let remainingAmount = groupData.amount || 1;
+
+  for (let itemId of groupData.itemIds) {
+    const availableAmount = getInventoryItemCount(itemId);
+
+    if (availableAmount <= 0) {
+      continue;
+    }
+
+    const removeAmount = Math.min(availableAmount, remainingAmount);
+
+    removeInventoryItemQuantity(itemId, removeAmount);
+
+    remainingAmount -= removeAmount;
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function removeRecipeIngredientGroups(recipe) {
+  if (!recipe.ingredientGroups) {
+    return true;
+  }
+
+  for (let groupName in recipe.ingredientGroups) {
+    const groupData = recipe.ingredientGroups[groupName];
+
+    const removed = removeIngredientGroupItems(groupData);
+
+    if (!removed) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function getCurrentRegionId() {
   const savedDiscoveryData =
     localStorage.getItem("survivalSystemDiscoverySave");
@@ -90,6 +204,7 @@ if (hasWorkstation(workstationId)) {
     itemId: item.id
   };
 
+  discoverItem(workstationId);
   updateWorkstationScreen();
   autoSave();
 
@@ -121,6 +236,71 @@ function removeWorkstation(workstationId) {
   updateWorkstationScreen();
   updateInventoryScreen();
   autoSave();
+}
+
+function discoverItem(itemId) {
+  if (!itemId) {
+    return;
+  }
+
+  if (!discoveredItems.includes(itemId)) {
+    discoveredItems.push(itemId);
+  }
+
+  discoverRecipesFromKnownItems();
+}
+
+function hasDiscoveredItem(itemId) {
+  return discoveredItems.includes(itemId);
+}
+
+function isRecipeDiscoveryConditionMet(recipe) {
+  const anyList = Array.isArray(recipe.discoverByAny)
+    ? recipe.discoverByAny
+    : [];
+
+  const allList = Array.isArray(recipe.discoverByAll)
+    ? recipe.discoverByAll
+    : [];
+
+  const hasAnyCondition = anyList.length > 0;
+  const hasAllCondition = allList.length > 0;
+
+  if (!hasAnyCondition && !hasAllCondition) {
+    return false;
+  }
+
+  const anyPassed =
+    !hasAnyCondition ||
+    anyList.some(function (itemId) {
+      return hasDiscoveredItem(itemId);
+    });
+
+  const allPassed =
+    !hasAllCondition ||
+    allList.every(function (itemId) {
+      return hasDiscoveredItem(itemId);
+    });
+
+  return anyPassed && allPassed;
+}
+
+function discoverRecipesFromKnownItems() {
+  for (let recipeId in recipesDatabase) {
+    const recipe = recipesDatabase[recipeId];
+
+    if (!recipe || recipe.isPublic) {
+      continue;
+    }
+
+    if (discoveredRecipes.includes(recipe.id)) {
+      continue;
+    }
+
+    if (isRecipeDiscoveryConditionMet(recipe)) {
+      discoveredRecipes.push(recipe.id);
+    }
+  }
 }
 
 function isRecipeVisible(recipe) {
@@ -459,13 +639,46 @@ function applyToolDurabilityCost(recipe) {
   }
 }
 
-function getMatchingRecipe() {
-  const craftCounts = getCraftItemCounts();
+function hasEnoughNormalCraftIngredients(recipe) {
+  const ingredients = recipe.ingredients || {};
 
+  for (let itemId in ingredients) {
+    const requiredAmount = ingredients[itemId];
+    const availableAmount = getCraftSlotItemCount(itemId);
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function canCraftSlotsMatchRecipe(recipe) {
+  if (!hasEnoughNormalCraftIngredients(recipe)) {
+    return false;
+  }
+
+  if (!hasEnoughIngredientGroups(recipe)) {
+    return false;
+  }
+
+  return true;
+}
+
+function getMatchingRecipe() {
   for (let recipeId in recipesDatabase) {
     const recipe = recipesDatabase[recipeId];
 
-    if (isRecipeMatch(recipe, craftCounts)) {
+    if (!isRecipeVisible(recipe)) {
+      continue;
+    }
+
+    if (recipe.category !== selectedRecipeCategory) {
+      continue;
+    }
+
+    if (canCraftSlotsMatchRecipe(recipe)) {
       return recipe;
     }
   }
@@ -540,16 +753,22 @@ function moveItemBetweenContainers(
 }
 
 function craftSelectedRecipe() {
-    refreshBaseSleepState();
+  refreshBaseSleepState();
 
   if (isSleeping) {
     showMessage(t("cannotUseSleeping"));
     return;
   }
+
   const recipe = getMatchingRecipe();
 
   if (recipe === null) {
     showMessage(t("noMatchingRecipe"));
+    return;
+  }
+
+  if (!hasEnoughIngredientGroups(recipe)) {
+    showMessage(t("notEnoughIngredients"));
     return;
   }
 
@@ -578,7 +797,16 @@ function craftSelectedRecipe() {
     return;
   }
 
-  consumeCraftIngredients(recipe);
+  recipe.ingredients
+
+  if (!removeRecipeIngredientGroups(recipe)) {
+    showMessage(t("notEnoughIngredients"));
+    updateCraftingScreen();
+    updateInventoryScreen();
+    autoSave();
+    return;
+  }
+
   applyToolDurabilityCost(recipe);
 
   const added = addItem(craftedItem);
@@ -591,7 +819,7 @@ function craftSelectedRecipe() {
     return;
   }
 
-  checkRecipeDiscoveryByItem(craftedItem.id);
+  discoverItem(craftedItem.id);
 
   updateCraftingScreen();
   updateInventoryScreen();
@@ -601,19 +829,6 @@ function craftSelectedRecipe() {
   showMessage(message, "success");
   addLog(message, "success");
 
-  autoSave();
-}
-
-function checkRecipeDiscoveryByItem(itemId) {
-  const recipeIds = recipeDiscoveryRules[itemId];
-
-  if (!recipeIds) {
-    return;
-  }
-
-  for (let recipeId of recipeIds) {
-    discoverRecipe(recipeId);
-  }
   autoSave();
 }
 
@@ -636,7 +851,7 @@ function canAddItemToInventory(item) {
 }
 
 function consumeCraftIngredients(recipe) {
-  const neededIngredients = { ...recipe.ingredients };
+  const neededIngredients = { ...(recipe.ingredients || {}) };
 
   for (let i = 0; i < craftSlots.length; i++) {
     const item = craftSlots[i];
@@ -660,7 +875,6 @@ function consumeCraftIngredients(recipe) {
       craftSlots[i] = null;
     }
   }
-  autoSave();
 }
 
 function isItemInToolGroup(item, groupName) {
@@ -669,4 +883,118 @@ function isItemInToolGroup(item, groupName) {
   }
 
   return item.toolTags && item.toolTags.includes(groupName);
+}
+
+function getCraftSlotItemCount(itemId) {
+  let count = 0;
+
+  craftSlots.forEach(function (item) {
+    if (item && item.id === itemId) {
+      count += item.quantity || 1;
+    }
+  });
+
+  return count;
+}
+
+function getIngredientGroupCraftSlotTotal(groupData) {
+  if (!groupData || !Array.isArray(groupData.itemIds)) {
+    return 0;
+  }
+
+  return groupData.itemIds.reduce(function (total, itemId) {
+    return total + getCraftSlotItemCount(itemId);
+  }, 0);
+}
+
+function hasEnoughIngredientGroups(recipe) {
+  if (!recipe.ingredientGroups) {
+    return true;
+  }
+
+  for (let groupName in recipe.ingredientGroups) {
+    const groupData = recipe.ingredientGroups[groupName];
+    const requiredAmount = groupData.amount || 1;
+    const availableAmount = getIngredientGroupCraftSlotTotal(groupData);
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function removeCraftSlotItemQuantity(itemId, amount) {
+  let remainingAmount = amount;
+
+  for (let slotIndex = 0; slotIndex < craftSlots.length; slotIndex++) {
+    const item = craftSlots[slotIndex];
+
+    if (!item || item.id !== itemId) {
+      continue;
+    }
+
+    const itemQuantity = item.quantity || 1;
+    const removeAmount = Math.min(itemQuantity, remainingAmount);
+
+    item.quantity = itemQuantity - removeAmount;
+    remainingAmount -= removeAmount;
+
+    if (item.quantity <= 0) {
+      craftSlots[slotIndex] = null;
+    }
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function removeIngredientGroupItemsFromCraftSlots(groupData) {
+  if (!groupData || !Array.isArray(groupData.itemIds)) {
+    return false;
+  }
+
+  let remainingAmount = groupData.amount || 1;
+
+  for (let itemId of groupData.itemIds) {
+    const availableAmount = getCraftSlotItemCount(itemId);
+
+    if (availableAmount <= 0) {
+      continue;
+    }
+
+    const removeAmount = Math.min(availableAmount, remainingAmount);
+
+    removeCraftSlotItemQuantity(itemId, removeAmount);
+
+    remainingAmount -= removeAmount;
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function removeRecipeIngredientGroups(recipe) {
+  if (!recipe.ingredientGroups) {
+    return true;
+  }
+
+  for (let groupName in recipe.ingredientGroups) {
+    const groupData = recipe.ingredientGroups[groupName];
+
+    const removed = removeIngredientGroupItemsFromCraftSlots(groupData);
+
+    if (!removed) {
+      return false;
+    }
+  }
+
+  return true;
 }

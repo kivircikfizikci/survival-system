@@ -91,7 +91,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/pebble.png",
     weight: 0.2,
-    maxStack: 4,
+    maxStack: 4
   },
   dryWood: {
     id: "dryWood",
@@ -109,7 +109,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/insect.png",
     weight: 0.1,
-    maxStack: 16 
+    maxStack: 16
   },
   reed: {
     id: "reed",
@@ -139,6 +139,16 @@ const itemsDatabase = {
     maxStack: 1,
     hungerRestore: 2
   },
+  fish: {
+    id: "fish",
+    nameKey: "fish",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/fish.png",
+    weight: 0.4,
+    maxStack: 4,
+    hungerRestore: 20
+  },
   frog: {
     id: "frog",
     nameKey: "frog",
@@ -156,7 +166,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/clay.png",
     weight: 0.3,
-    maxStack: 4
+    maxStack: 8
   },
   branch: {
     id: "branch",
@@ -166,7 +176,7 @@ const itemsDatabase = {
     imageSrc: "img/branch.png",
     weight: 1,
     maxStack: 2
-   },
+  },
   mushroom: {
     id: "mushroom",
     nameKey: "mushroom",
@@ -183,8 +193,8 @@ const itemsDatabase = {
     type: "material",
     category: "natural",
     imageSrc: "img/rope.png",
-    weight: 0.4,
-    maxStack: 4
+    weight: 0.25,
+    maxStack: 8
   },
   dryGrass: {
     id: "dryGrass",
@@ -328,7 +338,7 @@ const itemsDatabase = {
     type: "material",
     category: "resource",
     imageSrc: "img/copperOre.png",
-    weight: 1.0,
+    weight: 1,
     maxStack: 1
   },
   salt: {
@@ -355,8 +365,8 @@ const itemsDatabase = {
     type: "material",
     category: "resource",
     imageSrc: "img/woodLog.png",
-    weight: 2.5,
-    maxStack: 1
+    weight: 2,
+    maxStack: 2
   },
   charcoal: {
     id: "charcoal",
@@ -364,7 +374,7 @@ const itemsDatabase = {
     type: "material",
     category: "resource",
     imageSrc: "img/charcoal.png",
-    weight: 1.5,
+    weight: 0.4,
     maxStack: 8
   },
   leather: {
@@ -620,7 +630,7 @@ const itemsDatabase = {
     maxStack: 1,
     extraSlots: 4,
     extraWeight: 3
-    },
+  },
   // Medical Items
   bandage: {
     id: "bandage",
@@ -1450,6 +1460,44 @@ const itemsDatabase = {
     weight: 0.05,
     maxStack: 20
   },
+  animalBone: {
+    id: "animalBone",
+    nameKey: "animalBone",
+    type: "material",
+    category: "animal",
+    imageSrc: "img/animalBone.png",
+    weight: 0.3,
+    maxStack: 4
+  },
+  animalHide: {
+    id: "animalHide",
+    nameKey: "animalHide",
+    type: "material",
+    category: "animal",
+    imageSrc: "img/animalHide.png",
+    weight: 0.8,
+    maxStack: 2
+  },
+  honeycomb: {
+    id: "honeycomb",
+    nameKey: "honeycomb",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/honeycomb.png",
+    weight: 0.15,
+    maxStack: 4,
+    hungerRestore: 10
+  },
+  rawMeat: {
+    id: "rawMeat",
+    nameKey: "rawMeat",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/rawMeat.png",
+    weight: 0.6,
+    maxStack: 4,
+    hungerRestore: 8
+  },
   // Vehicle
   makeshiftRaft: {
     id: "makeshiftRaft",
@@ -1462,134 +1510,6 @@ const itemsDatabase = {
   },
 };
 
-const areasDatabase = {
-  meadow: {
-    nameKey: "meadow",
-    loot: [
-      { itemId: "dryGrass", chance: 35 },
-      { itemId: "plantFiber", chance: 30 },
-      { itemId: "blackberry", chance: 25 },
-      { itemId: "insect", chance: 20 },
-      { itemId: "dryLeaf", chance: 20 },
-      { itemId: "pebble", chance: 15 },
-      { itemId: "wildHerb", chance: 10 },
-      { itemId: "smallFlower", chance: 15 },
-      { itemId: "honeycomb", chance: 5 }
-    ]
-  },
-  lake: {
-    nameKey: "lake",
-    loot: [
-      { itemId: "freshWater", chance: 35 },
-      { itemId: "reed", chance: 30 },
-      { itemId: "clay", chance: 98, requiredToolGroups: "shovel", toolDurabilityCost: 4 },
-      { itemId: "pebble", chance: 15 },
-      { itemId: "frog", chance: 12 },
-      { itemId: "fish", chance: 8 },
-      { itemId: "oldFishNet", chance: 5 },
-      { itemId: "plasticBottle", chance: 5 },
-      { itemId: "worm", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 4 },
-      { itemId: "snail", chance: 10 }
-    ]
-  },
-  trail: {
-    nameKey: "trail",
-    loot: [
-      { itemId: "stick", chance: 35 },
-      { itemId: "branch", chance: 28 },
-      { itemId: "dryWood", chance: 22 },
-      { itemId: "dryLeaf", chance: 20 },
-      { itemId: "bark", chance: 18 },
-      { itemId: "pebble", chance: 15 },
-      { itemId: "mushroom", chance: 12 },
-      { itemId: "sharpStone", chance: 10 },
-      { itemId: "blackberry", chance: 10 },
-      { itemId: "insect", chance: 10 },
-      { itemId: "woodLog", chance: 90, requiredToolGroups: "axe", toolDurabilityCost: 8 },
-      { itemId: "pineCone", chance: 15 },
-      { itemId: "resin", chance: 6 },
-      { itemId: "animalBone", chance: 5 },
-      { itemId: "feather", chance: 5 }
-    ]
-  },
-  mountain: {
-    nameKey: "mountain",
-    loot: [
-      { itemId: "pebble", chance: 35 },
-      { itemId: "sharpStone", chance: 30 },
-      { itemId: "flint", chance: 18 },
-      { itemId: "salt", chance: 10, requiredToolGroups: "shovel", toolDurabilityCost: 4 },
-      { itemId: "obsidianShard", chance: 8, requiredToolGroups: "pickaxe", toolDurabilityCost: 12 },
-      { itemId: "coal", chance: 14, requiredToolGroups: "pickaxe", toolDurabilityCost: 4 },
-      { itemId: "ironOre", chance: 6, requiredToolGroups: "pickaxe", toolDurabilityCost: 8 },
-      { itemId: "copperOre", chance: 5, requiredToolGroups: "pickaxe", toolDurabilityCost: 4 },
-      { itemId: "rope", chance: 2 }
-    ]
-  },
-  abandonedVillage: {
-    nameKey: "abandonedVillage",
-    loot: [
-      { itemId: "tshirt", chance: 22 },
-      { itemId: "wornShoes", chance: 18 },
-      { itemId: "oldJacket", chance: 14 },
-      { itemId: "oldPants", chance: 12 },
-      { itemId: "clothScrap", chance: 12 },
-      { itemId: "tinCan", chance: 12 },
-      { itemId: "plasticBottle", chance: 10 },
-      { itemId: "hoodie", chance: 8 },
-      { itemId: "shorts", chance: 8 },
-      { itemId: "sandals", chance: 8 },
-      { itemId: "sneakers", chance: 7 },
-      { itemId: "oldHat", chance: 6 },
-      { itemId: "fingerlessGloves", chance: 5 },
-      { itemId: "rope", chance: 10 },
-      { itemId: "dirtyBandage", chance: 10 },
-      { itemId: "workBoots", chance: 5 },
-      { itemId: "leatherJacket", chance: 5 },
-      { itemId: "winterGloves", chance: 6 },
-      { itemId: "schoolBag", chance: 3 },
-      { itemId: "cargoPants", chance: 8 },
-      { itemId: "hikingBag", chance: 1 },
-      { itemId: "militaryBag", chance: 2 }
-    ]
-  }
-};
-
-const recipeDiscoveryRules = {
-  wildHerb: ["herbalPasteFromFlower"],
-  honeycomb: ["herbalPasteFromHoneycomb"],
-  sharpStone: ["stoneKnife", "stoneAxe", "stoneShovel", "stoneSpear", "stonePickaxe"],
-  boiledWater: ["sterileBandage"],
-  obsidianShard: ["obsidianKnife"],
-  leatherScrap: ["leatherPouch", "tent"],
-  fireStarter: ["campfire", "boiledWater"],
-  rabbitFur: ["warmBedroll"],
-  clothScrap: ["simpleBedroll"],
-  campfire: ["cookedFish", "cookedFrog", "cookedSnail", "cookedMushroom"],
-  makeshiftRaft: ["woodLog"],
-  animalBone: ["boneSpear", "boneKnife", "boneNeedle"],
-  animalHide: ["leather", "tanningRack"],
-  tanningRack: ["leather", "leatherStrip"],
-  woodLog: ["choppingBlock", "splitWood", "woodPlank"],
-  clay: ["clayPickaxeMold", "clayShovelMold", "clayAxeMold", "claySpearMold", "clayKnifeMold"],
-  clayPickaxeMold: ["copperPickaxeHead"],
-  clayShovelMold: ["copperShovelHead"],
-  clayAxeMold: ["copperAxeHead"],
-  claySpearMold: ["copperSpearHead"],
-  clayKnifeMold: ["copperKnifeBlade"],
-  copperPickaxeHead: ["copperPickaxe"],
-  copperShovelHead: ["copperShovel"],
-  copperSpearHead: ["copperSpear"],
-  copperAxeHead: ["copperAxe"],
-  copperKnifeBlade: ["copperKnife"],
-  ironOre: ["ironAxeHead", "ironSpearHead", "ironShovelHead", "ironPickaxeHead", "ironKnifeBlade"],
-  ironPickaxeHead: ["ironPickaxe"],
-  ironShovelHead: ["ironShovel"],
-  ironSpearHead: ["ironSpear"],
-  ironAxeHead: ["ironAxe"],
-  ironKnifeBlade: ["ironKnife"]
-};
-
 const toolGroups = {
   knife: ["stoneKnife", "boneKnife", "obsidianKnife", "copperKnife", "ironKnife"],
   pickaxe: ["stonePickaxe", "copperPickaxe", "ironPickaxe"],
@@ -1600,15 +1520,19 @@ const toolGroups = {
 
 const recipesDatabase = {
   // Basic Recipes
-  ropeFiber: {
-    id: "ropeFiber",
-    nameKey: "ropeFiber",
+  rope: {
+    id: "rope",
+    nameKey: "rope",
     resultItemId: "rope",
     resultQuantity: 1,
     isPublic: true,
     category: "basic",
-    ingredients: {
-      plantFiber: 4
+    ingredients: {},
+    ingredientGroups: {
+      ropeMaterial: {
+        amount: 3,
+        itemIds: ["reed", "plantFiber", "dryGrass"]
+      }
     }
   },
   leatherStrip: {
@@ -1618,10 +1542,11 @@ const recipesDatabase = {
     resultQuantity: 4,
     isPublic: false,
     category: "basic",
+    discoverByAny: ["leather"],
     ingredients: {
       leather: 1
     },
-    requiredToolGroups: {
+     requiredToolGroups: {
       knife: 1
     },
     toolDurabilityCost: {
@@ -1636,6 +1561,7 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "choppingBlock",
     category: "basic",
+    discoverByAny: ["splitWood", "stoneAxe"],
     ingredients: {
       woodLog: 1
     },
@@ -1656,6 +1582,7 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "choppingBlock",
     category: "basic",
+    discoverByAny: ["woodLog", "stoneAxe"],
     ingredients: {
       woodLog: 1,
       rope: 1
@@ -1698,33 +1625,23 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "medical",
+    discoverByAny: ["bandage", "boiledWater"],
     ingredients: {
       bandage: 1,
       boiledWater: 1
     }
   },
-  herbalPasteFromFlower: {
-    id: "herbalPasteFromFlower",
+  herbalPaste: {
+    id: "herbalPaste",
     nameKey: "herbalPaste",
     resultItemId: "herbalPaste",
     resultQuantity: 1,
     isPublic: false,
     category: "medical",
+    discoverByAll: ["wildHerb", "smallFlower"],
     ingredients: {
       wildHerb: 2,
       smallFlower: 1
-    }
-  },
-  herbalPasteFromHoneycomb: {
-    id: "herbalPasteFromHoneycomb",
-    nameKey: "herbalPaste",
-    resultItemId: "herbalPaste",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "medical",
-    ingredients: {
-      wildHerb: 1,
-      honeycomb: 1
     }
   },
   // Tool Recipes
@@ -1735,6 +1652,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["branch", "sharpStone", "rope"],
     ingredients: {
       branch: 2,
       sharpStone: 2,
@@ -1748,6 +1666,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["sharpStone", "stick", "branch"],
     ingredients: {
       branch: 1,
       sharpStone: 2,
@@ -1761,6 +1680,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["sharpStone", "branch", "rope"],
     ingredients: {
       branch: 2,
       sharpStone: 3,
@@ -1774,6 +1694,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["sharpStone", "branch", "rope"],
     ingredients: {
       branch: 1,
       sharpStone: 1,
@@ -1786,6 +1707,7 @@ const recipesDatabase = {
     resultItemId: "stoneSpear",
     resultQuantity: 1,
     isPublic: false,
+    discoverByAny: ["branch", "sharpStone", "rope"],
     category: "tools",
     ingredients: {
       branch: 2,
@@ -1800,6 +1722,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["obsidianShard"],
     ingredients: {
       obsidianShard: 2,
       stick: 1,
@@ -1813,25 +1736,37 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["animalBone", "smallBones"],
     ingredients: {
-      animalBone: 1,
       branch: 1,
       rope: 1
+    },
+    ingredientGroups: {
+      boneTip: {
+        amount: 1,
+        itemIds: ["animalBone", "smallBones"]
+      }
     }
   },
   boneKnife: {
-    id: "boneKnife",
-    nameKey: "boneKnife",
-    resultItemId: "boneKnife",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "tools",
-    ingredients: {
-      animalBone: 1,
-      stick: 1,
-      rope: 1
-    }
+  id: "boneKnife",
+  nameKey: "boneKnife",
+  resultItemId: "boneKnife",
+  resultQuantity: 1,
+  isPublic: false,
+  category: "tools",
+  discoverByAny: ["animalBone", "smallBones"],
+  ingredients: {
+    stick: 1,
+    rope: 1
   },
+  ingredientGroups: {
+    boneMaterial: {
+      amount: 1,
+      itemIds: ["animalBone", "smallBones"]
+    }
+  }
+},
   boneNeedle: {
     id: "boneNeedle",
     nameKey: "boneNeedle",
@@ -1839,9 +1774,15 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAny: ["smallBones", "fishBone"],
     ingredients: {
-      animalBone: 1,
       sharpStone: 1
+    },
+    ingredientGroups: {
+      smallBoneMaterial: {
+        amount: 1,
+        itemIds: ["smallBones", "fishBone"]
+      }
     }
   },
   copperAxe: {
@@ -1851,6 +1792,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["copperAxeHead", "stick"],
     ingredients: {
       branch: 2,
       rope: 2,
@@ -1864,6 +1806,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["copperKnifeBlade", "stick"],
     ingredients: {
       stick: 1,
       rope: 1,
@@ -1877,6 +1820,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["copperPickaxeHead", "stick"],
     ingredients: {
       branch: 2,
       rope: 2,
@@ -1890,6 +1834,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["copperShovelHead", "stick"],
     ingredients: {
       branch: 1,
       rope: 1,
@@ -1903,6 +1848,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["copperSpearHead", "stick"],
     ingredients: {
       branch: 2,
       rope: 1,
@@ -1916,6 +1862,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["ironAxeHead", "stick"],
     ingredients: {
       branch: 2,
       rope: 2,
@@ -1929,6 +1876,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["ironKnifeBlade", "stick"],
     ingredients: {
       stick: 1,
       rope: 1,
@@ -1942,6 +1890,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["ironPickaxeHead", "stick"],
     ingredients: {
       branch: 2,
       rope: 2,
@@ -1955,6 +1904,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["ironShovelHead", "stick"],
     ingredients: {
       branch: 1,
       rope: 1,
@@ -1968,6 +1918,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
+    discoverByAll: ["ironSpearHead", "stick"],
     ingredients: {
       branch: 2,
       rope: 1,
@@ -1983,6 +1934,7 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "survival",
+    discoverByAny: ["freshWater", "campfire"],
     ingredients: {
       freshWater: 1
     }
@@ -1994,35 +1946,23 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: true,
     category: "survival",
-    ingredients: {
-      worm: 1,
-      insect: 1
+    ingredients: {},
+    ingredientGroups: {
+      baitMaterial: {
+        amount: 1,
+        itemIds: ["worm", "insect", "snail"]
+      }
     }
   },
-  fireStarterFromResin: {
-    id: "fireStarterFromResin",
+  fireStarter: {
+    id: "fireStarter",
     nameKey: "fireStarter",
     resultItemId: "fireStarter",
     resultQuantity: 1,
-    isPublic: true,
+    isPublic: false,
     category: "survival",
-    ingredients: {
-      dryLeaf: 2,
-      dryGrass: 2,
-      resin: 1
-    }
-  },
-  fireStarterFromPineCone: {
-    id: "fireStarterFromPineCone",
-    nameKey: "fireStarter",
-    resultItemId: "fireStarter",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "survival",
-    ingredients: {
-      pineCone: 1,
-      dryLeaf: 2
-    }
+    discoverByAll: ["flint", "dryGrass"],
+    ingredients: { flint: 1, dryGrass: 2 }
   },
   leatherPouch: {
     id: "leatherPouch",
@@ -2030,17 +1970,9 @@ const recipesDatabase = {
     resultItemId: "leatherPouch",
     resultQuantity: 1,
     isPublic: false,
-    category: "survival",
-    ingredients: {
-      leatherScrap: 4,
-      plantFiber: 1
-    },
-    requiredTools: {
-      boneNeedle: 1
-    },
-    toolDurabilityCost: {
-      boneNeedle: 2
-    }
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 2, leatherStrip: 2 }
   },
   leafBed: {
     id: "leafBed",
@@ -2049,7 +1981,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: true,
     category: "survival",
-
+    discoverByAll: ["dryLeaf", "dryGrass"],
     ingredients: {
       dryLeaf: 6,
       dryGrass: 6
@@ -2062,7 +1994,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
-
+    discoverByAny: ["clothScrap", "dryGrass", "rope"],
     ingredients: {
       clothScrap: 4,
       dryGrass: 4,
@@ -2076,24 +2008,17 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
-
+    discoverByAny: ["rabbitFur", "wolfPelt", "bearPelt", "wool"],
+    discoverByAll: ["clothScrap", "rope"],
     ingredients: {
-      rabbitFur: 4,
-      clothScrap: 3,
-      rope: 2
-    }
-  },
-  tent: {
-    id: "tent",
-    nameKey: "tent",
-    resultItemId: "tent",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "survival",
-    ingredients: {
-      leatherScrap: 8,
-      rope: 8,
-      branch: 7
+      clothScrap: 2,
+      rope: 1
+    },
+    ingredientGroups: {
+      warmMaterial: {
+        amount: 3,
+        itemIds: ["rabbitFur", "wool", "wolfPelt", "bearPelt"]
+      }
     }
   },
   campfire: {
@@ -2103,10 +2028,11 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
-    ingredients: {
-      pebble: 8,
-      woodLog: 4,
-      fireStarter: 1
+    discoverByAny: ["dryWood", "stick", "pebble"],
+    ingredients: { 
+      dryWood: 2, 
+      stick: 2, 
+      pebble: 2
     }
   },
   choppingBlock: {
@@ -2116,6 +2042,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
+    discoverByAny: ["woodLog", "stoneAxe"],
     ingredients: {
       woodLog: 1
     },
@@ -2123,7 +2050,7 @@ const recipesDatabase = {
       axe: 1
     },
     toolDurabilityCost: {
-      boneNeedle: 6
+      axe: 6
     }
   },
   tanningRack: {
@@ -2133,6 +2060,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
+    discoverByAny: ["animalHide", "stick", "rope"],
     ingredients: {
       stick: 4,
       rope: 2
@@ -2151,6 +2079,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: true,
     category: "survival",
+    discoverByAny: ["stick", "resin"],
     ingredients: {
       stick: 1,
       dryLeaf: 3,
@@ -2162,8 +2091,10 @@ const recipesDatabase = {
     nameKey: "charcoal",
     resultItemId: "charcoal",
     resultQuantity: 1,
-    isPublic: true,
+    isPublic: false,
     category: "survival",
+    discoverByAll: ["campfire", "woodLog"],
+    requiredWorkstation: "campfire",
     ingredients: {
       woodLog: 2,
       dryGrass: 4,
@@ -2178,8 +2109,13 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "tanningRack",
     category: "survival",
-    ingredients: {
-      animalHide: 1
+    discoverByAny: ["animalHide", "wolfPelt", "thickHide", "bearPelt", "scalyHide", "tanningRack"],
+    ingredients: {},
+    ingredientGroups: {
+      hideMaterial: {
+        amount: 1,
+        itemIds: ["animalHide", "wolfPelt", "thickHide", "bearPelt", "scalyHide"]
+      }
     },
     requiredToolGroups: {
       knife: 1
@@ -2195,7 +2131,7 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "survival",
-
+    discoverByAll: ["woodLog", "rope"],
     ingredients: {
       woodLog: 4,
       stick: 4,
@@ -2221,6 +2157,7 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "cooking",
+    discoverByAll: ["fish", "campfire"],
     ingredients: {
       fish: 1,
       dryWood: 1
@@ -2234,6 +2171,7 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "cooking",
+    discoverByAll: ["frog", "campfire"],
     ingredients: {
       frog: 1,
       dryWood: 1
@@ -2247,6 +2185,7 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "cooking",
+    discoverByAll: ["mushroom", "campfire"],
     ingredients: {
       mushroom: 1,
       dryWood: 1
@@ -2260,248 +2199,10 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "cooking",
+    discoverByAll: ["snail", "campfire"],
     ingredients: {
       snail: 1,
       dryWood: 1
-    }
-  },
-  // Clothing to Scrap Recipes
-  oldPantsToClothScrap: {
-    id: "oldPantsToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 3,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      oldPants: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  oldJacketToClothScrap: {
-    id: "oldJacketToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 4,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      oldJacket: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  wornShoesToLeatherScrap: {
-    id: "wornShoesToLeatherScrap",
-    nameKey: "leatherScrap",
-    resultItemId: "leatherScrap",
-    resultQuantity: 2,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      wornShoes: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 4
-    }
-  },
-  cargoPantsToClothScrap: {
-    id: "cargoPantsToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 5,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      cargoPants: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 4
-    }
-  },
-  shortsToClothScrap: {
-    id: "shortsToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 2,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      shorts: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  sandalsToClothScrap: {
-    id: "sandalsToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      sandals: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 2
-    }
-  },
-  sneakersToClothScrap: {
-    id: "sneakersToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      sneakers: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 2
-    }
-  },
-  workBootsToLeatherScrap: {
-    id: "workBootsToLeatherScrap",
-    nameKey: "leatherScrap",
-    resultItemId: "leatherScrap",
-    resultQuantity: 2,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      workBoots: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 4
-    }
-  },
-  leatherJacketToLeatherScrap: {
-    id: "leatherJacketToLeatherScrap",
-    nameKey: "leatherScrap",
-    resultItemId: "leatherScrap",
-    resultQuantity: 4,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      leatherJacket: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 4
-    }
-  },
-  fingerlessGlovesToLeatherScrap: {
-    id: "fingerlessGlovesToLeatherScrap",
-    nameKey: "leatherScrap",
-    resultItemId: "leatherScrap",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      fingerlessGloves: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  winterGlovesToClothScrap: {
-    id: "winterGlovesToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 1,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      winterGloves: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  oldHatToClothScrap: {
-    id: "oldHatToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 2,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      oldHat: 1
-    }, 
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  tshirtToClothScrap: {
-    id: "tshirtToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 2,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      tshirt: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 1
-    }
-  },
-  hoodieToClothScrap: {
-    id: "hoodieToClothScrap",
-    nameKey: "clothScrap",
-    resultItemId: "clothScrap",
-    resultQuantity: 4,
-    isPublic: true,
-    category: "clothing",
-    ingredients: {
-      hoodie: 1
-    },
-    requiredToolGroups: {
-      knife: 1
-    },
-    toolDurabilityCost: {
-      knife: 4
     }
   },
   // Smelting Recipes
@@ -2512,8 +2213,9 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAny: ["clay"],
     ingredients: {
-      clay: 6,
+      clay: 6
     }
   },
   clayShovelMold: {
@@ -2523,8 +2225,9 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAny: ["clay"],
     ingredients: {
-      clay: 4,
+      clay: 4
     }
   },
   clayAxeMold: {
@@ -2534,8 +2237,9 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAny: ["clay"],
     ingredients: {
-      clay: 5,
+      clay: 5
     }
   },
   clayKnifeMold: {
@@ -2545,8 +2249,9 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAny: ["clay"],
     ingredients: {
-      clay: 2,
+      clay: 2
     }
   },
   claySpearMold: {
@@ -2556,8 +2261,9 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAny: ["clay"],
     ingredients: {
-      clay: 3,
+      clay: 3
     }
   },
   copperPickaxeHead: {
@@ -2567,13 +2273,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["copperOre", "clayPickaxeMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 3,
       charcoal: 1,
       clayPickaxeMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   copperAxeHead: {
@@ -2583,13 +2288,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["copperOre", "clayAxeMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 3,
       charcoal: 1,
       clayAxeMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   copperKnifeBlade: {
@@ -2599,13 +2303,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["copperOre", "clayKnifeMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 1,
       charcoal: 1,
       clayKnifeMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   copperSpearHead: {
@@ -2615,13 +2318,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["copperOre", "claySpearMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 1,
       charcoal: 1,
       claySpearMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   copperShovelHead: {
@@ -2631,13 +2333,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["copperOre", "clayShovelMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 2,
       charcoal: 1,
       clayShovelMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   ironPickaxeHead: {
@@ -2647,13 +2348,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["ironOre", "clayPickaxeMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 3,
       charcoal: 1,
       clayPickaxeMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   ironAxeHead: {
@@ -2663,13 +2363,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["ironOre", "clayAxeMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 3,
       charcoal: 1,
       clayAxeMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   ironKnifeBlade: {
@@ -2679,13 +2378,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["ironOre", "clayKnifeMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 1,
       charcoal: 1,
       clayKnifeMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   ironSpearHead: {
@@ -2695,13 +2393,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["ironOre", "claySpearMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 1,
       charcoal: 1,
       claySpearMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
   ironShovelHead: {
@@ -2711,13 +2408,12 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "smelting",
+    discoverByAll: ["ironOre", "clayShovelMold"],
+    requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 2,
       charcoal: 1,
       clayShovelMold: 1
-    },
-    requiredTools: {
-      fireStarter: 1
     }
   },
 };
