@@ -278,6 +278,9 @@ const translations = {
     notEnoughHunger: "You are too hungry to do this.",
     actionTooTiring: "You are too tired to do this.",
     actionTooHungry: "You are too hungry to do this.",
+    grassSatchel: "Grass Satchel",
+    grassTunic: "Grass Tunic",
+    grassWrap: "Grass Wrap",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -555,7 +558,10 @@ const translations = {
     notEnoughEnergy: "Bunun için yeterli enerjin yok.",
     notEnoughHunger: "Bunu yapmak için çok açsın.",
     actionTooTiring: "Bunu yapamayacak kadar yorgunsun.",
-    actionTooHungry: "Bunu yapamayacak kadar açsın."
+    actionTooHungry: "Bunu yapamayacak kadar açsın.",
+    grassSatchel: "Ot Askılı Kese",
+    grassTunic: "Ot Tunik",
+    grassWrap: "Ot Bel Sargısı",
   }
 };
 

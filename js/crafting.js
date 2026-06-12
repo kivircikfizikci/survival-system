@@ -797,7 +797,7 @@ function craftSelectedRecipe() {
     return;
   }
 
-  recipe.ingredients
+  consumeCraftIngredients(recipe);
 
   if (!removeRecipeIngredientGroups(recipe)) {
     showMessage(t("notEnoughIngredients"));
@@ -856,19 +856,20 @@ function consumeCraftIngredients(recipe) {
   for (let i = 0; i < craftSlots.length; i++) {
     const item = craftSlots[i];
 
-    if (item === null) {
+    if (!item) {
       continue;
     }
 
     const neededAmount = neededIngredients[item.id];
 
-    if (!neededAmount) {
+    if (!neededAmount || neededAmount <= 0) {
       continue;
     }
 
-    const consumeAmount = Math.min(item.quantity, neededAmount);
+    const itemQuantity = item.quantity || 1;
+    const consumeAmount = Math.min(itemQuantity, neededAmount);
 
-    item.quantity -= consumeAmount;
+    item.quantity = itemQuantity - consumeAmount;
     neededIngredients[item.id] -= consumeAmount;
 
     if (item.quantity <= 0) {

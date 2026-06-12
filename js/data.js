@@ -582,6 +582,30 @@ const itemsDatabase = {
     extraSlots: 0,
     extraWeight: 0
   },
+  grassTunic: {
+    id: "grassTunic",
+    nameKey: "grassTunic",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "torso",
+    imageSrc: "img/grassTunic.png",
+    weight: 0.6,
+    maxStack: 1,
+    extraSlots: 1,
+    extraWeight: 1.5
+  },
+  grassWrap: {
+  id: "grassWrap",
+  nameKey: "grassWrap",
+  type: "clothing",
+  category: "clothing",
+  equipSlot: "legs",
+  imageSrc: "img/grassWrap.png",
+  weight: 0.45,
+  maxStack: 1,
+  extraSlots: 1,
+  extraWeight: 1
+},
   // Bags and Containers
   schoolBag: {
     id: "schoolBag",
@@ -630,6 +654,18 @@ const itemsDatabase = {
     maxStack: 1,
     extraSlots: 4,
     extraWeight: 3
+  },
+  grassSatchel: {
+    id: "grassSatchel",
+    nameKey: "grassSatchel",
+    type: "bag",
+    category: "bag",
+    equipSlot: "bag",
+    imageSrc: "img/grassSatchel.png",
+    weight: 0.45,
+    maxStack: 1,
+    extraSlots: 3,
+    extraWeight: 2.5
   },
   // Medical Items
   bandage: {
@@ -1964,16 +2000,6 @@ const recipesDatabase = {
     discoverByAll: ["flint", "dryGrass"],
     ingredients: { flint: 1, dryGrass: 2 }
   },
-  leatherPouch: {
-    id: "leatherPouch",
-    nameKey: "leatherPouch",
-    resultItemId: "leatherPouch",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "clothing",
-    discoverByAll: ["leather", "leatherStrip"],
-    ingredients: { leather: 2, leatherStrip: 2 }
-  },
   leafBed: {
     id: "leafBed",
     nameKey: "leafBed",
@@ -2146,6 +2172,57 @@ const recipesDatabase = {
     toolDurabilityCost: {
       axe: 6,
       knife: 4
+    }
+  },
+  // Clothing Items
+  leatherPouch: {
+    id: "leatherPouch",
+    nameKey: "leatherPouch",
+    resultItemId: "leatherPouch",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 2, leatherStrip: 2 }
+  },
+  grassSatchel: {
+    id: "grassSatchel",
+    nameKey: "grassSatchel",
+    resultItemId: "grassSatchel",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAny: ["dryGrass", "plantFiber"],
+    ingredients: {
+      dryGrass: 5,
+      plantFiber: 4,
+      rope: 1
+    }
+  },
+  grassTunic: {
+    id: "grassTunic",
+    nameKey: "grassTunic",
+    resultItemId: "grassTunic",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["dryGrass", "plantFiber"],
+    ingredients: {
+      dryGrass: 8,
+      plantFiber: 4
+    }
+  },
+  grassWrap: {
+    id: "grassWrap",
+    nameKey: "grassWrap",
+    resultItemId: "grassWrap",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["dryGrass", "plantFiber"],
+    ingredients: {
+      dryGrass: 6,
+      plantFiber: 3
     }
   },
   // Cooking Recipes
