@@ -292,6 +292,8 @@ const translations = {
     unknownRegion: "Unknown region",
     clothingDamaged: "{item} was damaged. Durability: {durability}/{maxDurability}",
     clothingBroken: "{item} was completely destroyed.",
+    cloth: "Cloth",
+    loom: "Loom",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -584,6 +586,8 @@ const translations = {
     unknownRegion: "Bilinmeyen bölge",
     clothingDamaged: "{item} hasar gördü. Dayanıklılık: {durability}/{maxDurability}",
     clothingBroken: "{item} tamamen parçalandı.",
+    cloth: "Kumaş",
+    loom: "Dokuma Tezgahı",
   }
 };
 

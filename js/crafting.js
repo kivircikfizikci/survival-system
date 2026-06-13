@@ -6,7 +6,7 @@ let craftSlots = [
 
 let draggedCraftSlotIndex = null;
 
-const workstationSlots = ["campfire", "choppingBlock", "tanningRack"];
+const workstationSlots = ["campfire", "choppingBlock", "tanningRack", "loom"];
 
 let regionWorkstations = {
   meadow: {},
@@ -203,10 +203,14 @@ function removeWorkstation(workstationId) {
     return;
   }
 
-  addItem({
+  const added = addItem({
     ...itemsDatabase[workstation.itemId],
     quantity: 1
   });
+
+  if (!added) {
+    return;
+  }
 
   currentRegionWorkstations[workstationId] = null;
 
@@ -631,6 +635,22 @@ function hasEnoughNormalCraftIngredients(recipe) {
   return true;
 }
 
+function hasRequiredCraftWorkstation(recipe) {
+  if (!recipe.requiredWorkstation) {
+    return true;
+  }
+
+  const currentRegionId = getCurrentRegionId();
+  const currentRegionWorkstations =
+    regionWorkstations[currentRegionId] || {};
+
+  const requiredWorkstation =
+    currentRegionWorkstations[recipe.requiredWorkstation];
+
+  return requiredWorkstation !== undefined &&
+    requiredWorkstation !== null;
+}
+
 function canCraftSlotsMatchRecipe(recipe) {
   if (!hasEnoughNormalCraftIngredients(recipe)) {
     return false;
@@ -640,10 +660,16 @@ function canCraftSlotsMatchRecipe(recipe) {
     return false;
   }
 
+  if (!hasRequiredCraftWorkstation(recipe)) {
+    return false;
+  }
+
   return true;
 }
 
 function getMatchingRecipe() {
+  const matchingRecipes = [];
+
   for (let recipeId in recipesDatabase) {
     const recipe = recipesDatabase[recipeId];
 
@@ -656,11 +682,26 @@ function getMatchingRecipe() {
     }
 
     if (canCraftSlotsMatchRecipe(recipe)) {
-      return recipe;
+      matchingRecipes.push(recipe);
     }
   }
 
-  return null;
+  if (matchingRecipes.length === 0) {
+    return null;
+  }
+
+  const workstationRecipe = matchingRecipes.find(function (recipe) {
+    return (
+      recipe.requiredWorkstation &&
+      hasRequiredCraftWorkstation(recipe)
+    );
+  });
+
+  if (workstationRecipe) {
+    return workstationRecipe;
+  }
+
+  return matchingRecipes[0];
 }
 
 function moveItemBetweenContainers(

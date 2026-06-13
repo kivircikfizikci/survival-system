@@ -1094,6 +1094,15 @@ const itemsDatabase = {
     toolTags: ["spear"],
     toolTier: "iron"
   },
+  cloth: {
+    id: "cloth",
+    nameKey: "cloth",
+    type: "material",
+    category: "material",
+    imageSrc: "img/cloth.png",
+    weight: 0.2,
+    maxStack: 20
+  },
   // Scrap Materials
   clothScrap: {
     id: "clothScrap",
@@ -1257,6 +1266,17 @@ const itemsDatabase = {
     maxStack: 1,
     durability: 50,
     maxDurability: 50
+  },
+  loom: {
+    id: "loom",
+    nameKey: "loom",
+    type: "usable",
+    category: "workstation",
+    imageSrc: "img/loom.png",
+    weight: 8,
+    maxStack: 1,
+    durability: 40,
+    maxDurability: 40
   },
   // Cooked Food
   cookedFish: {
@@ -1741,6 +1761,19 @@ const recipesDatabase = {
     },
     toolDurabilityCost: {
       axe: 4
+    }
+  },
+  cloth: {
+    id: "cloth",
+    nameKey: "cloth",
+    resultItemId: "cloth",
+    resultQuantity: 1,
+    isPublic: false,
+    requiredWorkstation: "loom",
+    category: "basic",
+    discoverByAll: ["plantFiber","loom"],
+    ingredients: {
+      plantFiber: 5
     }
   },
   // Medical Recipes
@@ -2228,6 +2261,26 @@ const recipesDatabase = {
     },
     toolDurabilityCost: {
       knife: 12
+    }
+  },
+  loom: {
+    id: "loom",
+    nameKey: "loom",
+    resultItemId: "loom",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    discoverByAll: ["woodPlank", "rope", "plantFiber"],
+    ingredients: {
+      woodPlank: 6,
+      stick: 4,
+      rope: 4
+    },
+    requiredToolGroups: {
+      axe: 1
+    },
+    toolDurabilityCost: {
+      knife: 8
     }
   },
   simpleTorch: {

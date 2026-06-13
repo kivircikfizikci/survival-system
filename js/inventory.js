@@ -434,7 +434,9 @@ function useInventoryItem(slotIndex) {
   if (
     item.id === "campfire" ||
     item.id === "choppingBlock" ||
-    item.id === "tanningRack"
+    item.id === "tanningRack" ||
+    item.id === "loom"
+
   ) {
     const placed = placeWorkstation(item.id, item);
 
