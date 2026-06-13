@@ -2111,6 +2111,25 @@ const recipesDatabase = {
       }
     }
   },
+  tent: {
+    id: "tent",
+    nameKey: "tent",
+    resultItemId: "tent",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "survival",
+    discoverByAny: [ "leather", "animalHide", "wolfPelt", "thickHide", "bearPelt", "scalyHide" ],
+    ingredients: {
+      rope: 6,
+      branch: 6
+    },
+    ingredientGroups: {
+      tentCoverMaterial: {
+        amount: 4,
+        itemIds: [ "leather", "animalHide", "wolfPelt", "thickHide", "bearPelt", "scalyHide" ]
+      }
+    }
+  },
   campfire: {
     id: "campfire",
     nameKey: "campfire",
