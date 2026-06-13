@@ -488,7 +488,11 @@ const itemsDatabase = {
     weight: 0.8,
     maxStack: 1,
     extraSlots: 4,
-    extraWeight: 4
+    extraWeight: 4,
+    durability: 30,
+    maxDurability: 30,
+
+    breakLoot: { itemId: "clothScrap", quantity: 3 }
   },
   cargoPants: {
     id: "cargoPants",
@@ -500,7 +504,10 @@ const itemsDatabase = {
     weight: 1,
     maxStack: 1,
     extraSlots: 6,
-    extraWeight: 5
+    extraWeight: 5,
+    durability: 45,
+    maxDurability: 45,
+    breakLoot: { itemId: "clothScrap", quantity: 4 }
   },
   shorts: {
     id: "shorts",
@@ -512,7 +519,10 @@ const itemsDatabase = {
     weight: 0.5,
     maxStack: 1,
     extraSlots: 2,
-    extraWeight: 1
+    extraWeight: 1,
+    durability: 20,
+    maxDurability: 20,
+    breakLoot: { itemId: "clothScrap", quantity: 2 }
   },
   sandals: {
     id: "sandals",
@@ -524,7 +534,10 @@ const itemsDatabase = {
     weight: 0.3,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 0
+    extraWeight: 0,
+    durability: 18,
+    maxDurability: 18,
+    breakLoot: { itemId: "leatherScrap", quantity: 1 }
   },
   sneakers: {
     id: "sneakers",
@@ -536,7 +549,10 @@ const itemsDatabase = {
     weight: 0.7,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 1
+    extraWeight: 1,
+    durability: 30,
+    maxDurability: 30,
+    breakLoot: { itemId: "clothScrap", quantity: 1 }
   },
   workBoots: {
     id: "workBoots",
@@ -548,7 +564,10 @@ const itemsDatabase = {
     weight: 1.5,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 3
+    extraWeight: 3,
+    durability: 50,
+    maxDurability: 50,
+    breakLoot: { itemId: "leatherScrap", quantity: 2 }
   },
   oldJacket: {
     id: "oldJacket",
@@ -560,7 +579,10 @@ const itemsDatabase = {
     weight: 1.2,
     maxStack: 1,
     extraSlots: 2,
-    extraWeight: 2
+    extraWeight: 2,
+    durability: 35,
+    maxDurability: 35,
+    breakLoot: { itemId: "clothScrap", quantity: 3 }  
   },
   leatherJacket: {
     id: "leatherJacket",
@@ -572,7 +594,10 @@ const itemsDatabase = {
     weight: 1.5,
     maxStack: 1,
     extraSlots: 3,
-    extraWeight: 3
+    extraWeight: 3,
+    durability: 60,
+    maxDurability: 60,
+    breakLoot: { itemId: "leatherScrap", quantity: 4 }
   },
   fingerlessGloves: {
     id: "fingerlessGloves",
@@ -584,7 +609,10 @@ const itemsDatabase = {
     weight: 0.3,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 1
+    extraWeight: 1,
+    durability: 25,
+    maxDurability: 25,
+    breakLoot: { itemId: "leatherScrap", quantity: 1 }
   },
   winterGloves: {
     id: "winterGloves",
@@ -596,7 +624,10 @@ const itemsDatabase = {
     weight: 0.5,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 0
+    extraWeight: 0,
+    durability: 25,
+    maxDurability: 25,
+    breakLoot: { itemId: "clothScrap", quantity: 1 }
   },
   oldHat: {
     id: "oldHat",
@@ -608,7 +639,10 @@ const itemsDatabase = {
     weight: 0.2,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 0
+    extraWeight: 0,
+    durability: 18,
+    maxDurability: 18,
+    breakLoot: { itemId: "clothScrap", quantity: 1 }
   },
   tshirt: {
     id: "tshirt",
@@ -620,7 +654,10 @@ const itemsDatabase = {
     weight: 0.3,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 0
+    extraWeight: 0,
+    durability: 15,
+    maxDurability: 15,
+    breakLoot: { itemId: "clothScrap", quantity: 1 }
   },
   hoodie: {
     id: "hoodie",
@@ -632,7 +669,10 @@ const itemsDatabase = {
     weight: 0.7,
     maxStack: 1,
     extraSlots: 1,
-    extraWeight: 1
+    extraWeight: 1,
+    durability: 30,
+    maxDurability: 30,
+    breakLoot: { itemId: "clothScrap", quantity: 3 }
   },
   wornShoes: {
     id: "wornShoes",
@@ -644,7 +684,10 @@ const itemsDatabase = {
     weight: 0.5,
     maxStack: 1,
     extraSlots: 0,
-    extraWeight: 0
+    extraWeight: 0,
+    durability: 20,
+    maxDurability: 20,
+    breakLoot: { itemId: "leatherScrap", quantity: 1 }
   },
   grassTunic: {
     id: "grassTunic",
@@ -656,20 +699,26 @@ const itemsDatabase = {
     weight: 0.6,
     maxStack: 1,
     extraSlots: 1,
-    extraWeight: 1.5
+    extraWeight: 1.5,
+    durability: 12,
+    maxDurability: 12,
+    breakLoot: { itemId: "plantFiber", quantity: 2 }
   },
   grassWrap: {
-  id: "grassWrap",
-  nameKey: "grassWrap",
-  type: "clothing",
-  category: "clothing",
-  equipSlot: "legs",
-  imageSrc: "img/grassWrap.png",
-  weight: 0.45,
-  maxStack: 1,
-  extraSlots: 1,
-  extraWeight: 1
-},
+    id: "grassWrap",
+    nameKey: "grassWrap",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "legs",
+    imageSrc: "img/grassWrap.png",
+    weight: 0.45,
+    maxStack: 1,
+    extraSlots: 1,
+    extraWeight: 1,
+    durability: 10,
+    maxDurability: 10,
+    breakLoot: { itemId: "plantFiber", quantity: 1 }
+  },
   // Bags and Containers
   schoolBag: {
     id: "schoolBag",

@@ -290,6 +290,8 @@ const translations = {
     goalCraftLeafBed: "Craft a leaf bed",
     goalReachTrail: "Reach the trail region",
     unknownRegion: "Unknown region",
+    clothingDamaged: "{item} was damaged. Durability: {durability}/{maxDurability}",
+    clothingBroken: "{item} was completely destroyed.",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -580,6 +582,8 @@ const translations = {
     goalCraftLeafBed: "Yaprak yatak üret",
     goalReachTrail: "Patika bölgesine ulaş",
     unknownRegion: "Bilinmeyen bölge",
+    clothingDamaged: "{item} hasar gördü. Dayanıklılık: {durability}/{maxDurability}",
+    clothingBroken: "{item} tamamen parçalandı.",
   }
 };
 

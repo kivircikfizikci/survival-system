@@ -919,26 +919,109 @@ function fleePendingEncounter() {
   updateTileActionPanel();
 }
 
-function rollFightLoot(encounterData) {
-  if (!encounterData || !encounterData.lootTable) {
-    return null;
+function damageRandomEquippedClothing(durabilityLoss) {
+  const saveData = getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.equipment ||
+    typeof saveData.equipment !== "object"
+  ) {
+    return [];
   }
 
-  let roll = Math.random() * 100;
-  let cumulativeChance = 0;
+  const equippedClothing = [];
 
-  for (let lootEntry of encounterData.lootTable) {
-    cumulativeChance += lootEntry.chance;
+  for (let slotName in saveData.equipment) {
+    const equippedItem = saveData.equipment[slotName];
 
-    if (roll <= cumulativeChance) {
-      return {
-        itemId: lootEntry.itemId,
-        quantity: lootEntry.quantity || 1
-      };
+    if (!equippedItem || equippedItem.type !== "clothing") {
+      continue;
     }
+
+    const databaseItem = itemsDatabase[equippedItem.id];
+
+    const maxDurability = Number(
+      equippedItem.maxDurability ??
+      databaseItem?.maxDurability ??
+      databaseItem?.durability ??
+      0
+    );
+
+    if (maxDurability <= 0) {
+      continue;
+    }
+
+    equippedClothing.push({
+      slotName,
+      item: equippedItem,
+      databaseItem,
+      maxDurability
+    });
   }
 
-  return null;
+  if (equippedClothing.length === 0) {
+    return [];
+  }
+
+  const selectedEntry =
+    equippedClothing[
+      Math.floor(Math.random() * equippedClothing.length)
+    ];
+
+  const selectedItem = selectedEntry.item;
+
+  const currentDurability = Number(
+    selectedItem.durability ?? selectedEntry.maxDurability
+  );
+
+  selectedItem.maxDurability = selectedEntry.maxDurability;
+  selectedItem.durability = Math.max(
+    0,
+    currentDurability - durabilityLoss
+  );
+
+  const itemData = selectedEntry.databaseItem || selectedItem;
+  const itemName = t(itemData.nameKey);
+
+  if (selectedItem.durability > 0) {
+    addDiscoveryLog(
+      t("clothingDamaged", {
+        item: itemName,
+        durability: selectedItem.durability,
+        maxDurability: selectedItem.maxDurability
+      })
+    );
+
+    saveMainSaveData(saveData);
+    return [];
+  }
+
+  saveData.equipment[selectedEntry.slotName] = null;
+
+  const breakLoot =
+    selectedItem.breakLoot ||
+    selectedEntry.databaseItem?.breakLoot ||
+    null;
+
+  const brokenLootItems = [];
+
+  if (breakLoot && breakLoot.itemId) {
+    brokenLootItems.push({
+      itemId: breakLoot.itemId,
+      quantity: breakLoot.quantity || 1
+    });
+  }
+
+  addDiscoveryLog(
+    t("clothingBroken", {
+      item: itemName
+    })
+  );
+
+  saveMainSaveData(saveData);
+
+  return brokenLootItems;
 }
 
 function fightPendingEncounter() {
@@ -966,11 +1049,17 @@ function fightPendingEncounter() {
 
   const finalFightChance = getFinalFightChance(encounterData);
   const fightRoll = Math.random() * 100;
+  const fightSucceeded = fightRoll <= finalFightChance;
 
   discoveryState.pendingEncounter = null;
   discoveryState.selectedFightTool = null;
 
-  if (fightRoll > finalFightChance) {
+  const clothingDurabilityLoss = fightSucceeded ? 1 : 3;
+
+  const brokenClothingLoot =
+    damageRandomEquippedClothing(clothingDurabilityLoss);
+
+  if (!fightSucceeded) {
     const damage = encounterData.failedFightDamage || 10;
 
     updateMainCharacterStat("health", -damage);
@@ -981,13 +1070,33 @@ function fightPendingEncounter() {
       })
     );
 
+    if (brokenClothingLoot.length > 0) {
+      discoveryState.pendingLoot = {
+        tileId: encounter.tileId,
+        items: brokenClothingLoot
+      };
+    }
+
     saveDiscoveryState();
     updateTileActionPanel();
 
     return;
   }
 
-  const lootResults = rollFightLoot(encounterData);
+  const rolledFightLoot = rollFightLoot(encounterData);
+
+  const fightLootResults = Array.isArray(rolledFightLoot)
+    ? rolledFightLoot
+    : [];
+
+  const clothingLootResults = Array.isArray(brokenClothingLoot)
+    ? brokenClothingLoot
+    : [];
+
+  const lootResults = [
+    ...fightLootResults,
+    ...clothingLootResults
+  ];
 
   if (lootResults.length === 0) {
     addDiscoveryLog(t("fightSucceededNoLoot"));
