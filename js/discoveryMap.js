@@ -141,17 +141,23 @@ function renderDiscoveryMap() {
         tileName.textContent = tileId;
 
         tileButton.appendChild(tileName);
-        } else if (canMoveTo(x, y)) {
-        tileButton.classList.add("is-movable");
+        } else if (
+          !discoveryState.pendingEncounter &&
+          canMoveTo(x, y)
+        ) {
+          tileButton.classList.add("is-movable");
 
-        tileButton.addEventListener("click", function () {
-          if (isDiscoveryMoving) {
-            return;
-          }
+          tileButton.addEventListener("click", function () {
+            if (
+              isDiscoveryMoving ||
+              discoveryState.pendingEncounter
+            ) {
+              return;
+            }
 
-          movePlayerTo(x, y);
-        });
-      }
+            movePlayerTo(x, y);
+          });
+        }
 
       mapGrid.appendChild(tileButton);
     }

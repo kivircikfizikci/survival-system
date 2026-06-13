@@ -145,6 +145,11 @@ async function movePlayerTo(x, y) {
     return;
   }
 
+  if (discoveryState.pendingEncounter) {
+    updateTileActionPanel();
+    return;
+  }
+
   if (!canMoveTo(x, y)) {
     return;
   }

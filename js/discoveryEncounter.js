@@ -917,6 +917,7 @@ function fleePendingEncounter() {
 
   saveDiscoveryState();
   updateTileActionPanel();
+  renderDiscoveryMap()
 }
 
 function damageRandomEquippedClothing(durabilityLoss) {
@@ -1079,6 +1080,7 @@ function fightPendingEncounter() {
 
     saveDiscoveryState();
     updateTileActionPanel();
+    renderDiscoveryMap()
 
     return;
   }
