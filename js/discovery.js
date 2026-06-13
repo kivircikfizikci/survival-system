@@ -52,8 +52,10 @@ function animatePlayerMovement(targetX, targetY, moveCostType) {
       movementMarker.textContent = "⛵";
     } else {
       movementMarker.innerHTML = `
-        <span class="movement-step movement-step-left"></span>
-        <span class="movement-step movement-step-right"></span>
+        <div class="movement-footprints">
+          <span class="movement-step movement-step-left"></span>
+          <span class="movement-step movement-step-right"></span>
+        </div>
       `;
     }
 
@@ -61,6 +63,20 @@ function animatePlayerMovement(targetX, targetY, moveCostType) {
     const startY = sourceRect.top + sourceRect.height / 2;
     const endX = targetRect.left + targetRect.width / 2;
     const endY = targetRect.top + targetRect.height / 2;
+
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+
+    const movementAngle =
+      Math.atan2(deltaY, deltaX) * (180 / Math.PI) + 90;
+
+    const footprints =
+      movementMarker.querySelector(".movement-footprints");
+
+    if (footprints) {
+      footprints.style.transform =
+        `rotate(${movementAngle}deg)`;
+    }
 
     movementMarker.style.left = startX + "px";
     movementMarker.style.top = startY + "px";

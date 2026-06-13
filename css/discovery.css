@@ -621,27 +621,35 @@ body:not(.show-map-debug-markers) .tile-required-item-marker {
   filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.65));
 }
 
+.movement-footprints {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  transform-origin: center;
+  pointer-events: none;
+}
+
 .movement-step {
   position: absolute;
   width: 8px;
   height: 13px;
-  border-radius: 50%;
+  border-radius: 50% 50% 45% 45%;
   background: rgba(238, 220, 177, 0.95);
   border: 1px solid rgba(55, 39, 25, 0.9);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
 }
 
 .movement-step-left {
-  left: 3px;
-  top: 3px;
-  transform: rotate(-20deg);
+  left: 4px;
+  bottom: 3px;
+  transform: rotate(-12deg);
   animation: walkingStepLeft 0.32s ease-in-out infinite alternate;
 }
 
 .movement-step-right {
-  right: 3px;
-  bottom: 3px;
-  transform: rotate(20deg);
+  right: 4px;
+  top: 3px;
+  transform: rotate(12deg);
   animation: walkingStepRight 0.32s ease-in-out infinite alternate;
 }
 
@@ -659,25 +667,25 @@ body:not(.show-map-debug-markers) .tile-required-item-marker {
 
 @keyframes walkingStepLeft {
   from {
-    transform: translateY(-2px) rotate(-20deg);
-    opacity: 1;
+    transform: translateY(2px) rotate(-12deg);
+    opacity: 0.65;
   }
 
   to {
-    transform: translateY(3px) rotate(-20deg);
-    opacity: 0.65;
+    transform: translateY(-2px) rotate(-12deg);
+    opacity: 1;
   }
 }
 
 @keyframes walkingStepRight {
   from {
-    transform: translateY(3px) rotate(20deg);
-    opacity: 0.65;
+    transform: translateY(-2px) rotate(12deg);
+    opacity: 1;
   }
 
   to {
-    transform: translateY(-2px) rotate(20deg);
-    opacity: 1;
+    transform: translateY(2px) rotate(12deg);
+    opacity: 0.65;
   }
 }
 
