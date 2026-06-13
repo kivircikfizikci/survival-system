@@ -1,10 +1,6 @@
 #Planlar..
----- Acil Yapılacak ----
-- Kıyafetlerin Durabiltyleri olacak savaş gördükçe azalacak ve en sonunda scrap verecek.
-
----- Kısa Zamanda ----
 Shelter System v2
-- Hali hazırda bulunan v1 üzerinde düzenleme yapılacak. Map üzerinde yerleştirilen tent mapte görünür şekilde olacak. O alandayken tent içerisindeki workstationları kullanabileceğiz.
+- Tent kurulan tile kısmında kurulan workstationları görebileceğiz.
 
 Quick Craft
 - Recipe List kısmında bulunan herhangi bir recipe için Quick Craft butonu yapılacak. 
