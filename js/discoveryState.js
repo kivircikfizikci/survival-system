@@ -15,6 +15,8 @@ let discoveryState = {
   }
 };
 
+let isDiscoveryMoving = false;
+
 function saveDiscoveryState() {
   localStorage.setItem(
     DISCOVERY_SAVE_KEY,

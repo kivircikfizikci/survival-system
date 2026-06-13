@@ -26,7 +26,104 @@ function updateDiscoverySleepNotice() {
   sleepingDiscoveryLogShown = false;
 }
 
-function movePlayerTo(x, y) {
+function animatePlayerMovement(targetX, targetY, moveCostType) {
+  return new Promise(function (resolve) {
+    const sourceTile = mapGrid.querySelector(
+      `.map-tile[data-x="${discoveryState.x}"][data-y="${discoveryState.y}"]`
+    );
+
+    const targetTile = mapGrid.querySelector(
+      `.map-tile[data-x="${targetX}"][data-y="${targetY}"]`
+    );
+
+    if (!sourceTile || !targetTile) {
+      resolve();
+      return;
+    }
+
+    const sourceRect = sourceTile.getBoundingClientRect();
+    const targetRect = targetTile.getBoundingClientRect();
+
+    const movementMarker = document.createElement("div");
+    movementMarker.classList.add("discovery-movement-marker");
+
+    if (moveCostType === "raftMove") {
+      movementMarker.classList.add("is-rafting");
+      movementMarker.textContent = "⛵";
+    } else {
+      movementMarker.innerHTML = `
+        <span class="movement-step movement-step-left"></span>
+        <span class="movement-step movement-step-right"></span>
+      `;
+    }
+
+    const startX = sourceRect.left + sourceRect.width / 2;
+    const startY = sourceRect.top + sourceRect.height / 2;
+    const endX = targetRect.left + targetRect.width / 2;
+    const endY = targetRect.top + targetRect.height / 2;
+
+    movementMarker.style.left = startX + "px";
+    movementMarker.style.top = startY + "px";
+
+    document.body.appendChild(movementMarker);
+
+    sourceTile.classList.add("is-move-source");
+    targetTile.classList.add("is-move-target");
+
+    const duration = moveCostType === "raftMove" ? 900 : 650;
+
+    const movementAnimation = movementMarker.animate(
+      [
+        {
+          left: startX + "px",
+          top: startY + "px",
+          transform: "translate(-50%, -50%) scale(1)"
+        },
+        {
+          left: (startX + endX) / 2 + "px",
+          top: (startY + endY) / 2 + "px",
+          transform: "translate(-50%, -60%) scale(1.08)",
+          offset: 0.5
+        },
+        {
+          left: endX + "px",
+          top: endY + "px",
+          transform: "translate(-50%, -50%) scale(1)"
+        }
+      ],
+      {
+        duration: duration,
+        easing: "ease-in-out",
+        fill: "forwards"
+      }
+    );
+
+    function finishMovementAnimation() {
+      movementMarker.remove();
+      sourceTile.classList.remove("is-move-source");
+      targetTile.classList.remove("is-move-target");
+      resolve();
+    }
+
+    movementAnimation.addEventListener(
+      "finish",
+      finishMovementAnimation,
+      { once: true }
+    );
+
+    movementAnimation.addEventListener(
+      "cancel",
+      finishMovementAnimation,
+      { once: true }
+    );
+  });
+}
+
+async function movePlayerTo(x, y) {
+  if (isDiscoveryMoving) {
+    return;
+  }
+
   if (isPlayerSleepingFromSave()) {
     updateDiscoverySleepNotice();
     return;
@@ -39,7 +136,8 @@ function movePlayerTo(x, y) {
   const targetTileId = getTileId(x, y);
   const targetTileData = getTileSpecialData(targetTileId);
 
-  const moveCostType = targetTileData.requiredItem &&
+  const moveCostType =
+    targetTileData.requiredItem &&
     targetTileData.requiredItem.requiredItemId === "makeshiftRaft"
       ? "raftMove"
       : "move";
@@ -48,16 +146,26 @@ function movePlayerTo(x, y) {
     return;
   }
 
-  discoveryState.x = x;
-  discoveryState.y = y;
+  isDiscoveryMoving = true;
+  mapGrid.classList.add("is-player-moving");
 
-  markCurrentTileVisited();
+  try {
+    await animatePlayerMovement(x, y, moveCostType);
 
-  rollCurrentTileLoot();
-  rollCurrentTileEncounter();
+    discoveryState.x = x;
+    discoveryState.y = y;
 
-  saveDiscoveryState();
-  renderDiscoveryMap();
+    markCurrentTileVisited();
+
+    rollCurrentTileLoot();
+    rollCurrentTileEncounter();
+
+    saveDiscoveryState();
+    renderDiscoveryMap();
+  } finally {
+    isDiscoveryMoving = false;
+    mapGrid.classList.remove("is-player-moving");
+  }
 }
 
 function setDiscoveryZoom(newZoom) {

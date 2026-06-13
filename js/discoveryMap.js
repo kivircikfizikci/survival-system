@@ -145,6 +145,10 @@ function renderDiscoveryMap() {
         tileButton.classList.add("is-movable");
 
         tileButton.addEventListener("click", function () {
+          if (isDiscoveryMoving) {
+            return;
+          }
+
           movePlayerTo(x, y);
         });
       }
