@@ -119,6 +119,25 @@ body {
   cursor: default;
 }
 
+.tile-shelter-marker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.map-tile.is-current .tile-shelter-marker {
+  width: 50%;
+  height: 50%;
+  top: 20%;
+  left: 20%;
+}
+
 .map-tile.is-blocked {
   background: rgba(15, 23, 42, 0.3);
   border-color: rgba(100, 116, 139, 0.45);

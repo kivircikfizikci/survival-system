@@ -141,8 +141,7 @@ const meadowMap = {
     ],
 
     meadowDangerZone: [
-      { id: "wildDog", type: "enemy", chance: 8 },
-      { id: "strayDog", type: "friendly", chance: 4 }
+      { id: "wildDog", type: "enemy", chance: 8 }
     ]
   },
 

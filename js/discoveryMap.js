@@ -23,6 +23,22 @@ function updateDiscoveryHeader() {
   zoomText.textContent = Math.round(discoveryState.zoom * 100) + "%";
 }
 
+function getSavedShelterForDiscovery() {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return null;
+  }
+
+  try {
+    const saveData = JSON.parse(savedData);
+    return saveData.playerShelter || null;
+  } catch (error) {
+    console.error("Shelter data could not be loaded:", error);
+    return null;
+  }
+}
+
 function renderDiscoveryMap() {
   const map = getCurrentMap();
 
@@ -46,6 +62,7 @@ function renderDiscoveryMap() {
   }
 
   const visitedTiles = getVisitedTilesForCurrentMap();
+  const savedShelter = getSavedShelterForDiscovery();
 
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
@@ -97,6 +114,24 @@ function renderDiscoveryMap() {
       if (tileData.exit) {
         tileButton.classList.add("has-exit");
       }
+
+      const hasShelterOnTile =
+      savedShelter &&
+      savedShelter.regionId === discoveryState.currentMapId &&
+      savedShelter.x === x &&
+      savedShelter.y === y;
+
+    if (hasShelterOnTile) {
+      tileButton.classList.add("has-shelter");
+
+      const shelterMarker = document.createElement("img");
+      shelterMarker.classList.add("tile-shelter-marker");
+      shelterMarker.src = "../img/tent.png";
+      shelterMarker.alt = "Tent";
+      shelterMarker.draggable = false;
+
+      tileButton.appendChild(shelterMarker);
+    }
 
       if (x === discoveryState.x && y === discoveryState.y) {
         tileButton.classList.add("is-current");

@@ -63,7 +63,7 @@
 
 .item-info {
   display: grid;
-  padding-bottom: 40px;
+  padding-bottom: 24px;
   min-height: 100%;
   grid-template-rows: 1fr auto;
   gap: 8px;

@@ -867,10 +867,15 @@ function updateShelterScreen() {
     return;
   }
 
-  if (
-    playerShelter === null ||
-    playerShelter.regionId !== getCurrentRegionId()
-  ) {
+  const currentPosition = getCurrentDiscoveryPosition();
+
+  const isPlayerAtShelter =
+    playerShelter !== null &&
+    playerShelter.regionId === currentPosition.regionId &&
+    playerShelter.x === currentPosition.x &&
+    playerShelter.y === currentPosition.y;
+
+  if (!isPlayerAtShelter) {
     shelterCard.hidden = true;
     return;
   }

@@ -1,9 +1,53 @@
 let draggedShelterSlotIndex = null;
 
+function getCurrentDiscoveryPosition() {
+  if (typeof discoveryState !== "undefined") {
+    return {
+      regionId: discoveryState.currentMapId || "meadow",
+      x: discoveryState.x,
+      y: discoveryState.y
+    };
+  }
+
+  const savedDiscoveryData = localStorage.getItem(
+    "survivalSystemDiscoverySave"
+  );
+
+  if (!savedDiscoveryData) {
+    return {
+      regionId: getCurrentRegionId(),
+      x: 16,
+      y: 16
+    };
+  }
+
+  try {
+    const discoveryData = JSON.parse(savedDiscoveryData);
+
+    return {
+      regionId: discoveryData.currentMapId || getCurrentRegionId(),
+      x: Number(discoveryData.x ?? 16),
+      y: Number(discoveryData.y ?? 16)
+    };
+  } catch (error) {
+    console.error("Discovery position could not be loaded:", error);
+
+    return {
+      regionId: getCurrentRegionId(),
+      x: 16,
+      y: 16
+    };
+  }
+}
+
 function createShelter() {
+  const currentPosition = getCurrentDiscoveryPosition();
+
   playerShelter = {
     type: "Tent",
-    regionId: getCurrentRegionId(),
+    regionId: currentPosition.regionId,
+    x: currentPosition.x,
+    y: currentPosition.y,
     storageSlots: 16,
     maxWeight: 50,
     storageItems: Array(16).fill(null)

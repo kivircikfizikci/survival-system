@@ -105,7 +105,6 @@
 
 .shelter-storage-slot .item-info {
   display: grid;
-  padding-bottom: 40px;
   min-height: 100%;
   grid-template-rows: 1fr auto;
   gap: 6px;
