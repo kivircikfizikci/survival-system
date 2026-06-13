@@ -61,19 +61,21 @@
   border: 0;
   border-radius: 8px;
   padding: 8px 12px;
-
   background: transparent;
   color: #cbd5e1;
-
   font-weight: 800;
   font-size: 0.82rem;
-
   cursor: pointer;
+  text-decoration: none;
 }
 
-.navbar-link:hover {
+.navbar-link {
   background: rgba(255, 255, 255, 0.08);
-  color: #f8fafc;
+}
+
+.navbar-link.is-active {
+  background: rgba(255, 255, 255, 0.219);
+  color:#a7f3d0;
 }
 
 .language-switcher {
