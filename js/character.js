@@ -10,6 +10,9 @@ let sleepSession = null;
 let discoveredRecipes = [];
 let discoveredItems = [];
 let completedGoals = [];
+let starterGoalsRewardClaimed = false;
+let isGrantingStarterGoalsReward = false;
+let buriedStash = null;
 
 let playerShelter = null;
 

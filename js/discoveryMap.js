@@ -63,6 +63,145 @@ function getSavedWorkstationsForDiscovery() {
   }
 }
 
+function getMainSaveDataForDiscovery() {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(savedData);
+  } catch (error) {
+    console.error("Main save could not be loaded:", error);
+    return null;
+  }
+}
+
+function saveMainSaveDataForDiscovery(saveData) {
+  localStorage.setItem(
+    "survivalSystemSave",
+    JSON.stringify(saveData)
+  );
+}
+
+function getSavedBuriedStashForDiscovery() {
+  const saveData = getMainSaveDataForDiscovery();
+
+  if (!saveData || !saveData.buriedStash) {
+    return null;
+  }
+
+  return saveData.buriedStash;
+}
+
+function generateBuriedStashLoot() {
+  let lootResults =
+    rollMultipleLootFromTable(buriedStashLootTable);
+
+  const validLootResults = lootResults.filter(function (lootItem) {
+    return itemsDatabase[lootItem.itemId];
+  });
+
+  if (validLootResults.length > 0) {
+    return validLootResults;
+  }
+
+  return [
+    {
+      itemId: "clothScrap",
+      quantity: 1
+    }
+  ];
+}
+
+function canPlaceBuriedStashOnTile(x, y) {
+  if (!isInsideMap(x, y)) {
+    return false;
+  }
+
+  const tileId = getTileId(x, y);
+  const tileData = getTileSpecialData(tileId);
+
+  if (tileData.isBlocked) {
+    return false;
+  }
+
+  if (tileData.exit) {
+    return false;
+  }
+
+  if (tileData.requiredItem) {
+    return false;
+  }
+
+  if (tileData.encounter) {
+    return false;
+  }
+
+  if (
+    x === discoveryState.x &&
+    y === discoveryState.y
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function ensureBuriedStashPlaced() {
+  if (discoveryState.currentMapId !== "trail") {
+    return;
+  }
+
+  const saveData = getMainSaveDataForDiscovery();
+
+  if (!saveData || !saveData.buriedStash) {
+    return;
+  }
+
+  const stash = saveData.buriedStash;
+
+  if (
+    typeof stash.x === "number" &&
+    typeof stash.y === "number" &&
+    Array.isArray(stash.items)
+  ) {
+    return;
+  }
+
+  const map = getCurrentMap();
+  const availableTiles = [];
+
+  for (let y = 0; y < map.height; y++) {
+    for (let x = 0; x < map.width; x++) {
+      if (canPlaceBuriedStashOnTile(x, y)) {
+        availableTiles.push({ x, y });
+      }
+    }
+  }
+
+  if (availableTiles.length === 0) {
+    console.error("No valid tile found for buried stash.");
+    return;
+  }
+
+  const selectedTile =
+    availableTiles[
+      Math.floor(Math.random() * availableTiles.length)
+    ];
+
+  stash.regionId = "trail";
+  stash.x = selectedTile.x;
+  stash.y = selectedTile.y;
+  stash.items = generateBuriedStashLoot();
+  stash.revealed = true;
+
+  saveData.buriedStash = stash;
+
+  saveMainSaveDataForDiscovery(saveData);
+}
+
 function getWorkstationMarkerPositionClass(workstationId) {
   const markerPositions = {
     campfire: "marker-top-left",
@@ -98,6 +237,8 @@ function updateDiscoveryCoordinateBox() {
 function renderDiscoveryMap() {
   const map = getCurrentMap();
 
+  ensureBuriedStashPlaced();
+
   updateRegionBackground();
 
   mapGrid.innerHTML = "";
@@ -120,6 +261,7 @@ function renderDiscoveryMap() {
   const visitedTiles = getVisitedTilesForCurrentMap();
   const savedShelter = getSavedShelterForDiscovery();
   const savedWorkstations = getSavedWorkstationsForDiscovery();
+  const savedBuriedStash = getSavedBuriedStashForDiscovery();
 
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
@@ -241,6 +383,27 @@ function renderDiscoveryMap() {
       }
     }
 
+    const hasBuriedStashOnTile =
+      savedBuriedStash &&
+      savedBuriedStash.revealed === true &&
+      savedBuriedStash.regionId === discoveryState.currentMapId &&
+      savedBuriedStash.x === x &&
+      savedBuriedStash.y === y &&
+      Array.isArray(savedBuriedStash.items) &&
+      savedBuriedStash.items.length > 0;
+
+    if (hasBuriedStashOnTile) {
+      tileButton.classList.add("has-buried-stash");
+
+      const stashMarker = document.createElement("img");
+      stashMarker.classList.add("tile-buried-stash-marker");
+      stashMarker.src = "../img/buriedStashMap.png";
+      stashMarker.alt = t("buriedStash");
+      stashMarker.draggable = false;
+
+      tileButton.appendChild(stashMarker);
+    }
+
       if (x === discoveryState.x && y === discoveryState.y) {
         tileButton.classList.add("is-current");
       } else if (
@@ -276,6 +439,34 @@ function renderDiscoveryMap() {
     if (typeof updateDiscoverySleepNotice === "function") {
       updateDiscoverySleepNotice();
     }
+}
+
+function getCurrentTileBuriedStash() {
+  const stash = getSavedBuriedStashForDiscovery();
+
+  if (!stash) {
+    return null;
+  }
+
+  if (stash.regionId !== discoveryState.currentMapId) {
+    return null;
+  }
+
+  if (
+    Number(stash.x) !== Number(discoveryState.x) ||
+    Number(stash.y) !== Number(discoveryState.y)
+  ) {
+    return null;
+  }
+
+  if (
+    !Array.isArray(stash.items) ||
+    stash.items.length === 0
+  ) {
+    return null;
+  }
+
+  return stash;
 }
 
 function updateTileActionPanel() {
@@ -523,6 +714,74 @@ function updateTileActionPanel() {
     tileActions.append(encounterCard, actions);
   }
 
+  const currentBuriedStash = getCurrentTileBuriedStash();
+
+    if (
+      currentBuriedStash &&
+      !discoveryState.pendingEncounter &&
+      pendingLootItems.length === 0
+    ) {
+      const stashCard = document.createElement("div");
+      stashCard.classList.add("buried-stash-card");
+
+      const stashTitle = document.createElement("strong");
+      stashTitle.classList.add("buried-stash-title");
+      stashTitle.textContent = t("buriedStash");
+
+      const stashLootList = document.createElement("div");
+      stashLootList.classList.add("found-loot-list");
+
+      for (let stashLootItem of currentBuriedStash.items) {
+        const item = itemsDatabase[stashLootItem.itemId];
+
+        if (!item) {
+          continue;
+        }
+
+        const lootCard = document.createElement("div");
+        lootCard.classList.add("found-loot-card");
+
+        const image = document.createElement("img");
+        image.src = item.imageSrc;
+        image.alt = getDiscoveryItemName(item);
+
+        const info = document.createElement("div");
+
+        const title = document.createElement("strong");
+        title.textContent = getDiscoveryItemName(item);
+
+        const quantity = document.createElement("span");
+        quantity.textContent = "x" + stashLootItem.quantity;
+
+        info.append(title, quantity);
+        lootCard.append(image, info);
+
+        stashLootList.appendChild(lootCard);
+      }
+
+      const stashActions = document.createElement("div");
+      stashActions.classList.add("found-loot-actions");
+
+      const takeAllButton = document.createElement("button");
+      takeAllButton.type = "button";
+      takeAllButton.classList.add("tile-action-button");
+      takeAllButton.textContent = t("takeAll");
+
+      takeAllButton.addEventListener("click", function () {
+        takeBuriedStashLoot();
+      });
+
+      stashActions.appendChild(takeAllButton);
+
+      stashCard.append(
+        stashTitle,
+        stashLootList,
+        stashActions
+      );
+
+      tileActions.appendChild(stashCard);
+    }
+
   const currentTileId = getTileId(discoveryState.x, discoveryState.y);
   const tileData = getTileSpecialData(currentTileId);
 
@@ -569,4 +828,39 @@ function updateMapCamera() {
     "px) scale(" +
     zoom +
     ")";
+}
+
+function takeBuriedStashLoot() {
+  const stash = getCurrentTileBuriedStash();
+
+  if (!stash) {
+    return;
+  }
+
+  const added = addPendingLootItemsToMainInventory(
+    stash.items
+  );
+
+  if (!added) {
+    addDiscoveryLog(t("inventoryFullOrTooHeavy"));
+    return;
+  }
+
+  addDiscoveryLog(
+    t("buriedStashLootTaken", {
+      items: getLootText(stash.items)
+    })
+  );
+
+  const saveData = getMainSaveDataForDiscovery();
+
+  if (!saveData) {
+    return;
+  }
+
+  saveData.buriedStash = null;
+
+  saveMainSaveDataForDiscovery(saveData);
+
+  renderDiscoveryMap();
 }

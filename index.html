@@ -49,6 +49,21 @@
 
 <p id="alertMessage" class="alert-message" aria-live="polite" hidden></p>
 
+    <section class="side-card goals-panel" id="goalsPanel">
+      <button type="button" class="goals-toggle" id="goalsToggle">
+        <span class="goals-arrow" id="goalsArrow">▾</span>
+        <span class="goals-title" data-i18n="survivalGoals">
+          Survival Goals
+        </span>
+
+        <span class="goals-progress" id="goalsProgress" aria-label="Goal progress"></span>
+      </button>
+
+      <div class="goals-content" id="goalsContent">
+        <div id="goalsList" class="goals-list"></div>
+      </div>
+    </section>
+
   <main class="game-shell game-layout" aria-label="Survival game interface">
     <section class="left-column">
       <section class="profile-panel" aria-label="Character information">
@@ -261,17 +276,6 @@
 
       <div id="logList" class="log-list">
         <p class="log-empty" data-i18n="logEmpty">No events yet.</p>
-      </div>
-    </section>
-
-    <section class="side-card goals-panel" id="goalsPanel">
-      <button type="button" class="goals-toggle" id="goalsToggle">
-        <span data-i18n="survivalGoals">Survival Goals</span>
-        <span class="goals-arrow" id="goalsArrow">▾</span>
-      </button>
-
-      <div class="goals-content" id="goalsContent">
-        <div id="goalsList" class="goals-list"></div>
       </div>
     </section>
 

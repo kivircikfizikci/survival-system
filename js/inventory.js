@@ -410,6 +410,33 @@ function useInventoryItem(slotIndex) {
     return;
   }
 
+  if (item.id === "buriedStashMap") {
+    if (buriedStash !== null) {
+      showMessage(t("buriedStashAlreadyRevealed"));
+      return;
+    }
+
+    buriedStash = {
+      regionId: "trail",
+      x: null,
+      y: null,
+      items: null,
+      revealed: true
+    };
+
+    removeOneItem(slotIndex);
+
+    updateInventoryScreen();
+
+    const message = t("buriedStashMapUsed");
+
+    showMessage(message, "success");
+    addLog(message, "success");
+
+    autoSave();
+    return;
+  }
+
   if (item.id === "tent") {
     if (playerShelter !== null) {
       showMessage(t("alreadyHaveShelter"));

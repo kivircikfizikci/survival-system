@@ -1,6 +1,7 @@
 ﻿let currentLanguage = "en";
 
 const translations = {
+  //English
   en: {
     characterStatus: "Character Status",
     survivorLabel: "Survivor",
@@ -296,7 +297,16 @@ const translations = {
     loom: "Loom",
     quickCraft: "Quick Craft",
     notEnoughIngredients: "Not Enough Ingredients",
+    buriedStashMap: "Buried Stash Map",
+    starterGoalsCompleted: "You completed the first survival goals!",
+    starterGoalsRewardReceived: "Reward: Buried Stash Map",
+    buriedStash: "Buried Stash",
+    buriedStashMapUsed: "The map reveals a buried stash somewhere in the Trail region.",
+    buriedStashAlreadyRevealed: "You already have an active buried stash location.",
+    buriedStashLootTaken: "You took these items from the buried stash: {items}",
+    takeAll: "Take All",
   },
+  //Türkçe
   tr: {
     characterStatus: "Karakter Durumu",
     survivorLabel: "Hayatta Kalan",
@@ -592,6 +602,14 @@ const translations = {
     loom: "Dokuma Tezgahı",
     quickCraft: "Hızlı Üret",
     notEnoughIngredients: "Yeterli Malzeme Yok",
+    buriedStashMap: "Gömülü Zula Haritası",
+    starterGoalsCompleted: "İlk hayatta kalma hedeflerini tamamladın!",
+    starterGoalsRewardReceived: "Ödül: Gömülü Zula Haritası",
+    buriedStash: "Gömülü Zula",
+    buriedStashMapUsed: "Haritadaki işaret Trail bölgesinde bir gömülü zulanın yerini gösteriyor.",
+    buriedStashAlreadyRevealed: "Zaten aktif bir gömülü zula haritan var.",
+    buriedStashLootTaken: "Gömülü zuladan şunları aldın: {items}",
+    takeAll: "Tümünü Al",
   }
 };
 

@@ -136,6 +136,14 @@ const goalsDatabase = [
   }
 ];
 
+const buriedStashLootTable = [
+  {itemId: "clothScrap", chance: 80, quantityMin: 1, quantityMax: 3},
+  {itemId: "leatherScrap", chance: 60, quantityMin: 1, quantityMax: 3},
+  {itemId: "rope", chance: 70, quantityMin: 1, quantityMax: 2},
+  {itemId: "bandage", chance: 55, quantityMin: 1, quantityMax: 2},
+  {itemId: "boneKnife", chance: 30, quantityMin: 1, quantityMax: 1}
+];
+
 const itemsDatabase = {
   // Basic & Natural Items
   blackberry: {
@@ -1319,6 +1327,16 @@ const itemsDatabase = {
     maxStack: 4,
     hungerRestore: 8
   },
+  cookedMeat: {
+    id: "cookedMeat",
+    nameKey: "cookedMeat",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedMeat.png",
+    weight: 0.4,
+    maxStack: 4,
+    hungerRestore: 25
+  },
   // Smelting Items
   clayPickaxeMold: {
     id: "clayPickaxeMold",
@@ -1675,6 +1693,16 @@ const itemsDatabase = {
     category: "vehicle",
     imageSrc: "img/makeshiftRaft.png",
     weight: 8,
+    maxStack: 1
+  },
+  // Special
+  buriedStashMap: {
+    id: "buriedStashMap",
+    nameKey: "buriedStashMap",
+    type: "usable",
+    category: "special",
+    imageSrc: "img/buriedStashMap.png",
+    weight: 0.05,
     maxStack: 1
   },
 };
@@ -2464,6 +2492,20 @@ const recipesDatabase = {
     discoverByAll: ["snail", "campfire"],
     ingredients: {
       snail: 1,
+      dryWood: 1
+    }
+  },
+  cookedMeat: {
+    id: "cookedMeat",
+    nameKey: "cookedMeat",
+    resultItemId: "cookedMeat",
+    resultQuantity: 1,
+    isPublic: false,
+    requiredWorkstation: "campfire",
+    category: "cooking",
+    discoverByAll: ["rawMeat", "campfire"],
+    ingredients: {
+      rawMeat: 1,
       dryWood: 1
     }
   },

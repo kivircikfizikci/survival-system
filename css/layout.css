@@ -177,10 +177,11 @@
 
 .goals-panel {
   overflow: hidden;
+  width: min(1500px, 100%);
+  margin: 0 auto 12px;
 }
 
 .goals-toggle {
-  width: 100%;
   border: none;
   background: transparent;
   color: inherit;
@@ -193,14 +194,43 @@
   font: inherit;
 }
 
+.goals-title {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
 .goals-toggle span:first-child {
   font-size: 1rem;
   font-weight: 700;
 }
 
+.goals-progress {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(12px, 1fr));
+  gap: 4px;
+}
+
+.goal-progress-cell {
+  height: 10px;
+  border: 1px solid rgba(190, 175, 135, 0.7);
+  border-radius: 2px;
+  background: rgba(30, 27, 22, 0.85);
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.65);
+}
+
+.goal-progress-cell.is-completed {
+  border-color: rgba(105, 190, 105, 0.9);
+  background: rgba(70, 165, 75, 0.95);
+  box-shadow:
+    inset 0 0 3px rgba(255, 255, 255, 0.2),
+    0 0 5px rgba(75, 185, 85, 0.35);
+}
+
 .goals-arrow {
   opacity: 0.75;
   font-size: 0.95rem;
+  flex: 0 0 auto;
 }
 
 .goals-content {
@@ -215,6 +245,8 @@
   gap: 6px;
   padding-top: 10px;
   border-top: 1px solid rgba(148, 163, 184, 0.18);
+  grid-auto-flow: column;
+  justify-content: start;
 }
 
 .goal-item {

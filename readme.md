@@ -1,9 +1,4 @@
 1. Yapılacaklar
-Survival Goals
-- Ana ekranın üstüne gelecek. Tıklanıldığı zaman görevler görünecek.
-- Loading bar tarzı olacak: Survival Goals: [] [] [] [] [] tarzı. görev yapıldıkça yeşil şekilde dolacak.
-- İlk görevler bittiği zaman karşılığında ödül verecek (gömülü stash haritası, o konuma gidildiği zaman shelter ekranı gibi ekran çıkacak ve içerisinde random lootlar olacak.)
-
 Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.
@@ -30,4 +25,6 @@ Class Sistemi v1
 2. Eklenecek Item Listesi
 
 3. Görseli Olmayan Item Listesi
+cookedMeat
+buriedStashMap
 

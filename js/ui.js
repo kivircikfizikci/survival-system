@@ -1080,6 +1080,86 @@ function checkGoalsByCurrentMap() {
   });
 }
 
+function updateGoalsProgress() {
+  const goalsProgress =
+    document.getElementById("goalsProgress");
+
+  if (!goalsProgress) {
+    return;
+  }
+
+  goalsProgress.innerHTML = "";
+
+  goalsDatabase.forEach(function (goal) {
+    const progressCell = document.createElement("span");
+    progressCell.classList.add("goal-progress-cell");
+
+    if (isGoalCompleted(goal.id)) {
+      progressCell.classList.add("is-completed");
+    }
+
+    goalsProgress.appendChild(progressCell);
+  });
+}
+
+function areStarterGoalsCompleted() {
+  return goalsDatabase.every(function (goal) {
+    return isGoalCompleted(goal.id);
+  });
+}
+
+function checkStarterGoalsReward() {
+  if (
+    starterGoalsRewardClaimed ||
+    isGrantingStarterGoalsReward
+  ) {
+    return;
+  }
+
+  if (!areStarterGoalsCompleted()) {
+    return;
+  }
+
+  const rewardItem = itemsDatabase.buriedStashMap;
+
+  if (!rewardItem) {
+    console.error("buriedStashMap item is missing.");
+    return;
+  }
+
+  isGrantingStarterGoalsReward = true;
+
+  try {
+    const added = addItem({
+      ...rewardItem,
+      quantity: 1
+    });
+
+    if (!added) {
+      return;
+    }
+
+    starterGoalsRewardClaimed = true;
+
+    const completedMessage =
+      t("starterGoalsCompleted");
+
+    const rewardMessage =
+      t("starterGoalsRewardReceived");
+
+    showMessage(rewardMessage, "success");
+
+    addLog(
+      completedMessage + " " + rewardMessage,
+      "success"
+    );
+
+    autoSave();
+  } finally {
+    isGrantingStarterGoalsReward = false;
+  }
+}
+
 function updateGoalsPanel() {
   if (!goalsList) {
     return;
@@ -1109,6 +1189,8 @@ function updateGoalsPanel() {
     goalsList.appendChild(goalElement);
   });
 
+  updateGoalsProgress();
+  checkStarterGoalsReward(); 
   updateGoalsPanelState();
 }
 

@@ -97,6 +97,8 @@ function saveGame() {
     craftSlots: craftSlots,
 
     completedGoals: completedGoals,
+    starterGoalsRewardClaimed: starterGoalsRewardClaimed,
+    buriedStash: buriedStash,
 
     regionWorkstations: regionWorkstations,
     playerShelter: playerShelter,
@@ -156,6 +158,11 @@ function loadGame() {
   if (Array.isArray(saveData.completedGoals)) {
     completedGoals = saveData.completedGoals;
   }
+
+  starterGoalsRewardClaimed =
+  saveData.starterGoalsRewardClaimed === true;
+
+  buriedStash = saveData.buriedStash || null;
 
   if (saveData.currentLanguage) {
     currentLanguage = saveData.currentLanguage;
