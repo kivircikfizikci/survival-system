@@ -427,3 +427,32 @@
   border-radius: 10px;
   padding: 4px;
 }
+
+.quick-craft-button {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+
+  border: 1px solid rgba(190, 160, 105, 0.75);
+  border-radius: 5px;
+
+  background: rgba(72, 58, 38, 0.92);
+  color: #ead8ac;
+
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.quick-craft-button:hover {
+  background: rgba(98, 78, 49, 0.96);
+  border-color: rgba(225, 195, 130, 0.95);
+}
+
+.quick-craft-button:active {
+  transform: translateY(1px);
+}

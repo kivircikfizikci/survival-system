@@ -916,7 +916,6 @@ function fleePendingEncounter() {
   addDiscoveryLog(t("fleeSucceeded"));
 
   saveDiscoveryState();
-  updateTileActionPanel();
   renderDiscoveryMap()
 }
 
@@ -1079,9 +1078,7 @@ function fightPendingEncounter() {
     }
 
     saveDiscoveryState();
-    updateTileActionPanel();
-    renderDiscoveryMap()
-
+    renderDiscoveryMap();
     return;
   }
 
@@ -1104,8 +1101,7 @@ function fightPendingEncounter() {
     addDiscoveryLog(t("fightSucceededNoLoot"));
 
     saveDiscoveryState();
-    updateTileActionPanel();
-
+    renderDiscoveryMap();
     return;
   }
 
@@ -1117,5 +1113,5 @@ function fightPendingEncounter() {
   addDiscoveryLog(t("fightSucceeded"));
 
   saveDiscoveryState();
-  updateTileActionPanel();
+  renderDiscoveryMap();
 }

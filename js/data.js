@@ -1931,24 +1931,24 @@ const recipesDatabase = {
     }
   },
   boneKnife: {
-  id: "boneKnife",
-  nameKey: "boneKnife",
-  resultItemId: "boneKnife",
-  resultQuantity: 1,
-  isPublic: false,
-  category: "tools",
-  discoverByAny: ["animalBone", "smallBones"],
-  ingredients: {
-    stick: 1,
-    rope: 1
-  },
-  ingredientGroups: {
-    boneMaterial: {
-      amount: 1,
-      itemIds: ["animalBone", "smallBones"]
+    id: "boneKnife",
+    nameKey: "boneKnife",
+    resultItemId: "boneKnife",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "tools",
+    discoverByAny: ["animalBone", "smallBones"],
+    ingredients: {
+      stick: 1,
+      rope: 1
+    },
+    ingredientGroups: {
+      boneMaterial: {
+        amount: 1,
+        itemIds: ["animalBone", "smallBones"]
+      }
     }
-  }
-},
+  },
   boneNeedle: {
     id: "boneNeedle",
     nameKey: "boneNeedle",

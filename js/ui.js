@@ -262,7 +262,33 @@ function updateRecipesScreen() {
       resultWrapper.append(resultImage, resultName);
     }
 
-    recipeRow.append(ingredientsWrapper, equalsElement, resultWrapper);
+    recipeRow.append(
+    ingredientsWrapper,
+    equalsElement,
+    resultWrapper
+  );
+
+  if (canQuickCraftRecipe(recipe)) {
+    const quickCraftButton =
+      document.createElement("button");
+
+    quickCraftButton.type = "button";
+    quickCraftButton.classList.add(
+      "quick-craft-button"
+    );
+
+    quickCraftButton.textContent =
+      t("quickCraft");
+
+    quickCraftButton.addEventListener(
+      "click",
+      function () {
+        quickCraftRecipe(recipe.id);
+      }
+    );
+
+    recipeRow.appendChild(quickCraftButton);
+  }
     recipeList.appendChild(recipeRow);
   }
 }

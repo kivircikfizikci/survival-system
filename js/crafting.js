@@ -492,6 +492,8 @@ function moveCraftItem(craftFromSlot, craftToSlot, amount = "all") {
   }
 }
 
+
+
 function canStackItems(targetItem, sourceItem) {
   if (targetItem === null || sourceItem === null) {
     return false;
@@ -652,6 +654,86 @@ function hasEnoughNormalCraftIngredients(recipe) {
   return true;
 }
 
+function hasEnoughQuickCraftIngredients(recipe) {
+  const ingredients = recipe.ingredients || {};
+
+  for (let itemId in ingredients) {
+    const requiredAmount = ingredients[itemId];
+    const availableAmount = getInventoryItemCount(itemId);
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function hasEnoughQuickCraftIngredientGroups(recipe) {
+  if (!recipe.ingredientGroups) {
+    return true;
+  }
+
+  for (let groupName in recipe.ingredientGroups) {
+    const groupData = recipe.ingredientGroups[groupName];
+
+    if (!groupData || !Array.isArray(groupData.itemIds)) {
+      return false;
+    }
+
+    const requiredAmount = groupData.amount || 1;
+
+    const availableAmount = groupData.itemIds.reduce(
+      function (total, itemId) {
+        return total + getInventoryItemCount(itemId);
+      },
+      0
+    );
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function hasEnoughQuickCraftTools(recipe) {
+  const requiredTools = recipe.requiredTools || {};
+
+  for (let toolId in requiredTools) {
+    const requiredAmount = requiredTools[toolId];
+    const availableAmount = getInventoryItemCount(toolId);
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  const requiredToolGroups = recipe.requiredToolGroups || {};
+
+  for (let groupName in requiredToolGroups) {
+    const requiredAmount = requiredToolGroups[groupName];
+    let availableAmount = 0;
+
+    for (let item of inventory.items) {
+      if (!item) {
+        continue;
+      }
+
+      if (isItemInToolGroup(item, groupName)) {
+        availableAmount += item.quantity || 1;
+      }
+    }
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function hasRequiredCraftWorkstation(recipe) {
   if (!recipe.requiredWorkstation) {
     return true;
@@ -665,6 +747,33 @@ function hasRequiredCraftWorkstation(recipe) {
     currentRegionWorkstations[recipe.requiredWorkstation];
 
   return isWorkstationAtCurrentTile(requiredWorkstation);
+}
+
+function canQuickCraftRecipe(recipe) {
+  if (!recipe) {
+    return false;
+  }
+
+  if (!hasEnoughQuickCraftIngredients(recipe)) {
+    return false;
+  }
+
+  if (!hasEnoughQuickCraftIngredientGroups(recipe)) {
+    return false;
+  }
+
+  if (!hasEnoughQuickCraftTools(recipe)) {
+    return false;
+  }
+
+  if (
+    recipe.requiredWorkstation &&
+    !hasRequiredCraftWorkstation(recipe)
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 function canCraftSlotsMatchRecipe(recipe) {
@@ -718,6 +827,284 @@ function getMatchingRecipe() {
   }
 
   return matchingRecipes[0];
+}
+
+function consumeQuickCraftIngredients(recipe) {
+  const ingredients = recipe.ingredients || {};
+
+  for (let itemId in ingredients) {
+    const removed = removeInventoryItemQuantity(
+      itemId,
+      ingredients[itemId]
+    );
+
+    if (!removed) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function removeQuickCraftIngredientGroups(recipe) {
+  if (!recipe.ingredientGroups) {
+    return true;
+  }
+
+  for (let groupName in recipe.ingredientGroups) {
+    const groupData = recipe.ingredientGroups[groupName];
+
+    if (!groupData || !Array.isArray(groupData.itemIds)) {
+      return false;
+    }
+
+    let remainingAmount = groupData.amount || 1;
+
+    for (let itemId of groupData.itemIds) {
+      if (remainingAmount <= 0) {
+        break;
+      }
+
+      const availableAmount = getInventoryItemCount(itemId);
+
+      if (availableAmount <= 0) {
+        continue;
+      }
+
+      const removeAmount = Math.min(
+        availableAmount,
+        remainingAmount
+      );
+
+      const removed = removeInventoryItemQuantity(
+        itemId,
+        removeAmount
+      );
+
+      if (!removed) {
+        return false;
+      }
+
+      remainingAmount -= removeAmount;
+    }
+
+    if (remainingAmount > 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function applyQuickCraftToolDurabilityCost(recipe) {
+  if (!recipe.toolDurabilityCost) {
+    return;
+  }
+
+  for (let toolKey in recipe.toolDurabilityCost) {
+    const durabilityCost =
+      recipe.toolDurabilityCost[toolKey];
+
+    for (let i = 0; i < inventory.items.length; i++) {
+      const item = inventory.items[i];
+
+      if (!item) {
+        continue;
+      }
+
+      const isExactTool = item.id === toolKey;
+      const isToolGroup =
+        isItemInToolGroup(item, toolKey);
+
+      if (!isExactTool && !isToolGroup) {
+        continue;
+      }
+
+      const finalDurabilityCost =
+        getToolDurabilityCost(item, durabilityCost);
+
+      item.durability -= finalDurabilityCost;
+
+      if (item.durability <= 0) {
+        const brokenToolName = getItemName(item);
+
+        inventory.items[i] = null;
+
+        showMessage(
+          t("toolBroke", {
+            item: brokenToolName
+          }),
+          "warning"
+        );
+
+        addLog(
+          t("toolBroke", {
+            item: brokenToolName
+          }),
+          "warning"
+        );
+      }
+
+      break;
+    }
+  }
+}
+
+function addQuickCraftResultToInventory(item, quantity) {
+  let remainingAmount = quantity || 1;
+  const maxStack = item.maxStack || 1;
+
+  for (let i = 0; i < inventory.items.length; i++) {
+    const inventoryItem = inventory.items[i];
+
+    if (
+      !inventoryItem ||
+      inventoryItem.id !== item.id
+    ) {
+      continue;
+    }
+
+    const currentQuantity =
+      inventoryItem.quantity || 1;
+
+    const availableSpace =
+      maxStack - currentQuantity;
+
+    if (availableSpace <= 0) {
+      continue;
+    }
+
+    const addAmount = Math.min(
+      availableSpace,
+      remainingAmount
+    );
+
+    inventoryItem.quantity =
+      currentQuantity + addAmount;
+
+    remainingAmount -= addAmount;
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  for (let i = 0; i < inventory.items.length; i++) {
+    if (inventory.items[i] !== null) {
+      continue;
+    }
+
+    const addAmount = Math.min(
+      maxStack,
+      remainingAmount
+    );
+
+    inventory.items[i] = {
+      ...item,
+      quantity: addAmount
+    };
+
+    remainingAmount -= addAmount;
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function quickCraftRecipe(recipeId) {
+  refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
+  const recipe = recipesDatabase[recipeId];
+
+  if (!recipe || !canQuickCraftRecipe(recipe)) {
+    updateRecipesScreen();
+    return;
+  }
+
+  const resultItem =
+    itemsDatabase[recipe.resultItemId];
+
+  if (!resultItem) {
+    showMessage(t("invalidRecipeResult"));
+    return;
+  }
+
+  /*
+    Malzemeleri tükettikten sonra yer açılabileceği için
+    envanterin mevcut halinin yedeğini alıyoruz.
+    Sonuç sığmazsa her şeyi geri yükleyeceğiz.
+  */
+  const inventoryBackup = inventory.items.map(
+    function (item) {
+      return item ? { ...item } : null;
+    }
+  );
+
+  const normalIngredientsRemoved =
+    consumeQuickCraftIngredients(recipe);
+
+  if (!normalIngredientsRemoved) {
+    inventory.items = inventoryBackup;
+
+    showMessage(t("notEnoughIngredients"));
+    updateRecipesScreen();
+    updateInventoryScreen();
+    return;
+  }
+
+  const ingredientGroupsRemoved =
+    removeQuickCraftIngredientGroups(recipe);
+
+  if (!ingredientGroupsRemoved) {
+    inventory.items = inventoryBackup;
+
+    showMessage(t("notEnoughIngredients"));
+    updateRecipesScreen();
+    updateInventoryScreen();
+    return;
+  }
+
+  applyQuickCraftToolDurabilityCost(recipe);
+
+  const added = addQuickCraftResultToInventory(
+    resultItem,
+    recipe.resultQuantity || 1
+  );
+
+  if (!added) {
+    inventory.items = inventoryBackup;
+
+    showMessage(t("notEnoughInventorySpace"));
+    updateRecipesScreen();
+    updateInventoryScreen();
+    return;
+  }
+
+  discoverItem(resultItem.id);
+
+  checkGoalsByCraftedItem(resultItem.id);
+  updateGoalsPanel();
+
+  updateInventoryScreen();
+  updateCraftingScreen();
+  updateRecipesScreen();
+
+  const message = t("crafted", {
+    item: getItemName(resultItem)
+  });
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  autoSave();
 }
 
 function moveItemBetweenContainers(

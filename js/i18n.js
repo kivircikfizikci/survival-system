@@ -294,6 +294,8 @@ const translations = {
     clothingBroken: "{item} was completely destroyed.",
     cloth: "Cloth",
     loom: "Loom",
+    quickCraft: "Quick Craft",
+    notEnoughIngredients: "Not Enough Ingredients",
   },
   tr: {
     characterStatus: "Karakter Durumu",
@@ -588,6 +590,8 @@ const translations = {
     clothingBroken: "{item} tamamen parçalandı.",
     cloth: "Kumaş",
     loom: "Dokuma Tezgahı",
+    quickCraft: "Hızlı Üret",
+    notEnoughIngredients: "Yeterli Malzeme Yok",
   }
 };
 
