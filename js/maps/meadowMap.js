@@ -73,11 +73,11 @@ const meadowMap = {
   lootTables: {
     meadowGeneralArea: [
         { itemId: "dryGrass", chance: 10, quantity: 1 },
-        { itemId: "dryLeaf", chance: 7, quantity: 1 },
-        { itemId: "plantFiber", chance: 6, quantity: 1 },
+        { itemId: "dryLeaf", chance: 10, quantity: 1 },
+        { itemId: "plantFiber", chance: 7, quantity: 1 },
         { itemId: "smallFlower", chance: 5, quantity: 1 },
         { itemId: "wildHerb", chance: 4, quantity: 1 },
-        { itemId: "reed", chance: 4 },
+        { itemId: "reed", chance: 4, quantity: 1 },
         { itemId: "pebble", chance: 4, quantity: 1 },
         { itemId: "flint", chance: 4, quantity: 1 },
         { itemId: "insect", chance: 3, quantity: 1 },
@@ -92,13 +92,13 @@ const meadowMap = {
     ],
 
     dryGrassPatch: [
-      { itemId: "dryGrass", chance: 45, quantity: 1 },
-      { itemId: "plantFiber", chance: 25, quantity: 1 },
-      { itemId: "dryLeaf", chance: 15, quantity: 1 }
+      { itemId: "dryGrass", chance: 45, quantity: 2 },
+      { itemId: "plantFiber", chance: 25, quantity: 2 },
+      { itemId: "dryLeaf", chance: 15, quantity: 2 }
     ],
 
     fallenBranch: [
-      { itemId: "stick", chance: 35, quantity: 1 },
+      { itemId: "stick", chance: 35, quantity: 2 },
       { itemId: "branch", chance: 25, quantity: 1 },
       { itemId: "bark", chance: 18, quantity: 1 },
       { itemId: "dryWood", chance: 12, quantity: 1 }

@@ -1862,11 +1862,16 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
-    discoverByAny: ["branch", "sharpStone", "rope"],
+    discoverByAny: ["branch", "sharpStone", "rope", "flint"],
     ingredients: {
       branch: 2,
-      sharpStone: 2,
       rope: 2
+    },
+    ingredientGroups: {
+      stoneTip: {
+        amount: 2,
+        itemIds: ["sharpStone", "flint"]
+      }
     }
   },
   stoneKnife: {
@@ -1876,11 +1881,16 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
-    discoverByAny: ["sharpStone", "stick", "branch"],
+    discoverByAny: ["sharpStone", "stick", "branch", "flint"],
     ingredients: {
       branch: 1,
-      sharpStone: 2,
       stick: 1
+    },
+    ingredientGroups: {
+      stoneTip: {
+        amount: 2,
+        itemIds: ["sharpStone", "flint"]
+      }
     }
   },
   stonePickaxe: {
@@ -1890,11 +1900,16 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
-    discoverByAny: ["sharpStone", "branch", "rope"],
+    discoverByAny: ["sharpStone", "branch", "rope", "flint"],
     ingredients: {
       branch: 2,
-      sharpStone: 3,
       rope: 2
+    },
+    ingredientGroups: {
+      stoneTip: {
+        amount: 3,
+        itemIds: ["sharpStone", "flint"]
+      }
     }
   },
   stoneShovel: {
@@ -1904,11 +1919,16 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "tools",
-    discoverByAny: ["sharpStone", "branch", "rope"],
+    discoverByAny: ["sharpStone", "branch", "rope", "flint"],
     ingredients: {
       branch: 1,
-      sharpStone: 1,
       rope: 1
+    },
+    ingredientGroups: {
+      stoneTip: {
+        amount: 1,
+        itemIds: ["sharpStone", "flint"]
+      }
     }
   },
   stoneSpear: {
@@ -1917,12 +1937,17 @@ const recipesDatabase = {
     resultItemId: "stoneSpear",
     resultQuantity: 1,
     isPublic: false,
-    discoverByAny: ["branch", "sharpStone", "rope"],
+    discoverByAny: ["branch", "sharpStone", "rope", "flint"],
     category: "tools",
     ingredients: {
       branch: 2,
-      sharpStone: 2,
       rope: 1
+    },
+    ingredientGroups: {
+      stoneTip: {
+        amount: 2,
+        itemIds: ["sharpStone", "flint"]
+      }
     }
   },
   obsidianKnife: {

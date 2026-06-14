@@ -653,14 +653,14 @@ function huntPendingEncounter() {
   const toolStillAvailable =
     applySelectedHuntToolDurabilityCost(encounterData);
 
-    if (!toolStillAvailable) {
+  if (!toolStillAvailable) {
     return;
-    }
+  }
 
-const finalHuntChance = getFinalHuntChance(encounterData);
-const huntRoll = Math.random() * 100;
+  const finalHuntChance = getFinalHuntChance(encounterData);
+  const huntRoll = Math.random() * 100;
 
-if (huntRoll > finalHuntChance) {
+  if (huntRoll > finalHuntChance) {
     addDiscoveryLog(
       t("huntEscaped", {
         encounter: getEncounterName(encounter.id)
@@ -668,9 +668,10 @@ if (huntRoll > finalHuntChance) {
     );
 
     discoveryState.pendingEncounter = null;
+    discoveryState.selectedHuntTool = null;
 
     saveDiscoveryState();
-    updateTileActionPanel();
+    renderDiscoveryMap();
 
     return;
   }
@@ -684,7 +685,7 @@ if (huntRoll > finalHuntChance) {
     addDiscoveryLog(t("huntSucceededNoLoot"));
 
     saveDiscoveryState();
-    updateTileActionPanel();
+    renderDiscoveryMap();
 
     return;
   }
@@ -697,7 +698,7 @@ if (huntRoll > finalHuntChance) {
   addDiscoveryLog(t("huntSucceeded"));
 
   saveDiscoveryState();
-  updateTileActionPanel();
+  renderDiscoveryMap();
 }
 
 function getAvailableFightTools(encounterData) {
