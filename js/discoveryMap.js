@@ -39,6 +39,62 @@ function getSavedShelterForDiscovery() {
   }
 }
 
+function getSavedWorkstationsForDiscovery() {
+  const savedData = localStorage.getItem("survivalSystemSave");
+
+  if (!savedData) {
+    return {};
+  }
+
+  try {
+    const saveData = JSON.parse(savedData);
+
+    if (
+      !saveData.regionWorkstations ||
+      !saveData.regionWorkstations[discoveryState.currentMapId]
+    ) {
+      return {};
+    }
+
+    return saveData.regionWorkstations[discoveryState.currentMapId];
+  } catch (error) {
+    console.error("Workstation data could not be loaded:", error);
+    return {};
+  }
+}
+
+function getWorkstationMarkerPositionClass(workstationId) {
+  const markerPositions = {
+    campfire: "marker-top-left",
+    choppingBlock: "marker-top-right",
+    tanningRack: "marker-bottom-left",
+    loom: "marker-bottom-right"
+  };
+
+  return markerPositions[workstationId] || "marker-top-left";
+}
+
+function updateDiscoveryCoordinateBox() {
+  let coordinateBox = document.getElementById(
+    "discoveryCoordinateBox"
+  );
+
+  if (!coordinateBox) {
+    coordinateBox = document.createElement("div");
+    coordinateBox.id = "discoveryCoordinateBox";
+    coordinateBox.classList.add("discovery-coordinate-box");
+
+    mapViewport.appendChild(coordinateBox);
+  }
+
+  const currentTileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  coordinateBox.textContent = currentTileId;
+}
+
 function renderDiscoveryMap() {
   const map = getCurrentMap();
 
@@ -63,6 +119,7 @@ function renderDiscoveryMap() {
 
   const visitedTiles = getVisitedTilesForCurrentMap();
   const savedShelter = getSavedShelterForDiscovery();
+  const savedWorkstations = getSavedWorkstationsForDiscovery();
 
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
@@ -133,15 +190,60 @@ function renderDiscoveryMap() {
       tileButton.appendChild(shelterMarker);
     }
 
+    const workstationsOnTile = Object.values(savedWorkstations).filter(
+      function (workstation) {
+        return (
+          workstation &&
+          workstation.x === x &&
+          workstation.y === y
+        );
+      }
+    );
+
+    if (workstationsOnTile.length > 0) {
+      tileButton.classList.add("has-workstation");
+
+      const workstationMarkerGroup = document.createElement("div");
+      workstationMarkerGroup.classList.add("tile-workstation-markers");
+
+      for (let workstation of workstationsOnTile) {
+        const workstationItem =
+          itemsDatabase[workstation.itemId];
+
+        if (!workstationItem) {
+          continue;
+        }
+
+        const workstationMarker = document.createElement("img");
+        workstationMarker.classList.add("tile-workstation-marker");
+
+        workstationMarker.classList.add(
+          getWorkstationMarkerPositionClass(workstation.itemId)
+        );
+
+        workstationMarker.src =
+          workstationItem.imageSrc.startsWith("../")
+            ? workstationItem.imageSrc
+            : "../" + workstationItem.imageSrc;
+
+        workstationMarker.alt =
+          workstationItem.nameKey
+            ? t(workstationItem.nameKey)
+            : workstation.itemId;
+
+        workstationMarker.draggable = false;
+
+        workstationMarkerGroup.appendChild(workstationMarker);
+      }
+
+      if (workstationMarkerGroup.children.length > 0) {
+        tileButton.appendChild(workstationMarkerGroup);
+      }
+    }
+
       if (x === discoveryState.x && y === discoveryState.y) {
         tileButton.classList.add("is-current");
-
-        const tileName = document.createElement("span");
-        tileName.classList.add("current-tile-label");
-        tileName.textContent = tileId;
-
-        tileButton.appendChild(tileName);
-        } else if (
+      } else if (
           !discoveryState.pendingEncounter &&
           canMoveTo(x, y)
         ) {
@@ -165,6 +267,7 @@ function renderDiscoveryMap() {
 
     updateDiscoveryHeader();
     updateTileActionPanel();
+    updateDiscoveryCoordinateBox();
 
     requestAnimationFrame(function () {
         updateMapCamera();

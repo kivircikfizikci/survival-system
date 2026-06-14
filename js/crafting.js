@@ -149,6 +149,19 @@ function getCurrentRegionWorkstations() {
   return regionWorkstations[currentRegionId];
 }
 
+function isWorkstationAtCurrentTile(workstation) {
+  if (!workstation) {
+    return false;
+  }
+
+  const currentPosition = getCurrentDiscoveryPosition();
+
+  return (
+    workstation.x === currentPosition.x &&
+    workstation.y === currentPosition.y
+  );
+}
+
 function hasWorkstation(workstationId) {
   const currentRegionWorkstations = getCurrentRegionWorkstations();
 
@@ -176,9 +189,13 @@ if (hasWorkstation(workstationId)) {
   return false;
 }
 
+  const currentPosition = getCurrentDiscoveryPosition();
+
   currentRegionWorkstations[workstationId] = {
     id: item.id,
-    itemId: item.id
+    itemId: item.id,
+    x: currentPosition.x,
+    y: currentPosition.y
   };
 
   discoverItem(workstationId);
@@ -647,8 +664,7 @@ function hasRequiredCraftWorkstation(recipe) {
   const requiredWorkstation =
     currentRegionWorkstations[recipe.requiredWorkstation];
 
-  return requiredWorkstation !== undefined &&
-    requiredWorkstation !== null;
+  return isWorkstationAtCurrentTile(requiredWorkstation);
 }
 
 function canCraftSlotsMatchRecipe(recipe) {

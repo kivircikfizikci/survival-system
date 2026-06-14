@@ -183,6 +183,15 @@ async function movePlayerTo(x, y) {
 
     saveDiscoveryState();
     renderDiscoveryMap();
+
+    if (typeof updateWorkstationScreen === "function") {
+      updateWorkstationScreen();
+    }
+
+    if (typeof updateCraftingScreen === "function") {
+      updateCraftingScreen();
+    }
+
   } finally {
     isDiscoveryMoving = false;
     mapGrid.classList.remove("is-player-moving");
@@ -191,7 +200,7 @@ async function movePlayerTo(x, y) {
 
 function setDiscoveryZoom(newZoom) {
  const minZoom = 0.5;
- const maxZoom = 1.5;
+ const maxZoom = 2;
 
   discoveryState.zoom = Math.max(
     minZoom,

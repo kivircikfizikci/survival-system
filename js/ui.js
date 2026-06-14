@@ -712,7 +712,10 @@ function updateWorkstationScreen() {
     slotElement.innerHTML = "";
     slotElement.classList.remove("is-active");
 
-    if (!workstation) {
+    if (
+      !workstation ||
+      !isWorkstationAtCurrentTile(workstation)
+    ) {
       continue;
     }
 
