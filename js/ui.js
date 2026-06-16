@@ -379,8 +379,66 @@ function updateEquipmentScreen() {
   });
 }
 
+function getSleepRemainingMinutes() {
+  if (
+    !isSleeping ||
+    !sleepSession ||
+    !sleepSession.active
+  ) {
+    return 0;
+  }
+
+  const slotIndex = sleepSession.slotIndex;
+  const sleepItem = inventory.items[slotIndex];
+
+  if (
+    !sleepItem ||
+    sleepItem.id !== sleepSession.itemId ||
+    !sleepItem.sleepData
+  ) {
+    return 0;
+  }
+
+  const energyPerTick = Number(
+    sleepItem.sleepData.energyPerTick || 1
+  );
+
+  const tickMs = Number(gameConfig.sleepTickMs);
+
+  const remainingEnergy = Math.max(
+    0,
+    100 - energy
+  );
+
+  if (remainingEnergy <= 0) {
+    return 0;
+  }
+
+  const remainingTicks = Math.ceil(
+    remainingEnergy / energyPerTick
+  );
+
+  const elapsedSinceLastTick = Math.max(
+    0,
+    Date.now() - sleepSession.lastTickAt
+  );
+
+  const remainingMs = Math.max(
+    0,
+    remainingTicks * tickMs - elapsedSinceLastTick
+  );
+
+  return Math.max(
+    1,
+    Math.ceil(remainingMs / 60000)
+  );
+}
+
 function getPlayerStatusText() {
-  if (isSleeping) return t("statusLabel", { status: t("sleeping") });
+    if (isSleeping) { const remainingMinutes = getSleepRemainingMinutes();
+    const sleepingStatus = t("sleeping") + " ( " + remainingMinutes + " " + t("minute") + " )";
+    return t("statusLabel", { status: sleepingStatus});
+  }
   if (hunger <= 15) return t("statusLabel", { status: t("starving") });
   if (energy <= 15) return t("statusLabel", { status: t("exhausted") });
   if (health <= 30) return t("statusLabel", { status: t("weak") });

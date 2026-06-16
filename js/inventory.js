@@ -387,6 +387,14 @@ function startSleepTimer() {
 
   sleepIntervalId = setInterval(function () {
     processSleepProgress();
+
+    const statusElement =
+      document.getElementById("statusText");
+
+    if (statusElement) {
+      statusElement.textContent =
+        getPlayerStatusText();
+    }
   }, 1000);
 }
 

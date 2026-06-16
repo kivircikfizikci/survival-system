@@ -305,6 +305,7 @@ const translations = {
     buriedStashAlreadyRevealed: "You already have an active buried stash location.",
     buriedStashLootTaken: "You took these items from the buried stash: {items}",
     takeAll: "Take All",
+    minute: "minute",
   },
   //Türkçe
   tr: {
@@ -610,6 +611,7 @@ const translations = {
     buriedStashAlreadyRevealed: "Zaten aktif bir gömülü zula haritan var.",
     buriedStashLootTaken: "Gömülü zuladan şunları aldın: {items}",
     takeAll: "Tümünü Al",
+    minute: "dakika",
   }
 };
 

@@ -98,7 +98,7 @@ const meadowMap = {
     ],
 
     fallenBranch: [
-      { itemId: "stick", chance: 35, quantity: 2 },
+      { itemId: "stick", chance: 35, quantity: 1 },
       { itemId: "branch", chance: 25, quantity: 1 },
       { itemId: "bark", chance: 18, quantity: 1 },
       { itemId: "dryWood", chance: 12, quantity: 1 }
