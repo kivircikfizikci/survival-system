@@ -76,6 +76,7 @@ const meadowMap = {
         { itemId: "dryLeaf", chance: 10, quantity: 1 },
         { itemId: "plantFiber", chance: 7, quantity: 1 },
         { itemId: "smallFlower", chance: 5, quantity: 1 },
+        { itemId: "blackberry", chance: 5, quantity: 1 },
         { itemId: "wildHerb", chance: 4, quantity: 1 },
         { itemId: "reed", chance: 4, quantity: 1 },
         { itemId: "pebble", chance: 4, quantity: 1 },
@@ -85,7 +86,7 @@ const meadowMap = {
         { itemId: "feather", chance: 2, quantity: 1 }
     ],
     meadowBush: [
-      { itemId: "blackberry", chance: 35, quantity: 1 },
+      { itemId: "blackberry", chance: 35, quantity: 2 },
       { itemId: "dryLeaf", chance: 20, quantity: 1 },
       { itemId: "insect", chance: 10, quantity: 1 },
       { itemId: "plantFiber", chance: 10, quantity: 1 }

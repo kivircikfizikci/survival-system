@@ -31,30 +31,34 @@ const gameConfig = {
 
   actionCosts: {
     move: {
-      energy: 0.2,
-      hunger: 0.1
+      energy: 0.1,
+      hunger: 0.05
     },
 
     raftMove: {
-      energy: 0.4,
+      energy: 0.2,
       hunger: 0.15
     },
 
     hunt: {
+      energy: 2,
+      hunger: 1
+    },
+
+    fight: {
       energy: 3,
       hunger: 2
     },
 
-    fight: {
-      energy: 6,
-      hunger: 3
-    },
-
     flee: {
-      energy: 5,
-      hunger: 2
+      energy: 4,
+      hunger: 1
     }
-  }
+  },
+  emergencyMovementCosts: {
+    exhaustedHealth: 2,
+    starvingHealth: 1
+  },
 };
 
 function getSavedDiscoveryMapId() {
@@ -172,7 +176,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/dryWood.png",
     weight: 0.7,
-    maxStack: 3
+    maxStack: 6
   },
   insect: {
     id: "insect",
@@ -247,7 +251,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/branch.png",
     weight: 1,
-    maxStack: 2
+    maxStack: 4
   },
   mushroom: {
     id: "mushroom",
@@ -1654,7 +1658,7 @@ const itemsDatabase = {
     category: "animal",
     imageSrc: "img/animalBone.png",
     weight: 0.3,
-    maxStack: 4
+    maxStack: 12
   },
   animalHide: {
     id: "animalHide",
@@ -1663,7 +1667,7 @@ const itemsDatabase = {
     category: "animal",
     imageSrc: "img/animalHide.png",
     weight: 0.8,
-    maxStack: 2
+    maxStack: 4
   },
   honeycomb: {
     id: "honeycomb",

@@ -306,6 +306,8 @@ const translations = {
     buriedStashLootTaken: "You took these items from the buried stash: {items}",
     takeAll: "Take All",
     minute: "minute",
+    exhaustedMovementDamage: "Exhaustion is hurting you",
+    starvingMovementDamage: "You're suffering from hunger",
   },
   //Türkçe
   tr: {
@@ -612,6 +614,8 @@ const translations = {
     buriedStashLootTaken: "Gömülü zuladan şunları aldın: {items}",
     takeAll: "Tümünü Al",
     minute: "dakika",
+    exhaustedMovementDamage: "Tükenmişlik canını yakıyor",
+    starvingMovementDamage:"Açlıktan canın yanıyor",
   }
 };
 

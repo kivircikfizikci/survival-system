@@ -369,7 +369,6 @@ function canPayDiscoveryActionCost(actionType) {
 
 function payDiscoveryActionCost(actionType) {
   const actionCost = gameConfig.actionCosts[actionType];
-  
 
   if (!actionCost) {
     return true;
@@ -383,27 +382,87 @@ function payDiscoveryActionCost(actionType) {
 
   const currentEnergy = Number(saveData.energy ?? 100);
   const currentHunger = Number(saveData.hunger ?? 100);
+  const currentHealth = Number(saveData.health ?? 100);
 
-  if (currentEnergy < (actionCost.energy || 0)) {
-    addDiscoveryLog(t("actionTooTiring"));
-    return false;
+  const energyCost = Number(actionCost.energy || 0);
+  const hungerCost = Number(actionCost.hunger || 0);
+
+  const isMovementAction =
+    actionType === "move" ||
+    actionType === "raftMove";
+
+  const hasEnoughEnergy =
+    currentEnergy >= energyCost;
+
+  const hasEnoughHunger =
+    currentHunger >= hungerCost;
+
+  /*
+    Hunt, fight ve flee gibi hareket dışındaki eylemler,
+    enerji veya açlık yetersizse hâlâ engellenir.
+  */
+  if (!isMovementAction) {
+    if (!hasEnoughEnergy) {
+      addDiscoveryLog(t("actionTooTiring"));
+      return false;
+    }
+
+    if (!hasEnoughHunger) {
+      addDiscoveryLog(t("actionTooHungry"));
+      return false;
+    }
   }
 
-  if (currentHunger < (actionCost.hunger || 0)) {
-    addDiscoveryLog(t("actionTooHungry"));
-    return false;
+  let healthLoss = 0;
+
+  /*
+    Hareket sırasında enerji yetersizse,
+    enerji yerine sağlık harcanır.
+  */
+  if (isMovementAction && !hasEnoughEnergy) {
+    healthLoss += Number(
+      gameConfig.emergencyMovementCosts?.exhaustedHealth || 2
+    );
+
+    addDiscoveryLog(t("exhaustedMovementDamage"));
+  }
+
+  /*
+    Hareket sırasında açlık yetersizse,
+    ayrıca sağlık harcanır.
+  */
+  if (isMovementAction && !hasEnoughHunger) {
+    healthLoss += Number(
+      gameConfig.emergencyMovementCosts?.starvingHealth || 1
+    );
+
+    addDiscoveryLog(t("starvingMovementDamage"));
   }
 
   saveData.energy = Math.max(
     0,
-    Math.min(100, Number((currentEnergy - (actionCost.energy || 0)).toFixed(2)))
+    Math.min(
+      100,
+      Number((currentEnergy - energyCost).toFixed(2))
+    )
   );
 
   saveData.hunger = Math.max(
     0,
-    Math.min(100, Number((currentHunger - (actionCost.hunger || 0)).toFixed(2)))
+    Math.min(
+      100,
+      Number((currentHunger - hungerCost).toFixed(2))
+    )
   );
-  
+
+  saveData.health = Math.max(
+    0,
+    Math.min(
+      100,
+      Number((currentHealth - healthLoss).toFixed(2))
+    )
+  );
+
   saveMainSaveData(saveData);
 
   return true;
