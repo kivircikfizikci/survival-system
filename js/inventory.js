@@ -1,7 +1,7 @@
 let inventory = {
-  baseMaxWeight: 10,
-  baseSlots: 8,
-  maxWeight: 10,
+  baseMaxWeight: 15,
+  baseSlots: 10,
+  maxWeight: 15,
   items: [null, null, null, null]
 };
 

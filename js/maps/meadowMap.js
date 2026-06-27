@@ -94,7 +94,7 @@ const meadowMap = {
 
     dryGrassPatch: [
       { itemId: "dryGrass", chance: 45, quantity: 2 },
-      { itemId: "plantFiber", chance: 25, quantity: 2 },
+      { itemId: "plantFiber", chance: 25, quantity: 1 },
       { itemId: "dryLeaf", chance: 15, quantity: 2 }
     ],
 

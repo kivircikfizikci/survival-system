@@ -395,11 +395,10 @@ function renderDiscoveryMap() {
     if (hasBuriedStashOnTile) {
       tileButton.classList.add("has-buried-stash");
 
-      const stashMarker = document.createElement("img");
+      const stashMarker = document.createElement("span");
       stashMarker.classList.add("tile-buried-stash-marker");
-      stashMarker.src = "../img/buriedStashMap.png";
-      stashMarker.alt = t("buriedStash");
-      stashMarker.draggable = false;
+      stashMarker.textContent = "X";
+      stashMarker.title = t("buriedStash");
 
       tileButton.appendChild(stashMarker);
     }

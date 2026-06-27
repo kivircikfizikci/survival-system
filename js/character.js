@@ -10,6 +10,7 @@ let sleepSession = null;
 let discoveredRecipes = [];
 let discoveredItems = [];
 let completedGoals = [];
+let activeGoalsStage = "starter";
 let starterGoalsRewardClaimed = false;
 let isGrantingStarterGoalsReward = false;
 let buriedStash = null;

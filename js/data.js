@@ -27,7 +27,7 @@ function getRegionNameById(regionId) {
 }
 
 const gameConfig = {
-  sleepTickMs: 30000,
+  sleepTickMs: 3000,
 
   actionCosts: {
     move: {
@@ -95,54 +95,95 @@ function updateRegionBackground() {
   );
 }
 
-const goalsDatabase = [
-  {
-    id: "craftGrassWrap",
-    textKey: "goalCraftGrassWrap",
-    type: "craftedItem",
-    itemId: "grassWrap"
-  },
-  {
-    id: "craftGrassTunic",
-    textKey: "goalCraftGrassTunic",
-    type: "craftedItem",
-    itemId: "grassTunic"
-  },
-  {
-    id: "craftGrassSatchel",
-    textKey: "goalCraftGrassSatchel",
-    type: "craftedItem",
-    itemId: "grassSatchel"
-  },
-  {
-    id: "craftStoneKnife",
-    textKey: "goalCraftStoneKnife",
-    type: "craftedItem",
-    itemId: "stoneKnife"
-  },
-  {
-    id: "craftStoneAxe",
-    textKey: "goalCraftStoneAxe",
-    type: "craftedItem",
-    itemId: "stoneAxe"
-  },
-  {
-    id: "craftLeafBed",
-    textKey: "goalCraftLeafBed",
-    type: "craftedItem",
-    itemId: "leafBed"
-  },
-  {
-    id: "reachTrail",
-    textKey: "goalReachTrail",
-    type: "reachedMap",
-    mapId: "trail"
-  }
-];
+const goalsDatabase = {
+  starter: [
+    {
+      id: "craftGrassWrap",
+      textKey: "goalCraftGrassWrap",
+      type: "craftedItem",
+      itemId: "grassWrap"
+    },
+    {
+      id: "craftGrassTunic",
+      textKey: "goalCraftGrassTunic",
+      type: "craftedItem",
+      itemId: "grassTunic"
+    },
+    {
+      id: "craftGrassSatchel",
+      textKey: "goalCraftGrassSatchel",
+      type: "craftedItem",
+      itemId: "grassSatchel"
+    },
+    {
+      id: "craftStoneKnife",
+      textKey: "goalCraftStoneKnife",
+      type: "craftedItem",
+      itemId: "stoneKnife"
+    },
+    {
+      id: "craftStoneAxe",
+      textKey: "goalCraftStoneAxe",
+      type: "craftedItem",
+      itemId: "stoneAxe"
+    },
+    {
+      id: "craftLeafBed",
+      textKey: "goalCraftLeafBed",
+      type: "craftedItem",
+      itemId: "leafBed"
+    },
+    {
+      id: "reachTrail",
+      textKey: "goalReachTrail",
+      type: "reachedMap",
+      mapId: "trail"
+    }
+  ],
+
+  trail: [
+    {
+      id: "craftBoneKnife",
+      textKey: "goalCraftBoneKnife",
+      type: "craftedItem",
+      itemId: "boneKnife"
+    },
+    {
+      id: "craftSimpleBedroll",
+      textKey: "goalCraftSimpleBedroll",
+      type: "craftedItem",
+      itemId: "simpleBedroll"
+    },
+    {
+      id: "craftBandage",
+      textKey: "goalCraftBandage",
+      type: "craftedItem",
+      itemId: "bandage"
+    },
+    {
+      id: "craftCampfire",
+      textKey: "goalCraftCampfire",
+      type: "craftedItem",
+      itemId: "campfire"
+    },
+    {
+      id: "craftLeatherPouch",
+      textKey: "goalCraftLeatherPouch",
+      type: "craftedItem",
+      itemId: "leatherPouch"
+    },
+    {
+      id: "reachLake",
+      textKey: "goalReachLake",
+      type: "reachedMap",
+      mapId: "lake"
+    }
+  ]
+};
 
 const buriedStashLootTable = [
-  {itemId: "clothScrap", chance: 80, quantityMin: 1, quantityMax: 3},
-  {itemId: "leatherScrap", chance: 60, quantityMin: 1, quantityMax: 3},
+  {itemId: "clothScrap", chance: 80, quantityMin: 1, quantityMax: 4},
+  {itemId: "leather", chance: 60, quantityMin: 1, quantityMax: 3},
   {itemId: "rope", chance: 70, quantityMin: 1, quantityMax: 2},
   {itemId: "bandage", chance: 55, quantityMin: 1, quantityMax: 2},
   {itemId: "boneKnife", chance: 30, quantityMin: 1, quantityMax: 1}
@@ -1667,7 +1708,7 @@ const itemsDatabase = {
     category: "animal",
     imageSrc: "img/animalHide.png",
     weight: 0.8,
-    maxStack: 4
+    maxStack: 6
   },
   honeycomb: {
     id: "honeycomb",
@@ -1676,7 +1717,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/honeycomb.png",
     weight: 0.15,
-    maxStack: 4,
+    maxStack: 12,
     hungerRestore: 10
   },
   rawMeat: {
@@ -1685,8 +1726,8 @@ const itemsDatabase = {
     type: "usable",
     category: "food",
     imageSrc: "img/rawMeat.png",
-    weight: 0.6,
-    maxStack: 4,
+    weight: 0.4,
+    maxStack: 8,
     hungerRestore: 8
   },
   // Vehicle
@@ -2277,10 +2318,15 @@ const recipesDatabase = {
     isPublic: false,
     category: "survival",
     discoverByAny: ["dryWood", "stick", "pebble"],
-    ingredients: { 
-      dryWood: 2, 
+    ingredients: {
       stick: 2, 
       pebble: 2
+    },
+    ingredientGroups: {
+      campfireMaterial: {
+        amount: 2,
+        itemIds: [ "dryWood", "branch" ]
+      }
     }
   },
   choppingBlock: {
@@ -2476,10 +2522,15 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "cooking",
-    discoverByAll: ["fish", "campfire"],
+    discoverByAll: ["fish", "fishMeat", "campfire"],
     ingredients: {
-      fish: 1,
-      dryWood: 1
+      fishMeat: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
     }
   },
   cookedFrog: {
@@ -2492,8 +2543,13 @@ const recipesDatabase = {
     category: "cooking",
     discoverByAll: ["frog", "campfire"],
     ingredients: {
-      frog: 1,
-      dryWood: 1
+      frog: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
     }
   },
   cookedMushroom: {
@@ -2506,8 +2562,13 @@ const recipesDatabase = {
     category: "cooking",
     discoverByAll: ["mushroom", "campfire"],
     ingredients: {
-      mushroom: 1,
-      dryWood: 1
+      mushroom: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
     }
   },
   cookedSnail: {
@@ -2520,8 +2581,13 @@ const recipesDatabase = {
     category: "cooking",
     discoverByAll: ["snail", "campfire"],
     ingredients: {
-      snail: 1,
-      dryWood: 1
+      snail: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
     }
   },
   cookedMeat: {
@@ -2534,8 +2600,13 @@ const recipesDatabase = {
     category: "cooking",
     discoverByAll: ["rawMeat", "campfire"],
     ingredients: {
-      rawMeat: 1,
-      dryWood: 1
+      rawMeat: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
     }
   },
   // Smelting Recipes

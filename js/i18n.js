@@ -308,6 +308,12 @@ const translations = {
     minute: "minute",
     exhaustedMovementDamage: "Exhaustion is hurting you",
     starvingMovementDamage: "You're suffering from hunger",
+    goalCraftBoneKnife: "Craft a Bone Knife",
+    goalCraftSimpleBedroll: "Craft a Simple Bedroll",
+    goalCraftBandage: "Craft a Bandage",
+    goalCraftCampfire: "Craft a Campfire",
+    goalCraftLeatherPouch: "Craft a Leather Pouch",
+    goalReachLake: "Reach the Lake region",
   },
   //Türkçe
   tr: {
@@ -616,6 +622,12 @@ const translations = {
     minute: "dakika",
     exhaustedMovementDamage: "Tükenmişlik canını yakıyor",
     starvingMovementDamage:"Açlıktan canın yanıyor",
+    goalCraftBoneKnife: "Kemik bıçak üret",
+    goalCraftSimpleBedroll: "Basit uyku tulumu üret",
+    goalCraftBandage: "Bandaj üret",
+    goalCraftCampfire: "Kamp ateşi üret",
+    goalCraftLeatherPouch: "Deri kese üret",
+    goalReachLake: "Göl bölgesine ulaş",
   }
 };
 

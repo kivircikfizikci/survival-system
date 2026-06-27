@@ -97,6 +97,7 @@ function saveGame() {
     craftSlots: craftSlots,
 
     completedGoals: completedGoals,
+    activeGoalsStage: activeGoalsStage,
     starterGoalsRewardClaimed: starterGoalsRewardClaimed,
     buriedStash: buriedStash,
 
@@ -157,6 +158,15 @@ function loadGame() {
 
   if (Array.isArray(saveData.completedGoals)) {
     completedGoals = saveData.completedGoals;
+  }
+
+  if (
+    saveData.activeGoalsStage === "starter" ||
+    saveData.activeGoalsStage === "trail"
+  ) {
+    activeGoalsStage = saveData.activeGoalsStage;
+  } else if (saveData.starterGoalsRewardClaimed === true) {
+    activeGoalsStage = "trail";
   }
 
   starterGoalsRewardClaimed =

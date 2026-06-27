@@ -1083,6 +1083,10 @@ function updateShelterScreen() {
   }
 }
 
+function getActiveGoals() {
+  return goalsDatabase[activeGoalsStage] || [];
+}
+
 function completeGoal(goalId) {
   if (!goalId) {
     return;
@@ -1098,7 +1102,9 @@ function isGoalCompleted(goalId) {
 }
 
 function checkGoalsByCraftedItem(itemId) {
-  goalsDatabase.forEach(function (goal) {
+  const activeGoals = getActiveGoals();
+
+  activeGoals.forEach(function (goal) {
     if (goal.type !== "craftedItem") {
       return;
     }
@@ -1126,8 +1132,9 @@ function getCurrentDiscoveryMapIdForGoals() {
 
 function checkGoalsByCurrentMap() {
   const currentMapId = getCurrentDiscoveryMapIdForGoals();
+  const activeGoals = getActiveGoals();
 
-  goalsDatabase.forEach(function (goal) {
+  activeGoals.forEach(function (goal) {
     if (goal.type !== "reachedMap") {
       return;
     }
@@ -1146,9 +1153,16 @@ function updateGoalsProgress() {
     return;
   }
 
+  const activeGoals = getActiveGoals();
+
   goalsProgress.innerHTML = "";
 
-  goalsDatabase.forEach(function (goal) {
+  goalsProgress.style.gridTemplateColumns =
+    "repeat(" +
+    activeGoals.length +
+    ", minmax(12px, 1fr))";
+
+  activeGoals.forEach(function (goal) {
     const progressCell = document.createElement("span");
     progressCell.classList.add("goal-progress-cell");
 
@@ -1161,7 +1175,7 @@ function updateGoalsProgress() {
 }
 
 function areStarterGoalsCompleted() {
-  return goalsDatabase.every(function (goal) {
+  return goalsDatabase.starter.every(function (goal) {
     return isGoalCompleted(goal.id);
   });
 }
@@ -1198,6 +1212,7 @@ function checkStarterGoalsReward() {
     }
 
     starterGoalsRewardClaimed = true;
+    activeGoalsStage = "trail";
 
     const completedMessage =
       t("starterGoalsCompleted");
@@ -1224,10 +1239,13 @@ function updateGoalsPanel() {
   }
 
   checkGoalsByCurrentMap();
+  checkStarterGoalsReward();
+
+  const activeGoals = getActiveGoals();
 
   goalsList.innerHTML = "";
 
-  goalsDatabase.forEach(function (goal) {
+  activeGoals.forEach(function (goal) {
     const goalElement = document.createElement("div");
     goalElement.classList.add("goal-item");
 
@@ -1237,7 +1255,8 @@ function updateGoalsPanel() {
 
     const checkbox = document.createElement("span");
     checkbox.classList.add("goal-check");
-    checkbox.textContent = isGoalCompleted(goal.id) ? "✓" : "○";
+    checkbox.textContent =
+      isGoalCompleted(goal.id) ? "✓" : "○";
 
     const text = document.createElement("span");
     text.classList.add("goal-text");
@@ -1248,7 +1267,6 @@ function updateGoalsPanel() {
   });
 
   updateGoalsProgress();
-  checkStarterGoalsReward(); 
   updateGoalsPanelState();
 }
 
