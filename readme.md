@@ -1,4 +1,7 @@
 1. Yapılacaklar
+Ağaç Kesme sistemi
+Su toplama sistemi
+trail bölgesi için görev düzeltmesi
 Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.

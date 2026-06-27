@@ -143,16 +143,45 @@ const goalsDatabase = {
 
   trail: [
     {
-      id: "craftBoneKnife",
-      textKey: "goalCraftBoneKnife",
-      type: "craftedItem",
-      itemId: "boneKnife"
+      id: "chopFirstTree",
+      textKey: "goalChopFirstTree",
+      type: "choppedTree"
     },
     {
-      id: "craftSimpleBedroll",
-      textKey: "goalCraftSimpleBedroll",
+      id: "placeChoppingBlock",
+      textKey: "goalPlaceChoppingBlock",
+      type: "placedWorkstation",
+      workstationId: "choppingBlock"
+    },
+    {
+      id: "processWoodLog",
+      textKey: "goalProcessWoodLog",
+      type: "craftedAnyItem",
+      itemIds: ["splitWood", "woodPlank"]
+    },
+    {
+      id: "reachLake",
+      textKey: "goalReachLake",
+      type: "reachedMap",
+      mapId: "lake"
+    },
+    {
+      id: "collectFreshWater",
+      textKey: "goalCollectFreshWater",
+      type: "obtainedItem",
+      itemId: "freshWater"
+    },
+    {
+      id: "placeLoom",
+      textKey: "goalPlaceLoom",
+      type: "placedWorkstation",
+      workstationId: "loom"
+    },
+    {
+      id: "craftCloth",
+      textKey: "goalCraftCloth",
       type: "craftedItem",
-      itemId: "simpleBedroll"
+      itemId: "cloth"
     },
     {
       id: "craftBandage",
@@ -161,22 +190,10 @@ const goalsDatabase = {
       itemId: "bandage"
     },
     {
-      id: "craftCampfire",
-      textKey: "goalCraftCampfire",
+      id: "craftSterileBandage",
+      textKey: "goalCraftSterileBandage",
       type: "craftedItem",
-      itemId: "campfire"
-    },
-    {
-      id: "craftLeatherPouch",
-      textKey: "goalCraftLeatherPouch",
-      type: "craftedItem",
-      itemId: "leatherPouch"
-    },
-    {
-      id: "reachLake",
-      textKey: "goalReachLake",
-      type: "reachedMap",
-      mapId: "lake"
+      itemId: "sterileBandage"
     }
   ]
 };
