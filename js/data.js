@@ -53,6 +53,14 @@ const gameConfig = {
     flee: {
       energy: 4,
       hunger: 1
+    },
+    chopTree: {
+      energy: 2,
+      hunger: 1
+    },
+    fillWater: {
+      energy: 0.2,
+      hunger: 0
     }
   },
   emergencyMovementCosts: {
@@ -409,7 +417,13 @@ const itemsDatabase = {
     category: "container",
     imageSrc: "img/plasticBottle.png",
     weight: 0.25,
-    maxStack: 1
+    maxStack: 1,
+
+    containerData: {
+      capacity: 5,
+      unitMl: 100,
+      allowedLiquids: ["freshWater"]
+    }
   },
   tinCan: {
     id: "tinCan",
@@ -418,7 +432,13 @@ const itemsDatabase = {
     category: "container",
     imageSrc: "img/tinCan.png",
     weight: 0.18,
-    maxStack: 8
+    maxStack: 8,
+
+    containerData: {
+      capacity: 2,
+      unitMl: 100,
+      allowedLiquids: ["freshWater"]
+    }
   },
   worm: {
     id: "worm",
@@ -1356,7 +1376,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/cookedFish.png",
     weight: 0.4,
-    maxStack: 4,
+    maxStack: 8,
     hungerRestore: 20
   },
   cookedFrog: {
@@ -1366,7 +1386,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/cookedFrog.png",
     weight: 0.3,
-    maxStack: 4,
+    maxStack: 8,
     hungerRestore: 15
   },
   cookedMushroom: {
@@ -1376,7 +1396,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/cookedMushroom.png",
     weight: 0.2,
-    maxStack: 4,
+    maxStack: 8,
     hungerRestore: 10
   },
   cookedSnail: {
@@ -1386,7 +1406,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/cookedSnail.png",
     weight: 0.1,
-    maxStack: 4,
+    maxStack: 8,
     hungerRestore: 8
   },
   cookedMeat: {
@@ -1396,7 +1416,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/cookedMeat.png",
     weight: 0.4,
-    maxStack: 4,
+    maxStack: 8,
     hungerRestore: 25
   },
   // Smelting Items
@@ -1884,11 +1904,17 @@ const recipesDatabase = {
     resultItemId: "bandage",
     resultQuantity: 1,
     isPublic: true,
+    requiredWorkstation: "campfire",
     category: "medical",
     ingredients: {
-      dirtyBandage: 1,
-      freshWater: 1
-    }
+      dirtyBandage: 1
+    },
+    liquidIngredients: [
+      {
+        itemId: "freshWater",
+        amount: 1
+      }
+    ]
   },
   sterileBandage: {
     id: "sterileBandage",
@@ -1897,12 +1923,18 @@ const recipesDatabase = {
     resultQuantity: 1,
     isPublic: false,
     category: "medical",
-    discoverByAny: ["bandage", "boiledWater"],
+    discoverByAny: ["bandage"],
     ingredients: {
-      bandage: 1,
-      boiledWater: 1
+      bandage: 1
+    },
+    liquidIngredients: [
+    {
+      itemId: "freshWater",
+      amount: 1
     }
-  },
+  ],
+  requiredWorkstation: "campfire"
+},
   herbalPaste: {
     id: "herbalPaste",
     nameKey: "herbalPaste",
@@ -2232,9 +2264,12 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     category: "survival",
     discoverByAny: ["freshWater", "campfire"],
-    ingredients: {
-      freshWater: 1
-    }
+    liquidIngredients: [
+      {
+        itemId: "freshWater",
+        amount: 1
+      }
+    ],
   },
   fishBait: {
     id: "fishBait",

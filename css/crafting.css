@@ -259,6 +259,39 @@
   justify-content: center;
 }
 
+.recipe-liquid {
+  position: relative;
+}
+
+.recipe-liquid::after {
+  /* sağ üstte su simgesi
+  content: "💧";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  line-height: 1;
+  border-radius: 50%;
+  background: rgba(25, 75, 105, 0.9);
+}
+
+.recipe-liquid-missing {
+  opacity: 0.55;
+  border-radius: 8px;
+  padding: 4px;
+  outline: 1px solid rgba(180, 55, 55, 0.9);
+}
+
+.recipe-liquid-missing span {
+  color: #d96b6b;
+}
+
 .log-card {
   min-height: 260px;
 }
@@ -412,7 +445,7 @@
 
 .recipe-workstation,
 .recipe-workstation-missing {
-  border: 1px solid rgba(251, 191, 36, 0.45);
+    border: 1px solid rgba(251, 191, 36, 0.45);
   border-radius: 10px;
   padding: 4px;
 }

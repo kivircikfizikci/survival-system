@@ -169,53 +169,143 @@ function getLootText(lootItems) {
     .join(", ");
 }
 
-function simulateAddLootItemsToInventory(saveData, lootItems) {
+function isSavedContainerItem(item) {
+  return Boolean(
+    item &&
+    item.category === "container" &&
+    item.containerData
+  );
+}
+
+function isSavedContainerEmpty(item) {
+  if (!isSavedContainerItem(item)) {
+    return false;
+  }
+
+  return (
+    !item.contents ||
+    Number(item.contents.amount || 0) <= 0
+  );
+}
+
+function canSavedInventoryItemsStack(
+  existingItem,
+  newItem
+) {
+  if (!existingItem || !newItem) {
+    return false;
+  }
+
+  if (existingItem.id !== newItem.id) {
+    return false;
+  }
+
+  const maxStack = Number(
+    existingItem.maxStack ||
+    newItem.maxStack ||
+    1
+  );
+
+  if (
+    Number(existingItem.quantity || 1) >=
+    maxStack
+  ) {
+    return false;
+  }
+
+  if (
+    isSavedContainerItem(existingItem) ||
+    isSavedContainerItem(newItem)
+  ) {
+    return (
+      isSavedContainerEmpty(existingItem) &&
+      isSavedContainerEmpty(newItem)
+    );
+  }
+
+  return true;
+}
+
+function simulateAddLootItemsToInventory(
+  saveData,
+  lootItems
+) {
   if (!saveData || !saveData.inventory) {
     return null;
   }
 
   const inventoryItems = JSON.parse(
-    JSON.stringify(saveData.inventory.items || [])
+    JSON.stringify(
+      saveData.inventory.items || []
+    )
   );
 
-  const maxWeight = saveData.inventory.maxWeight || 0;
+  const maxWeight =
+    saveData.inventory.maxWeight || 0;
 
-  const currentWeight = getSaveInventoryWeight(inventoryItems);
+  const currentWeight =
+    getSaveInventoryWeight(inventoryItems);
 
-  const addedWeight = lootItems.reduce(function (total, lootItem) {
-    const databaseItem = itemsDatabase[lootItem.itemId];
+  const addedWeight = lootItems.reduce(
+    function (total, lootItem) {
+      const databaseItem =
+        itemsDatabase[lootItem.itemId];
 
-    if (!databaseItem) {
-      return total;
-    }
+      if (!databaseItem) {
+        return total;
+      }
 
-    return total + (databaseItem.weight || 0) * (lootItem.quantity || 1);
-  }, 0);
+      return (
+        total +
+        Number(databaseItem.weight || 0) *
+          Number(lootItem.quantity || 1)
+      );
+    },
+    0
+  );
 
-  if (currentWeight + addedWeight > maxWeight) {
+  if (
+    currentWeight + addedWeight >
+    maxWeight
+  ) {
     return null;
   }
 
   for (let lootItem of lootItems) {
-    const databaseItem = itemsDatabase[lootItem.itemId];
+    const databaseItem =
+      itemsDatabase[lootItem.itemId];
 
     if (!databaseItem) {
       return null;
     }
 
-    let quantity = lootItem.quantity || 1;
-    const maxStack = databaseItem.maxStack || 1;
+    let quantity =
+      Number(lootItem.quantity || 1);
+
+    const maxStack =
+      Number(databaseItem.maxStack || 1);
 
     for (let item of inventoryItems) {
       if (
         item !== null &&
-        item.id === lootItem.itemId &&
-        item.quantity < maxStack
+        canSavedInventoryItemsStack(
+          item,
+          databaseItem
+        )
       ) {
-        const availableSpace = maxStack - item.quantity;
-        const moveAmount = Math.min(availableSpace, quantity);
+        const availableSpace =
+          maxStack -
+          Number(item.quantity || 1);
 
-        item.quantity += moveAmount;
+        const moveAmount = Math.min(
+          availableSpace,
+          quantity
+        );
+
+        item.quantity =
+          Number(item.quantity || 1) +
+          moveAmount;
+
         quantity -= moveAmount;
 
         if (quantity <= 0) {
@@ -225,20 +315,34 @@ function simulateAddLootItemsToInventory(saveData, lootItems) {
     }
 
     while (quantity > 0) {
-      const emptySlotIndex = inventoryItems.findIndex(function (item) {
-        return item === null;
-      });
+      const emptySlotIndex =
+        inventoryItems.findIndex(
+          function (item) {
+            return item === null;
+          }
+        );
 
       if (emptySlotIndex === -1) {
         return null;
       }
 
-      const moveAmount = Math.min(maxStack, quantity);
+      const moveAmount = Math.min(
+        maxStack,
+        quantity
+      );
 
       inventoryItems[emptySlotIndex] = {
         ...databaseItem,
         quantity: moveAmount
       };
+
+      if (
+        databaseItem.category === "container" &&
+        databaseItem.containerData
+      ) {
+        inventoryItems[emptySlotIndex].contents =
+          null;
+      }
 
       quantity -= moveAmount;
     }
@@ -316,6 +420,388 @@ function unlockRecipesFromLoot(saveData, lootItems) {
       saveData.discoveredRecipes.push(recipe.id);
     }
   }
+}
+
+function completeDiscoveryGoal(goalId) {
+  if (!goalId) {
+    return;
+  }
+
+  const saveData = getMainSaveData();
+
+  if (!saveData) {
+    return;
+  }
+
+  if (!Array.isArray(saveData.completedGoals)) {
+    saveData.completedGoals = [];
+  }
+
+  if (!saveData.completedGoals.includes(goalId)) {
+    saveData.completedGoals.push(goalId);
+    saveMainSaveData(saveData);
+  }
+}
+
+function ensureCutTreesState() {
+  if (
+    !discoveryState.cutTrees ||
+    typeof discoveryState.cutTrees !== "object"
+  ) {
+    discoveryState.cutTrees = {};
+  }
+
+  if (!Array.isArray(discoveryState.cutTrees.trail)) {
+    discoveryState.cutTrees.trail = [];
+  }
+}
+
+function isCurrentTileTreeArea(tileData) {
+  return (
+    discoveryState.currentMapId === "trail" &&
+    tileData &&
+    tileData.resource &&
+    tileData.resource.lootTable === "pineForestFloor"
+  );
+}
+
+function isTreeCutOnCurrentTile() {
+  ensureCutTreesState();
+
+  const tileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  return discoveryState.cutTrees.trail.includes(tileId);
+}
+
+function findMainInventoryToolByTag(toolTag) {
+  const saveData = getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return null;
+  }
+
+  for (
+    let slotIndex = 0;
+    slotIndex < saveData.inventory.items.length;
+    slotIndex++
+  ) {
+    const item = saveData.inventory.items[slotIndex];
+
+    if (
+      item &&
+      Array.isArray(item.toolTags) &&
+      item.toolTags.includes(toolTag)
+    ) {
+      return {
+        saveData: saveData,
+        slotIndex: slotIndex,
+        item: item
+      };
+    }
+  }
+
+  return null;
+}
+
+function applyTreeAxeDurabilityCost() {
+  const toolData = findMainInventoryToolByTag("axe");
+
+  if (!toolData) {
+    return false;
+  }
+
+  const saveData = toolData.saveData;
+  const axe = toolData.item;
+  const slotIndex = toolData.slotIndex;
+
+  if (typeof axe.durability !== "number") {
+    return true;
+  }
+
+  const durabilityCost = getDiscoveryToolDurabilityCost(
+    axe,
+    1
+  );
+
+  axe.durability -= durabilityCost;
+
+  if (axe.durability <= 0) {
+    const axeName = getDiscoveryItemName(axe);
+
+    saveData.inventory.items[slotIndex] = null;
+
+    addDiscoveryLog(
+      t("treeAxeBroke", {
+        tool: axeName
+      })
+    );
+  }
+
+  saveMainSaveData(saveData);
+
+  return true;
+}
+
+function chopCurrentTree() {
+  const currentTileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  const tileData = getTileSpecialData(currentTileId);
+
+  if (!isCurrentTileTreeArea(tileData)) {
+    return;
+  }
+
+  if (isTreeCutOnCurrentTile()) {
+    addDiscoveryLog(t("treeAlreadyCut"));
+    return;
+  }
+
+  const axeData = findMainInventoryToolByTag("axe");
+
+  if (!axeData) {
+    addDiscoveryLog(t("axeRequired"));
+    return;
+  }
+
+  if (!payDiscoveryActionCost("chopTree")) {
+    return;
+  }
+
+  const added = addPendingLootItemsToMainInventory([
+    {
+      itemId: "woodLog",
+      quantity: 1
+    }
+  ]);
+
+  if (!added) {
+    addDiscoveryLog(t("inventoryFullOrTooHeavy"));
+    return;
+  }
+
+  applyTreeAxeDurabilityCost();
+
+  ensureCutTreesState();
+
+  if (!discoveryState.cutTrees.trail.includes(currentTileId)) {
+    discoveryState.cutTrees.trail.push(currentTileId);
+  }
+
+  completeDiscoveryGoal("chopFirstTree");
+
+  addDiscoveryLog(
+    t("treeChopped", {
+      item: getDiscoveryItemName(itemsDatabase.woodLog)
+    })
+  );
+
+  saveDiscoveryState();
+  renderDiscoveryMap();
+}
+
+function isCurrentTileWaterFillArea(tileData) {
+  return (
+    discoveryState.currentMapId === "lake" &&
+    tileData &&
+    tileData.resource &&
+    tileData.resource.lootTable === "lakeShoreDebris"
+  );
+}
+
+function findFillableWaterContainer(saveData) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return null;
+  }
+
+  for (
+    let slotIndex = 0;
+    slotIndex <
+    saveData.inventory.items.length;
+    slotIndex++
+  ) {
+    const item =
+      saveData.inventory.items[slotIndex];
+
+    if (
+      !item ||
+      item.category !== "container" ||
+      !item.containerData
+    ) {
+      continue;
+    }
+
+    const allowedLiquids =
+      item.containerData.allowedLiquids || [];
+
+    if (
+      !allowedLiquids.includes("freshWater")
+    ) {
+      continue;
+    }
+
+    const capacity = Number(
+      item.containerData.capacity || 0
+    );
+
+    const currentAmount =
+      item.contents &&
+      item.contents.itemId === "freshWater"
+        ? Number(item.contents.amount || 0)
+        : 0;
+
+    if (currentAmount < capacity) {
+      return {
+        slotIndex: slotIndex,
+        item: item,
+        capacity: capacity,
+        currentAmount: currentAmount
+      };
+    }
+  }
+
+  return null;
+}
+
+function findEmptySavedInventorySlot(inventoryItems) {
+  if (!Array.isArray(inventoryItems)) {
+    return -1;
+  }
+
+  return inventoryItems.findIndex(function (item) {
+    return item === null;
+  });
+}
+
+function fillWaterContainer() {
+  const currentTileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  const tileData =
+    getTileSpecialData(currentTileId);
+
+  if (!isCurrentTileWaterFillArea(tileData)) {
+    return;
+  }
+
+  const saveData = getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(
+      saveData.inventory.items
+    )
+  ) {
+    return;
+  }
+
+  const containerData =
+    findFillableWaterContainer(saveData);
+
+  if (!containerData) {
+    addDiscoveryLog(
+      t("fillableWaterContainerRequired")
+    );
+    return;
+  }
+
+  const slotIndex =
+    containerData.slotIndex;
+
+  let targetContainer =
+    saveData.inventory.items[slotIndex];
+
+  const quantity = Number(
+    targetContainer.quantity || 1
+  );
+
+  if (quantity > 1) {
+    const emptySlotIndex =
+      findEmptySavedInventorySlot(
+        saveData.inventory.items
+      );
+
+    if (emptySlotIndex === -1) {
+      addDiscoveryLog(
+        t("containerNeedsEmptySlot")
+      );
+      return;
+    }
+
+    targetContainer.quantity =
+      quantity - 1;
+
+    saveData.inventory.items[
+      emptySlotIndex
+    ] = {
+      ...itemsDatabase[targetContainer.id],
+      quantity: 1,
+      contents: null
+    };
+
+    targetContainer =
+      saveData.inventory.items[
+        emptySlotIndex
+      ];
+  }
+
+  const capacity = Number(
+    targetContainer.containerData.capacity || 0
+  );
+
+  targetContainer.contents = {
+    itemId: "freshWater",
+    amount: capacity
+  };
+
+  if (!payDiscoveryActionCost("fillWater")) {
+    return;
+  }
+
+  const updatedSaveData =
+    getMainSaveData();
+
+  if (!updatedSaveData) {
+    return;
+  }
+
+  updatedSaveData.inventory.items =
+    saveData.inventory.items;
+
+  saveMainSaveData(updatedSaveData);
+
+  completeDiscoveryGoal(
+    "collectFreshWater"
+  );
+
+  addDiscoveryLog(
+    t("waterContainerFilled", {
+      container:
+        getDiscoveryItemName(
+          targetContainer
+        ),
+      amount: capacity,
+      ml: capacity * 100
+    })
+  );
+
+  updateTileActionPanel();
 }
 
 function addPendingLootItemsToMainInventory(lootItems) {

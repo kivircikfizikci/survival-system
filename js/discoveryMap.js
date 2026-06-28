@@ -784,6 +784,73 @@ function updateTileActionPanel() {
   const currentTileId = getTileId(discoveryState.x, discoveryState.y);
   const tileData = getTileSpecialData(currentTileId);
 
+  if (
+    !discoveryState.pendingEncounter &&
+    pendingLootItems.length === 0 &&
+    !currentBuriedStash &&
+    isCurrentTileTreeArea(tileData) &&
+    !isTreeCutOnCurrentTile()
+  ) {
+    const axeData =
+      findMainInventoryToolByTag("axe");
+
+    const chopTreeButton =
+      document.createElement("button");
+
+    chopTreeButton.type = "button";
+    chopTreeButton.classList.add(
+      "tile-action-button"
+    );
+
+    chopTreeButton.textContent =
+      axeData
+        ? t("chopTree")
+        : t("chopTreeRequiresAxe");
+
+    chopTreeButton.disabled = !axeData;
+
+    chopTreeButton.addEventListener(
+      "click",
+      chopCurrentTree
+    );
+
+    tileActions.appendChild(chopTreeButton);
+  }
+
+  if (
+    !discoveryState.pendingEncounter &&
+    pendingLootItems.length === 0 &&
+    !currentBuriedStash &&
+    isCurrentTileWaterFillArea(tileData)
+  ) {
+    const saveData = getMainSaveData();
+
+    const containerData =
+      findFillableWaterContainer(saveData);
+
+    const fillWaterButton =
+      document.createElement("button");
+
+    fillWaterButton.type = "button";
+    fillWaterButton.classList.add(
+      "tile-action-button"
+    );
+
+    fillWaterButton.textContent =
+      containerData
+        ? t("fillWaterContainer")
+        : t("fillWaterRequiresContainer");
+
+    fillWaterButton.disabled = !containerData;
+
+    fillWaterButton.addEventListener(
+      "click",
+      fillWaterContainer
+    );
+
+    tileActions.appendChild(fillWaterButton);
+  }
+
   if (tileData.exit) {
     const exitButton = document.createElement("button");
     exitButton.type = "button";

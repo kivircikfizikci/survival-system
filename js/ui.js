@@ -105,7 +105,7 @@ function updateRecipesScreen() {
       ingredientsWrapper.appendChild(plusElement);
     }
 
-    function addRecipeItem(item, amount, extraClassName = "") {
+    function addRecipeItem(item, amount, extraClassName = "", customText = null) {
       if (!item) {
         return;
       }
@@ -128,10 +128,15 @@ function updateRecipesScreen() {
       itemImage.alt = getItemName(item);
 
       const itemName = document.createElement("span");
-      itemName.textContent =
-        amount > 1
-          ? getItemName(item) + " x" + amount
-          : getItemName(item);
+
+      if (customText !== null) {
+        itemName.textContent = customText;
+      } else {
+        itemName.textContent =
+          amount > 1
+            ? getItemName(item) + " x" + amount
+            : getItemName(item);
+      }
 
       itemElement.append(itemImage, itemName);
       ingredientsWrapper.appendChild(itemElement);
@@ -178,6 +183,65 @@ function updateRecipesScreen() {
           itemsDatabase[selectedGroupItemId],
           groupData.amount || 1,
           "recipe-ingredient-group"
+        );
+      }
+    }
+
+    if ( Array.isArray(recipe.liquidIngredients) && recipe.liquidIngredients.length > 0) {
+      for (let liquidIngredient of recipe.liquidIngredients) {
+        if (!liquidIngredient) {
+          continue;
+        }
+
+        const liquidItem =
+          itemsDatabase[liquidIngredient.itemId];
+
+        if (!liquidItem) {
+          continue;
+        }
+
+        const requiredAmount = Number(
+          liquidIngredient.amount || 0
+        );
+
+        if (requiredAmount <= 0) {
+          continue;
+        }
+
+        const availableAmount =
+          getInventoryLiquidAmount(
+            liquidIngredient.itemId
+          );
+
+        if (ingredientsWrapper.children.length > 0) {
+          addPlus();
+        }
+
+        const liquidClassName =
+          availableAmount >= requiredAmount
+            ? "recipe-liquid"
+            : "recipe-liquid recipe-liquid-missing";
+
+        const requiredMilliliters =
+          requiredAmount * 100;
+
+        const availableMilliliters =
+          availableAmount * 100;
+
+        const liquidText =
+          getItemName(liquidItem) +
+          " " +
+          requiredMilliliters +
+          " ml" +
+          " (" +
+          availableMilliliters +
+          " ml)";
+
+        addRecipeItem(
+          liquidItem,
+          requiredAmount,
+          liquidClassName,
+          liquidText
         );
       }
     }
@@ -295,23 +359,6 @@ function updateRecipesScreen() {
 
 function hasDurability(item) {
   return typeof item.durability === "number";
-}
-
-function createDurabilityBadge(item) {
-  const durabilityBadge = document.createElement("span");
-  durabilityBadge.classList.add("item-durability");
-
-  const databaseItem = itemsDatabase[item.id];
-  const maxDurability =
-    item.maxDurability ||
-    databaseItem?.maxDurability ||
-    databaseItem?.durability ||
-    item.durability;
-
-  durabilityBadge.textContent = item.durability + "/" + maxDurability;
-  durabilityBadge.title = "Durability: " + item.durability + "/" + maxDurability;
-
-  return durabilityBadge;
 }
 
 function updateRecipeFilterButtons() {
@@ -534,6 +581,317 @@ function setupEquipmentDropZones() {
   });
 }
 
+function createItemMetric(options) {
+  const metric = document.createElement("div");
+  metric.classList.add("item-footer-metric");
+
+  if (options.extraClassName) {
+    const classNames =
+      options.extraClassName.split(" ");
+
+    for (let className of classNames) {
+      if (className) {
+        metric.classList.add(className);
+      }
+    }
+  }
+
+  const header = document.createElement("div");
+  header.classList.add("item-footer-metric-header");
+
+  const title = document.createElement("span");
+  title.classList.add("item-footer-metric-title");
+  title.textContent = options.title || "";
+
+  const value = document.createElement("span");
+  value.classList.add("item-footer-metric-value");
+  value.textContent = options.value || "";
+
+  const mainInfo = document.createElement("div");
+  mainInfo.classList.add("item-footer-main-info");
+
+  mainInfo.append(title, value);
+  header.appendChild(mainInfo);
+  metric.appendChild(header);
+
+  if (options.subtext) {
+    const subtext = document.createElement("div");
+    subtext.classList.add("item-footer-metric-subtext");
+    subtext.textContent = options.subtext;
+    metric.appendChild(subtext);
+  }
+
+  if (typeof options.fillPercent === "number") {
+    const bar = document.createElement("div");
+    bar.classList.add("item-footer-metric-bar");
+
+    const fill = document.createElement("div");
+    fill.classList.add("item-footer-metric-fill");
+    fill.style.width = Math.max(0, Math.min(100, options.fillPercent)) + "%";
+
+    bar.appendChild(fill);
+    metric.appendChild(bar);
+  }
+
+  return metric;
+}
+
+function createContainerContentInfo(item) {
+  if (
+    !item ||
+    item.category !== "container" ||
+    !item.containerData
+  ) {
+    return null;
+  }
+
+  const capacity = Math.max(
+    0,
+    Number(item.containerData.capacity || 0)
+  );
+
+  const unitMl = Math.max(
+    1,
+    Number(item.containerData.unitMl || 100)
+  );
+
+  const hasContents = Boolean(
+    item.contents &&
+    item.contents.itemId &&
+    Number(item.contents.amount || 0) > 0
+  );
+
+  const currentAmount = hasContents
+    ? Math.max(
+        0,
+        Math.min(
+          capacity,
+          Number(item.contents.amount || 0)
+        )
+      )
+    : 0;
+
+  const fillPercent =
+    capacity > 0
+      ? (currentAmount / capacity) * 100
+      : 0;
+
+  const totalItemWeight =
+    Number(item.weight || 0) *
+    Number(item.quantity || 1);
+
+  const liquidItem = hasContents
+    ? itemsDatabase[item.contents.itemId]
+    : null;
+
+  const liquidName = hasContents
+    ? (
+        liquidItem
+          ? getItemName(liquidItem)
+          : item.contents.itemId
+      )
+    : t("containerEmpty");
+
+  const metric = createItemMetric({
+    title: liquidName,
+    value:
+      currentAmount +
+      "/" +
+      capacity,
+    subtext:
+      currentAmount * unitMl +
+      " ml",
+    fillPercent: fillPercent,
+    extraClassName:
+      hasContents
+        ? "item-container-info"
+        : "item-container-info is-empty"
+  });
+
+  const header = metric.querySelector(
+    ".item-footer-metric-header"
+  );
+
+  if (header) {
+    const weight = document.createElement("span");
+    weight.classList.add("item-footer-inline-weight");
+
+    weight.textContent =
+      totalItemWeight.toFixed(2) +
+      " kg";
+
+    header.appendChild(weight);
+  }
+
+  return metric;
+}
+
+function createWeightFooterInfo(item) {
+  if (!item) {
+    return null;
+  }
+
+  const totalItemWeight =
+    Number(item.weight || 0) *
+    Number(item.quantity || 1);
+
+  const weightBadge = document.createElement("div");
+
+  weightBadge.classList.add(
+    "item-standalone-weight"
+  );
+
+  weightBadge.textContent =
+    totalItemWeight.toFixed(2) + " kg";
+
+  return weightBadge;
+}
+
+function createItemFooter(item) {
+  if (!item) {
+    return null;
+  }
+
+  if (
+    item.category === "container" &&
+    item.containerData
+  ) {
+    return createContainerContentInfo(item);
+  }
+
+  if (hasDurability(item)) {
+    return createDurabilityFooterInfo(item);
+  }
+
+  return createWeightFooterInfo(item);
+}
+
+function createDurabilityInfo(item) {
+  if (!hasDurability(item)) {
+    return null;
+  }
+
+  const currentDurability = Math.max(
+    0,
+    Math.round(Number(item.durability || 0))
+  );
+
+  const maxDurability = Math.max(
+    1,
+    Math.round(Number(item.maxDurability || 1))
+  );
+
+  const percent = (currentDurability / maxDurability) * 100;
+
+  return createItemMetric({
+    title: t("durability"),
+    value: currentDurability + "/" + maxDurability,
+    subtext: Math.round(percent) + "%",
+    fillPercent: percent,
+    extraClassName: "item-durability-info"
+  });
+}
+
+function createDurabilityFooterInfo(item) {
+  if (!item || !hasDurability(item)) {
+    return null;
+  }
+
+  const currentDurability = Math.max(
+    0,
+    Number(item.durability || 0)
+  );
+
+  const maxDurability = Math.max(
+    1,
+    Number(
+      item.maxDurability ||
+      item.durability ||
+      1
+    )
+  );
+
+  const durabilityPercent = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        (currentDurability / maxDurability) * 100
+      )
+    )
+  );
+
+  const totalItemWeight =
+    Number(item.weight || 0) *
+    Number(item.quantity || 1);
+
+  const footerBox =
+    document.createElement("div");
+
+  footerBox.classList.add(
+    "item-footer-box",
+    "item-durability-footer"
+  );
+
+  const topRow =
+    document.createElement("div");
+
+  topRow.classList.add("item-footer-top");
+
+  const durabilityValue =
+    document.createElement("span");
+
+  durabilityValue.classList.add(
+    "item-footer-main-value"
+  );
+
+  durabilityValue.textContent =
+    Math.round(currentDurability) +
+    "/" +
+    Math.round(maxDurability);
+
+  const weightValue =
+    document.createElement("span");
+
+  weightValue.classList.add(
+    "item-footer-inline-weight"
+  );
+
+  weightValue.textContent =
+    totalItemWeight.toFixed(2) + " kg";
+
+  topRow.append(
+    durabilityValue,
+    weightValue
+  );
+
+  const progressBar =
+    document.createElement("div");
+
+  progressBar.classList.add(
+    "item-footer-bar"
+  );
+
+  const progressFill =
+    document.createElement("div");
+
+  progressFill.classList.add(
+    "item-footer-bar-fill"
+  );
+
+  progressFill.style.width =
+    durabilityPercent + "%";
+
+  progressBar.appendChild(progressFill);
+
+  footerBox.append(
+    topRow,
+    progressBar
+  );
+
+  return footerBox;
+}
+
 function updateInventoryScreen() {
   inventoryGrid.innerHTML = "";
   inventorySlotsText.textContent = t("slots", {
@@ -563,19 +921,25 @@ function updateInventoryScreen() {
       let itemName = document.createElement("strong");
       itemName.textContent = getItemName(item);
 
-      let itemWeight = document.createElement("span");
-      itemWeight.classList.add("item-weight");
-
       let totalItemWeight = item.weight * item.quantity;
-      itemWeight.textContent = totalItemWeight.toFixed(2) + " kg";
 
       itemInfo.append(itemImage, itemName);
       slot.appendChild(itemInfo);
-      slot.appendChild(itemWeight);
 
-      if (hasDurability(item)) {
-        slot.appendChild(createDurabilityBadge(item));
+      const itemFooter = createItemFooter(item);
+
+      if (itemFooter) {
+        const hasLargeFooter =
+          itemFooter.classList.contains("item-footer-box") ||
+          itemFooter.classList.contains("item-footer-metric");
+
+        if (hasLargeFooter) {
+          slot.classList.add("has-item-footer");
+        }
+
+        slot.appendChild(itemFooter);
       }
+      slot.appendChild(createItemFooter(item));
 
       if (item.quantity > 1) {
         let quantityBadge = document.createElement("span");
@@ -1067,16 +1431,20 @@ function updateShelterScreen() {
       itemInfo.append(img, name);
       slot.appendChild(itemInfo);
 
-      if (hasDurability(item)) {
-        slot.appendChild(createDurabilityBadge(item));
+      const itemFooter = createItemFooter(item);
+
+      if (itemFooter) {
+        const hasLargeFooter =
+          itemFooter.classList.contains("item-footer-box") ||
+          itemFooter.classList.contains("item-footer-metric");
+
+        if (hasLargeFooter) {
+          slot.classList.add("has-item-footer");
+        }
+
+        slot.appendChild(itemFooter);
       }
 
-      const itemWeight = document.createElement("span");
-      itemWeight.classList.add("item-weight");
-      itemWeight.textContent =
-        ((item.weight || 0) * (item.quantity || 1)).toFixed(2) + " kg";
-
-      slot.appendChild(itemWeight);
     }
 
     shelterStorageGrid.appendChild(slot);

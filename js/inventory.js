@@ -77,43 +77,175 @@ function getUsedSlots() {
   return usedSlots;
 }
 
+function isContainerItem(item) {
+  return Boolean(
+    item &&
+    item.category === "container" &&
+    item.containerData
+  );
+}
+
+function getContainerContentAmount(item) {
+  if (
+    !isContainerItem(item) ||
+    !item.contents
+  ) {
+    return 0;
+  }
+
+  return Number(item.contents.amount || 0);
+}
+
+function isContainerEmpty(item) {
+  return (
+    isContainerItem(item) &&
+    getContainerContentAmount(item) <= 0
+  );
+}
+
+function canInventoryItemsStack(existingItem, newItem) {
+  if (!existingItem || !newItem) {
+    return false;
+  }
+
+  if (existingItem.id !== newItem.id) {
+    return false;
+  }
+
+  const maxStack = Number(
+    existingItem.maxStack || newItem.maxStack || 1
+  );
+
+  if (Number(existingItem.quantity || 1) >= maxStack) {
+    return false;
+  }
+
+  if (
+    isContainerItem(existingItem) ||
+    isContainerItem(newItem)
+  ) {
+    return (
+      isContainerEmpty(existingItem) &&
+      isContainerEmpty(newItem)
+    );
+  }
+
+  return true;
+}
+
+function findContainerSafeStackableSlot(item) {
+  for (
+    let slotIndex = 0;
+    slotIndex < inventory.items.length;
+    slotIndex++
+  ) {
+    const existingItem = inventory.items[slotIndex];
+
+    if (
+      canInventoryItemsStack(
+        existingItem,
+        item
+      )
+    ) {
+      return slotIndex;
+    }
+  }
+
+  return -1;
+}
+
 function addItem(item) {
-    refreshBaseSleepState();
+  refreshBaseSleepState();
 
   if (isSleeping) {
     showMessage(t("cannotUseSleeping"));
-    return;
+    return false;
   }
 
-  if (getCurrentWeight() + item.weight > inventory.maxWeight) {
+  const quantityToAdd = Number(item.quantity || 1);
+
+  const addedWeight =
+    Number(item.weight || 0) * quantityToAdd;
+
+  if (
+    getCurrentWeight() + addedWeight >
+    inventory.maxWeight
+  ) {
     showMessage(t("tooHeavy"));
     return false;
   }
 
-  const stackableSlot = findStackableSlot(item);
+  let remainingQuantity = quantityToAdd;
 
-  if (stackableSlot !== -1) {
-    inventory.items[stackableSlot].quantity++;
-    updateInventoryScreen();
-    saveGame();
-    return true;
+  while (remainingQuantity > 0) {
+    const stackableSlot =
+      findContainerSafeStackableSlot(item);
+
+    if (stackableSlot !== -1) {
+      const existingItem =
+        inventory.items[stackableSlot];
+
+      const maxStack = Number(
+        existingItem.maxStack || 1
+      );
+
+      const availableSpace =
+        maxStack -
+        Number(existingItem.quantity || 1);
+
+      const movedQuantity = Math.min(
+        availableSpace,
+        remainingQuantity
+      );
+
+      existingItem.quantity =
+        Number(existingItem.quantity || 1) +
+        movedQuantity;
+
+      remainingQuantity -= movedQuantity;
+      continue;
+    }
+
+    const emptySlot = findEmptySlot();
+
+    if (emptySlot === -1) {
+      showMessage(t("noEmptySlot"));
+      return false;
+    }
+
+    const maxStack = Number(
+      item.maxStack || 1
+    );
+
+    const movedQuantity = Math.min(
+      maxStack,
+      remainingQuantity
+    );
+
+    inventory.items[emptySlot] = {
+      ...item,
+      quantity: movedQuantity
+    };
+
+    if (isContainerItem(inventory.items[emptySlot])) {
+      inventory.items[emptySlot].contents =
+        item.contents
+          ? {
+              itemId: item.contents.itemId,
+              amount: Number(
+                item.contents.amount || 0
+              )
+            }
+          : null;
+    }
+
+    remainingQuantity -= movedQuantity;
   }
-
-  const emptySlot = findEmptySlot();
-
-  if (emptySlot === -1) {
-    showMessage(t("noEmptySlot"));
-    return false;
-  }
-
-  inventory.items[emptySlot] = {
-    ...item,
-    quantity: item.quantity || 1
-  };
 
   discoverItem(item.id);
   updateInventoryScreen();
   autoSave();
+
   return true;
 }
 

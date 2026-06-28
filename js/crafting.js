@@ -113,24 +113,6 @@ function removeIngredientGroupItems(groupData) {
   return false;
 }
 
-function removeRecipeIngredientGroups(recipe) {
-  if (!recipe.ingredientGroups) {
-    return true;
-  }
-
-  for (let groupName in recipe.ingredientGroups) {
-    const groupData = recipe.ingredientGroups[groupName];
-
-    const removed = removeIngredientGroupItems(groupData);
-
-    if (!removed) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 function getCurrentRegionId() {
   return playerRegion || "meadow";
 }
@@ -492,8 +474,6 @@ function moveCraftItem(craftFromSlot, craftToSlot, amount = "all") {
   }
 }
 
-
-
 function canStackItems(targetItem, sourceItem) {
   if (targetItem === null || sourceItem === null) {
     return false;
@@ -749,6 +729,136 @@ function hasRequiredCraftWorkstation(recipe) {
   return isWorkstationAtCurrentTile(requiredWorkstation);
 }
 
+function getInventoryLiquidAmount(liquidItemId) {
+  let totalAmount = 0;
+
+  for (let item of inventory.items) {
+    if (
+      !item ||
+      !item.contents ||
+      item.contents.itemId !== liquidItemId
+    ) {
+      continue;
+    }
+
+    totalAmount += Number(
+      item.contents.amount || 0
+    );
+  }
+
+  return totalAmount;
+}
+
+function hasEnoughLiquidIngredients(recipe) {
+  if (
+    !recipe.liquidIngredients ||
+    recipe.liquidIngredients.length === 0
+  ) {
+    return true;
+  }
+
+  for (let liquidIngredient of recipe.liquidIngredients) {
+    const requiredAmount = Number(
+      liquidIngredient.amount || 0
+    );
+
+    const availableAmount =
+      getInventoryLiquidAmount(
+        liquidIngredient.itemId
+      );
+
+    if (availableAmount < requiredAmount) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function consumeInventoryLiquid(
+  liquidItemId,
+  amountToConsume
+) {
+  let remainingAmount = Number(
+    amountToConsume || 0
+  );
+
+  if (remainingAmount <= 0) {
+    return true;
+  }
+
+  for (
+    let slotIndex = 0;
+    slotIndex < inventory.items.length;
+    slotIndex++
+  ) {
+    const container =
+      inventory.items[slotIndex];
+
+    if (
+      !container ||
+      !container.contents ||
+      container.contents.itemId !== liquidItemId
+    ) {
+      continue;
+    }
+
+    const currentAmount = Number(
+      container.contents.amount || 0
+    );
+
+    if (currentAmount <= 0) {
+      continue;
+    }
+
+    const consumedAmount = Math.min(
+      currentAmount,
+      remainingAmount
+    );
+
+    container.contents.amount =
+      currentAmount - consumedAmount;
+
+    remainingAmount -= consumedAmount;
+
+    if (container.contents.amount <= 0) {
+      container.contents = null;
+    }
+
+    if (remainingAmount <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function consumeRecipeLiquidIngredients(recipe) {
+  if (
+    !recipe.liquidIngredients ||
+    recipe.liquidIngredients.length === 0
+  ) {
+    return true;
+  }
+
+  if (!hasEnoughLiquidIngredients(recipe)) {
+    return false;
+  }
+
+  for (let liquidIngredient of recipe.liquidIngredients) {
+    const consumed = consumeInventoryLiquid(
+      liquidIngredient.itemId,
+      liquidIngredient.amount
+    );
+
+    if (!consumed) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function canQuickCraftRecipe(recipe) {
   if (!recipe) {
     return false;
@@ -763,6 +873,10 @@ function canQuickCraftRecipe(recipe) {
   }
 
   if (!hasEnoughQuickCraftTools(recipe)) {
+    return false;
+  }
+
+  if (!hasEnoughLiquidIngredients(recipe)) {
     return false;
   }
 
@@ -782,6 +896,10 @@ function canCraftSlotsMatchRecipe(recipe) {
   }
 
   if (!hasEnoughIngredientGroups(recipe)) {
+    return false;
+  }
+
+  if (!hasEnoughLiquidIngredients(recipe)) {
     return false;
   }
 
@@ -1036,16 +1154,8 @@ function quickCraftRecipe(recipeId) {
     showMessage(t("invalidRecipeResult"));
     return;
   }
-
-  /*
-    Malzemeleri tükettikten sonra yer açılabileceği için
-    envanterin mevcut halinin yedeğini alıyoruz.
-    Sonuç sığmazsa her şeyi geri yükleyeceğiz.
-  */
-  const inventoryBackup = inventory.items.map(
-    function (item) {
-      return item ? { ...item } : null;
-    }
+  const inventoryBackup = JSON.parse(
+    JSON.stringify(inventory.items)
   );
 
   const normalIngredientsRemoved =
@@ -1067,6 +1177,18 @@ function quickCraftRecipe(recipeId) {
     inventory.items = inventoryBackup;
 
     showMessage(t("notEnoughIngredients"));
+    updateRecipesScreen();
+    updateInventoryScreen();
+    return;
+  }
+
+  const liquidIngredientsRemoved =
+    consumeRecipeLiquidIngredients(recipe);
+
+  if (!liquidIngredientsRemoved) {
+    inventory.items = inventoryBackup;
+
+    showMessage(t("notEnoughLiquid"));
     updateRecipesScreen();
     updateInventoryScreen();
     return;
@@ -1193,6 +1315,11 @@ function craftSelectedRecipe() {
     return;
   }
 
+  if (!hasEnoughLiquidIngredients(recipe)) {
+    showMessage(t("notEnoughLiquid"));
+    return;
+  }
+
   if (recipe.requiredWorkstation && !hasWorkstation(recipe.requiredWorkstation)) {
     showMessage(t("requiresWorkstation", {
       workstation: getItemName(itemsDatabase[recipe.requiredWorkstation])
@@ -1222,6 +1349,14 @@ function craftSelectedRecipe() {
 
   if (!removeRecipeIngredientGroups(recipe)) {
     showMessage(t("notEnoughIngredients"));
+    updateCraftingScreen();
+    updateInventoryScreen();
+    autoSave();
+    return;
+  }
+
+  if (!consumeRecipeLiquidIngredients(recipe)) {
+    showMessage(t("notEnoughLiquid"));
     updateCraftingScreen();
     updateInventoryScreen();
     autoSave();
