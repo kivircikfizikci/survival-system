@@ -44,7 +44,7 @@ const trailMap = {
       ...createTileRange("AD19", "AF25"), ...createTileRange("AD28", "AF32"),
   ],
 
-  treeTiles: [ "I29", 
+  treeTiles: [ "I29", "G30", "D32", "B30", "E27", "N26", "N23", "L21", "J21", "F17", "M19", "K15", 
   ],
 
   resourceTiles: {

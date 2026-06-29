@@ -1512,15 +1512,28 @@ function checkGoalsByCurrentWorkstations() {
 }
 
 function checkGoalsByCraftedItem(itemId) {
+  if (!itemId) {
+    return;
+  }
+
   const activeGoals = getActiveGoals();
 
   activeGoals.forEach(function (goal) {
-    if (goal.type !== "craftedItem") {
+    if (goal.type === "craftedItem") {
+      if (goal.itemId === itemId) {
+        completeGoal(goal.id);
+      }
+
       return;
     }
 
-    if (goal.itemId === itemId) {
-      completeGoal(goal.id);
+    if (goal.type === "craftedAnyItem") {
+      if (
+        Array.isArray(goal.itemIds) &&
+        goal.itemIds.includes(itemId)
+      ) {
+        completeGoal(goal.id);
+      }
     }
   });
 }

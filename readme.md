@@ -1,4 +1,9 @@
 1. Yapılacaklar
+trail treetiles kısmı tamamlanacak.
+
+Başlangıç bölgelerinde kullanılabilecek basit sandık tarzı bir şey yapılmalı. 6-8 slot verecek içerisine eşyalar konulacak ve haritanın herhangi bir yerine koyulabilecek. tent mantığı gibi çalışacak. stick grass plantfiber drygrass kullanılarak yapılabilecek basit bi sandık olacak.
+
+
 Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.
@@ -6,9 +11,9 @@ Mine System v1.
 Fishing System v1.
 - Fishing spot tile kısımlarında -> fishBait / spear / oldFishNet gibi itemlarla -> Fish roll atacağız -> fishMeat, fishOil, fishBone elde etcez.
 
-Görev Sistemi v2
-- Meadow bölgesine göre görev uygunlukları ayarlanacak.
-- Trail bölgesi için görevler yazılacak.
+Görev Sistemi v3
+- Trailden lake e geçiş ödülü
+- lake görevleri
 
 Experience Sistemi v1
 - Başarılan görevlerden belirli experience gelecek.
@@ -23,8 +28,19 @@ Class Sistemi v1
 - Her class kendine uygun şekilde bonuslar sağlayacak.
 
 2. Eklenecek Item Listesi
+barkSandals
+
+leatherCap
+leatherVest
+leatherWrap
+leatherGloves
+leatherBoots
+
+clothShirt
+clothPants
+clothHood
+clothBag
+
 
 3. Görseli Olmayan Item Listesi
-cookedMeat
-buriedStashMap
 
