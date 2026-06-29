@@ -44,6 +44,9 @@ const trailMap = {
       ...createTileRange("AD19", "AF25"), ...createTileRange("AD28", "AF32"),
   ],
 
+  treeTiles: [ "I29", 
+  ],
+
   resourceTiles: {
     ...createResourceTiles(
       [ 
@@ -200,7 +203,6 @@ const trailMap = {
     trailSmallAnimals: [
       { id: "rabbit", type: "friendly", chance: 9 },
       { id: "deer", type: "friendly", chance: 4 },
-      { id: "strayDog", type: "friendly", chance: 3 }
     ],
 
     trailWildPath: [
@@ -211,7 +213,6 @@ const trailMap = {
 
     trailDangerZone: [
       { id: "wildDog", type: "enemy", chance: 10 },
-      { id: "strayDog", type: "friendly", chance: 3 },
       { id: "deer", type: "friendly", chance: 2 }
     ]
   },

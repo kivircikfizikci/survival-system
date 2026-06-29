@@ -51,6 +51,10 @@ function getTileSpecialData(tileId) {
 
     resource: specificResource || defaultResource,
 
+    isTree:
+      Array.isArray(map.treeTiles) &&
+      map.treeTiles.includes(tileId),
+
     encounter: map.encounterTiles
       ? map.encounterTiles[tileId] || null
       : null,

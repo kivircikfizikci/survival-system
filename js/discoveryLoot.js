@@ -460,8 +460,7 @@ function isCurrentTileTreeArea(tileData) {
   return (
     discoveryState.currentMapId === "trail" &&
     tileData &&
-    tileData.resource &&
-    tileData.resource.lootTable === "pineForestFloor"
+    tileData.isTree === true
   );
 }
 
@@ -476,35 +475,46 @@ function isTreeCutOnCurrentTile() {
   return discoveryState.cutTrees.trail.includes(tileId);
 }
 
-function findMainInventoryToolByTag(toolTag) {
-  const saveData = getMainSaveData();
+function findMainInventoryToolByTag(toolTag, saveData = null) {
+  const currentSaveData =
+    saveData || getMainSaveData();
 
   if (
-    !saveData ||
-    !saveData.inventory ||
-    !Array.isArray(saveData.inventory.items)
+    !currentSaveData ||
+    !currentSaveData.inventory ||
+    !Array.isArray(
+      currentSaveData.inventory.items
+    )
   ) {
     return null;
   }
 
   for (
     let slotIndex = 0;
-    slotIndex < saveData.inventory.items.length;
+    slotIndex <
+    currentSaveData.inventory.items.length;
     slotIndex++
   ) {
-    const item = saveData.inventory.items[slotIndex];
+    const item =
+      currentSaveData.inventory.items[
+        slotIndex
+      ];
 
     if (
-      item &&
-      Array.isArray(item.toolTags) &&
-      item.toolTags.includes(toolTag)
+      !item ||
+      !Array.isArray(item.toolTags)
     ) {
-      return {
-        saveData: saveData,
-        slotIndex: slotIndex,
-        item: item
-      };
+      continue;
     }
+
+    if (!item.toolTags.includes(toolTag)) {
+      continue;
+    }
+
+    return {
+      slotIndex: slotIndex,
+      item: item
+    };
   }
 
   return null;
@@ -555,7 +565,8 @@ function chopCurrentTree() {
     discoveryState.y
   );
 
-  const tileData = getTileSpecialData(currentTileId);
+  const tileData =
+    getTileSpecialData(currentTileId);
 
   if (!isCurrentTileTreeArea(tileData)) {
     return;
@@ -563,13 +574,45 @@ function chopCurrentTree() {
 
   if (isTreeCutOnCurrentTile()) {
     addDiscoveryLog(t("treeAlreadyCut"));
+    updateTileActionPanel();
     return;
   }
 
-  const axeData = findMainInventoryToolByTag("axe");
+  const initialSaveData =
+    getMainSaveData();
 
-  if (!axeData) {
+  const initialAxeData =
+    findMainInventoryToolByTag(
+      "axe",
+      initialSaveData
+    );
+
+  if (!initialAxeData) {
     addDiscoveryLog(t("axeRequired"));
+    updateTileActionPanel();
+    return;
+  }
+
+  /*
+    Önce woodLog için envanterde gerçekten
+    yer ve ağırlık kapasitesi var mı kontrol ediyoruz.
+    Böylece başarısız işlemde enerji harcanmaz.
+  */
+  const inventoryPreview =
+    simulateAddLootItemsToInventory(
+      initialSaveData,
+      [
+        {
+          itemId: "woodLog",
+          quantity: 1
+        }
+      ]
+    );
+
+  if (!inventoryPreview) {
+    addDiscoveryLog(
+      t("inventoryFullOrTooHeavy")
+    );
     return;
   }
 
@@ -577,31 +620,84 @@ function chopCurrentTree() {
     return;
   }
 
-  const added = addPendingLootItemsToMainInventory([
-    {
-      itemId: "woodLog",
-      quantity: 1
-    }
-  ]);
+  /*
+    Action cost save dosyasını değiştirdiği için
+    güncel save verisini yeniden alıyoruz.
+  */
+  const updatedSaveData =
+    getMainSaveData();
 
-  if (!added) {
-    addDiscoveryLog(t("inventoryFullOrTooHeavy"));
+  if (
+    !updatedSaveData ||
+    !updatedSaveData.inventory
+  ) {
     return;
   }
 
-  applyTreeAxeDurabilityCost();
+  const updatedAxeData =
+    findMainInventoryToolByTag(
+      "axe",
+      updatedSaveData
+    );
+
+  if (!updatedAxeData) {
+    addDiscoveryLog(t("axeRequired"));
+    return;
+  }
+
+  const newInventoryItems =
+    simulateAddLootItemsToInventory(
+      updatedSaveData,
+      [
+        {
+          itemId: "woodLog",
+          quantity: 1
+        }
+      ]
+    );
+
+  if (!newInventoryItems) {
+    addDiscoveryLog(
+      t("inventoryFullOrTooHeavy")
+    );
+    return;
+  }
+
+  updatedSaveData.inventory.items =
+    newInventoryItems;
+
+  const durabilityApplied =
+    applyTreeAxeDurabilityCost(
+      updatedSaveData,
+      updatedAxeData.slotIndex
+    );
+
+  if (!durabilityApplied) {
+    addDiscoveryLog(t("axeRequired"));
+    return;
+  }
+
+  saveMainSaveData(updatedSaveData);
 
   ensureCutTreesState();
 
-  if (!discoveryState.cutTrees.trail.includes(currentTileId)) {
-    discoveryState.cutTrees.trail.push(currentTileId);
+  if (
+    !discoveryState.cutTrees.trail.includes(
+      currentTileId
+    )
+  ) {
+    discoveryState.cutTrees.trail.push(
+      currentTileId
+    );
   }
 
   completeDiscoveryGoal("chopFirstTree");
 
   addDiscoveryLog(
     t("treeChopped", {
-      item: getDiscoveryItemName(itemsDatabase.woodLog)
+      item: getDiscoveryItemName(
+        itemsDatabase.woodLog
+      )
     })
   );
 

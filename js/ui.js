@@ -1469,6 +1469,51 @@ function isGoalCompleted(goalId) {
   return completedGoals.includes(goalId);
 }
 
+function checkGoalsByPlacedWorkstation(workstationId) {
+  if (!workstationId) {
+    return;
+  }
+
+  const activeGoals = getActiveGoals();
+
+  activeGoals.forEach(function (goal) {
+    if (goal.type !== "placedWorkstation") {
+      return;
+    }
+
+    if (goal.workstationId === workstationId) {
+      completeGoal(goal.id);
+    }
+  });
+}
+
+function checkGoalsByCurrentWorkstations() {
+  const currentRegionWorkstations =
+    getCurrentRegionWorkstations();
+
+  if (
+    !currentRegionWorkstations ||
+    typeof currentRegionWorkstations !== "object"
+  ) {
+    return;
+  }
+
+  const activeGoals = getActiveGoals();
+
+  activeGoals.forEach(function (goal) {
+    if (
+      goal.type !== "placedWorkstation" ||
+      !goal.workstationId
+    ) {
+      return;
+    }
+
+    if (currentRegionWorkstations[goal.workstationId]) {
+      completeGoal(goal.id);
+    }
+  });
+}
+
 function checkGoalsByCraftedItem(itemId) {
   const activeGoals = getActiveGoals();
 
@@ -1607,6 +1652,7 @@ function updateGoalsPanel() {
   }
 
   checkGoalsByCurrentMap();
+  checkGoalsByCurrentWorkstations();
   checkStarterGoalsReward();
 
   const activeGoals = getActiveGoals();
