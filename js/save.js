@@ -10,7 +10,9 @@ function restoreItem(savedItem) {
   let databaseItem = itemsDatabase[savedItem.id];
 
   if (!databaseItem) {
-    databaseItem = Object.values(itemsDatabase).find(function (item) {
+    databaseItem = Object.values(
+      itemsDatabase
+    ).find(function (item) {
       return item.id === savedItem.id;
     });
   }
@@ -25,8 +27,36 @@ function restoreItem(savedItem) {
     quantity: savedItem.quantity ?? 1
   };
 
-  if (typeof databaseItem.maxDurability === "number") {
-    restoredItem.maxDurability = databaseItem.maxDurability;
+  if (
+    databaseItem.category === "container" &&
+    databaseItem.containerData
+  ) {
+    restoredItem.containerData = {
+      ...databaseItem.containerData
+    };
+
+    if (
+      savedItem.contents &&
+      savedItem.contents.itemId &&
+      Number(savedItem.contents.amount || 0) > 0
+    ) {
+      restoredItem.contents = {
+        itemId: savedItem.contents.itemId,
+        amount: Number(
+          savedItem.contents.amount || 0
+        )
+      };
+    } else {
+      restoredItem.contents = null;
+    }
+  }
+
+  if (
+    typeof databaseItem.maxDurability ===
+    "number"
+  ) {
+    restoredItem.maxDurability =
+      databaseItem.maxDurability;
   }
 
   return restoredItem;

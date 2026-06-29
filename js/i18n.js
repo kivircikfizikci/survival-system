@@ -333,6 +333,7 @@ const translations = {
     waterContainerFilled: "{container} was filled from the lake. Contents: {amount} units ({ml} ml) of fresh water.",
     notEnoughLiquid: "You do not have enough liquid in your containers for this recipe.",
     containerEmpty: "Empty",
+    inventoryTooHeavyForWater: "Filling this container would exceed your inventory weight limit.",
   },
   //Türkçe
   tr: {
@@ -666,6 +667,7 @@ const translations = {
     waterContainerFilled:"{container} gölden dolduruldu. İçerik: {amount} birim ({ml} ml) temiz su.",
     notEnoughLiquid: "Bu tarif için kaplarında yeterli miktarda sıvı yok.",
     containerEmpty: "Boş",
+    inventoryTooHeavyForWater: "Kabı doldurursan envanter taşıma sınırını aşacak.",
   }
 };
 

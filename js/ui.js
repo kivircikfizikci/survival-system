@@ -677,8 +677,7 @@ function createContainerContentInfo(item) {
       : 0;
 
   const totalItemWeight =
-    Number(item.weight || 0) *
-    Number(item.quantity || 1);
+  getItemTotalWeight(item);
 
   const liquidItem = hasContents
     ? itemsDatabase[item.contents.itemId]
@@ -732,8 +731,7 @@ function createWeightFooterInfo(item) {
   }
 
   const totalItemWeight =
-    Number(item.weight || 0) *
-    Number(item.quantity || 1);
+    getItemTotalWeight(item);
 
   const weightBadge = document.createElement("div");
 
@@ -822,8 +820,7 @@ function createDurabilityFooterInfo(item) {
   );
 
   const totalItemWeight =
-    Number(item.weight || 0) *
-    Number(item.quantity || 1);
+    getItemTotalWeight(item);
 
   const footerBox =
     document.createElement("div");
@@ -1337,13 +1334,13 @@ function updateShelterScreen() {
     return item !== null;
   }).length;
 
-  const shelterWeight = playerShelter.storageItems.reduce(function (total, item) {
-    if (item === null) {
-      return total;
-    }
-
-    return total + item.weight * (item.quantity || 1);
-  }, 0);
+  const shelterWeight =
+    playerShelter.storageItems.reduce(
+      function (total, item) {
+        return total + getItemTotalWeight(item);
+      },
+      0
+    );
 
   shelterTitle.textContent = playerShelter.type;
 

@@ -53,16 +53,48 @@ function findStackableSlot(item) {
   return -1;
 }
 
-function getCurrentWeight() {
-  let total = 0;
-
-  for (let item of inventory.items) {
-    if (item !== null) {
-      total += item.weight * item.quantity;
-    }
+function getItemTotalWeight(item) {
+  if (!item) {
+    return 0;
   }
 
-  return total;
+  const quantity = Math.max(
+    1,
+    Number(item.quantity || 1)
+  );
+
+  const baseWeight =
+    Number(item.weight || 0) * quantity;
+
+  if (
+    item.category !== "container" ||
+    !item.containerData ||
+    !item.contents ||
+    !item.contents.itemId
+  ) {
+    return baseWeight;
+  }
+
+  const contentAmount = Math.max(
+    0,
+    Number(item.contents.amount || 0)
+  );
+
+  const unitWeight = Math.max(
+    0,
+    Number(item.containerData.unitWeight || 0.1)
+  );
+
+  const liquidWeight =
+    contentAmount * unitWeight;
+
+  return baseWeight + liquidWeight;
+}
+
+function getCurrentWeight() {
+  return inventory.items.reduce(function (total, item) {
+    return total + getItemTotalWeight(item);
+  }, 0);
 }
 
 function getUsedSlots() {

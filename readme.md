@@ -1,10 +1,4 @@
 1. Yapılacaklar
-Fix: su sisteminde containerların ağırlıkları içine su doldurulduğu zaman suya göre artmalı 100ml 0.1kg şeklinde.
-
-Ağaç Kesme sistemi
-
-trail bölgesi için görev düzeltmesi
-
 Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.

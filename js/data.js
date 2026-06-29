@@ -422,6 +422,7 @@ const itemsDatabase = {
     containerData: {
       capacity: 5,
       unitMl: 100,
+      unitWeight: 0.1,
       allowedLiquids: ["freshWater"]
     }
   },
@@ -437,6 +438,7 @@ const itemsDatabase = {
     containerData: {
       capacity: 2,
       unitMl: 100,
+      unitWeight: 0.1,
       allowedLiquids: ["freshWater"]
     }
   },

@@ -66,13 +66,51 @@ function saveMainSaveData(saveData) {
   localStorage.setItem("survivalSystemSave", JSON.stringify(saveData));
 }
 
-function getSaveInventoryWeight(inventoryItems) {
-  return inventoryItems.reduce(function (total, item) {
-    if (item === null) {
-      return total;
-    }
+function getSavedItemTotalWeight(item) {
+  if (!item) {
+    return 0;
+  }
 
-    return total + (item.weight || 0) * (item.quantity || 1);
+  const quantity = Math.max(
+    1,
+    Number(item.quantity || 1)
+  );
+
+  const baseWeight =
+    Number(item.weight || 0) * quantity;
+
+  if (
+    item.category !== "container" ||
+    !item.containerData ||
+    !item.contents ||
+    !item.contents.itemId
+  ) {
+    return baseWeight;
+  }
+
+  const contentAmount = Math.max(
+    0,
+    Number(item.contents.amount || 0)
+  );
+
+  const unitWeight = Math.max(
+    0,
+    Number(item.containerData.unitWeight || 0.1)
+  );
+
+  return (
+    baseWeight +
+    contentAmount * unitWeight
+  );
+}
+
+function getSaveInventoryWeight(inventoryItems) {
+  if (!Array.isArray(inventoryItems)) {
+    return 0;
+  }
+
+  return inventoryItems.reduce(function (total, item) {
+    return total + getSavedItemTotalWeight(item);
   }, 0);
 }
 
@@ -860,6 +898,44 @@ function fillWaterContainer() {
   const capacity = Number(
     targetContainer.containerData.capacity || 0
   );
+
+  const currentAmount =
+    targetContainer.contents &&
+    targetContainer.contents.itemId === "freshWater"
+      ? Number(targetContainer.contents.amount || 0)
+      : 0;
+
+  const amountToAdd = Math.max(
+    0,
+    capacity - currentAmount
+  );
+
+  const unitWeight = Number(
+    targetContainer.containerData.unitWeight || 0.1
+  );
+
+  const addedLiquidWeight =
+    amountToAdd * unitWeight;
+
+  const currentInventoryWeight =
+    getSaveInventoryWeight(
+      saveData.inventory.items
+    );
+
+  const maxInventoryWeight =
+    Number(saveData.inventory.maxWeight || 0);
+
+  if (
+    currentInventoryWeight +
+    addedLiquidWeight >
+    maxInventoryWeight
+  ) {
+    addDiscoveryLog(
+      t("inventoryTooHeavyForWater")
+    );
+
+    return;
+  }
 
   targetContainer.contents = {
     itemId: "freshWater",

@@ -71,14 +71,6 @@ function getShelterCurrentWeight() {
   }, 0);
 }
 
-function getItemTotalWeight(item) {
-  if (item === null) {
-    return 0;
-  }
-
-  return (item.weight || 0) * (item.quantity || 1);
-}
-
 function canAddItemToShelter(item) {
   if (!playerShelter || item === null) {
     return false;
