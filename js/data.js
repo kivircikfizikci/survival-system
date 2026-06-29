@@ -898,8 +898,18 @@ const itemsDatabase = {
     category: "medical",
     imageSrc: "img/sterileBandage.png",
     weight: 0.2,
-    maxStack: 6,
-    healAmount: 25
+    maxStack: 8,
+    healAmount: 20
+  },
+  qualityBandage: {
+    id: "qualityBandage",
+    nameKey: "qualityBandage",
+    type: "usable",
+    category: "medical",
+    imageSrc: "img/qualityBandage.png",
+    weight: 0.3,
+    maxStack: 8,
+    healAmount: 40
   },
   herbalPaste: {
     id: "herbalPaste",
@@ -1419,6 +1429,16 @@ const itemsDatabase = {
     maxStack: 8,
     hungerRestore: 25
   },
+  cookedRabbitMeat: {
+    id: "cookedRabbitMeat",
+    nameKey: "cookedRabbitMeat",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedRabbitMeat.png",
+    weight: 0.2,
+    maxStack: 12,
+    hungerRestore: 20
+  },
   // Smelting Items
   clayPickaxeMold: {
     id: "clayPickaxeMold",
@@ -1922,19 +1942,32 @@ const recipesDatabase = {
     resultItemId: "sterileBandage",
     resultQuantity: 1,
     isPublic: false,
+    requiredWorkstation: "campfire",
     category: "medical",
     discoverByAny: ["bandage"],
     ingredients: {
       bandage: 1
     },
     liquidIngredients: [
-    {
-      itemId: "freshWater",
-      amount: 1
-    }
-  ],
-  requiredWorkstation: "campfire"
-},
+      {
+        itemId: "freshWater",
+        amount: 1
+      }
+    ],
+  },
+  qualityBandage: {
+    id: "qualityBandage",
+    nameKey: "qualityBandage",
+    resultItemId: "qualityBandage",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "medical",
+    discoverByAny: ["sterileBandage", "herbalPaste"],
+    ingredients: {
+      sterileBandage: 1,
+      herbalPaste: 1
+    },
+  },
   herbalPaste: {
     id: "herbalPaste",
     nameKey: "herbalPaste",
@@ -2255,22 +2288,6 @@ const recipesDatabase = {
     }
   },
   // Survival Recipes
-  boiledWater: {
-    id: "boiledWater",
-    nameKey: "boiledWater",
-    resultItemId: "boiledWater",
-    resultQuantity: 1,
-    isPublic: false,
-    requiredWorkstation: "campfire",
-    category: "survival",
-    discoverByAny: ["freshWater", "campfire"],
-    liquidIngredients: [
-      {
-        itemId: "freshWater",
-        amount: 1
-      }
-    ],
-  },
   fishBait: {
     id: "fishBait",
     nameKey: "fishBait",
@@ -2653,6 +2670,25 @@ const recipesDatabase = {
     discoverByAll: ["rawMeat", "campfire"],
     ingredients: {
       rawMeat: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
+    }
+  },
+  cookedRabbitMeat: {
+    id: "cookedRabbitMeat",
+    nameKey: "cookedRabbitMeat",
+    resultItemId: "cookedRabbitMeat",
+    resultQuantity: 1,
+    isPublic: false,
+    requiredWorkstation: "campfire",
+    category: "cooking",
+    discoverByAll: ["rabbitMeat", "campfire"],
+    ingredients: {
+      rabbitMeat: 1
     },
     ingredientGroups: {
       fireMaterial: {
