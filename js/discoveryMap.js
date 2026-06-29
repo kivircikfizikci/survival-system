@@ -39,6 +39,21 @@ function getSavedShelterForDiscovery() {
   }
 }
 
+function getSavedStorageContainersForDiscovery() {
+  const mainSaveData = getMainSaveData();
+
+  if (
+    !mainSaveData ||
+    !Array.isArray(
+      mainSaveData.placedStorageContainers
+    )
+  ) {
+    return [];
+  }
+
+  return mainSaveData.placedStorageContainers;
+}
+
 function getSavedWorkstationsForDiscovery() {
   const savedData = localStorage.getItem("survivalSystemSave");
 
@@ -261,6 +276,7 @@ function renderDiscoveryMap() {
   const visitedTiles = getVisitedTilesForCurrentMap();
   const savedShelter = getSavedShelterForDiscovery();
   const savedWorkstations = getSavedWorkstationsForDiscovery();
+  const savedStorageContainers = getSavedStorageContainersForDiscovery();
   const savedBuriedStash = getSavedBuriedStashForDiscovery();
 
   for (let y = 0; y < map.height; y++) {
@@ -330,6 +346,74 @@ function renderDiscoveryMap() {
       shelterMarker.draggable = false;
 
       tileButton.appendChild(shelterMarker);
+    }
+
+    const storageContainersOnTile =
+      savedStorageContainers.filter(function (container) {
+        return (
+          container &&
+          container.regionId === discoveryState.currentMapId &&
+          Number(container.x) === Number(x) &&
+          Number(container.y) === Number(y)
+        );
+      });
+
+    if (storageContainersOnTile.length > 0) {
+      tileButton.classList.add(
+        "has-storage-container"
+      );
+
+      const storageMarkerGroup =
+        document.createElement("div");
+
+      storageMarkerGroup.classList.add(
+        "tile-storage-markers"
+      );
+
+      for (
+        const container of storageContainersOnTile
+      ) {
+        const containerItem =
+          itemsDatabase[container.itemId];
+
+        if (!containerItem) {
+          continue;
+        }
+
+        const storageMarker =
+          document.createElement("img");
+
+        storageMarker.classList.add(
+          "tile-storage-marker"
+        );
+
+        storageMarker.src =
+          containerItem.imageSrc.startsWith("../")
+            ? containerItem.imageSrc
+            : "../" + containerItem.imageSrc;
+
+        storageMarker.alt =
+          containerItem.nameKey
+            ? t(containerItem.nameKey)
+            : container.itemId;
+
+        storageMarker.title =
+          storageMarker.alt;
+
+        storageMarker.draggable = false;
+
+        storageMarkerGroup.appendChild(
+          storageMarker
+        );
+      }
+
+      if (
+        storageMarkerGroup.children.length > 0
+      ) {
+        tileButton.appendChild(
+          storageMarkerGroup
+        );
+      }
     }
 
     const workstationsOnTile = Object.values(savedWorkstations).filter(

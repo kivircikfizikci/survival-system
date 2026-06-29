@@ -66,6 +66,7 @@ updateInventoryCapacityFromEquipment(false);
 updateInventoryScreen();
 updateEquipmentScreen();
 updateShelterScreen();
+updateStorageContainerScreen();
 updateCraftingScreen();
 updateWorkstationScreen();
 updateRecipesScreen();

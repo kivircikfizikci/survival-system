@@ -4,8 +4,6 @@ let craftSlots = [
   null, null, null
 ];
 
-let draggedCraftSlotIndex = null;
-
 const workstationSlots = ["campfire", "choppingBlock", "tanningRack", "loom"];
 
 let regionWorkstations = {

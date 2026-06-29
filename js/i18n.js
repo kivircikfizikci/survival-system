@@ -334,6 +334,13 @@ const translations = {
     notEnoughLiquid: "You do not have enough liquid in your containers for this recipe.",
     containerEmpty: "Empty",
     inventoryTooHeavyForWater: "Filling this container would exceed your inventory weight limit.",
+    wovenCrate: "Woven Crate",
+    wovenCratePlaced: "Woven crate placed.",
+    storageAlreadyHere: "There is already a storage container here.",
+    storageRegionLimit: "You cannot place any more crates in this region.",
+    storageTooHeavy: "The crate cannot carry any more weight.",
+    emptyStorageFirst: "Empty the crate before packing it.",
+    storageContainerPacked: "The crate was packed.",    
   },
   //Türkçe
   tr: {
@@ -668,6 +675,13 @@ const translations = {
     notEnoughLiquid: "Bu tarif için kaplarında yeterli miktarda sıvı yok.",
     containerEmpty: "Boş",
     inventoryTooHeavyForWater: "Kabı doldurursan envanter taşıma sınırını aşacak.",
+    wovenCrate: "Örgü Sandık",
+    wovenCratePlaced: "Örgü sandık yerleştirildi.",
+    storageAlreadyHere: "Bu konumda zaten bir sandık var.",
+    storageRegionLimit: "Bu bölgede daha fazla sandık kuramazsın.",
+    storageTooHeavy: "Sandık daha fazla ağırlık taşıyamaz.",
+    emptyStorageFirst: "Sandığı kaldırmadan önce içini boşalt.",
+    storageContainerPacked: "Sandık kaldırıldı.",
   }
 };
 

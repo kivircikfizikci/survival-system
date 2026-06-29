@@ -27,6 +27,14 @@ const shelterStorageText = document.getElementById("shelterStorageText");
 const shelterWeightText = document.getElementById("shelterWeightText");
 const shelterStorageGrid = document.getElementById("shelterStorageGrid");
 
+const storageContainerCard = document.getElementById("storageContainerCard");
+const storageContainerTitle = document.getElementById("storageContainerTitle");
+const storageContainerRegionText = document.getElementById("storageContainerRegionText");
+const storageContainerSlotsText = document.getElementById("storageContainerSlotsText");
+const storageContainerWeightText = document.getElementById("storageContainerWeightText");
+const storageContainerGrid = document.getElementById("storageContainerGrid");
+const packStorageContainerButton = document.getElementById("packStorageContainerButton");
+
 let playerNickname = "Survivor";
 let playerRegion = "meadow";
 let playerProfession = "Explorer";
@@ -34,6 +42,9 @@ let playerProfession = "Explorer";
 
 let draggedSlotIndex = null;
 let draggedEquipmentSlot = null;
+let draggedCraftSlotIndex = null;
+let draggedShelterSlotIndex = null;
+let draggedStorageSlotIndex = null;
 let dragMoveAmount = "all";
 
 const recipesBtn = document.getElementById("recipesBtn");
@@ -1028,8 +1039,23 @@ function updateInventoryScreen() {
 
     slot.addEventListener("drop", function () {
       if (draggedShelterSlotIndex !== null) {
-        moveShelterItemToInventorySlot(draggedShelterSlotIndex, i);
+        moveShelterItemToInventorySlot(
+          draggedShelterSlotIndex,
+          i
+        );
+
         draggedShelterSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
+      if (draggedStorageSlotIndex !== null) {
+        moveStorageContainerItemToInventorySlot(
+          draggedStorageSlotIndex,
+          i
+        );
+
+        draggedStorageSlotIndex = null;
         dragMoveAmount = "all";
         return;
       }
@@ -1041,15 +1067,25 @@ function updateInventoryScreen() {
       }
 
       if (draggedCraftSlotIndex !== null) {
-        moveCraftItemToInventorySlot(draggedCraftSlotIndex, i, dragMoveAmount);
+        moveCraftItemToInventorySlot(
+          draggedCraftSlotIndex,
+          i,
+          dragMoveAmount
+        );
+
         draggedCraftSlotIndex = null;
         dragMoveAmount = "all";
         return;
       }
 
       if (draggedSlotIndex !== null) {
-        moveInventoryItem(draggedSlotIndex, i);
+        moveInventoryItem(
+          draggedSlotIndex,
+          i
+        );
+
         draggedSlotIndex = null;
+        dragMoveAmount = "all";
       }
     });
 

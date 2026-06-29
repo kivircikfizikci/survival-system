@@ -630,6 +630,26 @@ function useInventoryItem(slotIndex) {
     return;
   }
 
+  if (item.id === "wovenCrate") {
+  const placed = placeWovenCrate();
+
+  if (!placed) {
+    return;
+  }
+
+  item.quantity -= 1;
+
+  if (item.quantity <= 0) {
+    inventory.items[slotIndex] = null;
+  }
+
+  updateInventoryScreen();
+  updateStorageContainerScreen();
+  autoSave();
+
+  return;
+}
+
   if (
     item.id === "campfire" ||
     item.id === "choppingBlock" ||

@@ -802,3 +802,31 @@ body:not(.show-map-debug-markers) .tile-required-item-marker {
 
   pointer-events: none;
 }
+
+.tile-storage-markers {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  z-index: 8;
+
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+
+  pointer-events: none;
+}
+
+.tile-storage-marker {
+  width: 26px;
+  height: 26px;
+
+  object-fit: contain;
+  image-rendering: auto;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.has-storage-container {
+  position: relative;
+}

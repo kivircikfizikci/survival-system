@@ -133,6 +133,7 @@ function saveGame() {
 
     regionWorkstations: regionWorkstations,
     playerShelter: playerShelter,
+    placedStorageContainers: placedStorageContainers,
     discoveredRecipes: discoveredRecipes,
     discoveredItems: discoveredItems,
     currentLanguage: currentLanguage,
@@ -212,6 +213,55 @@ function loadGame() {
     playerShelter = saveData.playerShelter;
   }
 
+  if (
+    Array.isArray(
+      saveData.placedStorageContainers
+    )
+  ) {
+    placedStorageContainers =
+      saveData.placedStorageContainers.map(
+        function (container) {
+          const storageSlots =
+            Number(
+              container.storageSlots || 8
+            );
+
+          const restoredItems =
+            Array.isArray(
+              container.storageItems
+            )
+              ? container.storageItems.map(
+                  function (item) {
+                    return restoreItem(item);
+                  }
+                )
+              : [];
+
+          while (
+            restoredItems.length <
+            storageSlots
+          ) {
+            restoredItems.push(null);
+          }
+
+          return {
+            ...container,
+            storageSlots: storageSlots,
+            maxWeight: Number(
+              container.maxWeight || 15
+            ),
+            storageItems:
+              restoredItems.slice(
+                0,
+                storageSlots
+              )
+          };
+        }
+      );
+  } else {
+    placedStorageContainers = [];
+  }
+
   if (saveData.regionWorkstations) {
     regionWorkstations = saveData.regionWorkstations;
   }
@@ -228,6 +278,7 @@ function loadGame() {
 
   updateScreen();
   updateInventoryScreen();
+  updateStorageContainerScreen();
 
   isLoadingGame = false;
 }

@@ -1,5 +1,3 @@
-let draggedShelterSlotIndex = null;
-
 function getCurrentDiscoveryPosition() {
   if (typeof discoveryState !== "undefined") {
     return {
@@ -63,11 +61,7 @@ function getShelterCurrentWeight() {
   }
 
   return playerShelter.storageItems.reduce(function (total, item) {
-    if (item === null) {
-      return total;
-    }
-
-    return total + (item.weight || 0) * (item.quantity || 1);
+    return total + getItemTotalWeight(item);
   }, 0);
 }
 
@@ -76,9 +70,12 @@ function canAddItemToShelter(item) {
     return false;
   }
 
-  const itemWeight = (item.weight || 0) * (item.quantity || 1);
+  const itemWeight = getItemTotalWeight(item);
 
-  return getShelterCurrentWeight() + itemWeight <= playerShelter.maxWeight;
+  return (
+    getShelterCurrentWeight() + itemWeight <=
+    playerShelter.maxWeight
+  );
 }
 
 function canMoveInventoryItemToShelter(inventoryItem, shelterItem) {
@@ -264,4 +261,716 @@ if (destroyShelterButton) {
   destroyShelterButton.addEventListener("click", function () {
     destroyShelter();
   });
+}
+
+function createStorageContainerInstanceId(itemId) {
+  return (
+    itemId +
+    "_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 100000)
+  );
+}
+
+function getStorageContainerById(instanceId) {
+  return placedStorageContainers.find(function (container) {
+    return container.instanceId === instanceId;
+  }) || null;
+}
+
+function getActiveStorageContainer() {
+  if (!activeStorageContainerId) {
+    return null;
+  }
+
+  return getStorageContainerById(
+    activeStorageContainerId
+  );
+}
+
+function getStorageContainersAtPosition(
+  regionId,
+  x,
+  y
+) {
+  return placedStorageContainers.filter(
+    function (container) {
+      return (
+        container.regionId === regionId &&
+        Number(container.x) === Number(x) &&
+        Number(container.y) === Number(y)
+      );
+    }
+  );
+}
+
+function getStorageContainerAtCurrentPosition() {
+  const position =
+    getCurrentDiscoveryPosition();
+
+  return (
+    placedStorageContainers.find(
+      function (container) {
+        return (
+          container.regionId ===
+            position.regionId &&
+          Number(container.x) ===
+            Number(position.x) &&
+          Number(container.y) ===
+            Number(position.y)
+        );
+      }
+    ) || null
+  );
+}
+
+function getStorageContainerCurrentWeight(
+  container
+) {
+  if (
+    !container ||
+    !Array.isArray(container.storageItems)
+  ) {
+    return 0;
+  }
+
+  return container.storageItems.reduce(
+    function (total, item) {
+      return total + getItemTotalWeight(item);
+    },
+    0
+  );
+}
+
+function isStorageContainerEmpty(container) {
+  if (
+    !container ||
+    !Array.isArray(container.storageItems)
+  ) {
+    return true;
+  }
+
+  return container.storageItems.every(
+    function (item) {
+      return item === null;
+    }
+  );
+}
+
+function placeWovenCrate() {
+  const position =
+    getCurrentDiscoveryPosition();
+
+  const existingContainer =
+    getStorageContainerAtCurrentPosition();
+
+  if (existingContainer) {
+    showMessage(t("storageAlreadyHere"));
+    return false;
+  }
+
+  const wovenCratesInRegion =
+    placedStorageContainers.filter(
+      function (container) {
+        return (
+          container.regionId ===
+            position.regionId &&
+          container.itemId === "wovenCrate"
+        );
+      }
+    );
+
+  if (wovenCratesInRegion.length >= 3) {
+    showMessage(t("storageRegionLimit"));
+    return false;
+  }
+
+  const storageContainer = {
+    instanceId:
+      createStorageContainerInstanceId(
+        "wovenCrate"
+      ),
+
+    itemId: "wovenCrate",
+
+    regionId: position.regionId,
+    x: position.x,
+    y: position.y,
+
+    storageSlots: 8,
+    maxWeight: 15,
+
+    storageItems: Array(8).fill(null)
+  };
+
+  placedStorageContainers.push(
+    storageContainer
+  );
+
+  activeStorageContainerId =
+    storageContainer.instanceId;
+
+  const message = t("wovenCratePlaced");
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  updateStorageContainerScreen();
+  autoSave();
+
+  return true;
+}
+
+function openStorageContainerAtCurrentPosition() {
+  const container =
+    getStorageContainerAtCurrentPosition();
+
+  if (!container) {
+    activeStorageContainerId = null;
+    return null;
+  }
+
+  activeStorageContainerId =
+    container.instanceId;
+
+  return container;
+}
+
+function canMoveInventoryItemToStorageContainer(
+  inventoryItem,
+  containerItem,
+  container
+) {
+  if (!container || !inventoryItem) {
+    return false;
+  }
+
+  const currentWeight =
+    getStorageContainerCurrentWeight(container);
+
+  const incomingWeight =
+    getItemTotalWeight(inventoryItem);
+
+  const outgoingWeight =
+    getItemTotalWeight(containerItem);
+
+  return (
+    currentWeight -
+      outgoingWeight +
+      incomingWeight <=
+    container.maxWeight
+  );
+}
+
+function moveInventoryItemToStorageContainerSlot(
+  inventorySlotIndex,
+  containerSlotIndex
+) {
+  const container = getActiveStorageContainer();
+
+  if (!container) {
+    return;
+  }
+
+  const inventoryItem =
+    inventory.items[inventorySlotIndex];
+
+  const containerItem =
+    container.storageItems[containerSlotIndex];
+
+  if (!inventoryItem) {
+    return;
+  }
+
+  if (
+    canStackStorageItems(
+      containerItem,
+      inventoryItem
+    )
+  ) {
+    const availableSpace =
+      containerItem.maxStack -
+      containerItem.quantity;
+
+    const moveAmount = Math.min(
+      availableSpace,
+      inventoryItem.quantity
+    );
+
+    const addedWeight =
+      getItemTotalWeight({
+        ...inventoryItem,
+        quantity: moveAmount
+      });
+
+    if (
+      getStorageContainerCurrentWeight(
+        container
+      ) +
+        addedWeight >
+      container.maxWeight
+    ) {
+      showMessage(t("storageTooHeavy"));
+      return;
+    }
+
+    containerItem.quantity += moveAmount;
+    inventoryItem.quantity -= moveAmount;
+
+    if (inventoryItem.quantity <= 0) {
+      inventory.items[inventorySlotIndex] =
+        null;
+    }
+
+    updateInventoryScreen();
+    updateStorageContainerScreen();
+    autoSave();
+    return;
+  }
+
+  if (
+    !canMoveInventoryItemToStorageContainer(
+      inventoryItem,
+      containerItem,
+      container
+    )
+  ) {
+    showMessage(t("storageTooHeavy"));
+    return;
+  }
+
+  container.storageItems[containerSlotIndex] =
+    inventoryItem;
+
+  inventory.items[inventorySlotIndex] =
+    containerItem;
+
+  updateInventoryScreen();
+  updateStorageContainerScreen();
+  autoSave();
+}
+
+function moveStorageContainerItemToInventorySlot(
+  containerSlotIndex,
+  inventorySlotIndex
+) {
+  const container = getActiveStorageContainer();
+
+  if (!container) {
+    return;
+  }
+
+  const containerItem =
+    container.storageItems[containerSlotIndex];
+
+  const inventoryItem =
+    inventory.items[inventorySlotIndex];
+
+  if (!containerItem) {
+    return;
+  }
+
+  if (
+    canStackStorageItems(
+      inventoryItem,
+      containerItem
+    )
+  ) {
+    const availableSpace =
+      inventoryItem.maxStack -
+      inventoryItem.quantity;
+
+    const moveAmount = Math.min(
+      availableSpace,
+      containerItem.quantity
+    );
+
+    const addedWeight =
+      getItemTotalWeight({
+        ...containerItem,
+        quantity: moveAmount
+      });
+
+    if (
+      getCurrentWeight() + addedWeight >
+      inventory.maxWeight
+    ) {
+      showMessage(t("inventoryTooHeavy"));
+      return;
+    }
+
+    inventoryItem.quantity += moveAmount;
+    containerItem.quantity -= moveAmount;
+
+    if (containerItem.quantity <= 0) {
+      container.storageItems[
+        containerSlotIndex
+      ] = null;
+    }
+
+    updateInventoryScreen();
+    updateStorageContainerScreen();
+    autoSave();
+    return;
+  }
+
+  const inventoryWeightAfterMove =
+    getCurrentWeight() -
+    getItemTotalWeight(inventoryItem) +
+    getItemTotalWeight(containerItem);
+
+  if (
+    inventoryWeightAfterMove >
+    inventory.maxWeight
+  ) {
+    showMessage(t("inventoryTooHeavy"));
+    return;
+  }
+
+  inventory.items[inventorySlotIndex] =
+    containerItem;
+
+  container.storageItems[containerSlotIndex] =
+    inventoryItem;
+
+  updateInventoryScreen();
+  updateStorageContainerScreen();
+  autoSave();
+}
+
+function moveStorageContainerItem(
+  fromSlotIndex,
+  toSlotIndex
+) {
+  const container = getActiveStorageContainer();
+
+  if (
+    !container ||
+    fromSlotIndex === toSlotIndex
+  ) {
+    return;
+  }
+
+  const fromItem =
+    container.storageItems[fromSlotIndex];
+
+  const toItem =
+    container.storageItems[toSlotIndex];
+
+  if (!fromItem) {
+    return;
+  }
+
+  if (
+    canStackStorageItems(toItem, fromItem)
+  ) {
+    const sourceWillBeEmpty =
+      stackStorageItems(toItem, fromItem);
+
+    if (sourceWillBeEmpty) {
+      container.storageItems[fromSlotIndex] =
+        null;
+    }
+
+    updateStorageContainerScreen();
+    autoSave();
+    return;
+  }
+
+  container.storageItems[toSlotIndex] =
+    fromItem;
+
+  container.storageItems[fromSlotIndex] =
+    toItem;
+
+  updateStorageContainerScreen();
+  autoSave();
+}
+
+function updateStorageContainerScreen() {
+  if (!storageContainerCard) {
+    return;
+  }
+
+  const container =
+    getStorageContainerAtCurrentPosition();
+
+  if (!container) {
+    activeStorageContainerId = null;
+    storageContainerCard.hidden = true;
+    return;
+  }
+
+  activeStorageContainerId =
+    container.instanceId;
+
+  storageContainerCard.hidden = false;
+
+  const usedSlots =
+    container.storageItems.filter(
+      function (item) {
+        return item !== null;
+      }
+    ).length;
+
+  const currentWeight =
+    getStorageContainerCurrentWeight(
+      container
+    );
+
+  const databaseItem =
+    itemsDatabase[container.itemId];
+
+  storageContainerTitle.textContent =
+    databaseItem
+      ? getItemName(databaseItem)
+      : "Woven Crate";
+
+  storageContainerRegionText.textContent =
+    getRegionNameById(container.regionId);
+
+  storageContainerSlotsText.textContent =
+    usedSlots +
+    " / " +
+    container.storageSlots +
+    " slots";
+
+  storageContainerWeightText.textContent =
+    currentWeight.toFixed(1) +
+    " / " +
+    container.maxWeight +
+    " kg";
+
+  storageContainerGrid.innerHTML = "";
+
+  for (
+    let i = 0;
+    i < container.storageSlots;
+    i++
+  ) {
+    const slot =
+      document.createElement("div");
+
+    slot.classList.add(
+      "shelter-storage-slot"
+    );
+
+    slot.dataset.storageSlot = i;
+
+    slot.addEventListener(
+      "dragover",
+      function (event) {
+        event.preventDefault();
+      }
+    );
+
+    slot.addEventListener(
+      "drop",
+      function () {
+        const targetSlotIndex = Number(
+          slot.dataset.storageSlot
+        );
+
+        if (
+          draggedStorageSlotIndex !== null
+        ) {
+          moveStorageContainerItem(
+            draggedStorageSlotIndex,
+            targetSlotIndex
+          );
+
+          draggedStorageSlotIndex = null;
+          dragMoveAmount = "all";
+          return;
+        }
+
+        if (draggedSlotIndex !== null) {
+          moveInventoryItemToStorageContainerSlot(
+            draggedSlotIndex,
+            targetSlotIndex
+          );
+
+          draggedSlotIndex = null;
+          dragMoveAmount = "all";
+        }
+      }
+    );
+
+    const item =
+      container.storageItems[i];
+
+    if (!item) {
+      slot.draggable = false;
+
+      const emptyLabel =
+        document.createElement("span");
+
+      emptyLabel.classList.add(
+        "shelter-empty-label"
+      );
+
+      emptyLabel.textContent = "";
+
+      slot.appendChild(emptyLabel);
+    } else {
+      slot.classList.add("is-filled");
+      slot.draggable = true;
+
+      slot.addEventListener(
+        "dragstart",
+        function () {
+          draggedStorageSlotIndex =
+            Number(
+              slot.dataset.storageSlot
+            );
+
+          dragMoveAmount = "all";
+        }
+      );
+
+      slot.addEventListener(
+        "dragend",
+        function () {
+          draggedStorageSlotIndex = null;
+          dragMoveAmount = "all";
+        }
+      );
+
+      if ((item.quantity || 1) > 1) {
+        const quantityBadge =
+          document.createElement("span");
+
+        quantityBadge.classList.add(
+          "quantity-badge"
+        );
+
+        quantityBadge.textContent =
+          "x" + item.quantity;
+
+        slot.appendChild(quantityBadge);
+      }
+
+      const itemInfo =
+        document.createElement("div");
+
+      itemInfo.classList.add("item-info");
+
+      const img =
+        document.createElement("img");
+
+      img.classList.add("item-image");
+      img.src = item.imageSrc;
+      img.alt = getItemName(item);
+
+      const name =
+        document.createElement("strong");
+
+      name.textContent = getItemName(item);
+
+      itemInfo.append(img, name);
+      slot.appendChild(itemInfo);
+
+      const itemFooter =
+        createItemFooter(item);
+
+      if (itemFooter) {
+        const hasLargeFooter =
+          itemFooter.classList.contains(
+            "item-footer-box"
+          ) ||
+          itemFooter.classList.contains(
+            "item-footer-metric"
+          );
+
+        if (hasLargeFooter) {
+          slot.classList.add(
+            "has-item-footer"
+          );
+        }
+
+        slot.appendChild(itemFooter);
+      }
+    }
+
+    storageContainerGrid.appendChild(slot);
+  }
+}
+
+function packActiveStorageContainer() {
+  const container =
+    getActiveStorageContainer();
+
+  if (!container) {
+    return;
+  }
+
+  if (!isStorageContainerEmpty(container)) {
+    showMessage(t("emptyStorageFirst"));
+    return;
+  }
+
+  const emptyInventorySlot =
+    findEmptySlot();
+
+  if (emptyInventorySlot === -1) {
+    showMessage(t("noEmptySlot"));
+    return;
+  }
+
+  const databaseItem =
+    itemsDatabase[container.itemId];
+
+  if (!databaseItem) {
+    return;
+  }
+
+  const packedItem = {
+    ...databaseItem,
+    quantity: 1
+  };
+
+  if (
+    getCurrentWeight() +
+      getItemTotalWeight(packedItem) >
+    inventory.maxWeight
+  ) {
+    showMessage(t("tooHeavy"));
+    return;
+  }
+
+  inventory.items[emptyInventorySlot] =
+    packedItem;
+
+  placedStorageContainers =
+    placedStorageContainers.filter(
+      function (placedContainer) {
+        return (
+          placedContainer.instanceId !==
+          container.instanceId
+        );
+      }
+    );
+
+  activeStorageContainerId = null;
+
+  updateInventoryScreen();
+  updateStorageContainerScreen();
+
+  const message =
+    t("storageContainerPacked");
+
+  showMessage(message, "success");
+  addLog(message, "success");
+
+  autoSave();
+}
+
+if (packStorageContainerButton) {
+  packStorageContainerButton.addEventListener(
+    "click",
+    function () {
+      packActiveStorageContainer();
+    }
+  );
 }

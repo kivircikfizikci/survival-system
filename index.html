@@ -201,6 +201,36 @@
       <div class="shelter-storage-grid" id="shelterStorageGrid"></div>
     </section>
 
+    <section class="side-card shelter-card" id="storageContainerCard" hidden>
+      <div class="side-card-header shelter-header">
+        <div class="shelter-top">
+          <div>
+            <h2 id="storageContainerTitle">Woven Crate</h2>
+            <small id="storageContainerRegionText">Meadow</small>
+          </div>
+
+          <div class="shelter-summary">
+            <span id="storageContainerSlotsText">0 / 8 slots</span>
+            <span id="storageContainerWeightText">0 / 15 kg</span>
+          </div>
+
+          <button
+            id="packStorageContainerButton"
+            class="destroy-shelter-button"
+            type="button"
+            data-i18n="pack"
+          >
+            Pack
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="shelter-storage-grid"
+        id="storageContainerGrid"
+      ></div>
+    </section>
+
     <aside class="info-side-panel" aria-label="Recipes and logs">
     <section class="side-card recipes-card" id="recipesPanel" hidden>
       <div class="recipes-header">
@@ -293,8 +323,8 @@
 <script src="js/i18n.js"></script>
 <script src="js/equipment.js"></script>
 <script src="js/crafting.js"></script>
-<script src="js/ui.js"></script>
 <script src="js/shelter.js"></script>
+<script src="js/ui.js"></script>
 <script src="js/save.js"></script>
 <script src="js/main.js"></script>
 </body>

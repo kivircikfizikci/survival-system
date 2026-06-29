@@ -540,7 +540,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/leather.png",
     weight: 0.6,
-    maxStack: 6
+    maxStack: 12
   },
   leatherStrip: {
     id: "leatherStrip",
@@ -1379,6 +1379,20 @@ const itemsDatabase = {
     maxStack: 1,
     durability: 40,
     maxDurability: 40
+  },
+  wovenCrate: {
+    id: "wovenCrate",
+    nameKey: "wovenCrate",
+    type: "usable",
+    category: "storage",
+    imageSrc: "img/wovenCrate.png",
+    weight: 2.5,
+    maxStack: 1,
+
+    storageData: {
+      slots: 8,
+      maxWeight: 15
+    }
   },
   // Cooked Food
   cookedFish: {
@@ -2456,6 +2470,23 @@ const recipesDatabase = {
     toolDurabilityCost: {
       knife: 8
     }
+  },
+  wovenCrate: {
+    id: "wovenCrate",
+    category: "survival",
+    ingredients: {
+      stick: 6,
+      dryGrass: 4,
+      plantFiber: 4
+    },
+    ingredientGroups: {
+      hideMaterial: {
+        amount: 2,
+        itemIds: ["dryGrass", "plantFiber"]
+      }
+    },
+    resultItemId: "wovenCrate",
+    resultQuantity: 1
   },
   simpleTorch: {
     id: "simpleTorch",
