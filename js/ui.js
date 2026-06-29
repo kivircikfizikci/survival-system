@@ -1094,30 +1094,80 @@ function updateInventoryScreen() {
 }
 
 function setupCraftDropZones() {
-  const craftSlotElements = document.querySelectorAll(".craft-slot");
+  const craftSlotElements =
+    document.querySelectorAll(".craft-slot");
 
-  craftSlotElements.forEach(function (craftSlotElement) {
-    craftSlotElement.addEventListener("dragover", function (event) {
-      event.preventDefault();
-    });
-
-    craftSlotElement.addEventListener("drop", function () {
-      const craftSlotIndex = Number(craftSlotElement.dataset.craftSlot);
-
-      if (draggedCraftSlotIndex !== null) {
-        moveCraftItem(draggedCraftSlotIndex, craftSlotIndex, dragMoveAmount);
-        draggedCraftSlotIndex = null;
-        dragMoveAmount = "all";
-        return;
+  craftSlotElements.forEach(function (
+    craftSlotElement
+  ) {
+    craftSlotElement.addEventListener(
+      "dragover",
+      function (event) {
+        event.preventDefault();
       }
+    );
 
-      if (draggedSlotIndex !== null) {
-        moveInventoryItemToCraftSlot(draggedSlotIndex, craftSlotIndex, dragMoveAmount);
-        draggedSlotIndex = null;
-        dragMoveAmount = "all";
-        return;
+    craftSlotElement.addEventListener(
+      "drop",
+      function () {
+        const craftSlotIndex = Number(
+          craftSlotElement.dataset.craftSlot
+        );
+
+        if (
+          draggedCraftSlotIndex !== null
+        ) {
+          moveCraftItem(
+            draggedCraftSlotIndex,
+            craftSlotIndex,
+            dragMoveAmount
+          );
+
+          draggedCraftSlotIndex = null;
+          dragMoveAmount = "all";
+          return;
+        }
+
+        if (
+          draggedShelterSlotIndex !== null
+        ) {
+          moveShelterItemToCraftSlot(
+            draggedShelterSlotIndex,
+            craftSlotIndex,
+            dragMoveAmount
+          );
+
+          draggedShelterSlotIndex = null;
+          dragMoveAmount = "all";
+          return;
+        }
+
+        if (
+          draggedStorageSlotIndex !== null
+        ) {
+          moveStorageContainerItemToCraftSlot(
+            draggedStorageSlotIndex,
+            craftSlotIndex,
+            dragMoveAmount
+          );
+
+          draggedStorageSlotIndex = null;
+          dragMoveAmount = "all";
+          return;
+        }
+
+        if (draggedSlotIndex !== null) {
+          moveInventoryItemToCraftSlot(
+            draggedSlotIndex,
+            craftSlotIndex,
+            dragMoveAmount
+          );
+
+          draggedSlotIndex = null;
+          dragMoveAmount = "all";
+        }
       }
-    });
+    );
   });
 }
 
@@ -1407,6 +1457,13 @@ function updateShelterScreen() {
       if (draggedShelterSlotIndex !== null) {
         moveShelterItem(draggedShelterSlotIndex, shelterSlotIndex);
         draggedShelterSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
+      if (draggedCraftSlotIndex !== null) {
+        moveCraftItemToShelterSlot(draggedCraftSlotIndex, shelterSlotIndex, dragMoveAmount);
+        draggedCraftSlotIndex = null;
         dragMoveAmount = "all";
         return;
       }

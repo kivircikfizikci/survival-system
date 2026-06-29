@@ -165,6 +165,147 @@ function moveShelterItemToInventorySlot(shelterSlotIndex, inventorySlotIndex) {
   autoSave();
 }
 
+function moveShelterItemToCraftSlot(
+  shelterSlotIndex,
+  craftSlotIndex,
+  amount = "all"
+) {
+  refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
+  if (!playerShelter) {
+    return;
+  }
+
+  const moved = moveItemBetweenContainers(
+    playerShelter.storageItems,
+    shelterSlotIndex,
+    craftSlots,
+    craftSlotIndex,
+    amount,
+    "craftSlotFull"
+  );
+
+  if (!moved) {
+    return;
+  }
+
+  updateShelterScreen();
+  updateCraftingScreen();
+  autoSave();
+}
+
+function moveCraftItemToShelterSlot(
+  craftSlotIndex,
+  shelterSlotIndex,
+  amount = "all"
+) {
+  refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
+  if (!playerShelter) {
+    return;
+  }
+
+  const moved = moveItemBetweenContainers(
+    craftSlots,
+    craftSlotIndex,
+    playerShelter.storageItems,
+    shelterSlotIndex,
+    amount,
+    "shelterSlotFull"
+  );
+
+  if (!moved) {
+    return;
+  }
+
+  updateCraftingScreen();
+  updateShelterScreen();
+  autoSave();
+}
+
+function moveCraftItemToStorageContainerSlot(
+  craftSlotIndex,
+  storageSlotIndex,
+  amount = "all"
+) {
+  refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
+  const container = getActiveStorageContainer();
+
+  if (!container) {
+    return;
+  }
+
+  const moved = moveItemBetweenContainers(
+    craftSlots,
+    craftSlotIndex,
+    container.storageItems,
+    storageSlotIndex,
+    amount,
+    "storageSlotFull"
+  );
+
+  if (!moved) {
+    return;
+  }
+
+  updateCraftingScreen();
+  updateStorageContainerScreen();
+  autoSave();
+}
+
+function moveStorageContainerItemToCraftSlot(
+  storageSlotIndex,
+  craftSlotIndex,
+  amount = "all"
+) {
+  refreshBaseSleepState();
+
+  if (isSleeping) {
+    showMessage(t("cannotUseSleeping"));
+    return;
+  }
+
+  const container =
+    getActiveStorageContainer();
+
+  if (!container) {
+    return;
+  }
+
+  const moved = moveItemBetweenContainers(
+    container.storageItems,
+    storageSlotIndex,
+    craftSlots,
+    craftSlotIndex,
+    amount,
+    "craftSlotFull"
+  );
+
+  if (!moved) {
+    return;
+  }
+
+  updateStorageContainerScreen();
+  updateCraftingScreen();
+  autoSave();
+}
+
 function moveShelterItem(fromShelterSlotIndex, toShelterSlotIndex) {
   if (!playerShelter || fromShelterSlotIndex === toShelterSlotIndex) {
     return;
@@ -765,37 +906,44 @@ function updateStorageContainerScreen() {
       }
     );
 
-    slot.addEventListener(
-      "drop",
-      function () {
-        const targetSlotIndex = Number(
-          slot.dataset.storageSlot
+    slot.addEventListener("drop", function () {
+      const targetSlotIndex = Number(
+        slot.dataset.storageSlot
+      );
+
+      if (draggedStorageSlotIndex !== null) {
+        moveStorageContainerItem(
+          draggedStorageSlotIndex,
+          targetSlotIndex
         );
 
-        if (
-          draggedStorageSlotIndex !== null
-        ) {
-          moveStorageContainerItem(
-            draggedStorageSlotIndex,
-            targetSlotIndex
-          );
-
-          draggedStorageSlotIndex = null;
-          dragMoveAmount = "all";
-          return;
-        }
-
-        if (draggedSlotIndex !== null) {
-          moveInventoryItemToStorageContainerSlot(
-            draggedSlotIndex,
-            targetSlotIndex
-          );
-
-          draggedSlotIndex = null;
-          dragMoveAmount = "all";
-        }
+        draggedStorageSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
       }
-    );
+
+      if (draggedCraftSlotIndex !== null) {
+        moveCraftItemToStorageContainerSlot(
+          draggedCraftSlotIndex,
+          targetSlotIndex,
+          dragMoveAmount
+        );
+
+        draggedCraftSlotIndex = null;
+        dragMoveAmount = "all";
+        return;
+      }
+
+      if (draggedSlotIndex !== null) {
+        moveInventoryItemToStorageContainerSlot(
+          draggedSlotIndex,
+          targetSlotIndex
+        );
+
+        draggedSlotIndex = null;
+        dragMoveAmount = "all";
+      }
+    });
 
     const item =
       container.storageItems[i];
