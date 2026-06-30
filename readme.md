@@ -1,9 +1,6 @@
 1. Yapılacaklar
 trail treetiles kısmı tamamlanacak.
 
-Başlangıç bölgelerinde kullanılabilecek basit sandık tarzı bir şey yapılmalı. 6-8 slot verecek içerisine eşyalar konulacak ve haritanın herhangi bir yerine koyulabilecek. tent mantığı gibi çalışacak. stick grass plantfiber drygrass kullanılarak yapılabilecek basit bi sandık olacak.
-
-
 Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.
@@ -28,13 +25,6 @@ Class Sistemi v1
 - Her class kendine uygun şekilde bonuslar sağlayacak.
 
 2. Eklenecek Item Listesi
-barkSandals
-
-leatherCap
-leatherVest
-leatherWrap
-leatherGloves
-leatherBoots
 
 clothShirt
 clothPants
@@ -43,4 +33,3 @@ clothBag
 
 
 3. Görseli Olmayan Item Listesi
-wovenCrate

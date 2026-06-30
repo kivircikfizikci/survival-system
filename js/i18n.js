@@ -340,7 +340,8 @@ const translations = {
     storageRegionLimit: "You cannot place any more crates in this region.",
     storageTooHeavy: "The crate cannot carry any more weight.",
     emptyStorageFirst: "Empty the crate before packing it.",
-    storageContainerPacked: "The crate was packed.",    
+    storageContainerPacked: "The crate was packed.", 
+    barkSandals: "Bark Sandals",   
   },
   //Türkçe
   tr: {
@@ -682,6 +683,7 @@ const translations = {
     storageTooHeavy: "Sandık daha fazla ağırlık taşıyamaz.",
     emptyStorageFirst: "Sandığı kaldırmadan önce içini boşalt.",
     storageContainerPacked: "Sandık kaldırıldı.",
+    barkSandals: "Kabuk Sandaletler",
   }
 };
 

@@ -583,7 +583,6 @@ const itemsDatabase = {
     extraWeight: 4,
     durability: 30,
     maxDurability: 30,
-
     breakLoot: { itemId: "clothScrap", quantity: 3 }
   },
   cargoPants: {
@@ -675,21 +674,6 @@ const itemsDatabase = {
     durability: 35,
     maxDurability: 35,
     breakLoot: { itemId: "clothScrap", quantity: 3 }  
-  },
-  leatherJacket: {
-    id: "leatherJacket",
-    nameKey: "leatherJacket",
-    type: "clothing",
-    category: "clothing",
-    equipSlot: "vest",
-    imageSrc: "img/leatherJacket.png",
-    weight: 1.5,
-    maxStack: 1,
-    extraSlots: 3,
-    extraWeight: 3,
-    durability: 60,
-    maxDurability: 60,
-    breakLoot: { itemId: "leatherScrap", quantity: 4 }
   },
   fingerlessGloves: {
     id: "fingerlessGloves",
@@ -811,6 +795,111 @@ const itemsDatabase = {
     maxDurability: 10,
     breakLoot: { itemId: "plantFiber", quantity: 1 }
   },
+  barkSandals: {
+    id: "barkSandals",
+    nameKey: "barkSandals",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "feet",
+    imageSrc: "img/barkSandals.png",
+    weight: 0.3,
+    maxStack: 1,
+    extraSlots: 1,
+    extraWeight: 1,
+    durability: 12,
+    maxDurability: 12,
+    breakLoot: { itemId: "bark", quantity: 1 }
+  },
+  leatherCap: {
+    id: "leatherCap",
+    nameKey: "leatherCap",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "head",
+    imageSrc: "img/leatherCap.png",
+    weight: 0.5,
+    maxStack: 1,
+    extraSlots: 0,
+    extraWeight: 0,
+    durability: 40,
+    maxDurability: 40,
+    breakLoot: { itemId: "leatherScrap", quantity: 1 }
+  },
+  leatherJacket: {
+    id: "leatherJacket",
+    nameKey: "leatherJacket",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "vest",
+    imageSrc: "img/leatherJacket.png",
+    weight: 1.5,
+    maxStack: 1,
+    extraSlots: 3,
+    extraWeight: 3,
+    durability: 60,
+    maxDurability: 60,
+    breakLoot: { itemId: "leatherScrap", quantity: 4 }
+  },
+  leatherVest: {
+    id: "leatherVest",
+    nameKey: "leatherVest",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "torso",
+    imageSrc: "img/leatherVest.png",
+    weight: 1,
+    maxStack: 1,
+    extraSlots: 2,
+    extraWeight: 2,
+    durability: 50,
+    maxDurability: 50,
+    breakLoot: { itemId: "leatherScrap", quantity: 2 }
+  },
+  leatherShorts: {
+    id: "leatherShorts",
+    nameKey: "leatherShorts",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "legs",
+    imageSrc: "img/leatherShorts.png",
+    weight: 0.8,
+    maxStack: 1,
+    extraSlots: 1,
+    extraWeight: 1,
+    durability: 45,
+    maxDurability: 45,
+    breakLoot: { itemId: "leatherScrap", quantity: 2 }
+  },
+  leatherGloves: {
+    id: "leatherGloves",
+    nameKey: "leatherGloves",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "hands",
+    imageSrc: "img/leatherGloves.png",
+    weight: 0.4,
+    maxStack: 1,
+    extraSlots: 0,
+    extraWeight: 0,
+    durability: 40,
+    maxDurability: 40,
+    breakLoot: { itemId: "leatherScrap", quantity: 1 }
+  },
+  leatherBoots: {
+    id: "leatherBoots",
+    nameKey: "leatherBoots",
+    type: "clothing",
+    category: "clothing",
+    equipSlot: "feet",
+    imageSrc: "img/leatherBoots.png",
+    weight: 1,
+    maxStack: 1,
+    extraSlots: 0,
+    extraWeight: 1,
+    durability: 55,
+    maxDurability: 55,
+    breakLoot: { itemId: "leatherScrap", quantity: 2 }
+  },
   // Bags and Containers
   schoolBag: {
     id: "schoolBag",
@@ -871,6 +960,18 @@ const itemsDatabase = {
     maxStack: 1,
     extraSlots: 3,
     extraWeight: 2.5
+  },
+  leatherSatchel: {
+    id: "leatherSatchel",
+    nameKey: "leatherSatchel",
+    type: "bag",
+    category: "bag",
+    equipSlot: "bag",
+    imageSrc: "img/leatherSatchel.png",
+    weight: 0.5,
+    maxStack: 1,
+    extraSlots: 5,
+    extraWeight: 5
   },
   // Medical Items
   bandage: {
@@ -2565,16 +2666,6 @@ const recipesDatabase = {
     }
   },
   // Clothing Items
-  leatherPouch: {
-    id: "leatherPouch",
-    nameKey: "leatherPouch",
-    resultItemId: "leatherPouch",
-    resultQuantity: 1,
-    isPublic: false,
-    category: "clothing",
-    discoverByAll: ["leather", "leatherStrip"],
-    ingredients: { leather: 2, leatherStrip: 2 }
-  },
   grassSatchel: {
     id: "grassSatchel",
     nameKey: "grassSatchel",
@@ -2614,6 +2705,107 @@ const recipesDatabase = {
       dryGrass: 6,
       plantFiber: 3
     }
+  },
+  barkSandals: {
+    id: "barkSandals",
+    nameKey: "barkSandals",
+    resultItemId: "barkSandals",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["bark"],
+    ingredients: {
+      bark: 2,
+      plantFiber: 4
+    }
+  },
+  leatherPouch: {
+    id: "leatherPouch",
+    nameKey: "leatherPouch",
+    resultItemId: "leatherPouch",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 2, leatherStrip: 2 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherSatchel: {
+    id: "leatherSatchel",
+    nameKey: "leatherSatchel",
+    resultItemId: "leatherSatchel",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 6, leatherStrip: 4 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherCap: {
+    id: "leatherCap",
+    nameKey: "leatherCap",
+    resultItemId: "leatherCap",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 2, leatherStrip: 1 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherVest: {
+    id: "leatherVest",
+    nameKey: "leatherVest",
+    resultItemId: "leatherVest",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 6, leatherStrip: 3 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherShorts: {
+    id: "leatherShorts",
+    nameKey: "leatherShorts",
+    resultItemId: "leatherShorts",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 4, leatherStrip: 3 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherGloves: {
+    id: "leatherGloves",
+    nameKey: "leatherGloves",
+    resultItemId: "leatherGloves",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 2, leatherStrip: 4 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherBoots: {
+    id: "leatherBoots",
+    nameKey: "leatherBoots",
+    resultItemId: "leatherBoots",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 4, leatherStrip: 2 },
+    requiredTools: { boneNeedle: 1 }
+  },
+  leatherJacket: {
+    id: "leatherJacket",
+    nameKey: "leatherJacket",
+    resultItemId: "leatherJacket",
+    resultQuantity: 1,
+    isPublic: false,
+    category: "clothing",
+    discoverByAll: ["leather", "leatherStrip"],
+    ingredients: { leather: 5, leatherStrip: 3 },
+    requiredTools: { boneNeedle: 1 }
   },
   // Cooking Recipes
   cookedFish: {
