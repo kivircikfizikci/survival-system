@@ -85,16 +85,34 @@ encounterTables: {
     { id: "snake", type: "enemy", chance: 4 },
     { id: "smallBird", type: "friendly", chance: 3 }
   ]
-}
+},
 
-  /*exits: {
-    "AF16": {
+  exits: {
+    "Q32": {
+      targetMapId: "trail",
+      targetPosition: {
+        x: 15,
+        y: 0
+      },
+      label: "Trail"
+    },
+
+    "AE1": {
       targetMapId: "mountain",
       targetPosition: {
-        x: 16,
-        y: 30
+        x: 0,
+        y: 28
       },
       label: "Mountain"
-    }
-  }*/
+    },
+
+    "A15": {
+      targetMapId: "abandonedVillage",
+      targetPosition: {
+        x: 30,
+        y: 0
+      },
+      label: "Abandoned village"
+    },
+ }
 };
