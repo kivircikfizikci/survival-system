@@ -194,11 +194,20 @@ function loadGame() {
 
   if (
     saveData.activeGoalsStage === "starter" ||
-    saveData.activeGoalsStage === "trail"
+    saveData.activeGoalsStage === "trail" ||
+    saveData.activeGoalsStage === "lake"
   ) {
     activeGoalsStage = saveData.activeGoalsStage;
-  } else if (saveData.starterGoalsRewardClaimed === true) {
+  } else if (
+    saveData.trailGoalsRewardClaimed === true
+  ) {
+    activeGoalsStage = "lake";
+  } else if (
+    saveData.starterGoalsRewardClaimed === true
+  ) {
     activeGoalsStage = "trail";
+  } else {
+    activeGoalsStage = "starter";
   }
 
   starterGoalsRewardClaimed =
