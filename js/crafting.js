@@ -487,24 +487,37 @@ function getCraftItemCounts() {
   const counts = {};
 
   for (let item of craftSlots) {
-    if (item !== null) {
-      if (!counts[item.id]) {
-        counts[item.id] = 0;
+    if (item === null) {
+      continue;
+    }
+
+    const itemQuantity = item.quantity || 1;
+
+    if (!counts[item.id]) {
+      counts[item.id] = 0;
+    }
+
+    counts[item.id] += itemQuantity;
+
+    for (let groupKey in toolGroups) {
+      const allowedToolIds = toolGroups[groupKey];
+
+      if (!Array.isArray(allowedToolIds)) {
+        continue;
       }
 
-      counts[item.id] += item.quantity || 1;
-
-      if (item.toolTags) {
-        for (let tag of item.toolTags) {
-          const groupKey = "toolGroup:" + tag;
-
-          if (!counts[groupKey]) {
-            counts[groupKey] = 0;
-          }
-
-          counts[groupKey] += item.quantity || 1;
-        }
+      if (!allowedToolIds.includes(item.id)) {
+        continue;
       }
+
+      const toolGroupKey =
+        "toolGroup:" + groupKey;
+
+      if (!counts[toolGroupKey]) {
+        counts[toolGroupKey] = 0;
+      }
+
+      counts[toolGroupKey] += itemQuantity;
     }
   }
 
@@ -518,6 +531,10 @@ function getToolDurabilityCost(item, baseCost) {
 
   if (item.toolTier === "iron") {
     return Math.max(1, Math.ceil(baseCost * 0.25));
+  }
+
+  if (item.toolTier === "bone") {
+    return Math.max(1, Math.ceil(baseCost * 0.3));
   }
 
   if (item.toolTier === "copper") {
@@ -582,37 +599,88 @@ function applyToolDurabilityCost(recipe) {
     return;
   }
 
-  for (let toolKey in recipe.toolDurabilityCost) {
-    const durabilityCost = recipe.toolDurabilityCost[toolKey];
+  for (
+    const toolKey in recipe.toolDurabilityCost
+  ) {
+    const durabilityCost =
+      recipe.toolDurabilityCost[toolKey];
 
-    for (let i = 0; i < craftSlots.length; i++) {
+    for (
+      let i = 0;
+      i < craftSlots.length;
+      i++
+    ) {
       const item = craftSlots[i];
 
-      if (item === null) {
+      if (!item) {
         continue;
       }
 
-      const isExactTool = item.id === toolKey;
-      const isToolGroup = isItemInToolGroup(item, toolKey);
+      const isExactTool =
+        item.id === toolKey;
 
-      if (!isExactTool && !isToolGroup) {
+      const isToolGroup =
+        isItemInToolGroup(item, toolKey);
+
+      if (
+        !isExactTool &&
+        !isToolGroup
+      ) {
         continue;
       }
 
-      const finalDurabilityCost = getToolDurabilityCost(item, durabilityCost);
+      if (
+        typeof item.durability !== "number"
+      ) {
+        const databaseItem =
+          itemsDatabase[item.id];
 
-      item.durability -= finalDurabilityCost;
-      autoSave();
+        if (
+          databaseItem &&
+          typeof databaseItem.durability ===
+            "number"
+        ) {
+          item.durability =
+            databaseItem.durability;
+        } else {
+          continue;
+        }
+      }
+
+      const finalDurabilityCost =
+        getToolDurabilityCost(
+          item,
+          durabilityCost
+        );
+
+      item.durability = Math.max(
+        0,
+        item.durability -
+          finalDurabilityCost
+      );
 
       if (item.durability <= 0) {
-        const brokenToolName = getItemName(item);
+        const brokenToolName =
+          getItemName(item);
+
         craftSlots[i] = null;
 
-        showMessage(t("toolBroke", { item: brokenToolName }), "warning");
-        addLog(t("toolBroke", { item: brokenToolName }), "warning");
+        showMessage(
+          t("toolBroke", {
+            item: brokenToolName
+          }),
+          "warning"
+        );
+
+        addLog(
+          t("toolBroke", {
+            item: brokenToolName
+          }),
+          "warning"
+        );
       }
 
-      return;
+      break;
     }
   }
 }
@@ -899,6 +967,27 @@ function canCraftSlotsMatchRecipe(recipe) {
 
   if (!hasEnoughLiquidIngredients(recipe)) {
     return false;
+  }
+
+  if (recipe.requiredToolGroups) {
+    const craftItemCounts =
+      getCraftItemCounts();
+
+    for (
+      const groupName in recipe.requiredToolGroups
+    ) {
+      const requiredAmount =
+        recipe.requiredToolGroups[groupName];
+
+      const availableAmount =
+        craftItemCounts[
+          "toolGroup:" + groupName
+        ] || 0;
+
+      if (availableAmount < requiredAmount) {
+        return false;
+      }
+    }
   }
 
   if (!hasRequiredCraftWorkstation(recipe)) {
@@ -1343,27 +1432,27 @@ function craftSelectedRecipe() {
     return;
   }
 
-  consumeCraftIngredients(recipe);
+    applyToolDurabilityCost(recipe);
 
-  if (!removeRecipeIngredientGroups(recipe)) {
-    showMessage(t("notEnoughIngredients"));
-    updateCraftingScreen();
-    updateInventoryScreen();
-    autoSave();
-    return;
-  }
+    consumeCraftIngredients(recipe);
 
-  if (!consumeRecipeLiquidIngredients(recipe)) {
-    showMessage(t("notEnoughLiquid"));
-    updateCraftingScreen();
-    updateInventoryScreen();
-    autoSave();
-    return;
-  }
+    if (!removeRecipeIngredientGroups(recipe)) {
+      showMessage(t("notEnoughIngredients"));
+      updateCraftingScreen();
+      updateInventoryScreen();
+      autoSave();
+      return;
+    }
 
-  applyToolDurabilityCost(recipe);
+    if (!consumeRecipeLiquidIngredients(recipe)) {
+      showMessage(t("notEnoughLiquid"));
+      updateCraftingScreen();
+      updateInventoryScreen();
+      autoSave();
+      return;
+    }
 
-  const added = addItem(craftedItem);
+    const added = addItem(craftedItem);
 
   if (!added) {
     showMessage(t("notEnoughInventorySpace"));
@@ -1435,12 +1524,29 @@ function consumeCraftIngredients(recipe) {
   }
 }
 
-function isItemInToolGroup(item, groupName) {
-  if (item === null) {
+function isItemInToolGroup(
+  item,
+  groupName
+) {
+  if (
+    !item ||
+    !item.id
+  ) {
     return false;
   }
 
-  return item.toolTags && item.toolTags.includes(groupName);
+  const allowedToolIds =
+    toolGroups[groupName];
+
+  if (
+    !Array.isArray(allowedToolIds)
+  ) {
+    return false;
+  }
+
+  return allowedToolIds.includes(
+    item.id
+  );
 }
 
 function getCraftSlotItemCount(itemId) {
