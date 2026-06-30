@@ -186,7 +186,16 @@ const lakeMap = {
     ]
   },
 
-
+  fishingSpotTiles: [
+    ...createResourceTiles(
+        [  
+        "A10", "A11", "B12", "B13", "C13", "C14", "C15", "D13", "D14", "C15", "D16", "D17", "E19", "F19", "G19", "G20", "G21", "H21", "H22", "I23", "J23", "K24", "L25", "M26", "O27",
+       "P27", "Q27", "R27", "T26", "U25", "V24", "V25", "W24", "W23", "X23", "Y21", "Z20", ...createTileRange("Z19", "AA13"), "Y12", "Y11", ...createTileRange("Y10", "W7"), "W6", "W5",
+       "W4", ...createTileRange("V4", "U1"), 
+        ],
+        "lakeShoreDebris"
+    ),
+  ],
 
  exits: {
     "Q32": {

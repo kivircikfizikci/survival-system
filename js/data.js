@@ -1067,6 +1067,17 @@ const itemsDatabase = {
     maxStack: 16
   },
   // Tools and Weapons
+  oldFishNet: {
+    id: "oldFishNet",
+    nameKey: "oldFishNet",
+    type: "tool",
+    category: "survival",
+    imageSrc: "img/oldFishNet.png",
+    weight: 0.8,
+    maxStack: 1,
+    durability: 25,
+    maxDurability: 25,
+  },
   stoneAxe: {
     id: "stoneAxe",
     nameKey: "stoneAxe",
@@ -1360,15 +1371,6 @@ const itemsDatabase = {
     imageSrc: "img/fishBait.png",
     weight: 0.1,
     maxStack: 16
-  },
-  oldFishNet: {
-    id: "oldFishNet",
-    nameKey: "oldFishNet",
-    type: "tool",
-    category: "survival",
-    imageSrc: "img/oldFishNet.png",
-    weight: 0.8,
-    maxStack: 1
   },
   fireStarter: {
     id: "fireStarter",
@@ -2067,7 +2069,7 @@ const recipesDatabase = {
     category: "basic",
     discoverByAll: ["leatherScrap", "boneNeedle"],
     ingredients: {
-      clothScrap: 4
+      leatherScrap: 4
     },
     requiredToolGroups: {
       needle: 1

@@ -47,13 +47,19 @@ function getTileSpecialData(tileId) {
       : null;
 
   return {
-    isBlocked: map.blockedTiles.includes(tileId),
+    isBlocked:
+      map.blockedTiles.includes(tileId),
 
-    resource: specificResource || defaultResource,
+    resource:
+      specificResource || defaultResource,
 
     isTree:
       Array.isArray(map.treeTiles) &&
       map.treeTiles.includes(tileId),
+
+    isFishingSpot:
+      Array.isArray(map.fishingSpotTiles) &&
+      map.fishingSpotTiles.includes(tileId),
 
     encounter: map.encounterTiles
       ? map.encounterTiles[tileId] || null

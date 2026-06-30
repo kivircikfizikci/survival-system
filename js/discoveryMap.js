@@ -935,6 +935,15 @@ function updateTileActionPanel() {
     tileActions.appendChild(fillWaterButton);
   }
 
+  if (
+    !discoveryState.pendingEncounter &&
+    pendingLootItems.length === 0 &&
+    !currentBuriedStash &&
+    tileData.isFishingSpot === true
+  ) {
+    renderFishingActions();
+  }
+
   if (tileData.exit) {
     const exitButton = document.createElement("button");
     exitButton.type = "button";

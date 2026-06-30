@@ -350,6 +350,15 @@ const translations = {
     goalCraftMakeshiftRaft: "Craft a makeshift raft.",
     goalReachMountain: "Reach the Mountain region.",
     survivalFailed: "Survival Failed! Your journey ends here.",
+    fishingSpot: "Fishing Spot",
+    fishingMethod_fishBait: "Fish with Bait ({chance}%)",
+    fishingMethod_spear: "Fish with Spear ({chance}%)",
+    fishingMethod_oldFishNet: "Fish with Old Fish Net ({chance}%)",
+    fishingRaftBonus: "Makeshift Raft bonus active: +{bonus}%",
+    fishingSucceeded: "You caught something!",
+    fishingFailed: "The fish got away.",
+    fishingItemMissing: "The required fishing item is missing.",
+    fishingToolBroke: "{tool} broke while fishing."
   },
   //Türkçe
   tr: {
@@ -700,6 +709,15 @@ const translations = {
     goalCraftMakeshiftRaft: "İlkel sal üret.",
     goalReachMountain: "Mountain bölgesine ulaş.",
     survivalFailed: "Hayatta Kalma Başarısız! Maceran burada sona erdi.",
+    fishingSpot: "Balık Tutma Noktası",
+    fishingMethod_fishBait: "Yemle Balık Tut (%{chance})",
+    fishingMethod_spear: "Mızrakla Balık Tut (%{chance})",
+    fishingMethod_oldFishNet: "Eski Balık Ağıyla Tut (%{chance})",
+    fishingRaftBonus: "İlkel sal bonusu aktif: +%{bonus}",
+    fishingSucceeded: "Bir şey yakaladın!",
+    fishingFailed: "Balık kaçtı.",
+    fishingItemMissing: "Gerekli balıkçılık eşyası bulunamadı.",
+    fishingToolBroke: "{tool} balık tutarken kırıldı.",
   }
 };
 

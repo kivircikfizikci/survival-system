@@ -292,6 +292,601 @@ const encounterDatabase = {
   }
 };
 
+const fishingMethods = {
+  fishBait: {
+    itemId: "fishBait",
+    baseChance: 45,
+    consumeAmount: 1
+  },
+
+  spear: {
+    toolGroup: "spear",
+    baseChance: 30,
+    durabilityCost: 3
+  },
+
+  oldFishNet: {
+    itemId: "oldFishNet",
+    baseChance: 60,
+    durabilityCost: 4
+  }
+};
+
+const makeshiftRaftFishingBonus = 20;
+
+const fishingLootTable = [
+  {
+    itemId: "fish",
+    chance: 100,
+    minQuantity: 1,
+    maxQuantity: 2
+  },
+  {
+    itemId: "fishBone",
+    chance: 45,
+    minQuantity: 1,
+    maxQuantity: 1
+  },
+  {
+    itemId: "fishOil",
+    chance: 20,
+    minQuantity: 1,
+    maxQuantity: 1
+  }
+];
+
+function findSavedInventoryItemById(
+  saveData,
+  itemId
+) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return null;
+  }
+
+  for (
+    let slotIndex = 0;
+    slotIndex < saveData.inventory.items.length;
+    slotIndex++
+  ) {
+    const item =
+      saveData.inventory.items[slotIndex];
+
+    if (!item || item.id !== itemId) {
+      continue;
+    }
+
+    return {
+      slotIndex: slotIndex,
+      item: item
+    };
+  }
+
+  return null;
+}
+
+function findSavedInventoryToolByGroup(
+  saveData,
+  toolGroupName
+) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return null;
+  }
+
+  const allowedToolIds =
+    toolGroups[toolGroupName];
+
+  if (!Array.isArray(allowedToolIds)) {
+    return null;
+  }
+
+  for (
+    let slotIndex = 0;
+    slotIndex < saveData.inventory.items.length;
+    slotIndex++
+  ) {
+    const item =
+      saveData.inventory.items[slotIndex];
+
+    if (
+      !item ||
+      !item.id ||
+      !allowedToolIds.includes(item.id)
+    ) {
+      continue;
+    }
+
+    return {
+      slotIndex: slotIndex,
+      item: item
+    };
+  }
+
+  return null;
+}
+
+function hasMakeshiftRaftForFishing(
+  saveData
+) {
+  return (
+    discoveryState.currentMapId === "lake" &&
+    findSavedInventoryItemById(
+      saveData,
+      "makeshiftRaft"
+    ) !== null
+  );
+}
+
+function getFishingChance(
+  fishingMethodId,
+  saveData
+) {
+  const fishingMethod =
+    fishingMethods[fishingMethodId];
+
+  if (!fishingMethod) {
+    return 0;
+  }
+
+  let finalChance =
+    Number(fishingMethod.baseChance || 0);
+
+  if (
+    hasMakeshiftRaftForFishing(saveData)
+  ) {
+    finalChance +=
+      makeshiftRaftFishingBonus;
+  }
+
+  return Math.min(
+    95,
+    Math.max(0, finalChance)
+  );
+}
+
+function rollFishingLoot() {
+  const lootItems = [];
+
+  for (
+    const lootData of fishingLootTable
+  ) {
+    const lootRoll =
+      Math.random() * 100;
+
+    if (lootRoll >= lootData.chance) {
+      continue;
+    }
+
+    const minQuantity =
+      Number(lootData.minQuantity || 1);
+
+    const maxQuantity =
+      Number(
+        lootData.maxQuantity ||
+        minQuantity
+      );
+
+    const quantity =
+      Math.floor(
+        Math.random() *
+          (
+            maxQuantity -
+            minQuantity +
+            1
+          )
+      ) + minQuantity;
+
+    lootItems.push({
+      itemId: lootData.itemId,
+      quantity: quantity
+    });
+  }
+
+  return lootItems;
+}
+
+function consumeFishingBait(
+  saveData,
+  baitData,
+  consumeAmount
+) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items) ||
+    !baitData
+  ) {
+    return false;
+  }
+
+  const baitItem =
+    saveData.inventory.items[
+      baitData.slotIndex
+    ];
+
+  if (
+    !baitItem ||
+    baitItem.id !== "fishBait"
+  ) {
+    return false;
+  }
+
+  const currentQuantity =
+    Number(baitItem.quantity || 1);
+
+  if (currentQuantity < consumeAmount) {
+    return false;
+  }
+
+  const remainingQuantity =
+    currentQuantity - consumeAmount;
+
+  if (remainingQuantity <= 0) {
+    saveData.inventory.items[
+      baitData.slotIndex
+    ] = null;
+  } else {
+    baitItem.quantity =
+      remainingQuantity;
+  }
+
+  return true;
+}
+
+function applyFishingToolDurabilityCost(
+  saveData,
+  toolData,
+  baseCost
+) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items) ||
+    !toolData ||
+    typeof toolData.slotIndex !== "number"
+  ) {
+    return false;
+  }
+
+  const tool =
+    saveData.inventory.items[
+      toolData.slotIndex
+    ];
+
+  if (
+    !tool ||
+    tool.id !== toolData.item.id
+  ) {
+    return false;
+  }
+
+  if (
+    typeof tool.durability !== "number"
+  ) {
+    return true;
+  }
+
+  const finalCost =
+    getDiscoveryToolDurabilityCost(
+      tool,
+      baseCost
+    );
+
+  tool.durability = Math.max(
+    0,
+    tool.durability - finalCost
+  );
+
+  if (tool.durability <= 0) {
+    const toolName =
+      getDiscoveryItemName(tool);
+
+    saveData.inventory.items[
+      toolData.slotIndex
+    ] = null;
+
+    addDiscoveryLog(
+      t("fishingToolBroke", {
+        tool: toolName
+      })
+    );
+  }
+
+  return true;
+}
+
+function fishAtCurrentTile(
+  fishingMethodId
+) {
+  const currentTileId =
+    getTileId(
+      discoveryState.x,
+      discoveryState.y
+    );
+
+  const tileData =
+    getTileSpecialData(currentTileId);
+
+  if (
+    !tileData ||
+    tileData.isFishingSpot !== true
+  ) {
+    return;
+  }
+
+  if (
+    discoveryState.pendingEncounter ||
+    getPendingLootItems().length > 0
+  ) {
+    return;
+  }
+
+  const fishingMethod =
+    fishingMethods[fishingMethodId];
+
+  if (!fishingMethod) {
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return;
+  }
+
+  let fishingItemData = null;
+
+  if (fishingMethod.itemId) {
+    fishingItemData =
+      findSavedInventoryItemById(
+        saveData,
+        fishingMethod.itemId
+      );
+  } else if (fishingMethod.toolGroup) {
+    fishingItemData =
+      findSavedInventoryToolByGroup(
+        saveData,
+        fishingMethod.toolGroup
+      );
+  }
+
+  if (!fishingItemData) {
+    addDiscoveryLog(
+      t("fishingItemMissing")
+    );
+
+    updateTileActionPanel();
+    return;
+  }
+
+  const fishingChance =
+    getFishingChance(
+      fishingMethodId,
+      saveData
+    );
+
+  const fishingSucceeded =
+    Math.random() * 100 <
+    fishingChance;
+
+  let fishingLoot = [];
+
+  if (fishingSucceeded) {
+    fishingLoot = rollFishingLoot();
+
+    const simulatedInventoryItems =
+      simulateAddLootItemsToInventory(
+        saveData,
+        fishingLoot
+      );
+
+    if (!simulatedInventoryItems) {
+      addDiscoveryLog(
+        t("notEnoughInventorySpace")
+      );
+
+      return;
+    }
+  }
+
+  if (
+    fishingMethod.consumeAmount
+  ) {
+    const consumed =
+      consumeFishingBait(
+        saveData,
+        fishingItemData,
+        fishingMethod.consumeAmount
+      );
+
+    if (!consumed) {
+      return;
+    }
+  }
+
+  if (
+    fishingMethod.durabilityCost
+  ) {
+    const durabilityApplied =
+      applyFishingToolDurabilityCost(
+        saveData,
+        fishingItemData,
+        fishingMethod.durabilityCost
+      );
+
+    if (!durabilityApplied) {
+      return;
+    }
+  }
+
+  saveMainSaveData(saveData);
+
+  if (!fishingSucceeded) {
+    addDiscoveryLog(
+      t("fishingFailed")
+    );
+
+    updateTileActionPanel();
+    return;
+  }
+
+  discoveryState.pendingLoot = {
+    source: "fishing",
+    items: fishingLoot
+  };
+
+  saveDiscoveryState();
+
+  addDiscoveryLog(
+    t("fishingSucceeded")
+  );
+
+  renderDiscoveryMap();
+}
+
+function renderFishingActions() {
+  const saveData =
+    getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return;
+  }
+
+  const fishingCard =
+    document.createElement("div");
+
+  fishingCard.classList.add(
+    "encounter-card"
+  );
+
+  const fishingTitle =
+    document.createElement("strong");
+
+  fishingTitle.textContent =
+    t("fishingSpot");
+
+  fishingCard.appendChild(
+    fishingTitle
+  );
+
+  const raftBonusActive =
+    hasMakeshiftRaftForFishing(
+      saveData
+    );
+
+  if (raftBonusActive) {
+    const raftBonusText =
+      document.createElement("span");
+
+    raftBonusText.textContent =
+      t("fishingRaftBonus", {
+        bonus:
+          makeshiftRaftFishingBonus
+      });
+
+    fishingCard.appendChild(
+      raftBonusText
+    );
+  }
+
+  const fishingActions =
+    document.createElement("div");
+
+  fishingActions.classList.add(
+    "found-loot-actions"
+  );
+
+  for (
+    const fishingMethodId in
+      fishingMethods
+  ) {
+    const fishingMethod =
+      fishingMethods[fishingMethodId];
+
+    let fishingItemData = null;
+
+    if (fishingMethod.itemId) {
+      fishingItemData =
+        findSavedInventoryItemById(
+          saveData,
+          fishingMethod.itemId
+        );
+    } else if (
+      fishingMethod.toolGroup
+    ) {
+      fishingItemData =
+        findSavedInventoryToolByGroup(
+          saveData,
+          fishingMethod.toolGroup
+        );
+    }
+
+    const fishingButton =
+      document.createElement("button");
+
+    fishingButton.type = "button";
+
+    fishingButton.classList.add(
+      "tile-action-button"
+    );
+
+    const fishingChance =
+      getFishingChance(
+        fishingMethodId,
+        saveData
+      );
+
+    fishingButton.textContent =
+      t(
+        "fishingMethod_" +
+          fishingMethodId,
+        {
+          chance: fishingChance
+        }
+      );
+
+    fishingButton.disabled =
+      fishingItemData === null;
+
+    fishingButton.addEventListener(
+      "click",
+      function () {
+        fishAtCurrentTile(
+          fishingMethodId
+        );
+      }
+    );
+
+    fishingActions.appendChild(
+      fishingButton
+    );
+  }
+
+  fishingCard.appendChild(
+    fishingActions
+  );
+
+  tileActions.appendChild(
+    fishingCard
+  );
+}
+
 function rollEncounterFromTable(encounterTableId) {
   const map = getCurrentMap();
 
