@@ -120,7 +120,12 @@ function getCurrentRegionName() {
 }
 
 function getCurrentRegionWorkstations() {
-  const currentRegionId = getCurrentRegionId();
+  const currentPosition =
+    getCurrentDiscoveryPosition();
+
+  const currentRegionId =
+    currentPosition.regionId ||
+    getCurrentRegionId();
 
   if (!regionWorkstations[currentRegionId]) {
     regionWorkstations[currentRegionId] = {};
@@ -150,32 +155,44 @@ function hasWorkstation(workstationId) {
 }
 
 function placeWorkstation(workstationId, item) {
-    refreshBaseSleepState();
+  refreshBaseSleepState();
 
   if (isSleeping) {
     showMessage(t("cannotUseSleeping"));
     return;
   }
 
-  const currentRegionWorkstations = getCurrentRegionWorkstations();
+  const currentPosition =
+    getCurrentDiscoveryPosition();
 
-if (hasWorkstation(workstationId)) {
-  showMessage(
-    t("workstationAlreadyPlaced", {
-      regionLabel: getCurrentRegionName()
-    })
-  );
+  const currentRegionId =
+    currentPosition.regionId ||
+    getCurrentRegionId();
 
-  return false;
-}
+  if (!regionWorkstations[currentRegionId]) {
+    regionWorkstations[currentRegionId] = {};
+  }
 
-  const currentPosition = getCurrentDiscoveryPosition();
+  const currentRegionWorkstations =
+    regionWorkstations[currentRegionId];
+
+  if (
+    currentRegionWorkstations[workstationId]
+  ) {
+    showMessage(
+      t("workstationAlreadyPlaced", {
+        regionLabel: getCurrentRegionName()
+      })
+    );
+
+    return false;
+  }
 
   currentRegionWorkstations[workstationId] = {
     id: item.id,
     itemId: item.id,
-    x: currentPosition.x,
-    y: currentPosition.y
+    x: Number(currentPosition.x),
+    y: Number(currentPosition.y)
   };
 
   discoverItem(workstationId);

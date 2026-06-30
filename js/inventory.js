@@ -665,8 +665,13 @@ function useInventoryItem(slotIndex) {
 
     removeOneItem(slotIndex);
 
+    const currentPosition = getCurrentDiscoveryPosition();
+    const currentRegionId = currentPosition.regionId || getCurrentRegionId();
+    const regionLabel = currentRegionId.charAt(0).toUpperCase() + currentRegionId.slice(1);
+
     const message = t("workstationPlaced", {
-      regionLabel: getCurrentRegionName()
+      item: getItemName(item),
+      regionLabel: regionLabel
     });
 
     showMessage(message, "success");
