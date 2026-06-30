@@ -1765,6 +1765,15 @@ function checkStarterGoalsReward() {
 
 function checkTrailGoalsReward() {
   if (
+    trailGoalsRewardClaimed &&
+    activeGoalsStage === "trail"
+  ) {
+    activeGoalsStage = "lake";
+    autoSave();
+    return;
+  }
+
+  if (
     activeGoalsStage !== "trail" ||
     trailGoalsRewardClaimed ||
     isGrantingTrailGoalsReward
@@ -1772,7 +1781,17 @@ function checkTrailGoalsReward() {
     return;
   }
 
-  if (!areTrailGoalsCompleted()) {
+  const trailGoals = goalsDatabase.trail;
+
+  if (!Array.isArray(trailGoals)) {
+    return;
+  }
+
+  const allCompleted = trailGoals.every(function (goal) {
+    return isGoalCompleted(goal.id);
+  });
+
+  if (!allCompleted) {
     return;
   }
 
@@ -1780,7 +1799,7 @@ function checkTrailGoalsReward() {
 
   if (!rewardItem) {
     console.error(
-      "qualityBandage item is missing."
+      "Trail reward item is missing: qualityBandage"
     );
     return;
   }
@@ -1794,6 +1813,10 @@ function checkTrailGoalsReward() {
     });
 
     if (!added) {
+      showMessage(
+        t("notEnoughInventorySpace"),
+        "warning"
+      );
       return;
     }
 
@@ -1806,10 +1829,7 @@ function checkTrailGoalsReward() {
     const rewardMessage =
       t("trailGoalsRewardReceived");
 
-    showMessage(
-      rewardMessage,
-      "success"
-    );
+    showMessage(rewardMessage, "success");
 
     addLog(
       completedMessage + " " + rewardMessage,
