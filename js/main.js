@@ -17,12 +17,30 @@ function findItemInInventory(itemId) {
 }
 
 function findToolGroupInInventory(groupName) {
-  for (let i = 0; i < inventory.items.length; i++) {
+  for (
+    let i = 0;
+    i < inventory.items.length;
+    i++
+  ) {
     const item = inventory.items[i];
 
-    if (item !== null && item.toolTags && item.toolTags.includes(groupName)) {
-      return { item, slotIndex: i };
+    if (!item || !item.id) {
+      continue;
     }
+
+    if (
+      !isItemInToolGroup(
+        item,
+        groupName
+      )
+    ) {
+      continue;
+    }
+
+    return {
+      item: item,
+      slotIndex: i
+    };
   }
 
   return null;

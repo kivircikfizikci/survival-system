@@ -433,10 +433,18 @@ function rollFightLoot(encounterData) {
   return rollMultipleLootFromTable(encounterData.lootTable);
 }
 
-function getAvailableHuntTools(encounterData) {
+function getAvailableHuntTools(
+  encounterData
+) {
   const saveData = getMainSaveData();
 
-  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(
+      saveData.inventory.items
+    )
+  ) {
     return [];
   }
 
@@ -446,28 +454,46 @@ function getAvailableHuntTools(encounterData) {
 
   const availableTools = [];
 
-  for (let slotIndex = 0; slotIndex < saveData.inventory.items.length; slotIndex++) {
-    const item = saveData.inventory.items[slotIndex];
+  for (
+    let slotIndex = 0;
+    slotIndex <
+      saveData.inventory.items.length;
+    slotIndex++
+  ) {
+    const item =
+      saveData.inventory.items[
+        slotIndex
+      ];
 
-    if (item === null) {
+    if (!item || !item.id) {
       continue;
     }
 
-    if (!item.toolTags) {
-      continue;
-    }
-
-    for (let toolGroupName in encounterData.huntToolBonuses) {
-      if (item.toolTags.includes(toolGroupName)) {
-        availableTools.push({
-          slotIndex: slotIndex,
-          itemId: item.id,
-          toolGroup: toolGroupName,
-          bonus: encounterData.huntToolBonuses[toolGroupName]
-        });
-
-        break;
+    for (
+      const toolGroupName in
+        encounterData.huntToolBonuses
+    ) {
+      if (
+        !isItemInToolGroup(
+          item,
+          toolGroupName
+        )
+      ) {
+        continue;
       }
+
+      availableTools.push({
+        slotIndex: slotIndex,
+        itemId: item.id,
+        toolGroup: toolGroupName,
+        bonus:
+          encounterData
+            .huntToolBonuses[
+              toolGroupName
+            ]
+      });
+
+      break;
     }
   }
 
@@ -578,49 +604,98 @@ function getSelectedHuntToolDurabilityCost(encounterData) {
   return encounterData.huntToolDurabilityCost[selectedToolGroup] || 1;
 }
 
-function applySelectedHuntToolDurabilityCost(encounterData) {
+function applySelectedHuntToolDurabilityCost(
+  encounterData
+) {
   if (!discoveryState.selectedHuntTool) {
     return true;
   }
 
   const saveData = getMainSaveData();
 
-  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
-    discoveryState.selectedHuntTool = null;
-    addDiscoveryLog(t("selectedHuntToolMissing"));
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(
+      saveData.inventory.items
+    )
+  ) {
+    discoveryState.selectedHuntTool =
+      null;
+
+    addDiscoveryLog(
+      t("selectedHuntToolMissing")
+    );
+
     return false;
   }
 
-  const selectedTool = discoveryState.selectedHuntTool;
-  const inventoryItem = saveData.inventory.items[selectedTool.slotIndex];
+  const selectedTool =
+    discoveryState.selectedHuntTool;
+
+  const inventoryItem =
+    saveData.inventory.items[
+      selectedTool.slotIndex
+    ];
+
+  const allowedToolIds =
+    toolGroups[selectedTool.toolGroup];
 
   if (
-    inventoryItem === null ||
-    inventoryItem.id !== selectedTool.itemId ||
-    !inventoryItem.toolTags ||
-    !inventoryItem.toolTags.includes(selectedTool.toolGroup)
+    !inventoryItem ||
+    inventoryItem.id !==
+      selectedTool.itemId ||
+    !Array.isArray(allowedToolIds) ||
+    !allowedToolIds.includes(
+      inventoryItem.id
+    )
   ) {
-    discoveryState.selectedHuntTool = null;
+    discoveryState.selectedHuntTool =
+      null;
+
     saveDiscoveryState();
-    addDiscoveryLog(t("selectedHuntToolMissing"));
+
+    addDiscoveryLog(
+      t("selectedHuntToolMissing")
+    );
+
     updateTileActionPanel();
+
     return false;
   }
 
-  if (typeof inventoryItem.durability !== "number") {
+  if (
+    typeof inventoryItem.durability !==
+      "number"
+  ) {
     return true;
   }
 
-  const baseCost = getSelectedHuntToolDurabilityCost(encounterData);
-  const finalCost = getDiscoveryToolDurabilityCost(inventoryItem, baseCost);
+  const baseCost =
+    getSelectedHuntToolDurabilityCost(
+      encounterData
+    );
+
+  const finalCost =
+    getDiscoveryToolDurabilityCost(
+      inventoryItem,
+      baseCost
+    );
 
   inventoryItem.durability -= finalCost;
 
   if (inventoryItem.durability <= 0) {
-    const toolName = getDiscoveryItemName(inventoryItem);
+    const toolName =
+      getDiscoveryItemName(
+        inventoryItem
+      );
 
-    saveData.inventory.items[selectedTool.slotIndex] = null;
-    discoveryState.selectedHuntTool = null;
+    saveData.inventory.items[
+      selectedTool.slotIndex
+    ] = null;
+
+    discoveryState.selectedHuntTool =
+      null;
 
     addDiscoveryLog(
       t("huntToolBroke", {
@@ -705,7 +780,11 @@ function huntPendingEncounter() {
 function getAvailableFightTools(encounterData) {
   const saveData = getMainSaveData();
 
-  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
     return [];
   }
 
@@ -715,24 +794,43 @@ function getAvailableFightTools(encounterData) {
 
   const availableTools = [];
 
-  for (let slotIndex = 0; slotIndex < saveData.inventory.items.length; slotIndex++) {
-    const item = saveData.inventory.items[slotIndex];
+  for (
+    let slotIndex = 0;
+    slotIndex < saveData.inventory.items.length;
+    slotIndex++
+  ) {
+    const item =
+      saveData.inventory.items[slotIndex];
 
-    if (item === null || !item.toolTags) {
+    if (!item || !item.id) {
       continue;
     }
 
-    for (let toolGroupName in encounterData.fightToolBonuses) {
-      if (item.toolTags.includes(toolGroupName)) {
-        availableTools.push({
-          slotIndex: slotIndex,
-          itemId: item.id,
-          toolGroup: toolGroupName,
-          bonus: encounterData.fightToolBonuses[toolGroupName]
-        });
+    for (
+      const toolGroupName in encounterData.fightToolBonuses
+    ) {
+      const allowedToolIds =
+        toolGroups[toolGroupName];
 
-        break;
+      if (!Array.isArray(allowedToolIds)) {
+        continue;
       }
+
+      if (!allowedToolIds.includes(item.id)) {
+        continue;
+      }
+
+      availableTools.push({
+        slotIndex: slotIndex,
+        itemId: item.id,
+        toolGroup: toolGroupName,
+        bonus:
+          encounterData.fightToolBonuses[
+            toolGroupName
+          ]
+      });
+
+      break;
     }
   }
 
@@ -820,7 +918,11 @@ function applySelectedFightToolDurabilityCost(encounterData) {
 
   const saveData = getMainSaveData();
 
-  if (!saveData || !saveData.inventory || !saveData.inventory.items) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
     discoveryState.selectedFightTool = null;
     addDiscoveryLog(t("selectedFightToolMissing"));
     return false;
@@ -829,11 +931,17 @@ function applySelectedFightToolDurabilityCost(encounterData) {
   const selectedTool = discoveryState.selectedFightTool;
   const inventoryItem = saveData.inventory.items[selectedTool.slotIndex];
 
+ const allowedToolIds =
+  toolGroups[selectedTool.toolGroup];
+
   if (
-    inventoryItem === null ||
-    inventoryItem.id !== selectedTool.itemId ||
-    !inventoryItem.toolTags ||
-    !inventoryItem.toolTags.includes(selectedTool.toolGroup)
+    !inventoryItem ||
+    inventoryItem.id !==
+      selectedTool.itemId ||
+    !Array.isArray(allowedToolIds) ||
+    !allowedToolIds.includes(
+      inventoryItem.id
+    )
   ) {
     discoveryState.selectedFightTool = null;
     saveDiscoveryState();

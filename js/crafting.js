@@ -562,28 +562,46 @@ function getToolDurabilityCost(item, baseCost) {
 }
 
 function isRecipeMatch(recipe, craftCounts) {
-  const requiredItems = { ...recipe.ingredients };
+  const requiredItems = {
+    ...(recipe.ingredients || {})
+  };
 
   if (recipe.requiredTools) {
-    for (let toolId in recipe.requiredTools) {
-      requiredItems[toolId] = recipe.requiredTools[toolId];
+    for (
+      const toolId in recipe.requiredTools
+    ) {
+      requiredItems[toolId] =
+        recipe.requiredTools[toolId];
     }
   }
 
   if (recipe.requiredToolGroups) {
-    for (let groupName in recipe.requiredToolGroups) {
-      requiredItems["toolGroup:" + groupName] = recipe.requiredToolGroups[groupName];
+    for (
+      const groupName in
+        recipe.requiredToolGroups
+    ) {
+      requiredItems[
+        "toolGroup:" + groupName
+      ] =
+        recipe.requiredToolGroups[
+          groupName
+        ];
     }
   }
 
-  for (let requiredId in requiredItems) {
-    if (craftCounts[requiredId] !== requiredItems[requiredId]) {
+  for (const requiredId in requiredItems) {
+    if (
+      craftCounts[requiredId] !==
+      requiredItems[requiredId]
+    ) {
       return false;
     }
   }
 
-  for (let itemId in craftCounts) {
-    if (itemId.startsWith("toolGroup:")) {
+  for (const itemId in craftCounts) {
+    if (
+      itemId.startsWith("toolGroup:")
+    ) {
       continue;
     }
 
@@ -591,17 +609,38 @@ function isRecipeMatch(recipe, craftCounts) {
       continue;
     }
 
-    const item = craftSlots.find(function (slotItem) {
-      return slotItem !== null && slotItem.id === itemId;
-    });
+    const item = craftSlots.find(
+      function (slotItem) {
+        return (
+          slotItem !== null &&
+          slotItem.id === itemId
+        );
+      }
+    );
 
-    if (!item || !item.toolTags) {
+    if (!item || !item.id) {
       return false;
     }
 
-    const isUsedAsRequiredGroup = item.toolTags.some(function (tag) {
-      return requiredItems["toolGroup:" + tag];
-    });
+    let isUsedAsRequiredGroup = false;
+
+    if (recipe.requiredToolGroups) {
+      for (
+        const groupName in
+          recipe.requiredToolGroups
+      ) {
+        const allowedToolIds =
+          toolGroups[groupName];
+
+        if (
+          Array.isArray(allowedToolIds) &&
+          allowedToolIds.includes(item.id)
+        ) {
+          isUsedAsRequiredGroup = true;
+          break;
+        }
+      }
+    }
 
     if (!isUsedAsRequiredGroup) {
       return false;
