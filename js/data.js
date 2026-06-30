@@ -1502,6 +1502,16 @@ const itemsDatabase = {
     maxStack: 8,
     hungerRestore: 20
   },
+  cookedFishMeat: {
+    id: "cookedFishMeat",
+    nameKey: "cookedFishMeat",
+    type: "usable",
+    category: "food",
+    imageSrc: "img/cookedFishMeat.png",
+    weight: 0.2,
+    maxStack: 16,
+    hungerRestore: 15
+  },
   cookedFrog: {
     id: "cookedFrog",
     nameKey: "cookedFrog",
@@ -1814,7 +1824,7 @@ const itemsDatabase = {
     category: "material",
     imageSrc: "img/bearClaw.png",
     weight: 0.8,
-    maxStack: 4
+    maxStack: 8
   },
   scalyHide: {
     id: "scalyHide",
@@ -1832,7 +1842,7 @@ const itemsDatabase = {
     category: "food",
     imageSrc: "img/fishMeat.png",
     weight: 0.4,
-    maxStack: 5,
+    maxStack: 18,
     hungerRestore: 10
   },
   fishOil: {
@@ -1842,7 +1852,7 @@ const itemsDatabase = {
     category: "material",
     imageSrc: "img/fishOil.png",
     weight: 0.10,
-    maxStack: 12
+    maxStack: 32
   },
   fishBone: {
     id: "fishBone",
@@ -1851,7 +1861,7 @@ const itemsDatabase = {
     category: "material",
     imageSrc: "img/fishBone.png",
     weight: 0.05,
-    maxStack: 20
+    maxStack: 40
   },
   spiderSilk: {
     id: "spiderSilk",
@@ -1860,7 +1870,7 @@ const itemsDatabase = {
     category: "material",
     imageSrc: "img/spiderSilk.png",
     weight: 0.05,
-    maxStack: 20
+    maxStack: 40
   },
   animalBone: {
     id: "animalBone",
@@ -2849,7 +2859,42 @@ const recipesDatabase = {
     isPublic: false,
     requiredWorkstation: "campfire",
     category: "cooking",
-    discoverByAll: ["fish", "fishMeat", "campfire"],
+    discoverByAll: ["fish", "campfire"],
+    ingredients: {
+      fish: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "dryWood", "stick", "branch" ]
+      }
+    }
+  },
+  fishMeat: {
+    id: "fishMeat",
+    nameKey: "fishMeat",
+    resultItemId: "fishMeat",
+    resultQuantity: 2,
+    isPublic: false,
+    category: "cooking",
+    discoverByAll: ["fish"],
+    ingredients: { fish: 1 },
+    requiredToolGroups: {
+      knife: 1
+    },
+    toolDurabilityCost: {
+      knife: 2
+    }
+  },
+  cookedFishMeat: {
+    id: "cookedFishMeat",
+    nameKey: "cookedFishMeat",
+    resultItemId: "cookedFishMeat",
+    resultQuantity: 1,
+    isPublic: false,
+    requiredWorkstation: "campfire",
+    category: "cooking",
+    discoverByAll: ["fishMeat", "campfire"],
     ingredients: {
       fishMeat: 1
     },

@@ -82,10 +82,9 @@ const lakeMap = {
       { itemId: "pebble", chance: 28, quantity: 1 },
       { itemId: "reed", chance: 20, quantity: 1 },
       { itemId: "dryGrass", chance: 16, quantity: 1 },
-      { itemId: "oldFishNet", chance: 8, quantity: 1 },
+      { itemId: "oldFishNet", chance: 2, quantity: 1 },
       { itemId: "plasticBottle", chance: 8, quantity: 1 },
       { itemId: "tinCan", chance: 5, quantity: 1 },
-      { itemId: "fish", chance: 3, quantity: 1 },
       { itemId: "snail", chance: 8, quantity: 1 },
     ],
 
@@ -120,7 +119,7 @@ const lakeMap = {
       { itemId: "tinCan", chance: 18, quantity: 1 },
       { itemId: "plasticBottle", chance: 14, quantity: 1 },
       { itemId: "clothScrap", chance: 12, quantity: 1 },
-      { itemId: "oldFishNet", chance: 6, quantity: 1 }
+      { itemId: "oldFishNet", chance: 2, quantity: 1 }
     ],
   },
 
@@ -175,8 +174,7 @@ const lakeMap = {
       { id: "deer", type: "friendly", chance: 5 },
       { id: "wolf", type: "enemy", chance: 5 },
       { id: "wildDog", type: "enemy", chance: 5 },
-      { id: "wildBoar", type: "enemy", chance: 5 },
-      { id: "fish", type: "friendly", chance: 10 }
+      { id: "wildBoar", type: "enemy", chance: 5 }
 
     ],
     lakePathRoad: [

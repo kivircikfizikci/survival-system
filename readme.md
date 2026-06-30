@@ -5,9 +5,6 @@ Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.
 
-Fishing System v1.
-- Fishing spot tile kısımlarında -> fishBait / spear / oldFishNet gibi itemlarla -> Fish roll atacağız -> fishMeat, fishOil, fishBone elde etcez.
-
 Görev Sistemi v4
 - lake den mountain e geçiş ödülü.
 - mountain görevleri
@@ -30,7 +27,6 @@ clothShirt
 clothPants
 clothHood
 clothBag
-
 
 3. Görseli Olmayan Item Listesi
 
