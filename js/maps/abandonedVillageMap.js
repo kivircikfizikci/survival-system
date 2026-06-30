@@ -18,22 +18,25 @@ const abandonedVillageMap = {
 
   resourceTiles: {
     ...createResourceTiles(
-        [ ],
-        ""
+      [ 
+        "A1", 
+              ...createTileRange("A2", "AF32"),
+          ],
+      "villageZone"
     ),
   },
 
   lootTables: {
     abandonedVillageGeneralArea: [
-        { itemId: "", chance: 1, quantity: 1 },
+        { itemId: "clothScrap", chance: 1, quantity: 1 },
     ],
   },
 
    encounterTiles: {
-   /* ...createEncounterTiles(
+    ...createEncounterTiles(
         createTileRange("A1", "AF32"),
         "abandonedVillageLowRisk"
-    ),*/
+    ),
 
     // Özel bölgeler altta genel riski ezer
     ...createEncounterTiles(
