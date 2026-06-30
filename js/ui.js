@@ -40,6 +40,8 @@ let playerRegion = "meadow";
 let playerProfession = "Explorer";
 //let playerXP = 420;
 
+let placedStorageContainers = [];
+
 let draggedSlotIndex = null;
 let draggedEquipmentSlot = null;
 let draggedCraftSlotIndex = null;
