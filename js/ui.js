@@ -520,6 +520,10 @@ function normalizeStat(value) {
 }
 
 function updateScreen() {
+  if (handlePlayerDeath()) {
+    return;
+  }
+
   healthText.textContent = formatStat(health);
   hungerText.textContent = formatStat(hunger);
   energyText.textContent = formatStat(energy);

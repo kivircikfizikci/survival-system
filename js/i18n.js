@@ -348,7 +348,8 @@ const translations = {
     goalCollectClay: "Collect clay.",
     goalCraftCookedFish: "Cook a fish.",
     goalCraftMakeshiftRaft: "Craft a makeshift raft.",
-    goalReachMountain: "Reach the Mountain region."
+    goalReachMountain: "Reach the Mountain region.",
+    survivalFailed: "Survival Failed! Your journey ends here.",
   },
   //Türkçe
   tr: {
@@ -697,7 +698,8 @@ const translations = {
     goalCollectClay: "Kil topla.",
     goalCraftCookedFish: "Pişmiş balık hazırla.",
     goalCraftMakeshiftRaft: "İlkel sal üret.",
-    goalReachMountain: "Mountain bölgesine ulaş."
+    goalReachMountain: "Mountain bölgesine ulaş.",
+    survivalFailed: "Hayatta Kalma Başarısız! Maceran burada sona erdi.",
   }
 };
 

@@ -1,6 +1,7 @@
 const SAVE_KEY = "survivalSystemSave";
 let isLoadingGame = false;
 let isSavingGame = false;
+let isPlayerDead = false;
 
 function restoreItem(savedItem) {
   if (savedItem === null) {
@@ -107,7 +108,10 @@ function restoreCraftSlots(savedCraftSlots) {
 }
 
 function saveGame() {
-  if (isSavingGame) {
+  if (
+    isSavingGame ||
+    isPlayerDead
+  ) {
     return;
   }
 
@@ -297,6 +301,11 @@ function loadGame() {
 
 function resetSave() {
   localStorage.removeItem(SAVE_KEY);
+
+  localStorage.removeItem(
+    "survivalSystemDiscoverySave"
+  );
+
   location.reload();
 }
 
@@ -304,4 +313,41 @@ function autoSave() {
   if (typeof saveGame === "function") {
     saveGame();
   }
+}
+
+function handlePlayerDeath() {
+  if (
+    isPlayerDead ||
+    health > 0
+  ) {
+    return false;
+  }
+
+  isPlayerDead = true;
+  health = 0;
+
+  localStorage.removeItem(SAVE_KEY);
+
+  localStorage.removeItem(
+    "survivalSystemDiscoverySave"
+  );
+
+  const deathMessage =
+    t("survivalFailed");
+
+  showMessage(
+    deathMessage,
+    "error"
+  );
+
+  addLog(
+    deathMessage,
+    "error"
+  );
+
+  setTimeout(function () {
+    location.reload();
+  }, 1500);
+
+  return true;
 }
