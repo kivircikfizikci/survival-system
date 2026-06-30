@@ -341,7 +341,14 @@ const translations = {
     storageTooHeavy: "The crate cannot carry any more weight.",
     emptyStorageFirst: "Empty the crate before packing it.",
     storageContainerPacked: "The crate was packed.", 
-    barkSandals: "Bark Sandals",   
+    barkSandals: "Bark Sandals",
+    trailGoalsCompleted: "You completed all Trail goals!",
+    trailGoalsRewardReceived: "You received a quality bandage as a reward.",
+    goalCatchFirstFish: "Catch your first fish.",
+    goalCollectClay: "Collect clay.",
+    goalCraftCookedFish: "Cook a fish.",
+    goalCraftMakeshiftRaft: "Craft a makeshift raft.",
+    goalReachMountain: "Reach the Mountain region."
   },
   //Türkçe
   tr: {
@@ -684,6 +691,13 @@ const translations = {
     emptyStorageFirst: "Sandığı kaldırmadan önce içini boşalt.",
     storageContainerPacked: "Sandık kaldırıldı.",
     barkSandals: "Kabuk Sandaletler",
+    trailGoalsCompleted: "Trail hedeflerinin tamamını bitirdin!",
+    trailGoalsRewardReceived: "Ödül olarak kaliteli bandaj kazandın.",
+    goalCatchFirstFish: "İlk balığını yakala.",
+    goalCollectClay: "Kil topla.",
+    goalCraftCookedFish: "Pişmiş balık hazırla.",
+    goalCraftMakeshiftRaft: "İlkel sal üret.",
+    goalReachMountain: "Mountain bölgesine ulaş."
   }
 };
 

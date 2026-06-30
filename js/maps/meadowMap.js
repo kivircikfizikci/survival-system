@@ -48,6 +48,9 @@ const meadowMap = {
 
   ],
 
+  treeTiles: [ "AE14", "X7", "AA5", "AE3", "W2", "Q3", "I4", "H4", "G7", "A7", "K10", "L10", "G22", "D30", "R31", "Z28", "AC22", 
+  ],
+
   resourceTiles: {
     ...createResourceTiles(
         ["E15", "E16", "E27", "F15", "F16", "F26", "K12", "P16", "U11", "Y24", "Z10", "AA8", "AC6", "AD23", "AE23", "AF23", ],

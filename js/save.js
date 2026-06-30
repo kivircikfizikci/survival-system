@@ -129,6 +129,7 @@ function saveGame() {
     completedGoals: completedGoals,
     activeGoalsStage: activeGoalsStage,
     starterGoalsRewardClaimed: starterGoalsRewardClaimed,
+    trailGoalsRewardClaimed: trailGoalsRewardClaimed,
     buriedStash: buriedStash,
 
     regionWorkstations: regionWorkstations,
@@ -202,6 +203,8 @@ function loadGame() {
 
   starterGoalsRewardClaimed =
   saveData.starterGoalsRewardClaimed === true;
+  trailGoalsRewardClaimed =
+  saveData.trailGoalsRewardClaimed === true;
 
   buriedStash = saveData.buriedStash || null;
 

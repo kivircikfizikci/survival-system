@@ -1698,6 +1698,18 @@ function areStarterGoalsCompleted() {
   });
 }
 
+function areTrailGoalsCompleted() {
+  const trailGoals = goalsDatabase.trail;
+
+  if (!Array.isArray(trailGoals)) {
+    return false;
+  }
+
+  return trailGoals.every(function (goal) {
+    return isGoalCompleted(goal.id);
+  });
+}
+
 function checkStarterGoalsReward() {
   if (
     starterGoalsRewardClaimed ||
@@ -1751,6 +1763,65 @@ function checkStarterGoalsReward() {
   }
 }
 
+function checkTrailGoalsReward() {
+  if (
+    activeGoalsStage !== "trail" ||
+    trailGoalsRewardClaimed ||
+    isGrantingTrailGoalsReward
+  ) {
+    return;
+  }
+
+  if (!areTrailGoalsCompleted()) {
+    return;
+  }
+
+  const rewardItem = itemsDatabase.qualityBandage;
+
+  if (!rewardItem) {
+    console.error(
+      "qualityBandage item is missing."
+    );
+    return;
+  }
+
+  isGrantingTrailGoalsReward = true;
+
+  try {
+    const added = addItem({
+      ...rewardItem,
+      quantity: 3
+    });
+
+    if (!added) {
+      return;
+    }
+
+    trailGoalsRewardClaimed = true;
+    activeGoalsStage = "lake";
+
+    const completedMessage =
+      t("trailGoalsCompleted");
+
+    const rewardMessage =
+      t("trailGoalsRewardReceived");
+
+    showMessage(
+      rewardMessage,
+      "success"
+    );
+
+    addLog(
+      completedMessage + " " + rewardMessage,
+      "success"
+    );
+
+    autoSave();
+  } finally {
+    isGrantingTrailGoalsReward = false;
+  }
+}
+
 function updateGoalsPanel() {
   if (!goalsList) {
     return;
@@ -1759,6 +1830,7 @@ function updateGoalsPanel() {
   checkGoalsByCurrentMap();
   checkGoalsByCurrentWorkstations();
   checkStarterGoalsReward();
+  checkTrailGoalsReward();
 
   const activeGoals = getActiveGoals();
 

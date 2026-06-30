@@ -203,6 +203,39 @@ const goalsDatabase = {
       type: "craftedItem",
       itemId: "sterileBandage"
     }
+  ],
+
+  lake: [
+    {
+      id: "catchFirstFish",
+      textKey: "goalCatchFirstFish",
+      type: "obtainedItem",
+      itemId: "fish"
+    },
+    {
+      id: "collectClay",
+      textKey: "goalCollectClay",
+      type: "obtainedItem",
+      itemId: "clay"
+    },
+    {
+      id: "craftCookedFish",
+      textKey: "goalCraftCookedFish",
+      type: "craftedItem",
+      itemId: "cookedFish"
+    },
+    {
+      id: "craftMakeshiftRaft",
+      textKey: "goalCraftMakeshiftRaft",
+      type: "craftedItem",
+      itemId: "makeshiftRaft"
+    },
+    {
+      id: "reachMountain",
+      textKey: "goalReachMountain",
+      type: "reachedMap",
+      mapId: "mountain"
+    }
   ]
 };
 

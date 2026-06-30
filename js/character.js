@@ -13,7 +13,10 @@ let completedGoals = [];
 let activeGoalsStage = "starter";
 let starterGoalsRewardClaimed = false;
 let isGrantingStarterGoalsReward = false;
+let trailGoalsRewardClaimed = false;
+let isGrantingTrailGoalsReward = false;
 let buriedStash = null;
+
 
 let playerShelter = null;
 
