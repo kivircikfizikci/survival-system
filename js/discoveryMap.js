@@ -876,7 +876,7 @@ function updateTileActionPanel() {
     !isTreeCutOnCurrentTile()
   ) {
     const axeData =
-      findMainInventoryToolByTag("axe");
+      findMainInventoryToolByGroup("axe");
 
     const chopTreeButton =
       document.createElement("button");

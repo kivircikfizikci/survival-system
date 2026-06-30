@@ -489,14 +489,20 @@ function ensureCutTreesState() {
     discoveryState.cutTrees = {};
   }
 
-  if (!Array.isArray(discoveryState.cutTrees.trail)) {
-    discoveryState.cutTrees.trail = [];
+  const currentMapId =
+    discoveryState.currentMapId;
+
+  if (
+    !Array.isArray(
+      discoveryState.cutTrees[currentMapId]
+    )
+  ) {
+    discoveryState.cutTrees[currentMapId] = [];
   }
 }
 
 function isCurrentTileTreeArea(tileData) {
   return (
-    discoveryState.currentMapId === "trail" &&
     tileData &&
     tileData.isTree === true
   );
@@ -505,47 +511,54 @@ function isCurrentTileTreeArea(tileData) {
 function isTreeCutOnCurrentTile() {
   ensureCutTreesState();
 
+  const currentMapId =
+    discoveryState.currentMapId;
+
   const tileId = getTileId(
     discoveryState.x,
     discoveryState.y
   );
 
-  return discoveryState.cutTrees.trail.includes(tileId);
+  return discoveryState.cutTrees[
+    currentMapId
+  ].includes(tileId);
 }
 
-function findMainInventoryToolByTag(toolTag, saveData = null) {
+function findMainInventoryToolByGroup(
+  requiredToolGroup,
+  saveData = null
+) {
   const currentSaveData =
     saveData || getMainSaveData();
 
   if (
     !currentSaveData ||
     !currentSaveData.inventory ||
-    !Array.isArray(
-      currentSaveData.inventory.items
-    )
+    !Array.isArray(currentSaveData.inventory.items)
   ) {
+    return null;
+  }
+
+  const allowedToolIds =
+    toolGroups[requiredToolGroup];
+
+  if (!Array.isArray(allowedToolIds)) {
     return null;
   }
 
   for (
     let slotIndex = 0;
-    slotIndex <
-    currentSaveData.inventory.items.length;
+    slotIndex < currentSaveData.inventory.items.length;
     slotIndex++
   ) {
     const item =
-      currentSaveData.inventory.items[
-        slotIndex
-      ];
+      currentSaveData.inventory.items[slotIndex];
 
-    if (
-      !item ||
-      !Array.isArray(item.toolTags)
-    ) {
+    if (!item || !item.id) {
       continue;
     }
 
-    if (!item.toolTags.includes(toolTag)) {
+    if (!allowedToolIds.includes(item.id)) {
       continue;
     }
 
@@ -558,32 +571,51 @@ function findMainInventoryToolByTag(toolTag, saveData = null) {
   return null;
 }
 
-function applyTreeAxeDurabilityCost() {
-  const toolData = findMainInventoryToolByTag("axe");
-
-  if (!toolData) {
+function applyTreeAxeDurabilityCost(
+  saveData,
+  toolData
+) {
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items) ||
+    !toolData ||
+    typeof toolData.slotIndex !== "number"
+  ) {
     return false;
   }
 
-  const saveData = toolData.saveData;
-  const axe = toolData.item;
   const slotIndex = toolData.slotIndex;
+
+  const axe =
+    saveData.inventory.items[slotIndex];
+
+  if (!axe) {
+    return false;
+  }
 
   if (typeof axe.durability !== "number") {
     return true;
   }
 
-  const durabilityCost = getDiscoveryToolDurabilityCost(
-    axe,
-    1
+  const durabilityCost =
+    getDiscoveryToolDurabilityCost(
+      axe,
+      1
+    );
+
+  axe.durability = Math.max(
+    0,
+    axe.durability - durabilityCost
   );
 
-  axe.durability -= durabilityCost;
-
   if (axe.durability <= 0) {
-    const axeName = getDiscoveryItemName(axe);
+    const axeName =
+      getDiscoveryItemName(axe);
 
-    saveData.inventory.items[slotIndex] = null;
+    saveData.inventory.items[
+      slotIndex
+    ] = null;
 
     addDiscoveryLog(
       t("treeAxeBroke", {
@@ -591,8 +623,6 @@ function applyTreeAxeDurabilityCost() {
       })
     );
   }
-
-  saveMainSaveData(saveData);
 
   return true;
 }
@@ -620,7 +650,7 @@ function chopCurrentTree() {
     getMainSaveData();
 
   const initialAxeData =
-    findMainInventoryToolByTag(
+    findMainInventoryToolByGroup(
       "axe",
       initialSaveData
     );
@@ -631,11 +661,6 @@ function chopCurrentTree() {
     return;
   }
 
-  /*
-    Önce woodLog için envanterde gerçekten
-    yer ve ağırlık kapasitesi var mı kontrol ediyoruz.
-    Böylece başarısız işlemde enerji harcanmaz.
-  */
   const inventoryPreview =
     simulateAddLootItemsToInventory(
       initialSaveData,
@@ -658,10 +683,6 @@ function chopCurrentTree() {
     return;
   }
 
-  /*
-    Action cost save dosyasını değiştirdiği için
-    güncel save verisini yeniden alıyoruz.
-  */
   const updatedSaveData =
     getMainSaveData();
 
@@ -673,7 +694,7 @@ function chopCurrentTree() {
   }
 
   const updatedAxeData =
-    findMainInventoryToolByTag(
+    findMainInventoryToolByGroup(
       "axe",
       updatedSaveData
     );
@@ -705,10 +726,10 @@ function chopCurrentTree() {
     newInventoryItems;
 
   const durabilityApplied =
-    applyTreeAxeDurabilityCost(
-      updatedSaveData,
-      updatedAxeData.slotIndex
-    );
+  applyTreeAxeDurabilityCost(
+    updatedSaveData,
+    updatedAxeData
+  );
 
   if (!durabilityApplied) {
     addDiscoveryLog(t("axeRequired"));
@@ -719,15 +740,18 @@ function chopCurrentTree() {
 
   ensureCutTreesState();
 
-  if (
-    !discoveryState.cutTrees.trail.includes(
-      currentTileId
-    )
-  ) {
-    discoveryState.cutTrees.trail.push(
-      currentTileId
-    );
-  }
+const currentMapId =
+  discoveryState.currentMapId;
+
+if (
+  !discoveryState.cutTrees[
+    currentMapId
+  ].includes(currentTileId)
+) {
+  discoveryState.cutTrees[
+    currentMapId
+  ].push(currentTileId);
+}
 
   completeDiscoveryGoal("chopFirstTree");
 
