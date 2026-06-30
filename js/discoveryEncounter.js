@@ -292,23 +292,31 @@ const encounterDatabase = {
   }
 };
 
+let isFishingActionInProgress = false;
+
 const fishingMethods = {
   fishBait: {
     itemId: "fishBait",
     baseChance: 45,
-    consumeAmount: 1
+    consumeAmount: 1,
+    actionCostKey: "fishBait",
+    durationMs: 3000
   },
 
   spear: {
     toolGroup: "spear",
     baseChance: 30,
-    durabilityCost: 3
+    durabilityCost: 3,
+    actionCostKey: "fishSpear",
+    durationMs: 4000
   },
 
   oldFishNet: {
     itemId: "oldFishNet",
     baseChance: 60,
-    durabilityCost: 4
+    durabilityCost: 4,
+    actionCostKey: "fishNet",
+    durationMs: 5000
   }
 };
 
@@ -602,6 +610,95 @@ function applyFishingToolDurabilityCost(
   return true;
 }
 
+function startFishingAction(
+  fishingMethodId,
+  fishButton
+) {
+  if (isFishingActionInProgress) {
+    return;
+  }
+
+  const fishingMethod =
+    fishingMethods[fishingMethodId];
+
+  if (!fishingMethod) {
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return;
+  }
+
+  let fishingItemData = null;
+
+  if (fishingMethod.itemId) {
+    fishingItemData =
+      findSavedInventoryItemById(
+        saveData,
+        fishingMethod.itemId
+      );
+  } else if (
+    fishingMethod.toolGroup
+  ) {
+    fishingItemData =
+      findSavedInventoryToolByGroup(
+        saveData,
+        fishingMethod.toolGroup
+      );
+  }
+
+  if (!fishingItemData) {
+    addDiscoveryLog(
+      t("fishingItemMissing")
+    );
+
+    updateTileActionPanel();
+    return;
+  }
+
+  if (
+    !payDiscoveryActionCost(
+      fishingMethod.actionCostKey
+    )
+  ) {
+    return;
+  }
+
+  isFishingActionInProgress = true;
+
+  const durationMs =
+    Number(
+      fishingMethod.durationMs || 3000
+    );
+
+  fishButton.disabled = true;
+  fishButton.textContent = t("fishingInProgress");
+
+  fishButton.style.setProperty(
+    "--fishing-duration",
+    durationMs + "ms"
+  );
+
+  fishButton.classList.add(
+    "is-fishing"
+  );
+
+  setTimeout(function () {
+    isFishingActionInProgress = false;
+
+    fishAtCurrentTile(
+      fishingMethodId
+    );
+  }, durationMs);
+}
+
 function fishAtCurrentTile(
   fishingMethodId
 ) {
@@ -757,8 +854,7 @@ function fishAtCurrentTile(
 }
 
 function renderFishingActions() {
-  const saveData =
-    getMainSaveData();
+  const saveData = getMainSaveData();
 
   if (
     !saveData ||
@@ -772,7 +868,8 @@ function renderFishingActions() {
     document.createElement("div");
 
   fishingCard.classList.add(
-    "encounter-card"
+    "encounter-card",
+    "encounter-card-friendly"
   );
 
   const fishingTitle =
@@ -785,31 +882,69 @@ function renderFishingActions() {
     fishingTitle
   );
 
-  const raftBonusActive =
-    hasMakeshiftRaftForFishing(
-      saveData
+  const selectedFishingMethod =
+    discoveryState.selectedFishingMethod;
+
+  const chanceText =
+    document.createElement("span");
+
+  chanceText.classList.add(
+    "encounter-hunt-chance"
+  );
+
+  if (
+    selectedFishingMethod &&
+    fishingMethods[selectedFishingMethod]
+  ) {
+    chanceText.textContent = t(
+      "fishingChance",
+      {
+        chance: getSelectedFishingChance()
+      }
     );
+  } else {
+    chanceText.textContent =
+      t("selectFishingMethod");
+  }
 
-  if (raftBonusActive) {
-    const raftBonusText =
-      document.createElement("span");
+  fishingCard.appendChild(chanceText);
 
-    raftBonusText.textContent =
-      t("fishingRaftBonus", {
-        bonus:
-          makeshiftRaftFishingBonus
-      });
+  const methodSelector =
+    document.createElement("div");
 
-    fishingCard.appendChild(
-      raftBonusText
+  methodSelector.classList.add(
+    "hunt-tool-selector"
+  );
+
+  const noMethodButton =
+    document.createElement("button");
+
+  noMethodButton.type = "button";
+  noMethodButton.classList.add(
+    "hunt-tool-button"
+  );
+
+  if (
+    discoveryState.selectedFishingMethod ===
+    null
+  ) {
+    noMethodButton.classList.add(
+      "is-selected"
     );
   }
 
-  const fishingActions =
-    document.createElement("div");
+  noMethodButton.textContent =
+    t("noTool");
 
-  fishingActions.classList.add(
-    "found-loot-actions"
+  noMethodButton.addEventListener(
+    "click",
+    function () {
+      clearSelectedFishingMethod();
+    }
+  );
+
+  methodSelector.appendChild(
+    noMethodButton
   );
 
   for (
@@ -837,54 +972,183 @@ function renderFishingActions() {
         );
     }
 
-    const fishingButton =
+    if (!fishingItemData) {
+      continue;
+    }
+
+    const methodButton =
       document.createElement("button");
 
-    fishingButton.type = "button";
-
-    fishingButton.classList.add(
-      "tile-action-button"
+    methodButton.type = "button";
+    methodButton.classList.add(
+      "hunt-tool-button"
     );
 
-    const fishingChance =
-      getFishingChance(
-        fishingMethodId,
-        saveData
+    if (
+      discoveryState.selectedFishingMethod ===
+      fishingMethodId
+    ) {
+      methodButton.classList.add(
+        "is-selected"
+      );
+    }
+
+    methodButton.textContent =
+      getFishingMethodButtonLabel(
+        fishingMethodId
       );
 
-    fishingButton.textContent =
-      t(
-        "fishingMethod_" +
-          fishingMethodId,
-        {
-          chance: fishingChance
-        }
-      );
-
-    fishingButton.disabled =
-      fishingItemData === null;
-
-    fishingButton.addEventListener(
+    methodButton.addEventListener(
       "click",
       function () {
-        fishAtCurrentTile(
+        selectFishingMethod(
           fishingMethodId
         );
       }
     );
 
-    fishingActions.appendChild(
-      fishingButton
+    methodSelector.appendChild(
+      methodButton
     );
   }
 
   fishingCard.appendChild(
-    fishingActions
+    methodSelector
   );
+
+  if (
+    hasMakeshiftRaftForFishing(saveData)
+  ) {
+    const raftBonusText =
+      document.createElement("span");
+
+    raftBonusText.classList.add(
+      "encounter-hunt-chance"
+    );
+
+    raftBonusText.textContent =
+      t("fishingRaftBonus", {
+        bonus:
+          makeshiftRaftFishingBonus
+      });
+
+    fishingCard.appendChild(
+      raftBonusText
+    );
+  }
 
   tileActions.appendChild(
     fishingCard
   );
+
+  if (
+    selectedFishingMethod &&
+    fishingMethods[selectedFishingMethod]
+  ) {
+    const actions =
+      document.createElement("div");
+
+    actions.classList.add(
+      "found-loot-actions"
+    );
+
+    const fishButton =
+      document.createElement("button");
+
+    fishButton.type = "button";
+
+    fishButton.classList.add(
+      "tile-action-button",
+      "fishing-action-button"
+    );
+
+    fishButton.disabled = isFishingActionInProgress;
+
+    fishButton.textContent =
+      t("fish");
+
+    fishButton.addEventListener(
+      "click",
+      function () {
+        startFishingAction(
+          selectedFishingMethod,
+          fishButton
+        );
+      }
+    );
+
+    actions.appendChild(
+      fishButton
+    );
+
+    tileActions.appendChild(
+      actions
+    );
+  }
+}
+
+function selectFishingMethod(fishingMethodId) {
+  discoveryState.selectedFishingMethod =
+    fishingMethodId;
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function clearSelectedFishingMethod() {
+  discoveryState.selectedFishingMethod =
+    null;
+
+  saveDiscoveryState();
+  updateTileActionPanel();
+}
+
+function getSelectedFishingChance() {
+  const saveData = getMainSaveData();
+
+  if (!saveData) {
+    return 0;
+  }
+
+  const fishingMethodId =
+    discoveryState.selectedFishingMethod;
+
+  if (
+    !fishingMethodId ||
+    !fishingMethods[fishingMethodId]
+  ) {
+    return 0;
+  }
+
+  return getFishingChance(
+    fishingMethodId,
+    saveData
+  );
+}
+
+function getFishingMethodButtonLabel(
+  fishingMethodId
+) {
+  const fishingMethod =
+    fishingMethods[fishingMethodId];
+
+  if (!fishingMethod) {
+    return "";
+  }
+
+  if (fishingMethodId === "fishBait") {
+    return t("fishingMethod_fishBaitShort");
+  }
+
+  if (fishingMethodId === "spear") {
+    return t("fishingMethod_spearShort");
+  }
+
+  if (fishingMethodId === "oldFishNet") {
+    return t("fishingMethod_oldFishNetShort");
+  }
+
+  return fishingMethodId;
 }
 
 function rollEncounterFromTable(encounterTableId) {

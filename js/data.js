@@ -30,38 +30,16 @@ const gameConfig = {
   sleepTickMs: 3000,
 
   actionCosts: {
-    move: {
-      energy: 0.1,
-      hunger: 0.05
-    },
-
-    raftMove: {
-      energy: 0.2,
-      hunger: 0.15
-    },
-
-    hunt: {
-      energy: 2,
-      hunger: 1
-    },
-
-    fight: {
-      energy: 3,
-      hunger: 2
-    },
-
-    flee: {
-      energy: 4,
-      hunger: 1
-    },
-    chopTree: {
-      energy: 2,
-      hunger: 1
-    },
-    fillWater: {
-      energy: 0.2,
-      hunger: 0
-    }
+    move: { energy: 0.1, hunger: 0.05 },
+    raftMove: { energy: 0.2, hunger: 0.15 },
+    hunt: { energy: 2, hunger: 1 },
+    fight: { energy: 3, hunger: 2 },
+    flee: { energy: 4, hunger: 1 },
+    chopTree: { energy: 2, hunger: 1 },
+    fillWater: { energy: 0.2, hunger: 0 },
+    fishBait: { energy: 1.5, hunger: 0.5 },
+    fishSpear: { energy: 3, hunger: 1 },
+    fishNet: { energy: 2, hunger: 0.75 }
   },
   emergencyMovementCosts: {
     exhaustedHealth: 2,

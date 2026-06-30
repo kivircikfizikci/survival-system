@@ -291,7 +291,11 @@ languageButtons.forEach(function (button) {
 
     updateDiscoveryStaticTexts();
     updateDiscoveryLanguageButtons();
-    updateTexts();
+
+    if (typeof updateTexts === "function") {
+      updateTexts();
+    }
+    
     renderDiscoveryMap();
   });
 });

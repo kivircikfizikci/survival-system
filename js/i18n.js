@@ -358,7 +358,13 @@ const translations = {
     fishingSucceeded: "You caught something!",
     fishingFailed: "The fish got away.",
     fishingItemMissing: "The required fishing item is missing.",
-    fishingToolBroke: "{tool} broke while fishing."
+    fishingToolBroke: "{tool} broke while fishing.",
+    fishingChance: "Fishing chance: {chance}%",
+    selectFishingMethod: "Select a fishing method.",
+    fishingMethod_fishBaitShort: "Fish Bait",
+    fishingMethod_spearShort: "Spear",
+    fishingMethod_oldFishNetShort: "Old Fish Net",
+    fishingInProgress: "Fishing..."
   },
   //Türkçe
   tr: {
@@ -718,6 +724,12 @@ const translations = {
     fishingFailed: "Balık kaçtı.",
     fishingItemMissing: "Gerekli balıkçılık eşyası bulunamadı.",
     fishingToolBroke: "{tool} balık tutarken kırıldı.",
+    fishingChance: "Balık tutma şansı: %{chance}",
+    selectFishingMethod: "Bir balıkçılık yöntemi seç.",
+    fishingMethod_fishBaitShort: "Balık Yemi",
+    fishingMethod_spearShort: "Mızrak",
+    fishingMethod_oldFishNetShort: "Eski Balık Ağı",
+    fishingInProgress: "Balık tutuluyor...",
   }
 };
 

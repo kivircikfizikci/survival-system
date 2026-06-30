@@ -159,7 +159,7 @@ const lakeMap = {
 
   encounterTables: {
     lakeZone: [
-      { id: "fish", type: "friendly", chance: 10 }
+      { id: "alligator", type: "enemy", chance: 5 }
     ],
     lakeTreeZone: [
       { id: "deer", type: "friendly", chance: 5 },
@@ -186,15 +186,9 @@ const lakeMap = {
     ]
   },
 
-  fishingSpotTiles: [
-    ...createResourceTiles(
-        [  
-        "A10", "A11", "B12", "B13", "C13", "C14", "C15", "D13", "D14", "C15", "D16", "D17", "E19", "F19", "G19", "G20", "G21", "H21", "H22", "I23", "J23", "K24", "L25", "M26", "O27",
-       "P27", "Q27", "R27", "T26", "U25", "V24", "V25", "W24", "W23", "X23", "Y21", "Z20", ...createTileRange("Z19", "AA13"), "Y12", "Y11", ...createTileRange("Y10", "W7"), "W6", "W5",
-       "W4", ...createTileRange("V4", "U1"), 
-        ],
-        "lakeShoreDebris"
-    ),
+  fishingSpotTiles: [ "A8", "B8", "B9", "C10", "D11", "D12", "D13", "D14", "D15", "E16", "F16", "G16", "H16", "H17", "G17", "F17", "E17", "F18", "G18", "H18", "G19", "H19", 
+    "H20", "H21", "I22", "J22", "J23", "K23", "K24", "L24", "L25", "M26", "N26", "O26", "P26", "Q26", "R26", "S26", "T25", "T24", "U24", "U23", "V23", "V22", "W22", "X21", 
+    "X20", "Y19", "Y18", "Y17", "Y16", "Z16", "Y15", "Z15", "Y14", "Z14", "Y13", "X12", "X11", "W10", "W9", "W8", "V7", "V6", "V5", "U4", "T4", "T3", "T2", "T1"
   ],
 
  exits: {
