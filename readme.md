@@ -1,5 +1,5 @@
 1. Yapılacaklar
-trail treetiles kısmı tamamlanacak.
+- toolbelt tarzı item yapılacak. toollar içine konulabilecek.
 
 Mine System v1.
 - mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
@@ -8,9 +8,9 @@ Mine System v1.
 Fishing System v1.
 - Fishing spot tile kısımlarında -> fishBait / spear / oldFishNet gibi itemlarla -> Fish roll atacağız -> fishMeat, fishOil, fishBone elde etcez.
 
-Görev Sistemi v3
-- Trailden lake e geçiş ödülü
-- lake görevleri
+Görev Sistemi v4
+- lake den mountain e geçiş ödülü.
+- mountain görevleri
 
 Experience Sistemi v1
 - Başarılan görevlerden belirli experience gelecek.

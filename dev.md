@@ -8,5 +8,6 @@ autoSave();
 console.log("Tüm itemlar öğrenildi:", discoveredItems);
 console.log("Tüm recipeler öğrenildi:", discoveredRecipes);
 
-
+// istenilen itemı envantere eklemek için
+addItem(itemsDatabase.stick);
 
