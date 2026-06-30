@@ -433,17 +433,13 @@ function rollFightLoot(encounterData) {
   return rollMultipleLootFromTable(encounterData.lootTable);
 }
 
-function getAvailableHuntTools(
-  encounterData
-) {
+function getAvailableHuntTools(encounterData) {
   const saveData = getMainSaveData();
 
   if (
     !saveData ||
     !saveData.inventory ||
-    !Array.isArray(
-      saveData.inventory.items
-    )
+    !Array.isArray(saveData.inventory.items)
   ) {
     return [];
   }
@@ -456,14 +452,11 @@ function getAvailableHuntTools(
 
   for (
     let slotIndex = 0;
-    slotIndex <
-      saveData.inventory.items.length;
+    slotIndex < saveData.inventory.items.length;
     slotIndex++
   ) {
     const item =
-      saveData.inventory.items[
-        slotIndex
-      ];
+      saveData.inventory.items[slotIndex];
 
     if (!item || !item.id) {
       continue;
@@ -473,12 +466,14 @@ function getAvailableHuntTools(
       const toolGroupName in
         encounterData.huntToolBonuses
     ) {
-      if (
-        !isItemInToolGroup(
-          item,
-          toolGroupName
-        )
-      ) {
+      const allowedToolIds =
+        toolGroups[toolGroupName];
+
+      if (!Array.isArray(allowedToolIds)) {
+        continue;
+      }
+
+      if (!allowedToolIds.includes(item.id)) {
         continue;
       }
 
@@ -487,10 +482,9 @@ function getAvailableHuntTools(
         itemId: item.id,
         toolGroup: toolGroupName,
         bonus:
-          encounterData
-            .huntToolBonuses[
-              toolGroupName
-            ]
+          encounterData.huntToolBonuses[
+            toolGroupName
+          ]
       });
 
       break;

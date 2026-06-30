@@ -16,6 +16,31 @@ function findItemInInventory(itemId) {
   return null;
 }
 
+function isItemInToolGroup(
+  item,
+  groupName
+) {
+  if (
+    !item ||
+    !item.id
+  ) {
+    return false;
+  }
+
+  const allowedToolIds =
+    toolGroups[groupName];
+
+  if (
+    !Array.isArray(allowedToolIds)
+  ) {
+    return false;
+  }
+
+  return allowedToolIds.includes(
+    item.id
+  );
+}
+
 function findToolGroupInInventory(groupName) {
   for (
     let i = 0;
