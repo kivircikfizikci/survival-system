@@ -107,12 +107,12 @@ encounterTables: {
     },
 
     "A15": {
-      targetMapId: "abandonedVillage",
+      targetMapId: "lake",
       targetPosition: {
         x: 30,
         y: 0
       },
-      label: "Abandoned village"
+      label: "Lake"
     },
  }
 };
