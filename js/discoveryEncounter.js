@@ -350,6 +350,7 @@ function clearPendingEncounter() {
   discoveryState.selectedFightTool = null;
 
   saveDiscoveryState();
+  renderDiscoveryMap();
   updateTileActionPanel();
 }
 

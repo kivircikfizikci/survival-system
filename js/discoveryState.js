@@ -11,7 +11,11 @@ let discoveryState = {
   selectedHuntTool: null,
   selectedFightTool: null,
   cutTrees: {
-    trail: []
+    meadow: [],
+    trail: [],
+    lake: [],
+    mountain: [],
+    abandonedVillage: [],
   },
   visitedTiles: {
     meadow: []
