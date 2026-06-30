@@ -69,10 +69,10 @@ function restoreInventory(savedInventory) {
 
   inventory = savedInventory;
 
-  inventory.baseSlots = inventory.baseSlots ?? 4;
-  inventory.baseMaxWeight = inventory.baseMaxWeight ?? 5;
+  inventory.baseSlots = inventory.baseSlots ?? 10;
+  inventory.baseMaxWeight = inventory.baseMaxWeight ?? 15;
   inventory.maxWeight = inventory.maxWeight ?? inventory.baseMaxWeight;
-  inventory.items = inventory.items ?? [null, null, null, null];
+  inventory.items = inventory.items ?? [null, null, null, null, null, null, null, null, null, null];
 
   inventory.items = inventory.items.map(function (item) {
     return restoreItem(item);

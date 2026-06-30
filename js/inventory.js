@@ -2,7 +2,7 @@ let inventory = {
   baseMaxWeight: 15,
   baseSlots: 10,
   maxWeight: 15,
-  items: [null, null, null, null]
+  items: [null, null, null, null, null, null, null, null, null, null]
 };
 
 function setInventoryCapacity(totalSlots, totalWeight, showWarning = true) {
