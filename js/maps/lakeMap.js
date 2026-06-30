@@ -210,8 +210,8 @@ const lakeMap = {
     "A15": {
       targetMapId: "abandonedVillage",
       targetPosition: {
-        x: 30,
-        y: 0
+        x: 31,
+        y: 1
       },
       label: "Abandoned village"
     },

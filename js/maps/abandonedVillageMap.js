@@ -19,7 +19,7 @@ const abandonedVillageMap = {
   resourceTiles: {
     ...createResourceTiles(
         [ ],
-        "lake..."
+        ""
     ),
   },
 
@@ -30,10 +30,10 @@ const abandonedVillageMap = {
   },
 
    encounterTiles: {
-    ...createEncounterTiles(
+   /* ...createEncounterTiles(
         createTileRange("A1", "AF32"),
         "abandonedVillageLowRisk"
-    ),
+    ),*/
 
     // Özel bölgeler altta genel riski ezer
     ...createEncounterTiles(
@@ -88,29 +88,11 @@ encounterTables: {
 },
 
   exits: {
-    "Q32": {
-      targetMapId: "trail",
-      targetPosition: {
-        x: 15,
-        y: 0
-      },
-      label: "Trail"
-    },
-
-    "AE1": {
-      targetMapId: "mountain",
-      targetPosition: {
-        x: 0,
-        y: 28
-      },
-      label: "Mountain"
-    },
-
-    "A15": {
+    "AF2": {
       targetMapId: "lake",
       targetPosition: {
-        x: 30,
-        y: 0
+        x: 0,
+        y: 14
       },
       label: "Lake"
     },
