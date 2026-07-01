@@ -203,10 +203,10 @@ const goalsDatabase = {
       itemId: "cookedFish"
     },
     {
-      id: "craftMakeshiftRaft",
-      textKey: "goalCraftMakeshiftRaft",
+      id: "craftPickaxeMold",
+      textKey: "goalcraftPickaxeMold",
       type: "craftedItem",
-      itemId: "makeshiftRaft"
+      itemId: "clayPickaxeMold"
     },
     {
       id: "reachMountain",

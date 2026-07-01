@@ -773,6 +773,28 @@ function digClayAtCurrentTile() {
     return;
   }
 
+  if (
+    saveData.activeGoalsStage === "lake"
+  ) {
+    if (
+      !Array.isArray(
+        saveData.completedGoals
+      )
+    ) {
+      saveData.completedGoals = [];
+    }
+
+    if (
+      !saveData.completedGoals.includes(
+        "collectClay"
+      )
+    ) {
+      saveData.completedGoals.push(
+        "collectClay"
+      );
+    }
+  }
+
   saveMainSaveData(saveData);
 
   discoveryState.pendingLoot = {

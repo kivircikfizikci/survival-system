@@ -368,7 +368,8 @@ const translations = {
     digClay: "Dig Clay",
     clayDigInProgress: "Digging...",
     clayDigSucceeded: "You dug clay from the bank.",
-    diggingToolBroke: "{tool} broke while digging."
+    diggingToolBroke: "{tool} broke while digging.",
+    goalcraftPickaxeMold: "Craft a clay pickaxe mold.",
   },
   //Türkçe
   tr: {
@@ -735,7 +736,8 @@ const translations = {
     digClay: "Kil Kaz",
     clayDigInProgress: "Kazılıyor...",
     clayDigSucceeded: "Kil yatağından kil çıkardın.",
-    diggingToolBroke: "{tool} kazı sırasında kırıldı."
+    diggingToolBroke: "{tool} kazı sırasında kırıldı.",
+    goalcraftPickaxeMold: "Kil kazma kalıbı üret.",
   }
 };
 
