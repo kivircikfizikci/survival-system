@@ -771,26 +771,25 @@ function chopCurrentTree() {
     return;
   }
 
-  const newInventoryItems =
+  const treeLoot = [
+    {
+      itemId: "woodLog",
+      quantity: 1
+    }
+  ];
+
+  const updatedInventoryPreview =
     simulateAddLootItemsToInventory(
       updatedSaveData,
-      [
-        {
-          itemId: "woodLog",
-          quantity: 1
-        }
-      ]
+      treeLoot
     );
 
-  if (!newInventoryItems) {
+  if (!updatedInventoryPreview) {
     addDiscoveryLog(
       t("inventoryFullOrTooHeavy")
     );
     return;
   }
-
-  updatedSaveData.inventory.items =
-    newInventoryItems;
 
   const durabilityApplied =
   applyTreeAxeDurabilityCost(
@@ -807,18 +806,24 @@ function chopCurrentTree() {
 
   ensureCutTreesState();
 
-const currentMapId =
-  discoveryState.currentMapId;
+  const currentMapId =
+    discoveryState.currentMapId;
 
-if (
-  !discoveryState.cutTrees[
-    currentMapId
-  ].includes(currentTileId)
-) {
-  discoveryState.cutTrees[
-    currentMapId
-  ].push(currentTileId);
-}
+  if (
+    !discoveryState.cutTrees[
+      currentMapId
+    ].includes(currentTileId)
+  ) {
+    discoveryState.cutTrees[
+      currentMapId
+    ].push(currentTileId);
+  }
+
+  discoveryState.pendingLoot = {
+    source: "treeChopping",
+    tileId: currentTileId,
+    items: treeLoot
+  };
 
   completeDiscoveryGoal("chopFirstTree");
 
