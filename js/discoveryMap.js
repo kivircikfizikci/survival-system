@@ -944,6 +944,15 @@ function updateTileActionPanel() {
     renderFishingActions();
   }
 
+  if (
+    !discoveryState.pendingEncounter &&
+    pendingLootItems.length === 0 &&
+    !currentBuriedStash &&
+    isCurrentTileClayDigArea(tileData)
+  ) {
+    renderClayDigAction();
+  }
+
   if (tileData.exit) {
     const exitButton = document.createElement("button");
     exitButton.type = "button";

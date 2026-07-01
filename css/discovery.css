@@ -831,13 +831,13 @@ body:not(.show-map-debug-markers) .tile-required-item-marker {
   position: relative;
 }
 
-.fishing-action-button {
+.discovery-timed-action-button {
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 
-.fishing-action-button::before {
+.discovery-timed-action-button::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -851,19 +851,19 @@ body:not(.show-map-debug-markers) .tile-required-item-marker {
   pointer-events: none;
 }
 
-.fishing-action-button.is-fishing::before {
+.discovery-timed-action-button.is-performing-action::before {
   animation:
-    fishing-button-drain
-    var(--fishing-duration, 3000ms)
+    discovery-action-drain
+    var(--discovery-action-duration, 3000ms)
     linear
     forwards;
 }
 
-.fishing-action-button.is-fishing {
+.discovery-timed-action-button.is-performing-action {
   cursor: wait;
 }
 
-@keyframes fishing-button-drain {
+@keyframes discovery-action-drain {
   from {
     transform: scaleX(0);
   }

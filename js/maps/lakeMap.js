@@ -96,10 +96,10 @@ const lakeMap = {
     ],
 
     lakeClayBank: [
-      { itemId: "clay", chance: 55, quantity: 1 },
-      { itemId: "pebble", chance: 15, quantity: 1 },
-      { itemId: "snail", chance: 8, quantity: 1 },
-      { itemId: "worm", chance: 20, quantity: 3 },
+      { itemId: "clay", chance: 15, quantity: 1 },
+      { itemId: "pebble", chance: 5, quantity: 1 },
+      { itemId: "snail", chance: 3, quantity: 1 },
+      { itemId: "worm", chance: 5, quantity: 3 },
     ],
     
     lakeTreeArea: [

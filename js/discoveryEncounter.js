@@ -292,7 +292,7 @@ const encounterDatabase = {
   }
 };
 
-let isFishingActionInProgress = false;
+let isDiscoveryTimedActionInProgress = false;
 
 const fishingMethods = {
   fishBait: {
@@ -548,10 +548,11 @@ function consumeFishingBait(
   return true;
 }
 
-function applyFishingToolDurabilityCost(
+function applyDiscoveryToolDurabilityCost(
   saveData,
   toolData,
-  baseCost
+  baseCost,
+  brokenMessageKey
 ) {
   if (
     !saveData ||
@@ -570,6 +571,7 @@ function applyFishingToolDurabilityCost(
 
   if (
     !tool ||
+    !toolData.item ||
     tool.id !== toolData.item.id
   ) {
     return false;
@@ -600,21 +602,377 @@ function applyFishingToolDurabilityCost(
       toolData.slotIndex
     ] = null;
 
-    addDiscoveryLog(
-      t("fishingToolBroke", {
-        tool: toolName
-      })
-    );
+    if (brokenMessageKey) {
+      addDiscoveryLog(
+        t(brokenMessageKey, {
+          tool: toolName
+        })
+      );
+    }
   }
 
   return true;
+}
+
+function startDiscoveryTimedAction({
+  button,
+  durationMs,
+  actionCostKey,
+  progressTextKey,
+  onComplete
+}) {
+  if (isDiscoveryTimedActionInProgress) {
+    return false;
+  }
+
+  if (
+    !button ||
+    typeof onComplete !== "function"
+  ) {
+    return false;
+  }
+
+  if (
+    actionCostKey &&
+    !payDiscoveryActionCost(actionCostKey)
+  ) {
+    return false;
+  }
+
+  isDiscoveryTimedActionInProgress = true;
+
+  const finalDurationMs = Math.max(
+    500,
+    Number(durationMs || 3000)
+  );
+
+  button.disabled = true;
+
+  if (progressTextKey) {
+    button.textContent =
+      t(progressTextKey);
+  }
+
+  button.style.setProperty(
+    "--discovery-action-duration",
+    finalDurationMs + "ms"
+  );
+
+  button.classList.add(
+    "is-performing-action"
+  );
+
+  setTimeout(function () {
+    isDiscoveryTimedActionInProgress = false;
+
+    onComplete();
+  }, finalDurationMs);
+
+  return true;
+}
+
+function isCurrentTileClayDigArea(
+  tileData
+) {
+  return (
+    tileData &&
+    tileData.resource &&
+    tileData.resource.lootTable ===
+      "lakeClayBank"
+  );
+}
+
+function rollClayDigLoot() {
+  return [
+    {
+      itemId: "clay",
+      quantity:
+        Math.floor(
+          Math.random() * 3
+        ) + 2
+    }
+  ];
+}
+
+function digClayAtCurrentTile() {
+  const currentTileId =
+    getTileId(
+      discoveryState.x,
+      discoveryState.y
+    );
+
+  const tileData =
+    getTileSpecialData(currentTileId);
+
+  if (
+    !isCurrentTileClayDigArea(tileData)
+  ) {
+    return;
+  }
+
+  if (
+    discoveryState.pendingEncounter ||
+    getPendingLootItems().length > 0
+  ) {
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return;
+  }
+
+  const shovelData =
+    findSavedInventoryToolByGroup(
+      saveData,
+      "shovel"
+    );
+
+  if (!shovelData) {
+    addDiscoveryLog(
+      t("clayDigRequiresShovel")
+    );
+
+    updateTileActionPanel();
+    return;
+  }
+
+  const clayLoot =
+    rollClayDigLoot();
+
+  const simulatedInventoryItems =
+    simulateAddLootItemsToInventory(
+      saveData,
+      clayLoot
+    );
+
+  if (!simulatedInventoryItems) {
+    addDiscoveryLog(
+      t("notEnoughInventorySpace")
+    );
+
+    updateTileActionPanel();
+    return;
+  }
+
+  const durabilityApplied =
+    applyDiscoveryToolDurabilityCost(
+      saveData,
+      shovelData,
+      3,
+      "diggingToolBroke"
+    );
+
+  if (!durabilityApplied) {
+    return;
+  }
+
+  saveMainSaveData(saveData);
+
+  discoveryState.pendingLoot = {
+    source: "clayDigging",
+    tileId: currentTileId,
+    items: clayLoot
+  };
+
+  saveDiscoveryState();
+
+  addDiscoveryLog(
+    t("clayDigSucceeded")
+  );
+
+  renderDiscoveryMap();
+}
+
+function startClayDigAction(
+  digButton
+) {
+  if (isDiscoveryTimedActionInProgress) {
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  const shovelData =
+    findSavedInventoryToolByGroup(
+      saveData,
+      "shovel"
+    );
+
+  if (!shovelData) {
+    addDiscoveryLog(
+      t("clayDigRequiresShovel")
+    );
+
+    updateTileActionPanel();
+    return;
+  }
+
+  startDiscoveryTimedAction({
+    button: digButton,
+    durationMs: 3000,
+    actionCostKey: "digClay",
+    progressTextKey:
+      "clayDigInProgress",
+
+    onComplete: function () {
+      digClayAtCurrentTile();
+    }
+  });
+}
+
+function renderClayDigAction() {
+  const saveData =
+    getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return;
+  }
+
+  const shovelData =
+    findSavedInventoryToolByGroup(
+      saveData,
+      "shovel"
+    );
+
+  const clayCard =
+    document.createElement("div");
+
+  clayCard.classList.add(
+    "encounter-card",
+    "encounter-card-friendly"
+  );
+
+  const clayTitle =
+    document.createElement("strong");
+
+  clayTitle.textContent =
+    t("clayBank");
+
+  const clayDescription =
+    document.createElement("span");
+
+  clayDescription.textContent =
+    shovelData
+      ? t("clayDigDescription")
+      : t("clayDigRequiresShovel");
+
+  clayCard.append(
+    clayTitle,
+    clayDescription
+  );
+
+  if (shovelData) {
+    const shovelSelector =
+      document.createElement("div");
+
+    shovelSelector.classList.add(
+      "hunt-tool-selector"
+    );
+
+    const shovelButton =
+      document.createElement("button");
+
+    shovelButton.type = "button";
+
+    shovelButton.classList.add(
+      "hunt-tool-button",
+      "is-selected"
+    );
+
+    shovelButton.textContent =
+      getDiscoveryItemName(
+        shovelData.item
+      );
+
+    if (
+      typeof shovelData.item.durability ===
+        "number" &&
+      typeof shovelData.item.maxDurability ===
+        "number"
+    ) {
+      shovelButton.textContent +=
+        " (" +
+        shovelData.item.durability +
+        "/" +
+        shovelData.item.maxDurability +
+        ")";
+    }
+
+    shovelSelector.appendChild(
+      shovelButton
+    );
+
+    clayCard.appendChild(
+      shovelSelector
+    );
+  }
+
+  tileActions.appendChild(
+    clayCard
+  );
+
+  if (!shovelData) {
+    return;
+  }
+
+  const actions =
+    document.createElement("div");
+
+  actions.classList.add(
+    "found-loot-actions"
+  );
+
+  const digButton =
+    document.createElement("button");
+
+  digButton.type = "button";
+
+  digButton.classList.add(
+    "tile-action-button",
+    "discovery-timed-action-button"
+  );
+
+  digButton.disabled =
+    isDiscoveryTimedActionInProgress;
+
+  digButton.textContent =
+    t("digClay");
+
+  digButton.addEventListener(
+    "click",
+    function () {
+      startClayDigAction(
+        digButton
+      );
+    }
+  );
+
+  actions.appendChild(
+    digButton
+  );
+
+  tileActions.appendChild(
+    actions
+  );
 }
 
 function startFishingAction(
   fishingMethodId,
   fishButton
 ) {
-  if (isFishingActionInProgress) {
+  if (isDiscoveryTimedActionInProgress) {
     return;
   }
 
@@ -663,40 +1021,21 @@ function startFishingAction(
     return;
   }
 
-  if (
-    !payDiscoveryActionCost(
-      fishingMethod.actionCostKey
-    )
-  ) {
-    return;
-  }
+  startDiscoveryTimedAction({
+    button: fishButton,
+    durationMs:
+      fishingMethod.durationMs || 3000,
+    actionCostKey:
+      fishingMethod.actionCostKey,
+    progressTextKey:
+      "fishingInProgress",
 
-  isFishingActionInProgress = true;
-
-  const durationMs =
-    Number(
-      fishingMethod.durationMs || 3000
-    );
-
-  fishButton.disabled = true;
-  fishButton.textContent = t("fishingInProgress");
-
-  fishButton.style.setProperty(
-    "--fishing-duration",
-    durationMs + "ms"
-  );
-
-  fishButton.classList.add(
-    "is-fishing"
-  );
-
-  setTimeout(function () {
-    isFishingActionInProgress = false;
-
-    fishAtCurrentTile(
-      fishingMethodId
-    );
-  }, durationMs);
+    onComplete: function () {
+      fishAtCurrentTile(
+        fishingMethodId
+      );
+    }
+  });
 }
 
 function fishAtCurrentTile(
@@ -817,11 +1156,12 @@ function fishAtCurrentTile(
     fishingMethod.durabilityCost
   ) {
     const durabilityApplied =
-      applyFishingToolDurabilityCost(
-        saveData,
-        fishingItemData,
-        fishingMethod.durabilityCost
-      );
+    applyDiscoveryToolDurabilityCost(
+      saveData,
+      fishingItemData,
+      fishingMethod.durabilityCost,
+      "fishingToolBroke"
+    );
 
     if (!durabilityApplied) {
       return;
@@ -1082,10 +1422,10 @@ function renderFishingActions() {
 
     fishButton.classList.add(
       "tile-action-button",
-      "fishing-action-button"
+      "discovery-timed-action-button"
     );
 
-    fishButton.disabled = isFishingActionInProgress;
+    fishButton.disabled = isDiscoveryTimedActionInProgress;
 
     fishButton.textContent =
       t("fish");

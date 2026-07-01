@@ -361,7 +361,14 @@ const translations = {
     fishingMethod_fishBaitShort: "Fish Bait",
     fishingMethod_spearShort: "Spear",
     fishingMethod_oldFishNetShort: "Old Fish Net",
-    fishingInProgress: "Fishing..."
+    fishingInProgress: "Fishing...",
+    clayBank: "Clay Bank",
+    clayDigDescription: "You can dig deeper into the clay bank with a shovel.",
+    clayDigRequiresShovel: "A shovel is required to dig here.",
+    digClay: "Dig Clay",
+    clayDigInProgress: "Digging...",
+    clayDigSucceeded: "You dug clay from the bank.",
+    diggingToolBroke: "{tool} broke while digging."
   },
   //Türkçe
   tr: {
@@ -722,6 +729,13 @@ const translations = {
     fishingMethod_spearShort: "Mızrak",
     fishingMethod_oldFishNetShort: "Eski Balık Ağı",
     fishingInProgress: "Balık tutuluyor...",
+    clayBank: "Kil Yatağı",
+    clayDigDescription: "Küreğini kullanarak kil yatağını kazabilirsin.",
+    clayDigRequiresShovel: "Burayı kazmak için bir kürek gerekiyor.",
+    digClay: "Kil Kaz",
+    clayDigInProgress: "Kazılıyor...",
+    clayDigSucceeded: "Kil yatağından kil çıkardın.",
+    diggingToolBroke: "{tool} kazı sırasında kırıldı."
   }
 };
 

@@ -39,7 +39,8 @@ const gameConfig = {
     fillWater: { energy: 0.2, hunger: 0 },
     fishBait: { energy: 1.5, hunger: 0.5 },
     fishSpear: { energy: 3, hunger: 1 },
-    fishNet: { energy: 2, hunger: 0.75 }
+    fishNet: { energy: 2, hunger: 0.75 },
+    digClay: { energy: 2, hunger: 1 },
   },
   emergencyMovementCosts: {
     exhaustedHealth: 2,
