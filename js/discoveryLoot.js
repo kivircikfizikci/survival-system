@@ -627,6 +627,77 @@ function applyTreeAxeDurabilityCost(
   return true;
 }
 
+function startChopTreeAction(
+  chopTreeButton
+) {
+  if (isDiscoveryTimedActionInProgress) {
+    return;
+  }
+
+  const currentTileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  const tileData =
+    getTileSpecialData(currentTileId);
+
+  if (!isCurrentTileTreeArea(tileData)) {
+    return;
+  }
+
+  if (isTreeCutOnCurrentTile()) {
+    addDiscoveryLog(t("treeAlreadyCut"));
+    updateTileActionPanel();
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  const axeData =
+    findMainInventoryToolByGroup(
+      "axe",
+      saveData
+    );
+
+  if (!axeData) {
+    addDiscoveryLog(t("axeRequired"));
+    updateTileActionPanel();
+    return;
+  }
+
+  const inventoryPreview =
+    simulateAddLootItemsToInventory(
+      saveData,
+      [
+        {
+          itemId: "woodLog",
+          quantity: 1
+        }
+      ]
+    );
+
+  if (!inventoryPreview) {
+    addDiscoveryLog(
+      t("inventoryFullOrTooHeavy")
+    );
+    return;
+  }
+
+  startDiscoveryTimedAction({
+    button: chopTreeButton,
+    durationMs: 4000,
+    actionCostKey: "chopTree",
+    progressTextKey:
+      "choppingInProgress",
+
+    onComplete: function () {
+      chopCurrentTree();
+    }
+  });
+}
+
 function chopCurrentTree() {
   const currentTileId = getTileId(
     discoveryState.x,
@@ -676,10 +747,6 @@ function chopCurrentTree() {
     addDiscoveryLog(
       t("inventoryFullOrTooHeavy")
     );
-    return;
-  }
-
-  if (!payDiscoveryActionCost("chopTree")) {
     return;
   }
 

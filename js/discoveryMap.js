@@ -882,8 +882,10 @@ function updateTileActionPanel() {
       document.createElement("button");
 
     chopTreeButton.type = "button";
+
     chopTreeButton.classList.add(
-      "tile-action-button"
+      "tile-action-button",
+      "discovery-timed-action-button"
     );
 
     chopTreeButton.textContent =
@@ -891,14 +893,22 @@ function updateTileActionPanel() {
         ? t("chopTree")
         : t("chopTreeRequiresAxe");
 
-    chopTreeButton.disabled = !axeData;
+    chopTreeButton.disabled =
+      !axeData ||
+      isDiscoveryTimedActionInProgress;
 
     chopTreeButton.addEventListener(
       "click",
-      chopCurrentTree
+      function () {
+        startChopTreeAction(
+          chopTreeButton
+        );
+      }
     );
 
-    tileActions.appendChild(chopTreeButton);
+    tileActions.appendChild(
+      chopTreeButton
+    );
   }
 
   if (
