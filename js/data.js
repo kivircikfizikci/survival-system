@@ -187,8 +187,7 @@ const goalsDatabase = {
     {
       id: "catchFirstFish",
       textKey: "goalCatchFirstFish",
-      type: "obtainedItem",
-      itemId: "fish"
+      type: "caughtFish"
     },
     {
       id: "collectClay",

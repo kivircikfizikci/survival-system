@@ -828,9 +828,8 @@ function fishAtCurrentTile(
     }
   }
 
-  saveMainSaveData(saveData);
-
   if (!fishingSucceeded) {
+    saveMainSaveData(saveData);
     addDiscoveryLog(
       t("fishingFailed")
     );
@@ -838,6 +837,30 @@ function fishAtCurrentTile(
     updateTileActionPanel();
     return;
   }
+
+  if (
+    saveData.activeGoalsStage === "lake"
+  ) {
+    if (
+      !Array.isArray(
+        saveData.completedGoals
+      )
+    ) {
+      saveData.completedGoals = [];
+    }
+
+    if (
+      !saveData.completedGoals.includes(
+        "catchFirstFish"
+      )
+    ) {
+      saveData.completedGoals.push(
+        "catchFirstFish"
+      );
+    }
+  }
+
+  saveMainSaveData(saveData);
 
   discoveryState.pendingLoot = {
     source: "fishing",
