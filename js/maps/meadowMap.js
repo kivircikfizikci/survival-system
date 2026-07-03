@@ -139,13 +139,13 @@ const meadowMap = {
 
   encounterTables: {
     meadowAnimalZone: [
-      { id: "rabbit", type: "friendly", chance: 10 },
-      { id: "deer", type: "friendly", chance: 5 },
-      { id: "wildDog", type: "enemy", chance: 3 }
+      { id: "rabbit", type: "friendly", chance: 7 },
+      { id: "deer", type: "friendly", chance: 4 },
+      { id: "wildDog", type: "enemy", chance: 2 }
     ],
 
     meadowDangerZone: [
-      { id: "wildDog", type: "enemy", chance: 8 }
+      { id: "wildDog", type: "enemy", chance: 4 }
     ]
   },
 

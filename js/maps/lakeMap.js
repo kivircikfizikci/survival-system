@@ -161,20 +161,20 @@ const lakeMap = {
       { id: "alligator", type: "enemy", chance: 5 }
     ],
     lakeTreeZone: [
-      { id: "deer", type: "friendly", chance: 5 },
-      { id: "smallBird", type: "friendly", chance: 5 },
-      { id: "wildBoar", type: "enemy", chance: 1 },
+      { id: "deer", type: "friendly", chance: 4 },
+      { id: "smallBird", type: "friendly", chance: 4 },
+      { id: "wildBoar", type: "enemy", chance: 2 },
       { id: "wildDog", type: "enemy", chance: 2 },
       { id: "snake", type: "enemy", chance: 3 }
     ],
     lakeDangerZone: [
-      { id: "alligator", type: "enemy", chance: 5 },
-      { id: "snake", type: "enemy", chance: 5 },
-      { id: "smallBird", type: "friendly", chance: 5 },
-      { id: "deer", type: "friendly", chance: 5 },
-      { id: "wolf", type: "enemy", chance: 5 },
-      { id: "wildDog", type: "enemy", chance: 5 },
-      { id: "wildBoar", type: "enemy", chance: 5 }
+      { id: "alligator", type: "enemy", chance: 4 },
+      { id: "snake", type: "enemy", chance: 4 },
+      { id: "smallBird", type: "friendly", chance: 4 },
+      { id: "deer", type: "friendly", chance: 4 },
+      { id: "wolf", type: "enemy", chance: 4 },
+      { id: "wildDog", type: "enemy", chance: 4 },
+      { id: "wildBoar", type: "enemy", chance: 4 }
 
     ],
     lakePathRoad: [

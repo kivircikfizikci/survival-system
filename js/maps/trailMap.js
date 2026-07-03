@@ -210,12 +210,12 @@ const trailMap = {
 
     trailWildPath: [
       { id: "rabbit", type: "friendly", chance: 6 },
-      { id: "deer", type: "friendly", chance: 5 },
-      { id: "wildDog", type: "enemy", chance: 5 }
+      { id: "deer", type: "friendly", chance: 4 },
+      { id: "wildDog", type: "enemy", chance: 4 }
     ],
 
     trailDangerZone: [
-      { id: "wildDog", type: "enemy", chance: 10 },
+      { id: "wildDog", type: "enemy", chance: 6 },
       { id: "deer", type: "friendly", chance: 2 }
     ]
   },
