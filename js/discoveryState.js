@@ -18,8 +18,10 @@ let discoveryState = {
     abandonedVillage: [],
   },
   visitedTiles: {
-    meadow: []
-  }
+  meadow: []
+  },
+  tileLoot: {},
+  recentTileHistory: []
 };
 
 let isDiscoveryMoving = false;

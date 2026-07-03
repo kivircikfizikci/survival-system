@@ -177,9 +177,26 @@ async function movePlayerTo(x, y) {
     discoveryState.y = y;
 
     markCurrentTileVisited();
+    markRecentTileVisit();
 
-    rollCurrentTileLoot();
-    rollCurrentTileEncounter();
+    const hasStoredTileLoot =
+      restoreCurrentTileLoot();
+
+    if (!hasStoredTileLoot) {
+      rollCurrentTileLoot();
+
+      const rolledLootItems =
+        getPendingLootItems();
+
+      if (rolledLootItems.length > 0) {
+        setCurrentTileLoot(
+          rolledLootItems,
+          "tileSearch"
+        );
+      } else {
+        rollCurrentTileEncounter();
+      }
+    }
 
     saveDiscoveryState();
     renderDiscoveryMap();

@@ -193,6 +193,252 @@ function getPendingLootItems() {
   return [];
 }
 
+function ensureTileLootState() {
+  if (
+    !discoveryState.tileLoot ||
+    typeof discoveryState.tileLoot !== "object"
+  ) {
+    discoveryState.tileLoot = {};
+  }
+
+  if (!Array.isArray(discoveryState.recentTileHistory)) {
+    discoveryState.recentTileHistory = [];
+  }
+}
+
+function getTileLootByPosition(
+  mapId,
+  tileId
+) {
+  ensureTileLootState();
+
+  if (
+    !discoveryState.tileLoot[mapId] ||
+    !discoveryState.tileLoot[mapId][tileId]
+  ) {
+    return null;
+  }
+
+  return discoveryState.tileLoot[mapId][tileId];
+}
+
+function getCurrentTileLoot() {
+  const mapId =
+    discoveryState.currentMapId;
+
+  const tileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  return getTileLootByPosition(
+    mapId,
+    tileId
+  );
+}
+
+function mergeTileLootItems(
+  currentItems,
+  newItems
+) {
+  const mergedItems = [];
+
+  const allItems = [
+    ...(Array.isArray(currentItems)
+      ? currentItems
+      : []),
+
+    ...(Array.isArray(newItems)
+      ? newItems
+      : [])
+  ];
+
+  for (const lootItem of allItems) {
+    if (
+      !lootItem ||
+      !lootItem.itemId
+    ) {
+      continue;
+    }
+
+    const existingItem =
+      mergedItems.find(function (item) {
+        return (
+          item.itemId ===
+          lootItem.itemId
+        );
+      });
+
+    if (existingItem) {
+      existingItem.quantity +=
+        Number(
+          lootItem.quantity || 1
+        );
+
+      continue;
+    }
+
+    mergedItems.push({
+      itemId: lootItem.itemId,
+      quantity: Number(
+        lootItem.quantity || 1
+      )
+    });
+  }
+
+  return mergedItems;
+}
+
+function setCurrentTileLoot(
+  lootItems,
+  source = "unknown"
+) {
+  if (
+    !Array.isArray(lootItems) ||
+    lootItems.length === 0
+  ) {
+    return false;
+  }
+
+  ensureTileLootState();
+
+  const mapId =
+    discoveryState.currentMapId;
+
+  const tileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  if (
+    !discoveryState.tileLoot[mapId]
+  ) {
+    discoveryState.tileLoot[mapId] = {};
+  }
+
+  const currentTileLoot =
+    discoveryState.tileLoot[mapId][tileId];
+
+  const mergedItems =
+    mergeTileLootItems(
+      currentTileLoot
+        ? currentTileLoot.items
+        : [],
+      lootItems
+    );
+
+  const tileLootData = {
+    mapId: mapId,
+    tileId: tileId,
+    source: source,
+    items: mergedItems
+  };
+
+  discoveryState.tileLoot[mapId][tileId] =
+    tileLootData;
+
+  discoveryState.pendingLoot =
+    tileLootData;
+
+  return true;
+}
+
+function clearCurrentTileLoot() {
+  ensureTileLootState();
+
+  const mapId =
+    discoveryState.currentMapId;
+
+  const tileId = getTileId(
+    discoveryState.x,
+    discoveryState.y
+  );
+
+  if (
+    discoveryState.tileLoot[mapId]
+  ) {
+    delete discoveryState.tileLoot[
+      mapId
+    ][tileId];
+  }
+
+  discoveryState.pendingLoot = null;
+}
+
+function restoreCurrentTileLoot() {
+  const currentTileLoot =
+    getCurrentTileLoot();
+
+  if (
+    currentTileLoot &&
+    Array.isArray(
+      currentTileLoot.items
+    ) &&
+    currentTileLoot.items.length > 0
+  ) {
+    discoveryState.pendingLoot =
+      currentTileLoot;
+
+    return true;
+  }
+
+  discoveryState.pendingLoot = null;
+
+  return false;
+}
+
+function markRecentTileVisit() {
+  ensureTileLootState();
+
+  const historyEntry = {
+    mapId:
+      discoveryState.currentMapId,
+
+    tileId: getTileId(
+      discoveryState.x,
+      discoveryState.y
+    )
+  };
+
+  discoveryState.recentTileHistory.push(
+    historyEntry
+  );
+
+  while (
+    discoveryState.recentTileHistory.length >
+    10
+  ) {
+    const removedEntry =
+      discoveryState.recentTileHistory.shift();
+
+    const stillInHistory =
+      discoveryState.recentTileHistory.some(
+        function (entry) {
+          return (
+            entry.mapId ===
+              removedEntry.mapId &&
+            entry.tileId ===
+              removedEntry.tileId
+          );
+        }
+      );
+
+    if (stillInHistory) {
+      continue;
+    }
+
+    if (
+      discoveryState.tileLoot[
+        removedEntry.mapId
+      ]
+    ) {
+      delete discoveryState.tileLoot[
+        removedEntry.mapId
+      ][removedEntry.tileId];
+    }
+  }
+}
+
 function getLootText(lootItems) {
   return lootItems
     .map(function (lootItem) {
@@ -819,11 +1065,10 @@ function chopCurrentTree() {
     ].push(currentTileId);
   }
 
-  discoveryState.pendingLoot = {
-    source: "treeChopping",
-    tileId: currentTileId,
-    items: treeLoot
-  };
+  setCurrentTileLoot(
+    treeLoot,
+    "treeChopping"
+  );
 
   completeDiscoveryGoal("chopFirstTree");
 
@@ -1128,7 +1373,7 @@ function takePendingLoot() {
     );
   }
 
-  discoveryState.pendingLoot = null;
+  clearCurrentTileLoot();
 
   saveDiscoveryState();
   updateTileActionPanel();

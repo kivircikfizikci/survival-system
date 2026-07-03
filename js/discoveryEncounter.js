@@ -797,11 +797,10 @@ function digClayAtCurrentTile() {
 
   saveMainSaveData(saveData);
 
-  discoveryState.pendingLoot = {
-    source: "clayDigging",
-    tileId: currentTileId,
-    items: clayLoot
-  };
+  setCurrentTileLoot(
+    clayLoot,
+    "clayDigging"
+  );
 
   saveDiscoveryState();
 
@@ -1224,10 +1223,10 @@ function fishAtCurrentTile(
 
   saveMainSaveData(saveData);
 
-  discoveryState.pendingLoot = {
-    source: "fishing",
-    items: fishingLoot
-  };
+  setCurrentTileLoot(
+    fishingLoot,
+    "fishing"
+  );
 
   saveDiscoveryState();
 
@@ -2004,10 +2003,10 @@ function huntPendingEncounter() {
     return;
   }
 
-  discoveryState.pendingLoot = {
-    tileId: encounter.tileId,
-    items: lootResults
-  };
+  setCurrentTileLoot(
+    lootResults,
+    "hunting"
+  );
 
   addDiscoveryLog(t("huntSucceeded"));
 
@@ -2419,10 +2418,10 @@ function fightPendingEncounter() {
     );
 
     if (brokenClothingLoot.length > 0) {
-      discoveryState.pendingLoot = {
-        tileId: encounter.tileId,
-        items: brokenClothingLoot
-      };
+    setCurrentTileLoot(
+      brokenClothingLoot,
+      "brokenClothing"
+    );
     }
 
     saveDiscoveryState();
@@ -2453,10 +2452,10 @@ function fightPendingEncounter() {
     return;
   }
 
-  discoveryState.pendingLoot = {
-    tileId: encounter.tileId,
-    items: lootResults
-  };
+  setCurrentTileLoot(
+    lootResults,
+    "fighting"
+  );
 
   addDiscoveryLog(t("fightSucceeded"));
 
