@@ -265,8 +265,11 @@ function travelToMap(exitData) {
   }
 
   markCurrentTileVisited();
+  markRecentTileVisit();
+  restoreCurrentTileLoot();
   saveDiscoveryState();
   renderDiscoveryMap();
+  updateTileActionPanel();
 
   addDiscoveryLog(
     t("enteredMap", {
