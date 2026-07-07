@@ -14,9 +14,14 @@ const lakeMap = {
     },
 
   blockedTiles: [
-    ...createTileRange("AF23", "AE20"), "AF29", ...createTileRange("AF18", "AE16"), "AF15", "AD14", "AD13", "AD12", ...createTileRange("AC12", "AC5"), "AD6", "AD5", "AC14", "AC15", "AC16",
+    ...createTileRange("AF23", "AE20"), "AF29", ...createTileRange("AF19", "AE16"), "AF15", "AD14", "AD13", "AD12", ...createTileRange("AC12", "AC5"), "AD6", "AD5", "AC14", "AC15", "AC16",
     "AF9", ...createTileRange("AB4", "Z1"), ...createTileRange("AA5", "AB10"), ...createTileRange("Z10", "Z5"), "AF10", "AE9", "AE8", "AF8", "AF7", ...createTileRange("AF5", "AF1"), "AE4",
     "AE3", "AE2", "AD3", "AC1", "AC4",
+  ],
+
+  treeTiles: [ "R31", "S32", "T31", "U30", "V32", "W30", "X32", "Y31", "Y29", "Z28", "AA30", "Z32", "AA32", "AC32", "AE32", "AF31", "AE29", "AF29", "AC27", "AB26", "AC24", "AE26", "AF25", "AE24",
+    "AD19", "AC13", "AB11", "AA20", "Y23", "X25", "O32", "N31", "M32", "M31", "L32", "K32", "K30", "J29", "I30", "I32", "G32", "H28", "I27", "G26", "F28", "F29", "F32", "D32", "C32", "A32", 
+    "C30", "A29", "C29", "E28", "G26", "C26", "E25", "B24", "A24", "A23", "C23", "E24", "B21", "C20", "A20", "B13", "A12",
   ],
 
   requiredItemTiles: {
@@ -190,32 +195,32 @@ const lakeMap = {
     "X20", "Y19", "Y18", "Y17", "Y16", "Z16", "Y15", "Z15", "Y14", "Z14", "Y13", "X12", "X11", "W10", "W9", "W8", "V7", "V6", "V5", "U4", "T4", "T3", "T2", "T1"
   ],
 
- exits: {
-    "Q32": {
-      targetMapId: "trail",
-      targetPosition: {
-        x: 15,
-        y: 0
+  exits: {
+      "Q32": {
+        targetMapId: "trail",
+        targetPosition: {
+          x: 15,
+          y: 0
+        },
+        label: "Trail"
       },
-      label: "Trail"
-    },
 
-    "AE1": {
-      targetMapId: "mountain",
-      targetPosition: {
-        x: 0,
-        y: 28
+      "AE1": {
+        targetMapId: "mountain",
+        targetPosition: {
+          x: 0,
+          y: 28
+        },
+        label: "Mountain"
       },
-      label: "Mountain"
-    },
 
-    "A15": {
-      targetMapId: "abandonedVillage",
-      targetPosition: {
-        x: 31,
-        y: 1
+      "A15": {
+        targetMapId: "abandonedVillage",
+        targetPosition: {
+          x: 31,
+          y: 1
+        },
+        label: "Abandoned village"
       },
-      label: "Abandoned village"
-    },
- }
+  }
 };

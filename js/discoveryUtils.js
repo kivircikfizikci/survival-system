@@ -48,6 +48,7 @@ function getTileSpecialData(tileId) {
 
   return {
     isBlocked:
+      Array.isArray(map.blockedTiles) &&
       map.blockedTiles.includes(tileId),
 
     resource:

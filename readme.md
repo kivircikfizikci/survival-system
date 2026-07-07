@@ -31,5 +31,4 @@ clothBag
 3. Görseli Olmayan Item Listesi
 
 4. Deneme Sistemler;
-- tile kayıt sistemiyle son çıkan 2 - 3 lootu o tile a kaydedip geri dönüp onu alabilmek.
 - Traders sistemi, mapin belirli noktalarında belirli zamanlarda çıkıp trade yapabilme.
