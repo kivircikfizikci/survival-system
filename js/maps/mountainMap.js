@@ -201,37 +201,37 @@ const mountainMap = {
     },
 
     "B26": {
-      targetMapId: "mine",
+      targetMapId: "mine1",
       targetPosition: {
-        x: 15,
-        y: 32
+        x: 0,
+        y: 15
       },
       label: "Mine"
     },
 
     "B21": {
-      targetMapId: "mine",
+      targetMapId: "mine2",
       targetPosition: {
         x: 15,
-        y: 32
+        y: 15
       },
       label: "Mine"
     },
 
     "F24": {
-      targetMapId: "mine",
+      targetMapId: "mine3",
       targetPosition: {
         x: 15,
-        y: 32
+        y: 31
       },
       label: "Mine"
     },
 
     "J27": {
-      targetMapId: "mine",
+      targetMapId: "mine4",
       targetPosition: {
         x: 15,
-        y: 32
+        y: 31
       },
       label: "Mine"
     },

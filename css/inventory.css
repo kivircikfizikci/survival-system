@@ -1,14 +1,10 @@
-/* =========================================================
-   INVENTORY PANEL
-   ========================================================= */
-
 .inventory-panel {
   padding: 12px;
 
   border: 1px dashed rgba(148, 163, 184, 0.38);
   border-radius: 8px;
 
-  background: rgba(15, 23, 42, 0.48);
+  background: rgba(15, 23, 42, 0.4);
 
   box-shadow:
     0 24px 70px rgba(0, 0, 0, 0.2);
@@ -46,21 +42,11 @@
   font-weight: 800;
 }
 
-
-/* =========================================================
-   INVENTORY GRID
-   ========================================================= */
-
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
-
-
-/* =========================================================
-   INVENTORY SLOT
-   ========================================================= */
 
 .inventory-slot {
   position: relative;
@@ -98,11 +84,6 @@
   font-weight: 800;
   letter-spacing: 0.03em;
 }
-
-
-/* =========================================================
-   ITEM MAIN INFO
-   ========================================================= */
 
 .item-info {
   display: grid;
@@ -144,11 +125,6 @@
   white-space: nowrap;
 }
 
-
-/* =========================================================
-   QUANTITY BADGE
-   ========================================================= */
-
 .quantity-badge {
   position: absolute;
   top: 8px;
@@ -173,11 +149,6 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
-
-
-/* =========================================================
-   SLOT ACTIONS
-   ========================================================= */
 
 .slot-actions {
   position: absolute;
@@ -285,11 +256,6 @@
   line-height: 1;
 }
 
-
-/* =========================================================
-   ITEM FOOTER POSITION
-   ========================================================= */
-
 .inventory-slot > .item-footer,
 .shelter-storage-slot > .item-footer,
 .inventory-slot > .item-footer-box,
@@ -304,12 +270,6 @@
 
   width: auto;
 }
-
-
-/* =========================================================
-   GENERIC FOOTER BOX
-   Durability ve weight-only itemlerde kullanılır
-   ========================================================= */
 
 .item-footer-box {
   display: flex;
@@ -350,11 +310,6 @@
   white-space: nowrap;
 }
 
-
-/* =========================================================
-   DURABILITY BAR
-   ========================================================= */
-
 .item-footer-bar {
   width: 100%;
   height: 5px;
@@ -383,10 +338,6 @@
 }
 
 
-/* =========================================================
-   WEIGHT
-   ========================================================= */
-
 .item-footer-weight,
 .item-footer-inline-weight {
   flex-shrink: 0;
@@ -398,10 +349,6 @@
 
   white-space: nowrap;
 }
-
-/* =========================================================
-   CONTAINER FOOTER
-   ========================================================= */
 
 .item-footer-metric {
   width: 100%;
@@ -471,11 +418,6 @@
   line-height: 1;
 }
 
-
-/* =========================================================
-   CONTAINER FILL BAR
-   ========================================================= */
-
 .item-footer-metric-bar {
   width: 100%;
   height: 5px;
@@ -504,11 +446,6 @@
     width 180ms ease;
 }
 
-
-/* =========================================================
-   EMPTY CONTAINER
-   ========================================================= */
-
 .item-container-info.is-empty {
   border-color: rgba(150, 160, 175, 0.24);
 
@@ -529,17 +466,14 @@
   width: 0;
 }
 
-/* Durability veya container footer'ı olmayan normal itemler */
 .inventory-slot:not(.is-empty):not(.has-item-footer) {
   padding-bottom: 38px;
 }
 
-/* Normal item adını ağırlık rozetinin üstünde tut */
 .inventory-slot:not(.has-item-footer) .item-info {
   min-height: 0;
 }
 
-/* Normal item ağırlık rozeti */
 .inventory-slot > .item-standalone-weight {
   position: absolute;
   right: 10px;

@@ -3,6 +3,7 @@ const mapsDatabase = {
   trail: trailMap,
   lake: lakeMap,
   mountain: mountainMap,
-  mine: mineMap,
   abandonedVillage: abandonedVillageMap,
+
+   ...mineMaps
 };

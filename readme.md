@@ -1,8 +1,7 @@
 1. Yapılacaklar
-- toolbelt tarzı item yapılacak. toollar içine konulabilecek.
+mineMap.js üzerinden devam. mine1 bitti, mine2 tile lar yapılacak.
 
 Mine System v1.
-- mineMap.js düzenleme. Map görsel. blockedTiles, resourceTiles ve encounterTiles data girişi.
 - OreVein sistemi ve toolGroup gereksinimi.
 
 Görev Sistemi v4
@@ -32,3 +31,4 @@ clothBag
 
 4. Deneme Sistemler;
 - Traders sistemi, mapin belirli noktalarında belirli zamanlarda çıkıp trade yapabilme.
+- toolbelt tarzı item yapılacak. toollar içine konulabilecek.

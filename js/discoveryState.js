@@ -18,7 +18,12 @@ let discoveryState = {
     abandonedVillage: [],
   },
   visitedTiles: {
-  meadow: []
+    meadow: [],
+    trail: [],
+    lake: [],
+    mountain: [],
+    abandonedVillage: [],
+    mine: [],
   },
   tileLoot: {},
   recentTileHistory: []
