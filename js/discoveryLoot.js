@@ -1317,6 +1317,55 @@ function fillWaterContainer() {
   updateTileActionPanel();
 }
 
+function ensureDepletedActionTilesState() {
+  if (!discoveryState.depletedActionTiles) {
+    discoveryState.depletedActionTiles = {};
+  }
+
+  return discoveryState.depletedActionTiles;
+}
+
+function getCurrentTileIdForAction() {
+  return getTileId(discoveryState.x, discoveryState.y);
+}
+
+function isActionTileDepleted(mapId, tileId, actionId) {
+  const depletedState = ensureDepletedActionTilesState();
+
+  return Boolean(
+    depletedState[mapId] &&
+    depletedState[mapId][tileId] &&
+    depletedState[mapId][tileId].actionId === actionId
+  );
+}
+
+function isCurrentActionTileDepleted(actionId) {
+  const mapId = discoveryState.currentMapId;
+  const tileId = getCurrentTileIdForAction();
+
+  return isActionTileDepleted(mapId, tileId, actionId);
+}
+
+function markActionTileDepleted(mapId, tileId, actionId) {
+  const depletedState = ensureDepletedActionTilesState();
+
+  if (!depletedState[mapId]) {
+    depletedState[mapId] = {};
+  }
+
+  depletedState[mapId][tileId] = {
+    actionId,
+    depletedAt: Date.now()
+  };
+}
+
+function markCurrentActionTileDepleted(actionId) {
+  const mapId = discoveryState.currentMapId;
+  const tileId = getCurrentTileIdForAction();
+
+  markActionTileDepleted(mapId, tileId, actionId);
+}
+
 function addPendingLootItemsToMainInventory(lootItems) {
   const saveData = getMainSaveData();
 

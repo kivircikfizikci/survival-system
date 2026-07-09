@@ -43,23 +43,23 @@ const mineMaps = {
 
     lootTables: {
       mineCopperVein: [
-        { itemId: "copperOre", chance: 10, quantity: 1 },
+        { itemId: "copperOre", chance: 60, minQuantity: 2, maxQuantity: 5 },
         { itemId: "flint", chance: 15, quantity: 1 },
         { itemId: "sharpStone", chance: 20, quantity: 1 },
       ],
        mineIronVein: [
-        { itemId: "ironOre", chance: 10, quantity: 1 },
+        { itemId: "ironOre", chance: 60, minQuantity: 1, maxQuantity: 3 },
         { itemId: "flint", chance: 15, quantity: 1 },
         { itemId: "sharpStone", chance: 20, quantity: 1 },
       ],
        mineCoalVein: [
-        { itemId: "coal", chance: 10, quantity: 1 },
+        { itemId: "coal", chance: 60, minQuantity: 3, maxQuantity: 6 },
         { itemId: "flint", chance: 15, quantity: 1 },
         { itemId: "sharpStone", chance: 20, quantity: 1 },
       ],
       mineGeneralArea: [
         { itemId: "copperOre", chance: 2, quantity: 1 },
-        { itemId: "ironOre", chance: 2, quantity: 1 },
+        { itemId: "ironOre", chance: 1, quantity: 1 },
         { itemId: "coal", chance: 2, quantity: 1 },
         { itemId: "pebble", chance: 12, quantity: 1 },
         { itemId: "sharpStone", chance: 10, quantity: 1 },

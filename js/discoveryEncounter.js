@@ -671,6 +671,274 @@ function startDiscoveryTimedAction({
   return true;
 }
 
+function mineCurrentOreVein(tileData) {
+  if (!isMiningVeinTile(tileData)) {
+    addDiscoveryLog(t("notMiningVein"));
+    updateTileActionPanel();
+    return;
+  }
+
+  if (isCurrentActionTileDepleted("mining")) {
+    addDiscoveryLog(t("oreVeinDepleted"));
+    updateTileActionPanel();
+    return;
+  }
+
+  if (discoveryState.pendingEncounter || discoveryState.pendingLoot) {
+    updateTileActionPanel();
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  const pickaxeData =
+    findSavedInventoryToolByGroup(
+      saveData,
+      "pickaxe"
+    );
+
+  if (!pickaxeData) {
+    addDiscoveryLog(t("needPickaxeToMine"));
+    updateTileActionPanel();
+    return;
+  }
+
+  let miningLoot =
+    rollMiningLoot(tileData);
+
+  if (miningLoot.length === 0) {
+    miningLoot = [
+      {
+        itemId: "pebble",
+        quantity: 1
+      }
+    ];
+  }
+
+  applyDiscoveryToolDurabilityCost(
+    saveData,
+    pickaxeData,
+    4,
+    "miningToolBroke"
+  );
+
+  markCurrentActionTileDepleted(
+    "mining"
+  );
+
+  saveMainSaveData(
+    saveData
+  );
+
+  setCurrentTileLoot(
+    miningLoot,
+    "mining"
+  );
+
+  saveDiscoveryState();
+
+  addDiscoveryLog(
+    t("miningSucceeded")
+  );
+
+  renderDiscoveryMap();
+}
+
+function startMiningAction(mineButton, tileData) {
+  if (!isMiningVeinTile(tileData)) {
+    addDiscoveryLog(t("notMiningVein"));
+    updateTileActionPanel();
+    return;
+  }
+
+  if (isCurrentActionTileDepleted("mining")) {
+    addDiscoveryLog(t("oreVeinDepleted"));
+    updateTileActionPanel();
+    return;
+  }
+
+  const saveData = getMainSaveData();
+  const pickaxeData = findSavedInventoryToolByGroup(saveData, "pickaxe");
+
+  if (!pickaxeData) {
+    addDiscoveryLog(t("needPickaxeToMine"));
+    updateTileActionPanel();
+    return;
+  }
+
+  startDiscoveryTimedAction({
+    button: mineButton,
+    durationMs: 5000,
+    actionCostKey: "mineOre",
+    progressTextKey: "miningInProgress",
+    onComplete: function () { 
+      mineCurrentOreVein(tileData); 
+    }
+  });
+}
+
+function renderMiningAction(tileData) {
+  if (!isMiningVeinTile(tileData)) {
+    return;
+  }
+
+  const miningCard =
+    document.createElement("div");
+
+  miningCard.classList.add(
+    "encounter-card",
+    "encounter-card-friendly"
+  );
+
+  const miningTitle =
+    document.createElement("strong");
+
+  miningTitle.textContent =
+    t("oreVein");
+
+  const miningDescription =
+    document.createElement("span");
+
+  if (isCurrentActionTileDepleted("mining")) {
+    miningDescription.textContent =
+      t("oreVeinDepleted");
+
+    miningCard.append(
+      miningTitle,
+      miningDescription
+    );
+
+    tileActions.appendChild(
+      miningCard
+    );
+
+    return;
+  }
+
+  const saveData =
+    getMainSaveData();
+
+  if (
+    !saveData ||
+    !saveData.inventory ||
+    !Array.isArray(saveData.inventory.items)
+  ) {
+    return;
+  }
+
+  const pickaxeData =
+    findSavedInventoryToolByGroup(
+      saveData,
+      "pickaxe"
+    );
+
+  miningDescription.textContent =
+    pickaxeData
+      ? t("mineOreDescription")
+      : t("needPickaxeToMine");
+
+  miningCard.append(
+    miningTitle,
+    miningDescription
+  );
+
+  if (pickaxeData) {
+    const pickaxeSelector =
+      document.createElement("div");
+
+    pickaxeSelector.classList.add(
+      "hunt-tool-selector"
+    );
+
+    const pickaxeButton =
+      document.createElement("button");
+
+    pickaxeButton.type = "button";
+
+    pickaxeButton.classList.add(
+      "hunt-tool-button",
+      "is-selected"
+    );
+
+    pickaxeButton.textContent =
+      getDiscoveryItemName(
+        pickaxeData.item
+      );
+
+    if (
+      typeof pickaxeData.item.durability ===
+        "number" &&
+      typeof pickaxeData.item.maxDurability ===
+        "number"
+    ) {
+      pickaxeButton.textContent +=
+        " (" +
+        pickaxeData.item.durability +
+        "/" +
+        pickaxeData.item.maxDurability +
+        ")";
+    }
+
+    pickaxeSelector.appendChild(
+      pickaxeButton
+    );
+
+    miningCard.appendChild(
+      pickaxeSelector
+    );
+  }
+
+  tileActions.appendChild(
+    miningCard
+  );
+
+  if (!pickaxeData) {
+    return;
+  }
+
+  const actions =
+    document.createElement("div");
+
+  actions.classList.add(
+    "found-loot-actions"
+  );
+
+  const mineButton =
+    document.createElement("button");
+
+  mineButton.type = "button";
+
+  mineButton.classList.add(
+    "tile-action-button",
+    "discovery-timed-action-button"
+  );
+
+  mineButton.disabled =
+    isDiscoveryTimedActionInProgress;
+
+  mineButton.textContent =
+    t("mineOre");
+
+  mineButton.addEventListener(
+    "click",
+    function () {
+      startMiningAction(
+        mineButton,
+        tileData
+      );
+    }
+  );
+
+  actions.appendChild(
+    mineButton
+  );
+
+  tileActions.appendChild(
+    actions
+  );
+}
+
 function isCurrentTileClayDigArea(
   tileData
 ) {
@@ -1822,6 +2090,10 @@ function getDiscoveryToolDurabilityCost(tool, baseCost) {
 
   if (tool.toolTier === "copper") {
     return Math.max(1, Math.ceil(baseCost * 0.5));
+  }
+
+  if (tool.toolTier === "bone") {
+    return Math.max(1, Math.ceil(baseCost * 0.75));
   }
 
   return baseCost;

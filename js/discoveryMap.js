@@ -252,7 +252,13 @@ function updateDiscoveryCoordinateBox() {
 function renderDiscoveryMap() {
   const map = getCurrentMap();
 
+  if (!map) {
+    console.warn("Current discovery map not found:", discoveryState.currentMapId);
+    return;
+  }
+
   ensureBuriedStashPlaced();
+  ensureDiscoveryMapState(map.id || discoveryState.currentMapId);
 
   updateRegionBackground();
 
@@ -514,6 +520,7 @@ function renderDiscoveryMap() {
     updateDiscoveryHeader();
     updateTileActionPanel();
     updateDiscoveryCoordinateBox();
+    
 
     requestAnimationFrame(function () {
         updateMapCamera();
@@ -961,6 +968,15 @@ function updateTileActionPanel() {
     isCurrentTileClayDigArea(tileData)
   ) {
     renderClayDigAction();
+  }
+
+  if (
+    !discoveryState.pendingEncounter &&
+    pendingLootItems.length === 0 &&
+    !currentBuriedStash &&
+    isMiningVeinTile(tileData)
+  ) {
+    renderMiningAction(tileData);
   }
 
   if (tileData.exit) {

@@ -1,9 +1,6 @@
 1. Yapılacaklar
 mineMap.js üzerinden devam. mine1 bitti, mine2 tile lar yapılacak.
 
-Mine System v1.
-- OreVein sistemi ve toolGroup gereksinimi.
-
 Görev Sistemi v4
 - lake den mountain e geçiş ödülü.
 - mountain görevleri

@@ -23,10 +23,14 @@ let discoveryState = {
     lake: [],
     mountain: [],
     abandonedVillage: [],
-    mine: [],
+    mine1: [],
+    mine2: [],
+    mine3: [],
+    mine4: [],
   },
   tileLoot: {},
-  recentTileHistory: []
+  recentTileHistory: [],
+  depletedActionTiles: {}
 };
 
 let isDiscoveryMoving = false;
@@ -42,6 +46,7 @@ function loadDiscoveryState() {
   const savedData = localStorage.getItem(DISCOVERY_SAVE_KEY);
 
   if (!savedData) {
+    ensureDiscoveryMapState(discoveryState.currentMapId);
     markCurrentTileVisited();
     return;
   }
@@ -54,6 +59,32 @@ function loadDiscoveryState() {
       ...loadedState
     };
 
+    if (!discoveryState.currentMapId) {
+      discoveryState.currentMapId = "meadow";
+    }
+
+    if (typeof discoveryState.x !== "number") {
+      discoveryState.x = 16;
+    }
+
+    if (typeof discoveryState.y !== "number") {
+      discoveryState.y = 16;
+    }
+
+    const currentMap = getCurrentMap();
+
+    if (currentMap) {
+      if (
+        discoveryState.x < 1 ||
+        discoveryState.x > currentMap.width ||
+        discoveryState.y < 1 ||
+        discoveryState.y > currentMap.height
+      ) {
+        discoveryState.x = currentMap.startX || 1;
+        discoveryState.y = currentMap.startY || 1;
+      }
+    }
+
     if (!discoveryState.tileSize) {
       discoveryState.tileSize = 48;
     }
@@ -62,15 +93,76 @@ function loadDiscoveryState() {
       discoveryState.zoom = 1;
     }
 
-    if (!discoveryState.visitedTiles[discoveryState.currentMapId]) {
-      discoveryState.visitedTiles[discoveryState.currentMapId] = [];
+    if (!discoveryState.visitedTiles) {
+      discoveryState.visitedTiles = {};
     }
 
+    if (!discoveryState.cutTrees) {
+      discoveryState.cutTrees = {};
+    }
+
+    if (!discoveryState.tileLoot) {
+      discoveryState.tileLoot = {};
+    }
+
+    if (!Array.isArray(discoveryState.recentTileHistory)) {
+      discoveryState.recentTileHistory = [];
+    }
+
+    if (!discoveryState.depletedActionTiles) {
+      discoveryState.depletedActionTiles = {};
+    }
+
+    if (typeof discoveryState.pendingLoot === "undefined") {
+      discoveryState.pendingLoot = null;
+    }
+
+    if (typeof discoveryState.pendingEncounter === "undefined") {
+      discoveryState.pendingEncounter = null;
+    }
+
+    if (typeof discoveryState.selectedHuntTool === "undefined") {
+      discoveryState.selectedHuntTool = null;
+    }
+
+    if (typeof discoveryState.selectedFightTool === "undefined") {
+      discoveryState.selectedFightTool = null;
+    }
+
+    ensureDiscoveryMapState(discoveryState.currentMapId);
     markCurrentTileVisited();
   } catch (error) {
     console.error("Discovery save could not be loaded:", error);
     localStorage.removeItem(DISCOVERY_SAVE_KEY);
+
+    ensureDiscoveryMapState(discoveryState.currentMapId);
     markCurrentTileVisited();
+  }
+}
+
+function ensureDiscoveryMapState(mapId) {
+  if (!discoveryState.visitedTiles) {
+    discoveryState.visitedTiles = {};
+  }
+
+  if (!Array.isArray(discoveryState.visitedTiles[mapId])) {
+    discoveryState.visitedTiles[mapId] = [];
+  }
+
+  if (!discoveryState.tileLoot) {
+    discoveryState.tileLoot = {};
+  }
+
+  if (!discoveryState.tileLoot[mapId]) {
+    discoveryState.tileLoot[mapId] = {};
+  }
+
+  if (!discoveryState.depletedActionTiles) {
+    discoveryState.depletedActionTiles = {};
+  }
+
+  if (!discoveryState.depletedActionTiles[mapId]) {
+    discoveryState.depletedActionTiles[mapId] = {};
   }
 }
 

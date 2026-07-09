@@ -377,6 +377,15 @@ const translations = {
     diggingToolBroke: "{tool} broke while digging.",
     goalcraftPickaxeMold: "Craft a clay pickaxe mold.",
     choppingInProgress: "Chopping tree...",
+    oreVein: "Ore Vein",
+    mineOre: "Mine Ore",
+    mineOreDescription: "You can use your pickaxe to mine this ore vein.",
+    miningInProgress: "Mining ore...",
+    miningSucceeded: "You mined the ore vein. The resources are on the ground.",
+    needPickaxeToMine: "You need a pickaxe to mine this ore vein.",
+    notMiningVein: "There is no mineable ore vein here.",
+    oreVeinDepleted: "This ore vein is depleted.",
+    miningToolBroke: "{tool} broke while mining.",
   },
   //Türkçe
   tr: {
@@ -752,6 +761,15 @@ const translations = {
     diggingToolBroke: "{tool} kazı sırasında kırıldı.",
     goalcraftPickaxeMold: "Kil kazma kalıbı üret.",
     choppingInProgress: "Ağaç kesiliyor...",
+    oreVein: "Maden Damarı",
+    mineOre: "Madeni Kaz",
+    mineOreDescription: "Kazmanı kullanarak bu maden damarını kazabilirsin.",
+    miningInProgress: "Maden kazılıyor...",
+    miningSucceeded: "Madeni kazdın. Çıkan kaynaklar yerde duruyor.",
+    needPickaxeToMine: "Bu maden damarını kazmak için kazmaya ihtiyacın var.",
+    notMiningVein: "Burada kazılabilir bir maden damarı yok.",
+    oreVeinDepleted: "Bu maden damarı tükenmiş.",
+    miningToolBroke: "{tool} madeni kazarken kırıldı.",
   }
 };
 

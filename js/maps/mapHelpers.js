@@ -145,3 +145,80 @@ function createRequiredItemTiles(tileIds, requiredItemId) {
 
   return requiredItemTiles;
 }
+
+function isMiningVeinTile(tileData) {
+  if (!tileData || !tileData.resource) {
+    return false;
+  }
+
+  const miningLootTables = [
+    "mineCoalVein",
+    "mineCopperVein",
+    "mineIronVein",
+    "mineObsidianVein",
+    "mineStoneVein"
+  ];
+
+  return miningLootTables.includes(tileData.resource.lootTable);
+}
+
+function rollMiningLoot(tileData) {
+  if (!tileData || !tileData.resource) {
+    return [];
+  }
+
+  const lootTableId =
+    typeof tileData.resource === "string"
+      ? tileData.resource
+      : tileData.resource.lootTable;
+
+  if (!lootTableId) {
+    return [];
+  }
+
+  const map =
+    getCurrentMap();
+
+  if (
+    !map ||
+    !map.lootTables ||
+    !Array.isArray(map.lootTables[lootTableId])
+  ) {
+    return [];
+  }
+
+  const lootTable =
+    map.lootTables[lootTableId];
+
+  const lootResults = [];
+
+  lootTable.forEach(function (loot) {
+    const roll =
+      Math.random() * 100;
+
+    if (roll > loot.chance) {
+      return;
+    }
+
+    let quantity =
+      loot.quantity ?? 1;
+
+    if (
+      typeof loot.minQuantity === "number" &&
+      typeof loot.maxQuantity === "number"
+    ) {
+      quantity =
+        Math.floor(
+          Math.random() *
+            (loot.maxQuantity - loot.minQuantity + 1)
+        ) + loot.minQuantity;
+    }
+
+    lootResults.push({
+      itemId: loot.itemId,
+      quantity
+    });
+  });
+
+  return lootResults;
+}

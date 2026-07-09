@@ -44,6 +44,7 @@ const gameConfig = {
     fishSpear: { energy: 3, hunger: 1 },
     fishNet: { energy: 2, hunger: 0.75 },
     digClay: { energy: 2, hunger: 1 },
+    mineOre: { energy: 4, hunger: 1.5 },
   },
   emergencyMovementCosts: {
     exhaustedHealth: 2,
@@ -246,8 +247,8 @@ const itemsDatabase = {
     type: "material",
     category: "natural",
     imageSrc: "img/pebble.png",
-    weight: 0.2,
-    maxStack: 4
+    weight: 0.4,
+    maxStack: 20
   },
   dryWood: {
     id: "dryWood",
@@ -283,7 +284,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/sharpStone.png",
     weight: 0.4,
-    maxStack: 8
+    maxStack: 20
   },
   freshWater: {
     id: "freshWater",
@@ -322,7 +323,7 @@ const itemsDatabase = {
     category: "natural",
     imageSrc: "img/clay.png",
     weight: 0.3,
-    maxStack: 8
+    maxStack: 24
   },
   branch: {
     id: "branch",
@@ -482,7 +483,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/ironOre.png",
     weight: 2,
-    maxStack: 1
+    maxStack: 4
   },
   coal: {
     id: "coal",
@@ -500,7 +501,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/flint.png",
     weight: 0.25,
-    maxStack: 12
+    maxStack: 32
   },
   copperOre: {
     id: "copperOre",
@@ -509,7 +510,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/copperOre.png",
     weight: 1,
-    maxStack: 1
+    maxStack: 8
   },
   salt: {
     id: "salt",
@@ -518,7 +519,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/salt.png",
     weight: 0.5,
-    maxStack: 8
+    maxStack: 16
   },
   obsidianShard: {
     id: "obsidianShard",
@@ -526,8 +527,8 @@ const itemsDatabase = {
     type: "material",
     category: "resource",
     imageSrc: "img/obsidianShard.png",
-    weight: 0.35,
-    maxStack: 6
+    weight: 0.3,
+    maxStack: 16
   },
   woodLog: {
     id: "woodLog",
@@ -536,7 +537,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/woodLog.png",
     weight: 2,
-    maxStack: 2
+    maxStack: 4
   },
   charcoal: {
     id: "charcoal",
@@ -545,7 +546,7 @@ const itemsDatabase = {
     category: "resource",
     imageSrc: "img/charcoal.png",
     weight: 0.4,
-    maxStack: 8
+    maxStack: 20
   },
   leather: {
     id: "leather",
@@ -571,8 +572,8 @@ const itemsDatabase = {
     type: "material",
     category: "resource",
     imageSrc: "img/splitWood.png",
-    weight: 0.65,
-    maxStack: 4
+    weight: 0.6,
+    maxStack: 12
   },
   woodPlank: {
     id: "woodPlank",
@@ -1432,6 +1433,7 @@ const itemsDatabase = {
     category: "survival",
     imageSrc: "img/tent.png",
     weight: 5,
+    maxStack: 1,
     stackable: false,
     usable: true,
     itemType: "shelter"
