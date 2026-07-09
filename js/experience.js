@@ -188,14 +188,14 @@ function updateExperiencePanel() {
   const experienceText =
     document.getElementById("experience");
 
-  if (!experienceText) {
-    return;
+  if (experienceText) {
+    experienceText.textContent =
+      getExperienceDisplayText(
+        "general"
+      );
   }
 
-  experienceText.textContent =
-    getExperienceDisplayText(
-      "general"
-    );
+  updateExperienceSkillsPanel();
 }
 
 function loadExperienceState() {
@@ -275,3 +275,132 @@ function saveExperienceState() {
 
   return true;
 }
+
+function updateExperienceSkillsPanel() {
+  const skillsList =
+    document.getElementById("experienceSkillsList");
+
+  if (!skillsList) {
+    return;
+  }
+
+  skillsList.innerHTML = "";
+
+  experienceTypes.forEach(function (type) {
+    const typeExperience =
+      playerExperience[type];
+
+    if (!typeExperience) {
+      return;
+    }
+
+    const requiredExperience =
+      getRequiredExperience(
+        typeExperience.level
+      );
+
+    const progressPercent =
+      Math.min(
+        100,
+        Math.floor(
+          (typeExperience.current / requiredExperience) * 100
+        )
+      );
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "experience-skill-row";
+
+    row.innerHTML = `
+      <div class="experience-skill-header">
+        <span class="experience-skill-name">
+          ${getExperienceTypeName(type)}
+        </span>
+
+        <span class="experience-skill-value">
+          ${t("levelShort")} ${typeExperience.level}
+          ·
+          ${typeExperience.current}/${requiredExperience} ${t("xpShort")}
+        </span>
+      </div>
+
+      <div class="experience-skill-bar">
+        <div
+          class="experience-skill-fill"
+          style="width: ${progressPercent}%"
+        ></div>
+      </div>
+    `;
+
+    skillsList.appendChild(row);
+  });
+}
+
+function getExperienceTypeName(type) {
+  const key =
+    type + "Experience";
+
+  const translatedName =
+    t(key);
+
+  if (translatedName && translatedName !== key) {
+    return translatedName;
+  }
+
+  return type;
+}
+
+function setupExperiencePanel() {
+  const toggleButton =
+    document.getElementById("experienceToggle");
+
+  const panel =
+    document.getElementById("experiencePanel");
+
+  if (!toggleButton || !panel) {
+    return;
+  }
+
+  toggleButton.addEventListener("click", function (event) {
+    event.stopPropagation();
+
+    const isOpen =
+      !panel.hidden;
+
+    panel.hidden =
+      isOpen;
+
+    toggleButton.setAttribute(
+      "aria-expanded",
+      String(!isOpen)
+    );
+
+    if (!isOpen) {
+      updateExperienceSkillsPanel();
+    }
+  });
+
+  panel.addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+
+  document.addEventListener("click", function () {
+    if (panel.hidden) {
+      return;
+    }
+
+    panel.hidden = true;
+
+    toggleButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  setupExperiencePanel();
+  updateExperiencePanel();
+});

@@ -98,9 +98,30 @@
                   <span data-i18n="professionLabel">Profession</span>
                   <strong id="profession">Explorer</strong>
                 </div>
-                <div class="meta-row">
+                <div class="meta-row experience-meta-row">
                   <span data-i18n="experienceLabel">Experience</span>
-                  <strong id="experience">Level 1 · 0/50 XP</strong>
+
+                  <button
+                    id="experienceToggle"
+                    class="experience-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="experiencePanel"
+                  >
+                    <strong id="experience">Level 1 · 0/50 XP</strong>
+                  </button>
+
+                  <div
+                    id="experiencePanel"
+                    class="experience-panel"
+                    hidden
+                  >
+                    <div class="experience-panel-title" data-i18n="skillsLabel">
+                      Skills
+                    </div>
+
+                    <div id="experienceSkillsList" class="experience-skills-list"></div>
+                  </div>
                 </div>
               </div>
             </div>

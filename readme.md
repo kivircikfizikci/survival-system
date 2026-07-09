@@ -5,10 +5,6 @@ Görev Sistemi v4
 - lake den mountain e geçiş ödülü.
 - mountain görevleri
 
-Experience Sistemi v1
-- Başarılan görevlerden belirli experience gelecek.
-- Her yapılan craft, savaş ve benzeri eylemler exp kazandıracak.
-
 Class Sistemi v1
 - Explorer varsayılan class olacak.
 - Terkedilmiş köy aşamasına geçen oyuncular için uzmanlaşma kitaplarının bulunması ve belirli eylemlerde uzmanlaşma yani class sistemi yapılacak.

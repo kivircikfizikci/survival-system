@@ -399,6 +399,7 @@ const translations = {
     experienceLevelUp: "{type} reached level {level}.",
     levelShort: "Sv",
     xpShort: "XP",
+    skillsLabel: "Skills",
   },
   //Türkçe
   tr: {
@@ -796,6 +797,7 @@ const translations = {
     experienceLevelUp: "{type} seviyesi {level} oldu.",
     levelShort: "Sv",
     xpShort: "XP",
+    skillsLabel: "Yetenekler",
   }
 };
 

@@ -213,3 +213,90 @@
   color: #d1fae5;
   font-weight: 700;
 }
+
+.experience-meta-row {
+  position: relative;
+}
+
+.experience-toggle {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-align: right;
+}
+
+.experience-toggle strong {
+  pointer-events: none;
+}
+
+.experience-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 50;
+
+  width: 280px;
+  max-height: 380px;
+  overflow-y: auto;
+
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+
+  background: rgba(18, 18, 18, 0.96);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.experience-panel-title {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.experience-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.experience-skill-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.experience-skill-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.experience-skill-name {
+  font-weight: 600;
+}
+
+.experience-skill-value {
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.experience-skill-bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.experience-skill-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.72);
+}
