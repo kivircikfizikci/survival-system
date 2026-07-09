@@ -2873,6 +2873,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 6
     }
   },
   fishMeat: {
@@ -2908,6 +2912,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 6
     }
   },
   cookedFrog: {
@@ -2927,6 +2935,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 4
     }
   },
   cookedMushroom: {
@@ -2946,6 +2958,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 5
     }
   },
   cookedSnail: {
@@ -2965,6 +2981,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 6
     }
   },
   cookedMeat: {
@@ -2984,6 +3004,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 7
     }
   },
   cookedRabbitMeat: {
@@ -3003,6 +3027,10 @@ const recipesDatabase = {
         amount: 1,
         itemIds: [ "dryWood", "stick", "branch" ]
       }
+    },
+    experienceRewards: {
+      crafter: 1,
+      cooking: 5
     }
   },
   // Smelting Recipes
@@ -3077,8 +3105,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 3,
-      charcoal: 1,
       clayPickaxeMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 2,
+      blacksmith: 8
     }
   },
   copperAxeHead: {
@@ -3092,8 +3129,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 3,
-      charcoal: 1,
       clayAxeMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 2,
+      blacksmith: 8
     }
   },
   copperKnifeBlade: {
@@ -3107,8 +3153,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 1,
-      charcoal: 1,
       clayKnifeMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 2,
+      blacksmith: 8
     }
   },
   copperSpearHead: {
@@ -3122,8 +3177,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 1,
-      charcoal: 1,
       claySpearMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 2,
+      blacksmith: 8
     }
   },
   copperShovelHead: {
@@ -3137,8 +3201,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       copperOre: 2,
-      charcoal: 1,
       clayShovelMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 2,
+      blacksmith: 8
     }
   },
   ironPickaxeHead: {
@@ -3152,8 +3225,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 3,
-      charcoal: 1,
       clayPickaxeMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 4,
+      blacksmith: 12
     }
   },
   ironAxeHead: {
@@ -3167,8 +3249,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 3,
-      charcoal: 1,
       clayAxeMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 4,
+      blacksmith: 12
     }
   },
   ironKnifeBlade: {
@@ -3182,8 +3273,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 1,
-      charcoal: 1,
       clayKnifeMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 4,
+      blacksmith: 12
     }
   },
   ironSpearHead: {
@@ -3197,8 +3297,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 1,
-      charcoal: 1,
       claySpearMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 4,
+      blacksmith: 12
     }
   },
   ironShovelHead: {
@@ -3212,8 +3321,17 @@ const recipesDatabase = {
     requiredWorkstation: "campfire",
     ingredients: {
       ironOre: 2,
-      charcoal: 1,
       clayShovelMold: 1
+    },
+    ingredientGroups: {
+      fireMaterial: {
+        amount: 1,
+        itemIds: [ "charcoal", "coal" ]
+      }
+    },
+    experienceRewards: {
+      crafter: 4,
+      blacksmith: 12
     }
   },
 };

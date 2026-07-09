@@ -6,6 +6,7 @@ const encounterDatabase = {
     canHunt: true,
     canFight: false,
     huntChance: 50,
+    fighterExperienceReward: 4,
     huntToolBonuses: {
       knife: 15,
       spear: 20
@@ -28,6 +29,7 @@ const encounterDatabase = {
     canHunt: true,
     canFight: false,
     huntChance: 22,
+    fighterExperienceReward: 8,
     huntToolBonuses: {
       spear: 35,
       knife: 5
@@ -50,6 +52,7 @@ const encounterDatabase = {
     canHunt: true,
     canFight: false,
     huntChance: 35,
+    fighterExperienceReward: 5,
     huntToolBonuses: {
       spear: 10,
       knife: 5
@@ -70,6 +73,7 @@ const encounterDatabase = {
     canHunt: true,
     canFight: false,
     huntChance: 18,
+    fighterExperienceReward: 9,
     huntToolBonuses: {
       spear: 35,
       knife: 5
@@ -92,6 +96,7 @@ const encounterDatabase = {
     canHunt: true,
     canFight: false,
     huntChance: 35,
+    fighterExperienceReward: 6,
     huntToolBonuses: {
       spear: 25,
       knife: 10
@@ -114,6 +119,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 45,
     failedFightDamage: 12,
+    fighterExperienceReward: 9,
     fightToolBonuses: {
       knife: 15,
       spear: 25
@@ -137,6 +143,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 32,
     failedFightDamage: 20,
+    fighterExperienceReward: 12,
     fightToolBonuses: {
       knife: 12,
       spear: 30
@@ -161,6 +168,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 35,
     failedFightDamage: 18,
+    fighterExperienceReward: 13,
     fightToolBonuses: {
       knife: 8,
       spear: 30
@@ -184,6 +192,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 42,
     failedFightDamage: 10,
+    fighterExperienceReward: 8,
     fightToolBonuses: {
       knife: 20,
       spear: 15
@@ -206,6 +215,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 12,
     failedFightDamage: 40,
+    fighterExperienceReward: 20,
     fightToolBonuses: {
       knife: 5,
       spear: 25
@@ -231,6 +241,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 18,
     failedFightDamage: 32,
+    fighterExperienceReward: 18,
     fightToolBonuses: {
       knife: 5,
       spear: 30
@@ -254,6 +265,7 @@ const encounterDatabase = {
     canHunt: true,
     canFight: false,
     huntChance: 25,
+    fighterExperienceReward: 7,
     huntToolBonuses: {
       spear: 30,
       knife: 5
@@ -277,6 +289,7 @@ const encounterDatabase = {
     canFight: true,
     fightChance: 50,
     failedFightDamage: 4,
+    fighterExperienceReward: 5,
     fightToolBonuses: {
       knife: 20,
       spear: 10
@@ -2304,6 +2317,12 @@ function huntPendingEncounter() {
   discoveryState.selectedHuntTool = null;
 
   if (lootResults.length === 0) {
+    experience({
+      fighter: getEncounterExperienceReward(
+        encounterData
+      )
+    });
+
     addDiscoveryLog(t("huntSucceededNoLoot"));
 
     saveDiscoveryState();
@@ -2311,6 +2330,12 @@ function huntPendingEncounter() {
 
     return;
   }
+
+  experience({
+    fighter: getEncounterExperienceReward(
+      encounterData
+    )
+  });
 
   setCurrentTileLoot(
     lootResults,
@@ -2321,6 +2346,61 @@ function huntPendingEncounter() {
 
   saveDiscoveryState();
   renderDiscoveryMap();
+}
+
+function getEncounterExperienceReward(encounterData) {
+  if (!encounterData) {
+    return 5;
+  }
+
+  if (
+    typeof encounterData.fighterExperienceReward === "number"
+  ) {
+    return encounterData.fighterExperienceReward;
+  }
+
+  if (
+    typeof encounterData.experienceReward === "number"
+  ) {
+    return encounterData.experienceReward;
+  }
+
+  let reward = 5;
+
+  if (
+    typeof encounterData.failedFightDamage === "number"
+  ) {
+    reward += Math.ceil(
+      encounterData.failedFightDamage / 5
+    );
+  }
+
+  if (
+    typeof encounterData.fightChance === "number"
+  ) {
+    reward += Math.max(
+      0,
+      Math.ceil(
+        (50 - encounterData.fightChance) / 10
+      )
+    );
+  }
+
+  if (
+    typeof encounterData.huntChance === "number"
+  ) {
+    reward += Math.max(
+      0,
+      Math.ceil(
+        (50 - encounterData.huntChance) / 10
+      )
+    );
+  }
+
+  return Math.min(
+    Math.max(reward, 3),
+    25
+  );
 }
 
 function getAvailableFightTools(encounterData) {
@@ -2754,12 +2834,24 @@ function fightPendingEncounter() {
   ];
 
   if (lootResults.length === 0) {
+    experience({
+      fighter: getEncounterExperienceReward(
+        encounterData
+      )
+    });
+
     addDiscoveryLog(t("fightSucceededNoLoot"));
 
     saveDiscoveryState();
     renderDiscoveryMap();
     return;
   }
+
+  experience({
+    fighter: getEncounterExperienceReward(
+      encounterData
+    )
+  });
 
   setCurrentTileLoot(
     lootResults,

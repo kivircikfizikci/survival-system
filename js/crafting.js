@@ -841,14 +841,17 @@ function hasRequiredCraftWorkstation(recipe) {
     return true;
   }
 
-  const currentRegionId = getCurrentRegionId();
   const currentRegionWorkstations =
-    regionWorkstations[currentRegionId] || {};
+    getCurrentRegionWorkstations();
 
   const requiredWorkstation =
-    currentRegionWorkstations[recipe.requiredWorkstation];
+    currentRegionWorkstations[
+      recipe.requiredWorkstation
+    ];
 
-  return isWorkstationAtCurrentTile(requiredWorkstation);
+  return isWorkstationAtCurrentTile(
+    requiredWorkstation
+  );
 }
 
 function getInventoryLiquidAmount(liquidItemId) {
@@ -1275,6 +1278,127 @@ function addQuickCraftResultToInventory(item, quantity) {
   return false;
 }
 
+function getCraftExperienceRewards(recipe) {
+  if (!recipe) {
+    return {};
+  }
+
+  if (
+    recipe.experienceRewards &&
+    typeof recipe.experienceRewards === "object"
+  ) {
+    return {
+      ...recipe.experienceRewards
+    };
+  }
+
+  const rewards = {
+    crafter: getBaseCraftExperienceReward(recipe)
+  };
+
+  const resultItem =
+    itemsDatabase[recipe.resultItemId];
+
+  const resultItemId =
+    recipe.resultItemId || "";
+
+  const category =
+    recipe.category || "";
+
+  const requiredWorkstation =
+    recipe.requiredWorkstation || "";
+
+  if (
+    category === "clothing" ||
+    requiredWorkstation === "loom" ||
+    requiredWorkstation === "tanningRack" ||
+    resultItemId === "cloth" ||
+    resultItemId === "leather" ||
+    resultItemId === "leatherStrip" ||
+    (
+      resultItem &&
+      (
+        resultItem.type === "clothing" ||
+        resultItem.type === "bag"
+      )
+    )
+  ) {
+    rewards.tailor =
+      getSpecializedCraftExperienceReward(recipe);
+  }
+
+  if (
+    category === "cooking" ||
+    resultItemId.startsWith("cooked") ||
+    resultItemId === "boiledWater"
+  ) {
+    rewards.cooking =
+      getSpecializedCraftExperienceReward(recipe);
+  }
+
+  if (
+    category === "smelting" ||
+    resultItemId.startsWith("copper") ||
+    resultItemId.startsWith("iron")
+  ) {
+    rewards.blacksmith =
+      getSpecializedCraftExperienceReward(recipe);
+  }
+
+  return rewards;
+}
+
+function getBaseCraftExperienceReward(recipe) {
+  let reward = 3;
+
+  const ingredients =
+    recipe.ingredients || {};
+
+  Object.keys(ingredients).forEach(function (itemId) {
+    reward += Number(
+      ingredients[itemId] || 0
+    );
+  });
+
+  if (recipe.ingredientGroups) {
+    Object.keys(recipe.ingredientGroups).forEach(function (groupName) {
+      const groupData =
+        recipe.ingredientGroups[groupName];
+
+      reward += Number(
+        groupData.amount || 1
+      );
+    });
+  }
+
+  if (recipe.liquidIngredients) {
+    reward += recipe.liquidIngredients.length;
+  }
+
+  if (recipe.requiredWorkstation) {
+    reward += 2;
+  }
+
+  if (
+    recipe.requiredTools ||
+    recipe.requiredToolGroups
+  ) {
+    reward += 1;
+  }
+
+  return Math.min(
+    Math.max(reward, 3),
+    12
+  );
+}
+
+function getSpecializedCraftExperienceReward(recipe) {
+  return Math.min(
+    getBaseCraftExperienceReward(recipe) + 2,
+    15
+  );
+}
+
 function quickCraftRecipe(recipeId) {
   refreshBaseSleepState();
 
@@ -1357,6 +1481,10 @@ function quickCraftRecipe(recipeId) {
 
   checkGoalsByCraftedItem(resultItem.id);
   updateGoalsPanel();
+
+  experience(
+    getCraftExperienceRewards(recipe)
+  );
 
   updateInventoryScreen();
   updateCraftingScreen();
@@ -1522,6 +1650,10 @@ function craftSelectedRecipe() {
 
   checkGoalsByCraftedItem(craftedItem.id);
   updateGoalsPanel();
+
+  experience(
+    getCraftExperienceRewards(recipe)
+  );
 
   updateCraftingScreen();
   updateInventoryScreen();
@@ -1692,4 +1824,31 @@ function removeRecipeIngredientGroups(recipe) {
   }
 
   return true;
+}
+
+function discoverPlacedWorkstations() {
+  if (
+    !regionWorkstations ||
+    typeof regionWorkstations !== "object"
+  ) {
+    return;
+  }
+
+  Object.keys(regionWorkstations).forEach(function (regionId) {
+    const workstations =
+      regionWorkstations[regionId];
+
+    if (
+      !workstations ||
+      typeof workstations !== "object"
+    ) {
+      return;
+    }
+
+    Object.keys(workstations).forEach(function (workstationId) {
+      if (workstations[workstationId]) {
+        discoverItem(workstationId);
+      }
+    });
+  });
 }

@@ -289,6 +289,10 @@ function loadGame() {
     regionWorkstations = saveData.regionWorkstations;
   }
 
+  if (typeof discoverPlacedWorkstations === "function") {
+    discoverPlacedWorkstations();
+  }
+
   updateInventoryCapacityFromEquipment();
 
   processSleepProgress();
