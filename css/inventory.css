@@ -12,10 +12,9 @@
 
 .inventory-header {
   display: flex;
-  align-items: flex-end;
+  align-items: anchor-center;
   justify-content: space-between;
   gap: 12px;
-
   margin-bottom: 16px;
 }
 
@@ -24,7 +23,6 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
-
   margin: 0;
 }
 

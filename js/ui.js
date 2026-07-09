@@ -5,6 +5,7 @@ const nicknameText = document.getElementById("nickname");
 const statusText = document.getElementById("statusText");
 const regionText = document.getElementById("region");
 const professionText = document.getElementById("profession");
+const experienceText = document.getElementById("experience");
 const healthFill = document.getElementById("healthFill");
 const hungerFill = document.getElementById("hungerFill");
 const energyFill = document.getElementById("energyFill");
@@ -546,6 +547,9 @@ function updateScreen() {
   energyIconFill.style.setProperty("--empty", 100 - formatStat(energy) + "%");
 
   updateGoalsPanel();
+  if (typeof updateExperiencePanel === "function") {
+    updateExperiencePanel();
+  }
 }
 
 function showMessage(message, type = "warning") {

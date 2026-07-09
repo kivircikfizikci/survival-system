@@ -142,6 +142,8 @@ function saveGame() {
     discoveredRecipes: discoveredRecipes,
     discoveredItems: discoveredItems,
     currentLanguage: currentLanguage,
+
+    experience: playerExperience,
   };
 
   localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
@@ -224,6 +226,11 @@ function loadGame() {
   if (saveData.currentLanguage) {
     currentLanguage = saveData.currentLanguage;
   }
+
+  playerExperience =
+    normalizeExperienceState(
+      saveData.experience
+    );
 
   if (saveData.playerShelter) {
     playerShelter = saveData.playerShelter;
