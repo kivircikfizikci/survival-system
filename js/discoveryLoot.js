@@ -28,9 +28,12 @@ function rollCurrentTileLoot() {
   const currentTileId = getTileId(discoveryState.x, discoveryState.y);
   const tileData = getTileSpecialData(currentTileId);
 
-  discoveryState.pendingLoot = null;
+  if (!tileData || tileData.isBlocked || !tileData.resource) {
+    return;
+  }
 
-  if (tileData.isBlocked || !tileData.resource) {
+  if (isMiningVeinTile(tileData)) {
+    discoveryState.pendingLoot = null;
     return;
   }
 
@@ -309,6 +312,18 @@ function setCurrentTileLoot(
     discoveryState.x,
     discoveryState.y
   );
+
+  const tileData =
+    getTileSpecialData(
+      tileId
+    );
+
+  if (
+    source === "tileSearch" &&
+    isMiningVeinTile(tileData)
+  ) {
+    return false;
+  }
 
   if (
     !discoveryState.tileLoot[mapId]
