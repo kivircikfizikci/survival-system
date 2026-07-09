@@ -93,8 +93,8 @@ function experience(rewards) {
     updateExperiencePanel();
   }
 
-  if (typeof autoSave === "function") {
-    autoSave();
+  if (typeof saveExperienceState === "function") {
+    saveExperienceState();
   }
 }
 
@@ -185,6 +185,9 @@ function getExperienceDisplayText(type) {
 }
 
 function updateExperiencePanel() {
+  const experienceText =
+    document.getElementById("experience");
+
   if (!experienceText) {
     return;
   }
@@ -193,4 +196,82 @@ function updateExperiencePanel() {
     getExperienceDisplayText(
       "general"
     );
+}
+
+function loadExperienceState() {
+  if (typeof SAVE_KEY === "undefined") {
+    console.warn("SAVE_KEY is not defined. Experience could not be loaded.");
+    return false;
+  }
+
+  const savedData =
+    localStorage.getItem(SAVE_KEY);
+
+  if (!savedData) {
+    playerExperience =
+      createDefaultExperienceState();
+
+    updateExperiencePanel();
+    return false;
+  }
+
+  try {
+    const saveData =
+      JSON.parse(savedData);
+
+    playerExperience =
+      normalizeExperienceState(
+        saveData.experience
+      );
+
+    updateExperiencePanel();
+    return true;
+  } catch (error) {
+    console.error(
+      "Experience state could not be loaded:",
+      error
+    );
+
+    playerExperience =
+      createDefaultExperienceState();
+
+    updateExperiencePanel();
+    return false;
+  }
+}
+
+function saveExperienceState() {
+  if (typeof SAVE_KEY === "undefined") {
+    console.warn("SAVE_KEY is not defined. Experience could not be saved.");
+    return false;
+  }
+
+  const savedData =
+    localStorage.getItem(SAVE_KEY);
+
+  let saveData = {};
+
+  if (savedData) {
+    try {
+      saveData =
+        JSON.parse(savedData);
+    } catch (error) {
+      console.error(
+        "Save data could not be parsed while saving experience:",
+        error
+      );
+
+      return false;
+    }
+  }
+
+  saveData.experience =
+    playerExperience;
+
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(saveData)
+  );
+
+  return true;
 }

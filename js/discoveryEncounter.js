@@ -731,6 +731,12 @@ function mineCurrentOreVein(tileData) {
     saveData
   );
 
+  experience({
+    miner: getMiningExperienceReward(
+      tileData
+    )
+  });
+
   setCurrentTileLoot(
     miningLoot,
     "mining"
@@ -743,6 +749,38 @@ function mineCurrentOreVein(tileData) {
   );
 
   renderDiscoveryMap();
+}
+
+function getMiningExperienceReward(tileData) {
+  if (
+    !tileData ||
+    !tileData.resource
+  ) {
+    return 6;
+  }
+
+  const lootTableId =
+    typeof tileData.resource === "string"
+      ? tileData.resource
+      : tileData.resource.lootTable;
+
+  if (lootTableId === "mineIronVein") {
+    return 10;
+  }
+
+  if (lootTableId === "mineCopperVein") {
+    return 8;
+  }
+
+  if (lootTableId === "mineCoalVein") {
+    return 7;
+  }
+
+  if (lootTableId === "mineObsidianVein") {
+    return 12;
+  }
+
+  return 6;
 }
 
 function startMiningAction(mineButton, tileData) {
@@ -1064,6 +1102,10 @@ function digClayAtCurrentTile() {
   }
 
   saveMainSaveData(saveData);
+
+  experience({
+    miner: 4
+  });
 
   setCurrentTileLoot(
     clayLoot,
@@ -1459,6 +1501,11 @@ function fishAtCurrentTile(
 
   if (!fishingSucceeded) {
     saveMainSaveData(saveData);
+
+    experience({
+      fisher: 1
+    });
+
     addDiscoveryLog(
       t("fishingFailed")
     );
@@ -1467,29 +1514,19 @@ function fishAtCurrentTile(
     return;
   }
 
+  saveMainSaveData(saveData);
+
   if (
     saveData.activeGoalsStage === "lake"
   ) {
-    if (
-      !Array.isArray(
-        saveData.completedGoals
-      )
-    ) {
-      saveData.completedGoals = [];
-    }
-
-    if (
-      !saveData.completedGoals.includes(
-        "catchFirstFish"
-      )
-    ) {
-      saveData.completedGoals.push(
-        "catchFirstFish"
-      );
-    }
+    completeDiscoveryGoal(
+      "catchFirstFish"
+    );
   }
 
-  saveMainSaveData(saveData);
+  experience({
+    fisher: 5
+  });
 
   setCurrentTileLoot(
     fishingLoot,

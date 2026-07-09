@@ -736,10 +736,29 @@ function completeDiscoveryGoal(goalId) {
     saveData.completedGoals = [];
   }
 
-  if (!saveData.completedGoals.includes(goalId)) {
-    saveData.completedGoals.push(goalId);
-    saveMainSaveData(saveData);
+  if (saveData.completedGoals.includes(goalId)) {
+    return;
   }
+
+  saveData.completedGoals.push(goalId);
+
+  saveMainSaveData(saveData);
+
+  experience({
+    general: getDiscoveryGoalExperienceReward(
+      goalId
+    )
+  });
+}
+
+function getDiscoveryGoalExperienceReward(goalId) {
+  if (
+    typeof getGoalExperienceReward === "function"
+  ) {
+    return getGoalExperienceReward(goalId);
+  }
+
+  return 25;
 }
 
 function ensureCutTreesState() {
@@ -1064,6 +1083,10 @@ function chopCurrentTree() {
   }
 
   saveMainSaveData(updatedSaveData);
+
+  experience({
+    lumberjack: 6
+  });
 
   ensureCutTreesState();
 
@@ -1419,6 +1442,12 @@ function takePendingLoot() {
     return;
   }
 
+  experience({
+    explorer: getLootExplorerExperienceReward(
+      pendingLootItems
+    )
+  });
+
   if (pendingLootItems.length === 1) {
     const lootItem = pendingLootItems[0];
     const item = itemsDatabase[lootItem.itemId];
@@ -1448,6 +1477,38 @@ function leavePendingLoot() {
 
   saveDiscoveryState();
   updateTileActionPanel();
+}
+
+function getLootExplorerExperienceReward(lootItems) {
+  if (!Array.isArray(lootItems)) {
+    return 0;
+  }
+
+  let totalExperience = 0;
+
+  lootItems.forEach(function (lootItem) {
+    if (
+      !lootItem ||
+      !lootItem.itemId
+    ) {
+      return;
+    }
+
+    const quantity =
+      typeof lootItem.quantity === "number"
+        ? lootItem.quantity
+        : 1;
+
+    totalExperience += Math.max(
+      1,
+      Math.ceil(quantity / 2)
+    );
+  });
+
+  return Math.min(
+    totalExperience,
+    10
+  );
 }
 
 function getDiscoveryItemName(item) {
