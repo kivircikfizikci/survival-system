@@ -1,13 +1,13 @@
 const regionBackgrounds = {
-  meadow: "img/meadow.png",
-  lake: "img/lake.png",
-  trail: "img/trail.png",
-  mountain: "img/mountain.png",
-  mine1: "img/mine.png",
-  mine2: "img/mine.png",
-  mine3: "img/mine.png",
-  mine4: "img/mine.png",
-  abandonedVillage: "img/abandonedVillage.png"
+  meadow: "../img/meadow.png",
+  lake: "../img/lake.png",
+  trail: "../img/trail.png",
+  mountain: "../img/mountain.png",
+  mine1: "../img/mine.png",
+  mine2: "../img/mine.png",
+  mine3: "../img/mine.png",
+  mine4: "../img/mine.png",
+  abandonedVillage: "../img/abandonedVillage.png"
 };
 
 function getRegionNameById(regionId) {
