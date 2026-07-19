@@ -1,3 +1,35 @@
+const APP_BASE_PATH =
+  window.location.pathname.includes("/survival-system/")
+    ? "/survival-system/"
+    : "";
+
+function assetPath(path) {
+  if (!path || typeof path !== "string") {
+    return path;
+  }
+
+  if (
+    path.startsWith("http://") ||
+    path.startsWith("https://") ||
+    path.startsWith("data:") ||
+    path.startsWith("blob:")
+  ) {
+    return path;
+  }
+
+  if (
+    APP_BASE_PATH &&
+    path.startsWith(APP_BASE_PATH)
+  ) {
+    return path;
+  }
+
+  const cleanPath =
+    path.replace(/^(\.\.\/|\.\/|\/)+/, "");
+
+  return APP_BASE_PATH + cleanPath;
+}
+
 const regionBackgrounds = {
   meadow: "../img/meadow.png",
   lake: "../img/lake.png",
@@ -73,16 +105,21 @@ function updateRegionBackground() {
       ? discoveryState.currentMapId
       : getSavedDiscoveryMapId();
 
-  const imagePath = regionBackgrounds[currentMapId] || "";
+  const imagePath =
+    regionBackgrounds[currentMapId] || "";
 
   if (!imagePath) {
-    document.body.style.setProperty("--region-image", "none");
+    document.body.style.setProperty(
+      "--region-image",
+      "none"
+    );
+
     return;
   }
 
   document.body.style.setProperty(
     "--region-image",
-    `url("${imagePath}")`
+    `url("${assetPath(imagePath)}")`
   );
 }
 
@@ -1936,6 +1973,22 @@ const itemsDatabase = {
     maxStack: 1
   },
 };
+
+function normalizeItemImageSources() {
+  Object.keys(itemsDatabase).forEach(function (itemId) {
+    const item =
+      itemsDatabase[itemId];
+
+    if (!item || !item.imageSrc) {
+      return;
+    }
+
+    item.imageSrc =
+      assetPath(item.imageSrc);
+  });
+}
+
+normalizeItemImageSources();
 
 const toolGroups = {
   knife: ["stoneKnife", "boneKnife", "obsidianKnife", "copperKnife", "ironKnife"],
