@@ -1508,11 +1508,11 @@ function moveItemBetweenContainers(
   amount,
   fullMessageKey
 ) {
-    refreshBaseSleepState();
+  refreshBaseSleepState();
 
   if (isSleeping) {
     showMessage(t("cannotUseSleeping"));
-    return;
+    return false;
   }
 
   const fromItem = fromContainer[fromIndex];
@@ -1521,8 +1521,11 @@ function moveItemBetweenContainers(
     return false;
   }
 
-  const moveAmount = amount === "one" ? 1 : fromItem.quantity;
-  const toItem = toContainer[toIndex];
+  const moveAmount =
+    amount === "one" ? 1 : fromItem.quantity;
+
+  const toItem =
+    toContainer[toIndex];
 
   if (toItem !== null) {
     if (!canStackItems(toItem, fromItem)) {
@@ -1530,8 +1533,11 @@ function moveItemBetweenContainers(
       return false;
     }
 
-    const availableSpace = toItem.maxStack - toItem.quantity;
-    const actualMoveAmount = Math.min(moveAmount, availableSpace);
+    const availableSpace =
+      toItem.maxStack - toItem.quantity;
+
+    const actualMoveAmount =
+      Math.min(moveAmount, availableSpace);
 
     if (actualMoveAmount <= 0) {
       showMessage(t(fullMessageKey));
@@ -1545,12 +1551,15 @@ function moveItemBetweenContainers(
       fromContainer[fromIndex] = null;
     }
 
+    autoSave();
     return true;
   }
 
   if (moveAmount >= fromItem.quantity) {
     toContainer[toIndex] = fromItem;
     fromContainer[fromIndex] = null;
+
+    autoSave();
     return true;
   }
 
@@ -1561,9 +1570,8 @@ function moveItemBetweenContainers(
 
   fromItem.quantity -= moveAmount;
 
-  return true;
-
   autoSave();
+  return true;
 }
 
 function craftSelectedRecipe() {
