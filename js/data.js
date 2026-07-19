@@ -2044,7 +2044,7 @@ const recipesDatabase = {
     category: "basic",
     discoverByAny: ["splitWood", "stoneAxe"],
     ingredients: {
-      woodLog: 1
+      splitWood: 1
     },
     requiredToolGroups: {
       axe: 1,
@@ -2065,8 +2065,7 @@ const recipesDatabase = {
     category: "basic",
     discoverByAny: ["woodLog", "stoneAxe"],
     ingredients: {
-      woodLog: 1,
-      rope: 1
+      woodLog: 1
     },
     requiredToolGroups: {
       axe: 1
